@@ -1,0 +1,60 @@
+const { Finalizer, Duration } = require('klasa');
+const { MessageEmbed } = require('discord.js');
+
+module.exports = class extends Finalizer {
+
+	async run(msg, response) {
+		if (!this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).includes(msg.command.name)) return null;
+		response[0].send(`You have been ${msg.command.name}${msg.command.name.slice(-3) === 'ban' ? 'n' : ''}${msg.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${msg.guild}**. ${response[1] ? `**Reason**: ${response[1]}` : ''}`).catch(() => { // eslint-disable-line max-len
+			if (msg.command.name === 'warn') return msg.send(`<:redTick:399433440975519754>  ::  I couldn't send messages to **${response[0].tag}**, so I couldn't warn them.`);
+			return null;
+		});
+		const configs = {
+			kick: ['#FBA200', '👢'],
+			ban: ['#800000', '<:blobBan:399433444670701568>'],
+			softban: ['#3498DB', '❌💬'],
+			unban: ['#B5CD3B', '<:blobok:398843279665528843>'],
+			mute: ['#FFD700', '<:blobstop:446987757651361813>'],
+			unmute: ['#24E4D0', '<:blobgo:398843278243528707>'],
+			warn: ['#B2884D', '<:blobthinkstare:398843280135028738>']
+		};
+		const { modlogs } = await this.client.providers.default.get('modlogs', msg.guild.id);
+		modlogs.push({
+			id: (modlogs.length + 1).toString(),
+			timestamp: Date.now(),
+			type: msg.command.name,
+			moderator: (msg.author || this.client.user).id,
+			user: response[0].id,
+			reason: response[1]
+		});
+		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
+		const channel = msg.guild.channels.get(msg.guild.configs.modlogs[msg.command.name]);
+		if (!channel && msg.guild.configs.logging && msg.author) {
+			return msg.send([
+				`⚠ It seems that the modlog channel for ${msg.command.name}s is not yet set.`,
+				'If you want to continue without logging in the future without this warning, you can use `s.conf set logging false`.',
+				'This does not mean that I will stop the logs. You can always view them at `s.modlogs`.'
+			].join(' '));
+		}
+		if (!channel) return true;
+		if (!channel.postable) return msg.send(`<:redTick:399433440975519754>  ::  It seems that I cannot send messages in ${channel}.`);
+		const embed = new MessageEmbed()
+			.setColor(configs[msg.command.name][0])
+			.setTitle(`Case #${modlogs.length}: ${msg.command.name.toTitleCase()} ${configs[msg.command.name][1]}`)
+			.setFooter(`User ID: ${response[0].id}`)
+			.setTimestamp()
+			.addField('Moderator', msg.author || this.client.user, true)
+			.addField(response[0].bot ? 'Bot' : 'User', response[0], true);
+		if (response[1]) embed.addField('Reason', response[1], true);
+		if (response[2]) embed.addField('Duration', response[2] === Infinity ? '∞' : Duration.toNow(response[2]), true);
+		return channel.send(embed);
+	}
+
+	async init() {
+		const defProvider = this.client.providers.default;
+		if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
+		const guildSchema = this.client.gateways.guilds.schema;
+		if (!guildSchema.logging) guildSchema.add('logging', { type: 'boolean', default: true, configurable: true });
+	}
+
+};

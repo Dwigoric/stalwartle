@@ -1,0 +1,19 @@
+const { Command } = require('klasa');
+
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, {
+			aliases: ['paint'],
+			requiredPermissions: ['ATTACH_FILES'],
+			description: 'Sends an image of a painting.',
+			extendedHelp: 'By default, if you do not provide a user, your avatar will be used.',
+			usage: '[Inspiration:user]'
+		});
+	}
+
+	async run(msg, [user = msg.author]) {
+		msg.channel.sendFile(await this.client.idiot.painting(user.displayAvatarURL()), 'painting.png');
+	}
+
+};

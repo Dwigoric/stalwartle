@@ -1,0 +1,91 @@
+const { Command, Duration } = require('klasa');
+
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, {
+			aliases: ['remind', 'reminder'],
+			description: 'Schedules a reminder for you.',
+			usage: '[list|remove] (DurationUntilReminder:time) (Reminder:string) [...]',
+			extendedHelp: [
+				'e.g. `s.remindme 1m to get in the car, buy stuff, do stuff`',
+				"The subcommands `list` and `remove` are optional. If you want to add a reminder, simply don't use any subcommand.",
+				'**If you want daily, weekly, monthly or annual reminders, just use the flags `--daily` or `--annually` etc. and remove the reminder duration e.g. `s.remindme to eat cake --daily`**',
+				'***Recurring reminders ignore the duration. The command will still work with a given duration but the following will override the reminder:***',
+				'\n**Hourlies** `--hourly` → At 0 minute past every hour',
+				'**Dailies** `--daily` → At 00:00',
+				'**Weeklies** `--weekly` → At 00:00 every Saturday',
+				'**Monthlies** `--monthly` → At 00:00 every first day of the month',
+				'**Annuals** `--annually` → At 00:00 in January 1',
+				'All of which are in GMT timezone.',
+				'\nIf you want to force the reminder to the channel, use the `--channel` flag.'
+			].join('\n'),
+			usageDelim: ' ',
+			subcommands: true
+		});
+
+		this
+			.createCustomResolver('time', (arg, possible, msg, [action]) => {
+				if (['list', 'remove'].includes(action)) return undefined;
+				const hasFlags = ['hourly', 'daily', 'weekly', 'monthly', 'annually'].some(flag => msg.flags.hasOwnProperty(flag));
+				if (!arg && !hasFlags) throw '<:redTick:399433440975519754>  ::  Please provide the duration (e.g. 2d3h4m) of the reminder.';
+				if (msg.flags.annually) return '0 0 1 1 *';
+				if (msg.flags.monthly) return '0 0 1 * *';
+				if (msg.flags.weekly) return '0 0 * * 6';
+				if (msg.flags.daily) return '0 0 * * *';
+				if (msg.flags.hourly) return '0 */1 * * *';
+				return this.client.arguments.get('time').run(arg, possible, msg);
+			})
+			.createCustomResolver('string', (arg, possible, msg, [action]) => {
+				if (['list', 'remove'].includes(action) || !arg) return undefined;
+				return arg;
+			});
+	}
+
+	async run(msg, [when, ...text]) {
+		const reminder = await this.client.schedule.create('reminder', when, {
+			data: {
+				channel: msg.channel.id,
+				user: msg.author.id,
+				text: text.join(this.usageDelim),
+				forceChannel: Object.keys(msg.flags).includes('channel')
+			}
+		});
+		msg.send([
+			`<:greenTick:399433439280889858>  ::  Alright! I created you a reminder with the ID: \`${reminder.id}\``,
+			`You will be reminded of this in ${Duration.toNow(reminder.time)}.`,
+			reminder.data.forceChannel ?
+				'The people of this channel will be reminded.' :
+				"I will first try to remind you in DMs. If I can't send you one, I will then try to remind you in the channel you run this command."
+		].join('\n'));
+	}
+
+	async list(msg) {
+		const remList = await this.remlist(msg);
+		return msg.send(`Here is a list of your reminders:\n${remList.list}`);
+	}
+
+	async remove(msg) {
+		const remList = await this.remlist(msg);
+		const prompted = await msg.prompt(`Please give me the list number of the reminder you want to delete:\n${remList.list}`);
+		const remNum = Number(prompted.content);
+		if (isNaN(remNum)) throw "<:redTick:399433440975519754>  ::  You didn't give a number! :3";
+		if (!this.client.schedule.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw "<:redTick:399433440975519754>  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?"; // eslint-disable-line max-len
+		this.client.schedule.delete(remList[remNum]);
+		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully deleted reminder ID \`${remList[remNum]}\`.`);
+	}
+
+	async remlist(msg) {
+		const userRems = this.client.schedule.tasks.filter(tk => tk.taskName === 'reminder' && tk.data.user === msg.author.id);
+		if (!userRems.length) throw '<:redTick:399433440975519754>  ::  You do not have any reminder!';
+		const remList = { list: '' };
+		userRems.forEach(rem => {
+			const remPage = Object.values(userRems).map(rmd => rmd.id).indexOf(rem.id) + 1;
+			remList[remPage] = rem.id;
+			const text = rem.data.text ? `: ${rem.data.text}` : '.';
+			remList.list += `\`${remPage}\` (\`${rem.id}\`) | You'll be reminded in **${Duration.toNow(rem.time)}**${text}\n`;
+		});
+		return remList;
+	}
+
+};

@@ -1,0 +1,32 @@
+{
+    "name": "stalwartle",
+    "description": "A scrumptious project that does quirky things",
+    "version": "2.0.11b",
+    "main": "bot.js",
+    "scripts": {
+        "start": "pm2 start bot.js --name \"Stalwartle\""
+    },
+    "dependencies": {
+        "discord.js": "github:discordjs/discord.js",
+        "klasa": "github:dirigeants/klasa",
+        "moment-timezone": "^0.5.17"
+	},
+	"optionalDependencies": {
+		"cheerio": "^1.0.0-rc.2",
+		"currency-symbol-map": "^4.0.4",
+		"faceapp": "^0.4.3",
+		"fast-html-parser": "^1.0.1",
+		"figlet": "^1.2.0",
+		"idiotic-api": "^0.2.7",
+		"maljs": "^0.3.0",
+		"mathjs": "^4.3.0",
+		"roll": "^1.2.0",
+		"steamapi": "^2.0.2"
+	},
+	"devDependencies": {
+		"pm2": "^2.10.4"
+	},
+    "engines": {
+        "node": "10.0"
+    }
+}

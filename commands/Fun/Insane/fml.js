@@ -1,0 +1,35 @@
+const { Command } = require('klasa');
+const { MessageEmbed } = require('discord.js');
+const snekfetch = require('snekfetch');
+const HTMLParser = require('fast-html-parser');
+
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, { description: 'Gets a random FML story.' });
+	}
+
+	async run(msg) {
+		const res = await snekfetch.get('http://www.fmylife.com/random');
+		const root = HTMLParser.parse(res.text);
+		const article = root.querySelector('.block a');
+		const downdoot = root.querySelector('.vote-down');
+		const updoot = root.querySelector('.vote-up');
+
+		const embed = new MessageEmbed()
+			.setTitle(`Requested by ${msg.author.tag}`)
+			.setAuthor('FML Stories')
+			.setColor('RANDOM')
+			.setTimestamp()
+			.setDescription(`_${article.childNodes[0].text}\n\n_`)
+			.addField('I agree, your life sucks', updoot.childNodes[0].text, true)
+			.addField('You deserved it:', downdoot.childNodes[0].text, true);
+
+		if (article.childNodes[0].text.length < 5) {
+			throw '<:akcry:333597917342466048>  ::  Today, something went wrong, so you will have to try again in a few moments. FML again.';
+		}
+
+		msg.send({ embed });
+	}
+
+};
