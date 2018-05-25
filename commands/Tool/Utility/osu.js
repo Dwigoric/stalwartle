@@ -257,7 +257,7 @@ module.exports = class extends Command {
 			if (list.pp) stats.splice(2, 0, `${list.pp}pp`);
 			return [
 				`\`${requests.indexOf(list.date) + 1}\`: **[${beatmap.title}${beatmap.version ? ` [${beatmap.version}]` : ''}](https://osu.ppy.sh/b/${beatmap.beatmap_id})**${mods.length ? ` **${mods.map(mod => `+${mod}`).join(' ')}**` : ''} [${+`${`${Math.round(`${`${Number(beatmap.difficultyrating)}e+2`}`)}e-2`}`}⭐]`, // eslint-disable-line max-len
-				`${[`Mapper: [${beatmap.creator}](https://osu.ppy.sh/users/${beatmap.creator})`, `Artist: ${beatmap.artist}`, `Beatmap ID: ${list.beatmap_id}`].join(' | ')}`,
+				`${[`Mapper: [${beatmap.creator}](https://osu.ppy.sh/users/${encodeURIComponent(beatmap.creator)})`, `Artist: ${beatmap.artist}`, `Beatmap ID: ${list.beatmap_id}`].join(' | ')}`,
 				`[  **${stats.join('**  |  **')}**  ]`,
 				`Date: ${moment(list.date).subtract(8, 'hours').tz(timezone).format('dddd, LL | LTS')}`
 			].join('\n\t');
