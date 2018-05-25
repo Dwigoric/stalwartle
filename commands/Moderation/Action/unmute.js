@@ -29,7 +29,7 @@ module.exports = class extends Command {
 		if (!muteRole) throw '<:redTick:399433440975519754>  ::  Whoops! The mute role has been deleted. Please reconfigure this server\'s mute role by using the `s.muterole` command.';
 		if (!member.roles.has(muteRole.id)) throw `<:redTick:399433440975519754>  ::  ${user.tag} wasn't muted already!`;
 
-		await member.roles.remove(muteRole, reason);
+		await member.roles.remove(muteRole, 'Unmuted');
 		const task = this.client.schedule.tasks.filter(tk => tk.data.user === user.id)[0];
 		if (task) this.client.schedule.delete(task.id);
 
