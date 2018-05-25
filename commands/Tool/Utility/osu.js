@@ -114,7 +114,7 @@ module.exports = class extends Command {
 			.setTitle(`${user.username} (${user.country} Rank #${user.pp_country_rank})`)
 			.setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
 			.addField('PP Rank', user.pp_rank, true)
-			.addField('Level', user.level, true)
+			.addField(`Level ${parseInt(user.level)}`, `${+`${`${Math.round(`${`${(Number(user.level) - parseInt(user.level)) * 100}e+2`}`)}e-2`}`}% gained to level ${parseInt(user.level) + 1}`, true)
 			.addField('Hits', [`300s: ${user.count300}`, `100s: ${user.count100}`, `50s: ${user.count50}`], true)
 			.addField('Accuracy', accuracy, true)
 			.addField('Playcount', user.playcount, true)
