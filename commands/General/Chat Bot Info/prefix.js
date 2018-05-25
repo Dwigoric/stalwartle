@@ -5,7 +5,6 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			guarded: true,
-			permissionLevel: 6,
 			runIn: ['text'],
 			description: 'Changes the bot prefix server-wide.',
 			usage: '[Prefix:string]'
@@ -15,7 +14,7 @@ module.exports = class extends Command {
 	async run(msg, [newPrefix]) {
 		const { prefix } = msg.guild.configs;
 		if (!newPrefix) throw `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`;
-		if (!msg.hasAtLeastPermissionLevel(6)) throw '<:redTick:399433440975519754>  ::  Sorry! Only moderators or people with Manage Server permission may change the server prefix.'; // eslint-disable-line max-len
+		if (!await msg.hasAtLeastPermissionLevel(6)) throw '<:redTick:399433440975519754>  ::  Sorry! Only moderators or people with Manage Server permission may change the server prefix.'; // eslint-disable-line max-len
 		msg.guild.configs.update('prefix', newPrefix);
 		msg.send(`The prefix for **${msg.guild.name}** is now \`${newPrefix}\`.`);
 	}
