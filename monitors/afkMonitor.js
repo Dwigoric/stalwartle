@@ -22,7 +22,7 @@ module.exports = class extends Monitor {
 		if (!afkUser) return;
 		const afk = await this.client.providers.default.get('afk', afkUser.id);
 		msg.send([
-			`${msg.author}, **${afkUser.username}** is currently AFK. [Last seen ${Duration.toNow(afk.timestamp)} ago]`,
+			`<:blobping:449750900098203649>  ::  ${msg.author}, **${afkUser.username}** is currently AFK. [Last seen ${Duration.toNow(afk.timestamp)} ago]`,
 			afk.reason ? `**Reason**: ${afk.reason}` : ''
 		].join('\n'));
 	}
