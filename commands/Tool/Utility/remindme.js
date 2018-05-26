@@ -43,6 +43,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [when, ...text]) {
+		if (when - new Date() >= 94672801000) throw '<:redTick:399433440975519754>  ::  Your reminder cannot be longer than 3 years!';
 		const reminder = await this.client.schedule.create('reminder', when, {
 			data: {
 				channel: msg.channel.id,
