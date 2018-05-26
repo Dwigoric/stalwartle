@@ -19,7 +19,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const results = await msg.guild.fetchBans().then(banlist => banlist.map(ban => [ban.user.tag, ban.reason]));
+		const banlist = await msg.guild.fetchBans();
+		if (!banlist.size) return msg.send(`<:blobban:446165778933219338>  ::  **${msg.guild.name}** has no bans yet.`);
+		const results = banlist.map(ban => [ban.user.tag, ban.reason]);
 		return await this.handleMessage(
 			msg, {
 				sendAs: msg.flags.output || 'haste',
