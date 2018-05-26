@@ -21,11 +21,10 @@ module.exports = class extends Monitor {
 		const afkUser = msg.mentions.users.filter(us => afkUsers.includes(us.id)).first();
 		if (!afkUser) return;
 		const afk = await this.client.providers.default.get('afk', afkUser.id);
-		const afkMsg = `**${afkUser.username}** is currently AFK. [Last seen ${Duration.toNow(afk.timestamp)} ago]`;
-		let afkReason;
-		if (afk.reason) afkReason = `**Reason**: ${afk.reason}`;
-		else afkReason = '';
-		msg.reply(`${afkMsg}\n${afkReason}`);
+		msg.send([
+			`${msg.author}, **${afkUser.username}** is currently AFK. [Last seen ${Duration.toNow(afk.timestamp)} ago]`,
+			afk.reason ? `**Reason**: ${afk.reason}` : ''
+		].join('\n'));
 	}
 
 };
