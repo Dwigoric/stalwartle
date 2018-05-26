@@ -37,13 +37,10 @@ module.exports = class extends Command {
 				mac: 'MacOS',
 				linux: 'Linux'
 			};
-			const possiblePlatforms = ['windows', 'mac', 'linux'];
-			for (const platform in possiblePlatforms) {
-				if (steamData.platforms[possiblePlatforms[platform]]) platforms.push(platformsObj[possiblePlatforms[platform]]);
-			}
-			for (const index in steamData.genres) {
-				genres.push(steamData.genres[index].description);
-			}
+			['windows', 'mac', 'linux'].forEach(platform => {
+				if (steamData.platforms[platform]) platforms.push(platformsObj[platform]);
+			});
+			steamData.genres.forEach(genre => genres.push(genre.description));
 
 			embed
 				.setColor('RANDOM')
