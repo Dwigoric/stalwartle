@@ -31,9 +31,10 @@ module.exports = class extends Command {
 		if (muteRole.position >= msg.guild.me.roles.highest.position) throw `<:redTick:399433440975519754>  ::  The mute role **${muteRole.name}** is higher than me, so I can't give ${user.tag} the mute role.`; // eslint-disable-line max-len
 		if (member.roles.has(muteRole.id)) throw `<:redTick:399433440975519754>  ::  ${user.tag} has been already muted!`;
 
-		for (const channel of msg.guild.channels.filter(chan => chan.type !== 'category').values()) {
+		for (const channel of msg.guild.channels.values()) {
 			if (channel.type === 'text') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
-			if (channel.type === 'voice') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
+			else if (channel.type === 'voice') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
+			else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
 		}
 		await member.roles.add(muteRole, 'Muted');
 		if (duration && duration !== Infinity) {
