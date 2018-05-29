@@ -6,7 +6,7 @@ module.exports = class extends Finalizer {
 	async run(msg, response) {
 		if (!this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).includes(msg.command.name)) return null;
 		response[0].send(`You have been ${msg.command.name}${msg.command.name.slice(-3) === 'ban' ? 'n' : ''}${msg.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${msg.guild}**. ${response[1] ? `**Reason**: ${response[1]}` : ''}`).catch(() => { // eslint-disable-line max-len
-			if (msg.command.name === 'warn') return msg.send(`<:redTick:399433440975519754>  ::  I couldn't send messages to **${response[0].tag}**, so I couldn't warn them.`);
+			if (msg.command.name === 'warn' && msg.author) return msg.send(`<:redTick:399433440975519754>  ::  I couldn't send messages to **${response[0].tag}**, so I couldn't warn them.`);
 			return null;
 		});
 		const configs = {
@@ -18,12 +18,13 @@ module.exports = class extends Finalizer {
 			unmute: ['#24E4D0', '<:blobgo:398843278243528707>'],
 			warn: ['#B2884D', '<:blobthinkstare:398843280135028738>']
 		};
+		const moderator = msg.author ? response[0] === msg.author ? this.client.user : msg.author : this.client.user;
 		const { modlogs } = await this.client.providers.default.get('modlogs', msg.guild.id);
 		modlogs.push({
 			id: (modlogs.length + 1).toString(),
 			timestamp: Date.now(),
 			type: msg.command.name,
-			moderator: (msg.author || this.client.user).id,
+			moderator: moderator.id,
 			user: response[0].id,
 			reason: response[1]
 		});
@@ -43,10 +44,11 @@ module.exports = class extends Finalizer {
 			.setTitle(`Case #${modlogs.length}: ${msg.command.name.toTitleCase()} ${configs[msg.command.name][1]}`)
 			.setFooter(`User ID: ${response[0].id}`)
 			.setTimestamp()
-			.addField('Moderator', msg.author || this.client.user, true)
+			.addField('Moderator', moderator, true)
 			.addField(response[0].bot ? 'Bot' : 'User', response[0], true);
 		if (response[1]) embed.addField('Reason', response[1], true);
 		if (response[2]) embed.addField('Duration', response[2] === Infinity ? '∞' : Duration.toNow(response[2]), true);
+		if (response[3]) embed.addField('Content', response[3], true);
 		return channel.send(embed);
 	}
 
