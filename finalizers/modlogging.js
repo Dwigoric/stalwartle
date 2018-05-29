@@ -46,9 +46,13 @@ module.exports = class extends Finalizer {
 			.setTimestamp()
 			.addField('Moderator', moderator, true)
 			.addField(response[0].bot ? 'Bot' : 'User', response[0], true);
-		if (response[1]) embed.addField('Reason', response[1], true);
 		if (response[2]) embed.addField('Duration', response[2] === Infinity ? '∞' : Duration.toNow(response[2]), true);
-		if (response[3]) embed.addField('Content', response[3], true);
+		if (response[3]) {
+			embed
+				.addField('Content', response[3], true)
+				.addField('Channel', msg.channel, true);
+		}
+		if (response[1]) embed.addField('Reason', response[1], true);
 		return channel.send(embed);
 	}
 

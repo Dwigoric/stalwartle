@@ -21,6 +21,7 @@ module.exports = class extends Monitor {
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
 		this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('warn'),
+			channel: msg.channel,
 			guild: msg.guild
 		}, [msg.author, 'Sending invites with the AntiInvite enabled', null, inviteRegex.exec(msg.content)[0].split(/ +/)[0]]); // eslint-disable-line max-len
 	}
