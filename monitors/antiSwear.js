@@ -19,7 +19,8 @@ module.exports = class extends Monitor {
 		let swearArray;
 		if (msg.guild.configs.automod.globalSwears) {
 			swearArray = [
-				'[n𝗇ηꓠ𝚗🆖🇳][iι_y🇮𝗂іjï1ı🆖l|\u005c\u002f\u007c!¡]{1,50}[g🇬6ɡɢġģǧǵ9q]{2,}[3🇪€εεeéěȩėеiua0o]{1,50}[rŕřŗṙ🇷]',
+				'nigga',
+				'nigger',
 				'fuc?k',
 				'cunt',
 				'cnut',
@@ -29,15 +30,18 @@ module.exports = class extends Monitor {
 				'asshole',
 				'blowjob',
 				'c(u|0|o|\\(\\))ck'
-			].concat(msg.guild.configs.automod.swearWords);
-		} else { swearArray = msg.guild.configs.automod.swearWords; }
+			].concat(msg.guild.configs.automod.swearWords).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+		} else { swearArray = msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`); }
 		if (!swearArray.length) return;
-		if (!new RegExp(swearArray.join('|'), 'im').test(msg.content)) return;
+		const swearRegex = new RegExp(swearArray.join('|'), 'im');
+		if (!swearRegex.test(msg.content)) return;
+		console.log(new RegExp(swearArray.join('|')).exec(msg.content));
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
 		this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('warn'),
+			channel: msg.channel,
 			guild: msg.guild
-		}, [msg.author, 'Swearing with the AntiSwear enabled', null, msg.content]);
+		}, [msg.author, 'Swearing with the AntiSwear enabled', null, swearRegex.exec(msg.content)[0]]);
 	}
 
 	async init() {
