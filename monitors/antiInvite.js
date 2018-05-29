@@ -14,6 +14,7 @@ module.exports = class extends Monitor {
 		if (!msg.guild) return;
 		if (!msg.guild.configs.automod.antiInvite) return;
 		if (msg.author.bot && msg.guild.configs.automod.ignoreBots) return;
+		if (msg.guild.configs.automod.filterIgnore.includes(msg.channel.id)) return;
 
 		const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;
 		if (!inviteRegex.test(msg.content)) return;

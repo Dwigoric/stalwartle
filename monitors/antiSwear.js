@@ -14,6 +14,7 @@ module.exports = class extends Monitor {
 		if (!msg.guild) return;
 		if (!msg.guild.configs.automod.antiSwear) return;
 		if (msg.author.bot && msg.guild.configs.automod.ignoreBots) return;
+		if (msg.guild.configs.automod.filterIgnore.includes(msg.channel.id)) return;
 
 		let swearArray;
 		if (msg.guild.configs.automod.globalSwears) {
