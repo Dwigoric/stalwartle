@@ -16,9 +16,9 @@ module.exports = class extends Monitor {
 		if (msg.author.bot && msg.guild.configs.automod.ignoreBots) return;
 		if (msg.guild.configs.automod.filterIgnore.includes(msg.channel.id)) return;
 
-		let swearArray;
+		let swearArray = msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		if (msg.guild.configs.automod.globalSwears) {
-			swearArray = [
+			swearArray = swearArray.concat([
 				'nigga',
 				'nigger',
 				'fuc?k',
@@ -30,8 +30,8 @@ module.exports = class extends Monitor {
 				'asshole',
 				'blowjob',
 				'c(u|0|o|\\(\\))ck'
-			].concat(msg.guild.configs.automod.swearWords).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
-		} else { swearArray = msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`); }
+			]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+		}
 		if (!swearArray.length) return;
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (!swearRegex.test(msg.content)) return;
