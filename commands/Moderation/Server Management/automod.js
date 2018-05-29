@@ -10,6 +10,7 @@ module.exports = class extends Command {
 			extendedHelp: [
 				'All filters are disabled by default. If you want to enable the invite filter, use `s.automod invite enable`. Same for the swear filter.',
 				'To ignore bots, use `s.automod ignorebots enable`. This is disabled by default.',
+				'You can also ignore filters on mods. Juse use `s.conf set automod.ignoreMods true`. This is disabled by default.',
 				'\nTo add words to the swear filter, use `s.conf set automod.swearWords <word>`.',
 				'To disable filtering the words in the global filter, use `s.conf set automod.globalSwears false`. This is enabled by default.',
 				'\nYou can disable filtering on certain channels. Just use `s.conf set automod.filterIgnore <channel>`'
@@ -48,6 +49,7 @@ module.exports = class extends Command {
 		const guildSchema = this.client.gateways.guilds.schema;
 		if (!guildSchema.automod) await guildSchema.add('automod', { type: 'Folder' });
 		if (!guildSchema.automod.ignoreBots) await guildSchema.automod.add('ignoreBots', { type: 'boolean', default: false, configurable: true });
+		if (!guildSchema.automod.ignoreMods) await guildSchema.automod.add('ignoreMods', { type: 'boolean', default: false, configurable: true });
 		if (!guildSchema.automod.filterIgnore) await guildSchema.automod.add('filterIgnore', { type: 'channel', array: true, default: [], configurable: true });
 	}
 
