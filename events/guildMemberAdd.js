@@ -4,12 +4,9 @@ module.exports = class extends Event {
 
 	async run(member) {
 		const guildConf = member.guild.configs;
-		if (member.user.bot && guildConf.autorole.bot) {
-			return await this.giveRole(member, 'bot');
-		} else if (!member.user.bot && guildConf.autorole.user) {
-			return await this.giveRole(member, 'user');
-		}
-		return true;
+		if (member.user.bot && guildConf.autorole.bot) return await this.giveRole(member, 'bot');
+		if (!member.user.bot && guildConf.autorole.user) return await this.giveRole(member, 'user');
+		return null;
 	}
 
 	async giveRole(member, type) {
