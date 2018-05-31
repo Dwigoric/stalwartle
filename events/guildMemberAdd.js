@@ -12,7 +12,7 @@ module.exports = class extends Event {
 	async giveRole(member, type) {
 		const role = member.guild.roles.get(member.guild.configs.autorole[type]);
 		if (!role) {
-			member.guild.owner.user.send(`The role **${member.guild.configs.autorole[type]}** doesn't exist anymore. Autorole aborted.`).catch(() => null);
+			member.guild.owner.send(`The role **${member.guild.configs.autorole[type]}** doesn't exist anymore. Autorole aborted.`).catch(() => null);
 			return member.guild.configs.reset(`autorole.${type}`);
 		}
 		if (member.permissions.bitfield > member.guild.me.permissions.bitfield) return member.guild.owner.user.send(`⚠ **${member.tag}**'s permissions were higher than mine, so I couldn't give them **${role.name}**.`).catch(() => null); // eslint-disable-line max-len
