@@ -20,16 +20,17 @@ module.exports = class extends Command {
 	}
 
 	async delete(msg, [chan = msg.channel, ...msgargs]) {
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.'; // eslint-disable-line max-len
+		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.';
 		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
 		chan.send(msgargs);
-		return msg.delete();
+		return msg.delete().catch(() => null);
 	}
 
 	async embed(msg, [chan = msg.channel, ...msgargs]) {
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.'; // eslint-disable-line max-len
+		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.';
 		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
 		return chan.send({
 			embed: await new MessageEmbed()
@@ -42,8 +43,9 @@ module.exports = class extends Command {
 	}
 
 	async anonymous(msg, [chan = msg.channel, ...msgargs]) {
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.'; // eslint-disable-line max-len
+		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.';
 		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
 		chan.send({
 			embed: await new MessageEmbed()
@@ -53,7 +55,7 @@ module.exports = class extends Command {
 				.setFooter(`From #${msg.channel.name}`)
 				.setTimestamp()
 		});
-		return msg.delete();
+		return msg.delete().catch(() => null);
 	}
 
 };

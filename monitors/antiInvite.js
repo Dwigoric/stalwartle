@@ -19,7 +19,7 @@ module.exports = class extends Monitor {
 
 		const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;
 		if (!inviteRegex.test(msg.content)) return;
-		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
+		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete().catch(() => null);
 		this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('warn'),
 			channel: msg.channel,
