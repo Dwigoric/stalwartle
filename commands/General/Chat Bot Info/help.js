@@ -80,19 +80,15 @@ module.exports = class extends Command {
 			cmds = this.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
 		}
 
-		await Promise.all(cmds.map((command) =>
-			this.client.inhibitors.run(msg, command, true)
-				.then(() => {
-					const cat = category || command.category;
-					const subCat = subcategory || command.subCategory;
-					if (!help.hasOwnProperty(cat)) help[cat] = {};
-					if (!help[cat].hasOwnProperty(subCat)) help[cat][subCat] = [];
-					const description = typeof command.description === 'function' ? command.description(msg) : command.description;
-					return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
-				}).catch(() => {
-					// just so it will catch Promise rejections
-				})
-		));
+		await Promise.all(cmds.map(async command => {
+			if (!await msg.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && command.subCategory === 'Bot Owner') return null;
+			const cat = category || command.category;
+			const subCat = subcategory || command.subCategory;
+			if (!help.hasOwnProperty(cat)) help[cat] = {};
+			if (!help[cat].hasOwnProperty(subCat)) help[cat][subCat] = [];
+			const description = typeof command.description === 'function' ? command.description(msg) : command.description;
+			return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
+		}));
 
 		if (!Object.keys(help).length) throw `<:redTick:399433440975519754>  ::  It would seem that **${subcategory}** is not under **${category}**.`;
 		return help;
