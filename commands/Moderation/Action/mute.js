@@ -14,13 +14,13 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [member, duration = Infinity, ...reason]) {
+	async run(msg, [member, duration = Infinity, ...reason], force) {
 		if (!msg.guild.configs.muteRole) throw '<:redTick:399433440975519754>  ::  The mute role has not yet been set up for this server. You can do so by using the `s.muterole` command.';
-		if (member.user.id === msg.author.id) throw 'Why would you mute yourself?';
-		if (member.user.id === this.client.user.id) throw 'Have I done something wrong?';
+		if (!force && member.user.id === msg.author.id) throw 'Why would you mute yourself?';
+		if (!force && member.user.id === this.client.user.id) throw 'Have I done something wrong?';
 
 		const user = await this.client.users.fetch(member.id).catch(() => null);
-		if (member) {
+		if (member && !force) {
 			if (member.roles.highest.position >= msg.member.roles.highest.position) throw '<:redTick:399433440975519754>  ::  You cannot mute this user.';
 			if (member.roles.highest.position >= msg.guild.me.roles.highest.position) throw '<:redTick:399433440975519754>  ::  I cannot mute this user.';
 		}

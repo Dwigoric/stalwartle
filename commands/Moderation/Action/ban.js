@@ -17,12 +17,12 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [user, days = 0, duration = Infinity, ...reason]) {
-		if (user.id === msg.author.id) throw 'Why would you ban yourself?';
-		if (user.id === this.client.user.id) throw 'Have I done something wrong?';
+	async run(msg, [user, days = 0, duration = Infinity, ...reason], force) {
+		if (!force && user.id === msg.author.id) throw 'Why would you ban yourself?';
+		if (!force && user.id === this.client.user.id) throw 'Have I done something wrong?';
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
-		if (member) {
+		if (!force && member) {
 			if (member.roles.highest.position >= msg.member.roles.highest.position) throw '<:redTick:399433440975519754>  ::  You cannot ban this user.';
 			if (!member.bannable) throw '<:redTick:399433440975519754>  ::  I cannot ban this user.';
 		}
