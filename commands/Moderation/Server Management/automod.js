@@ -15,7 +15,7 @@ module.exports = class extends Command {
 				'To disable filtering the words in the global filter, use `s.conf set automod.globalSwears false`. This is enabled by default.',
 				'\nYou can disable filtering on certain channels. Just use `s.conf set automod.filterIgnore <channel>`'
 			].join('\n'),
-			usage: '<invite|swear|ignorebots|ignoremods> <enable|disable>',
+			usage: '<invite|swear|spam|mentionspam|ignorebots|ignoremods> <enable|disable>',
 			usageDelim: ' ',
 			subcommands: true
 		});
@@ -29,6 +29,16 @@ module.exports = class extends Command {
 	async swear(msg, [option]) {
 		await this.setAutoMod(msg, option, 'antiSwear');
 		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiSwear module has been ${option}d on ${msg.guild.name}.`);
+	}
+
+	async spam(msg, [option]) {
+		await this.setAutoMod(msg, option, 'antiSpam');
+		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiSpam module has been ${option}d on ${msg.guild.name}.`);
+	}
+
+	async mentionspam(msg, [option]) {
+		await this.setAutoMod(msg, option, 'mentionSpam');
+		return msg.send(`<:greenTick:399433439280889858>  ::  The MentionSpam module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async ignorebots(msg, [option]) {
