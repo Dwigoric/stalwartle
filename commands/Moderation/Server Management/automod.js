@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			description: 'Sets the automod settings for the server.',
 			extendedHelp: [
-				'All filters are disabled by default. If you want to enable the invite filter, use `s.automod invite enable`. Same for the swear filter.',
+				'All filters are disabled by default. If you want to enable the invite filter, use `s.automod invite enable`. Same for the swear, spam, and mentionspam filters.',
 				'To ignore bots, use `s.automod ignorebots enable`. This is disabled by default.',
 				'You can also ignore filters on mods. Juse use `s.automod ignoremods enable`. This is disabled by default.',
 				'\nTo add words to the swear filter, use `s.conf set automod.swearWords <word>`.',
