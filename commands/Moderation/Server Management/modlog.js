@@ -14,7 +14,7 @@ module.exports = class extends Command {
 				'If you want to reset the modlogs (not the channels), use the `reset` subcommand.',
 				'If you want to get the details of a specific case number, simply run `s.modlog <case number here>`.'
 			].join('\n'),
-			usage: '[reset] [CaseNumber:integer|User:user]',
+			usage: '[reset|showcontent] [CaseNumber:integer|User:user]',
 			usageDelim: ' ',
 			subcommands: true
 		});
@@ -75,6 +75,13 @@ module.exports = class extends Command {
 		return display
 			.setFooterPrefix('Page ')
 			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading moderation logs...'), { filter: (reaction, author) => author === msg.author });
+	}
+
+	async showcontent(msg) {
+		const { modlogShowContent } = msg.guild.configs;
+		if (modlogShowContent) msg.guild.configs.update('modlogShowContent', false);
+		else msg.guild.configs.update('modlogShowContent', true);
+		return msg.send(`<:greenTick:399433439280889858>  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
 	}
 
 	async reset(msg) {

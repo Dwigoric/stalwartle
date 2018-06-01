@@ -46,13 +46,12 @@ module.exports = class extends Finalizer {
 			.setTimestamp()
 			.addField('Moderator', moderator, true)
 			.addField(response[0].bot ? 'Bot' : 'User', response[0], true);
+		if (response[1]) embed.addField('Reason', response[1], true);
 		if (response[2]) embed.addField('Duration', response[2] === Infinity ? '∞' : Duration.toNow(response[2]), true);
 		if (response[3]) {
-			embed
-				.addField('Content', response[3], true)
-				.addField('Channel', msg.channel, true);
+			embed.addField('Channel', msg.channel, true);
+			if (msg.guild.configs.modlogShowContent) embed.addField('Content', response[3]);
 		}
-		if (response[1]) embed.addField('Reason', response[1], true);
 		return channel.send(embed);
 	}
 
@@ -61,6 +60,7 @@ module.exports = class extends Finalizer {
 		if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
 		const guildSchema = this.client.gateways.guilds.schema;
 		if (!guildSchema.logging) guildSchema.add('logging', { type: 'boolean', default: true, configurable: true });
+		if (!guildSchema.modlogShowContent) guildSchema.add('modlogShowContent', { type: 'boolean', default: true, configurable: true });
 	}
 
 };
