@@ -10,39 +10,43 @@ module.exports = class extends Command {
 			extendedHelp: [
 				'All filters are disabled by default. If you want to enable the invite filter, use `s.automod invite enable`. Same for the swear filter.',
 				'To ignore bots, use `s.automod ignorebots enable`. This is disabled by default.',
-				'You can also ignore filters on mods. Juse use `s.conf set automod.ignoreMods true`. This is disabled by default.',
+				'You can also ignore filters on mods. Juse use `s.automod ignoremods enable`. This is disabled by default.',
 				'\nTo add words to the swear filter, use `s.conf set automod.swearWords <word>`.',
 				'To disable filtering the words in the global filter, use `s.conf set automod.globalSwears false`. This is enabled by default.',
 				'\nYou can disable filtering on certain channels. Just use `s.conf set automod.filterIgnore <channel>`'
 			].join('\n'),
-			usage: '<invite|swear|ignorebots> <enable|disable>',
+			usage: '<invite|swear|ignorebots|ignoremods> <enable|disable>',
 			usageDelim: ' ',
 			subcommands: true
 		});
 	}
 
 	async invite(msg, [option]) {
-		let _option;
-		if (option === 'enable') _option = true;
-		else _option = false;
-		msg.guild.configs.update('automod.antiInvite', _option);
+		await this.setAutoMod(msg, option, 'antiInvite');
 		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiInvite module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async swear(msg, [option]) {
-		let _option;
-		if (option === 'enable') _option = true;
-		else _option = false;
-		msg.guild.configs.update('automod.antiSwear', _option);
+		await this.setAutoMod(msg, option, 'antiSwear');
 		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiSwear module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async ignorebots(msg, [option]) {
+		const _option = await this.setAutoMod(msg, option, 'ignoreBots');
+		return msg.send(`<:greenTick:399433439280889858>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on bots in ${msg.guild.name}.`);
+	}
+
+	async ignoremods(msg, [option]) {
+		const _option = await this.setAutoMod(msg, option, 'ignoreMods');
+		return msg.send(`<:greenTick:399433439280889858>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on moderators in ${msg.guild.name}.`);
+	}
+
+	async setAutoMod(msg, option, type) {
 		let _option;
 		if (option === 'enable') _option = true;
 		else _option = false;
-		msg.guild.configs.update('automod.ignoreBots', _option);
-		return msg.send(`<:greenTick:399433439280889858>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on bots in ${msg.guild.name}.`);
+		msg.guild.configs.update(`automod.${type}`, _option);
+		return _option;
 	}
 
 	async init() {
