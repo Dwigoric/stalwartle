@@ -6,6 +6,7 @@ module.exports = class extends Task {
 		const _guild = this.client.guilds.get(guild);
 		const _role = _guild.roles.get(role);
 		const member = await _guild.members.fetch(user).catch(() => null);
+		if (!member.roles.has(role)) return null;
 		this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('unmute'),
 			guild: _guild

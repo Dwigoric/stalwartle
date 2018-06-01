@@ -14,8 +14,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user, ...reason]) {
-		const isBanned = await msg.guild.fetchBans().then(bans => bans.has(user.id));
-		if (!isBanned) throw `<:redTick:399433440975519754>  ::  This user isn't banned from this server.`;
+		if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) throw `<:redTick:399433440975519754>  ::  This user isn't banned from this server.`;
 
 		reason = reason.length ? reason.join(this.usageDelim) : null;
 
