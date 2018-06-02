@@ -75,8 +75,8 @@ module.exports = class extends Command {
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setAuthor(dGuild.name, `https://cdn.discordapp.com/icons/${dGuild.id}/${dGuild.icon}.png`)
-				.setThumbnail(`https://cdn.discordapp.com/icons/${dGuild.id}/${dGuild.icon}.png`)
+				.setAuthor(dGuild.name, dGuild.iconURL({ format: 'png' }))
+				.setThumbnail(dGuild.iconURL({ format: 'png' }))
 				.addField('ID', dGuild.id, true)
 				.addField('Owner', `${dGuild.owner.user.tag}\n(${dGuild.owner.user})`, true)
 				.addField('Verification Level', verif, true)
@@ -96,7 +96,7 @@ module.exports = class extends Command {
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setImage(dGuild.iconURL({ size: 2048 }))
+				.setImage(dGuild.iconURL({ format: 'png', size: 2048 }))
 		});
 	}
 
