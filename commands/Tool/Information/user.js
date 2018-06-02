@@ -39,7 +39,7 @@ module.exports = class extends Command {
 				roleNum = '';
 			} else {
 				if (guildMember.roles.size <= 10) roles = guildMember.roles.sort((a, b) => b.position - a.position).first(10).map(rl => rl).join(' | ');
-				else roles = guildMember.roles.sort((a, b) => b.position - a.position).map(rl => rl.id).join(' | ');
+				else roles = guildMember.roles.sort((a, b) => b.position - a.position).map(rl => rl).join(' | ');
 				roleNum = `[${guildMember.roles.size}]`;
 			}
 		}
