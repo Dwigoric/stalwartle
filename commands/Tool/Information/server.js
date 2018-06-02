@@ -106,7 +106,7 @@ module.exports = class extends Command {
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle(`${dGuild.name}'s Roles [${dGuild.roles.size}]`)
-				.setDescription(dGuild.roles.map(role => role).join(' | '))
+				.setDescription(dGuild.roles.sort((a, b) => b.position - a.position).map(role => role).join(' | '))
 		});
 	}
 
