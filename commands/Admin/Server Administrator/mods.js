@@ -47,19 +47,20 @@ module.exports = class extends Command {
 	}
 
 	async add(msg, [mod]) {
-		const type = mod.constructor.name === 'GuildMember' ? 'users' : 'roles';
-		const guildConf = msg.guild.configs;
-		if (guildConf.moderators[type].includes(mod.id)) throw `<:redTick:399433440975519754>  ::  This role/user is already a moderator!`;
-		guildConf.update(`moderators.${type}`, mod.id, msg.guild, { action: 'add' });
-		msg.send(`<:greenTick:399433439280889858>  ::  Successfully added as moderator.`);
+		return this.toggle(msg, mod, 'add');
 	}
 
 	async remove(msg, [mod]) {
+		return this.toggle(msg, mod, 'remove');
+	}
+
+	async toggle(msg, mod, action) {
 		const type = mod.constructor.name === 'GuildMember' ? 'users' : 'roles';
 		const guildConf = msg.guild.configs;
-		if (!guildConf.moderators[type].includes(mod.id)) throw `<:redTick:399433440975519754>  ::  This role/user is already not a moderator!`;
-		guildConf.update(`moderators.${type}`, mod.id, msg.guild, { action: 'remove' });
-		msg.send(`<:greenTick:399433439280889858>  ::  Successfully removed as moderator.`);
+		if (action === 'add' && guildConf.moderators[type].includes(mod.id)) throw '<:redTick:399433440975519754>  ::  This role/user is already a moderator!';
+		if (action === 'remove' && !guildConf.moderators[type].includes(mod.id)) throw '<:redTick:399433440975519754>  ::  This role/user is already not a moderator!';
+		guildConf.update(`moderators.${type}`, mod.id, msg.guild, { action });
+		msg.send(`<:greenTick:399433439280889858>  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
 	}
 
 	async init() {
