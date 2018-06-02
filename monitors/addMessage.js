@@ -10,6 +10,7 @@ module.exports = class extends Monitor {
 	}
 
 	run(msg) {
+		if (!msg.guild) return;
 		msg.member.messages = msg;
 	}
 
