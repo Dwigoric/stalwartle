@@ -16,11 +16,13 @@ module.exports = class extends Command {
 		this
 			.createCustomResolver('member', (arg, possible, msg, [action]) => {
 				if (['add', 'remove'].includes(action) && !arg) throw '<:redTick:399433440975519754>  ::  Please provide the user/role.';
+				if (arg && !['add', 'remove'].includes(action)) throw '<:redTick:399433440975519754>  ::  Please specify if the role/user should be added or removed.';
 				if (!arg) return undefined;
 				return this.client.arguments.get('member').run(arg, possible, msg);
 			})
 			.createCustomResolver('role', (arg, possible, msg, [action]) => {
 				if (['add', 'remove'].includes(action) && !arg) throw '<:redTick:399433440975519754>  ::  Please provide the user/role.';
+				if (arg && !['add', 'remove'].includes(action)) throw '<:redTick:399433440975519754>  ::  Please specify if the role/user should be added or removed.';
 				if (!arg) return undefined;
 				return this.client.arguments.get('role').run(arg, possible, msg);
 			});
