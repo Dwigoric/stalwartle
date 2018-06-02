@@ -5,10 +5,11 @@ module.exports = class extends Finalizer {
 
 	async run(msg, response) {
 		if (!this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).includes(msg.command.name)) return null;
-		response[0].send(`You have been ${msg.command.name}${msg.command.name.slice(-3) === 'ban' ? 'n' : ''}${msg.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${msg.guild}**. ${response[1] ? `**Reason**: ${response[1]}` : ''}`).catch(() => { // eslint-disable-line max-len
-			if (msg.command.name === 'warn' && msg.author) return msg.send(`<:redTick:399433440975519754>  ::  I couldn't send messages to **${response[0].tag}**, so I couldn't warn them.`);
-			return null;
-		});
+		response[0]
+			.send(`You have been ${msg.command.name}${msg.command.name.slice(-3) === 'ban' ? 'n' : ''}${msg.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${msg.guild}**. ${response[1] ? `**Reason**: ${response[1]}` : ''}`) // eslint-disable-line max-len
+			.catch(() => {
+				if (msg.command.name === 'warn' && msg.author) msg.send(`⚠ I couldn't send messages to **${response[0].tag}**, so I couldn't warn them; but this will still be logged.`);
+			});
 		const configs = {
 			kick: ['#FBA200', '👢'],
 			ban: ['#800000', '<:blobBan:399433444670701568>'],
