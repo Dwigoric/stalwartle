@@ -12,7 +12,8 @@ module.exports = class extends Command {
 			extendedHelp: [
 				'If you want to get the modlogs for the server and not for a user, simple do not provide a user.',
 				'If you want to reset the modlogs (not the channels), use the `reset` subcommand.',
-				'If you want to get the details of a specific case number, simply run `s.modlog <case number here>`.'
+				'If you want to get the details of a specific case number, simply run `s.modlog <case number here>`.',
+				'To get the modlogs of a certain type, you can use the `--type` flag, e.g. `--type=warn`, `--type=kick`, `ban`, etc.'
 			].join('\n'),
 			usage: '[reset|showcontent] [CaseNumber:integer|User:user]',
 			usageDelim: ' ',
@@ -44,6 +45,7 @@ module.exports = class extends Command {
 			});
 		}
 
+		if (msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type)) list = list.filter(ml => ml.type === msg.flags.type); // eslint-disable-line max-len
 		if (user) list = list.filter(ml => ml.user === user.id);
 		list = list.sort((a, b) => Number(a.id) - Number(b.id));
 		if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
