@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
 	async init() {
 		const defProvider = this.client.providers.default;
-		if (!defProvider.hasTable('afk')) defProvider.createTable('afk');
+		if (!await defProvider.hasTable('afk')) defProvider.createTable('afk');
 	}
 
 };

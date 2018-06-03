@@ -80,7 +80,7 @@ module.exports = class extends Command {
 
 	async init() {
 		const defProvider = this.client.providers.default;
-		if (!defProvider.hasTable('tags')) defProvider.createTable('tags');
+		if (!await defProvider.hasTable('tags')) defProvider.createTable('tags');
 	}
 
 };
