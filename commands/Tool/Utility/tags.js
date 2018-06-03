@@ -51,9 +51,7 @@ module.exports = class extends Command {
 		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		if (userTags[tag]) throw `<:redTick:399433440975519754>  ::  **${tag}** is already your tag!`;
 		if (Object.keys(userTags).length > 15) throw `<:redTick:399433440975519754>  ::  You have already reached the limit of 15 tags!`;
-		const tagDetails = {};
-		tagDetails[tag] = contents.join(this.usageDelim);
-		await this.client.providers.default.update('tags', msg.author.id, tagDetails);
+		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
 		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been created!`);
 	}
 
@@ -72,9 +70,7 @@ module.exports = class extends Command {
 		if (tag === 'id') throw `<:redTick:399433440975519754>  ::  Tag **${tag}** cannot be edited. Sorry!`;
 		if (!userTags[tag]) throw `<:redTick:399433440975519754>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
 		if (!contents.length) throw `<:redTick:399433440975519754>  ::  Please provide the new contents of the tag **${tag}**.`;
-		const tagDetails = {};
-		tagDetails[tag] = contents.join(this.usageDelim);
-		await this.client.providers.default.update('tags', msg.author.id, tagDetails);
+		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
 		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been edited!`);
 	}
 
