@@ -11,17 +11,17 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [reason = null]) {
-		if (await this.client.providers.default.has('afk', msg.author.id) && msg.author.configs.afktoggle) {
-			await this.client.providers.default.delete('afk', msg.author.id);
+		if (await this.client.providers.get('json').has('afk', msg.author.id) && msg.author.configs.afktoggle) {
+			await this.client.providers.get('json').delete('afk', msg.author.id);
 			return msg.send(`Welcome back, **${msg.author}**! I've removed your AFK status.`);
 		}
-		await this.client.providers.default.create('afk', msg.author.id, { reason, channel: msg.channel.id, timestamp: Date.now() });
+		await this.client.providers.get('json').create('afk', msg.author.id, { reason, channel: msg.channel.id, timestamp: Date.now() });
 		return msg.send(`<:greenTick:399433439280889858>  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
 	}
 
 	async init() {
-		const defProvider = this.client.providers.default;
-		if (!await defProvider.hasTable('afk')) defProvider.createTable('afk');
+		const jsonProvider = this.client.providers.get('json');
+		if (!await jsonProvider.hasTable('afk')) jsonProvider.createTable('afk');
 	}
 
 };
