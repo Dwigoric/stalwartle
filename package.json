@@ -9,7 +9,8 @@
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
 		"klasa": "github:dirigeants/klasa",
-		"moment-timezone": "^0.5.17"
+		"moment-timezone": "^0.5.17",
+		"rethinkdbdash": "^2.3.31"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
