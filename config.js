@@ -13,7 +13,7 @@ exports.config = {
 	// Whether d.js should queue your rest request in 'sequential' or 'burst' mode
 	apiRequestMethod: 'sequential',
 	// If your bot should be able to mention @everyone
-	disableEveryone: false,
+	disableEveryone: true,
 	// Any Websocket Events you don't want to listen to
 	disabledEvents: [],
 	// A presence to login with
