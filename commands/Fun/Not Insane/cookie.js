@@ -51,7 +51,7 @@ module.exports = class extends Command {
 		}
 		const list = userStore
 			.filter(user => !user.bot && user.configs.cookies)
-			.sort((a, b) => b.configs.cookies > a.configs.cookies)
+			.sort((a, b) => b.configs.cookies > a.configs.cookies ? 1 : -1)
 			.array();
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		while (list.length) top10.push(list.splice(0, 10));
