@@ -20,11 +20,9 @@ module.exports = class extends Command {
 		this.createCustomResolver('string', async (arg, possible, msg, [member]) => {
 			if (!arg) {
 				if (member) {
-					try {
-						return this.client.idiot.mock(await msg.channel.messages.fetch(member.lastMessageID).then(mg => mg.content));
-					} catch (err) {
-						throw "<:redTick:399433440975519754>  ::  Whoops... that person hasn't messaged this channel for quite some time...";
-					}
+					return await msg.channel.messages.fetch(member.lastMessageID)
+						.then(mg => mg.content)
+						.catch(() => { throw "<:redTick:399433440975519754>  ::  Whoops... that person hasn't messaged this channel for quite some time..."; });
 				} else {
 					throw '<:redTick:399433440975519754>  ::  Um... what lie will I judge? 🤔';
 				}
