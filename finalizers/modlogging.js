@@ -37,6 +37,7 @@ module.exports = class extends Finalizer {
 				'This does not mean that I will stop the logs. You can always view them at `s.modlogs`.'
 			].join(' '));
 		}
+		if (!msg.guild.configs.logging) return true;
 		if (!channel) return true;
 		if (!channel.postable) return msg.send(`<:redTick:399433440975519754>  ::  It seems that I cannot send messages in ${channel}.`);
 		const embed = new MessageEmbed()
