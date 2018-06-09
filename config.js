@@ -22,7 +22,7 @@ exports.config = {
 	readyMessage: (client) => `${client.user.tag} has been given birth. Currently playing on ${client.guilds.size} servers with ${client.users.size} users.`,
 
 	ownerID: '295391820744228867',
-	owners: ['295391820744228867', '296862433136476160', '296256174209105920'],
+	owners: ['295391820744228867', '296862433136476160', '296256174209105920', '147891648628654082'],
 	/**
      * Caching Options
      */
