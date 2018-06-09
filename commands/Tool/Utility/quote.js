@@ -20,7 +20,12 @@ module.exports = class extends Command {
 			.setDescription(message.content)
 			.setFooter(`Quoted by ${msg.author.tag}`, msg.author.displayAvatarURL())
 			.setTimestamp(new Date(message.createdTimestamp));
-		msg.send({ embed, files: message.attachments.map(a => a.url) });
+		const attachments = message.attachments.size ? message.attachments.filter(atch => {
+			const filename = atch.file.name;
+			return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
+		}) : null;
+		if (attachments && attachments.size) embed.setImage(attachments.first().url);
+		return msg.send(embed);
 	}
 
 };

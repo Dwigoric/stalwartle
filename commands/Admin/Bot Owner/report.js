@@ -19,7 +19,7 @@ module.exports = class extends Command {
 			'magical-ideas': '445822516364181535',
 			'magical-bugs': '445822556214394880'
 		};
-		if (repMsg.author.id !== this.client.user.id) return;
+		if (repMsg.author.id !== this.client.user.id) return null;
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(repUser.tag, repUser.displayAvatarURL())
@@ -27,14 +27,21 @@ module.exports = class extends Command {
 			.addField("High Lord's Comments", repCom.join(' '))
 			.setFooter(`#${msg.channel.name} | ${msg.channel.guild.name}`)
 			.setTimestamp();
-		if (!msg.flags.deny) this.client.channels.get(reportChans[msg.channel.name]).send({ embed, files: repMsg.attachments.map(a => a.url) }).catch();
-		repUser.send(`Your ${msg.channel.name.slice(0, -1).split('-').join(' ')} has been acknowledged by a high lord!`, { embed, files: repMsg.attachments.map(a => a.url) }).then(() => repMsg.delete());
+		const attachments = repMsg.attachments.size ? repMsg.attachments.filter(atch => {
+			const filename = atch.file.name;
+			return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
+		}) : null;
+		if (attachments && attachments.size) embed.setImage(attachments.first().url);
+		if (!msg.flags.deny) this.client.channels.get(reportChans[msg.channel.name]).send(embed).catch();
 		msg.delete();
 		msg.send(`<:greenTick:399433439280889858>  ::  Report sent to **${repUser.tag}**.`).then(sent => {
 			setTimeout(() => {
 				sent.delete();
 			}, 5000);
 		});
+		return repUser.send(`Your ${msg.channel.name.slice(0, -1).split('-').join(' ')} has been acknowledged by a high lord!`, { embed })
+			.then(() => repMsg.delete())
+			.catch(() => null);
 	}
 
 };
