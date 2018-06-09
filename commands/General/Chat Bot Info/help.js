@@ -53,7 +53,8 @@ module.exports = class extends Command {
 					].join('\n') : '',
 					`💡 **ProTip #1**: By mentioning "${this.client.user}", I will give the server's current prefix.`,
 					"💡 **ProTip #2**: By using `s.help (command)`, you can get the command's additional information!",
-					'💡 **ProTip #3**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!'
+					'💡 **ProTip #3**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!',
+					'💡 **ProTip #4**: You do not want to use some commands in your server? Just use `s.conf set disabledCommands <command>`!'
 				].join('\n'));
 			}
 		}
