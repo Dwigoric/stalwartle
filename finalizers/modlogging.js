@@ -21,7 +21,7 @@ module.exports = class extends Finalizer {
 		};
 		const moderator = msg.author ? response[0] === msg.author ? this.client.user : msg.author : this.client.user;
 		const { modlogs } = await this.client.providers.default.get('modlogs', msg.guild.id);
-		this.client.providers.default.append('modlogs', msg.guild.id, 'modlogs', {
+		modlogs.push({
 			id: (modlogs.length + 1).toString(),
 			timestamp: Date.now(),
 			type: msg.command.name,
@@ -29,6 +29,7 @@ module.exports = class extends Finalizer {
 			user: response[0].id,
 			reason: response[1]
 		});
+		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
 		const channel = msg.guild.channels.get(msg.guild.configs.modlogs[msg.command.name]);
 		if (!channel && msg.guild.configs.logging && msg.author) {
 			return msg.send([
@@ -42,7 +43,7 @@ module.exports = class extends Finalizer {
 		if (!channel.postable) return msg.send(`<:redTick:399433440975519754>  ::  It seems that I cannot send messages in ${channel}.`);
 		const embed = new MessageEmbed()
 			.setColor(configs[msg.command.name][0])
-			.setTitle(`Case #${modlogs.length + 1}: ${msg.command.name.toTitleCase()} ${configs[msg.command.name][1]}`)
+			.setTitle(`Case #${modlogs.length}: ${msg.command.name.toTitleCase()} ${configs[msg.command.name][1]}`)
 			.setFooter(`User ID: ${response[0].id}`)
 			.setTimestamp()
 			.addField('Moderator', moderator, true)

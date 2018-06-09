@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs);
 
 		if (typeof user === 'number') {
-			const modlog = await this.client.providers.default.getFromArrayByIndex('modlogs', msg.guild.id, 'modlogs', user - 1);
+			const modlog = await this.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs[user - 1]);
 			if (!modlog) throw `<:redTick:399433440975519754>  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
 			const _user = await this.client.users.fetch(modlog.user).catch(() => null);
 			const moderator = await this.client.users.fetch(modlog.moderator).catch(() => null);
