@@ -26,7 +26,7 @@ module.exports = class extends Command {
 				} else {
 					throw '<:redTick:399433440975519754>  ::  Um... what lie will I judge? 🤔';
 				}
-			}
+			} else if (arg && member) { return `${member} ${arg}`; }
 			return arg;
 		});
 	}
@@ -44,7 +44,7 @@ module.exports = class extends Command {
 			.setAuthor(`${this.client.user.username}'s Lie Detector`, this.client.user.displayAvatarURL())
 			.setDescription(text.join(this.usageDelim))
 			.setFooter(`It's ${gif[1] === 0x2ECC71 ? 'the truth' : 'a lie'}!`);
-		if (member) embed.setTitle(`A lie from ${member.displayName}`);
+		if (member) embed.setTitle(`From ${member.displayName}`);
 
 		msg.send(embed);
 	}
