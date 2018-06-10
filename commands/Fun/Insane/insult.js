@@ -7,7 +7,8 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			description: 'Insults who you mention.',
-			usage: '<User:member>'
+			usage: '<User:member>',
+			nsfw: true
 		});
 	}
 
