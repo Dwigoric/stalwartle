@@ -26,7 +26,7 @@ module.exports = class extends Command {
 				} else {
 					throw '<:redTick:399433440975519754>  ::  Um... what lie will I judge? 🤔';
 				}
-			} else if (arg && member) { return `${member} ${arg}`; }
+			}
 			return arg;
 		});
 	}
@@ -38,6 +38,7 @@ module.exports = class extends Command {
 		};
 		const gif = msg.flags.force && ['truth', 'lie'].includes(msg.flags.force) ? gifs[msg.flags.force] : Object.values(gifs)[Math.round(Math.random())];
 
+		if (member && text.length) text.unshift(member);
 		const embed = new MessageEmbed()
 			.setColor(gif[1])
 			.setImage(gif[0])
