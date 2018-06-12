@@ -6,7 +6,7 @@ module.exports = class extends Provider {
 	constructor(...args) {
 		super(...args);
 		this.db = rethink(mergeDefault({
-			db: 'test',
+			db: 'Stalwartle',
 			silent: false
 		}, this.client.options.providers.rethinkdb));
 	}
