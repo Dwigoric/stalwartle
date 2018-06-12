@@ -69,7 +69,7 @@ module.exports = class extends Command {
 				"- If you want to get a user's best/recent plays, use the `best` or `recent` subcommands and supply the username.",
 				'- If you simply want to get information about a user, do not use any subcommand and supply the username. (e.g. `s.osu dwigoric`)'
 			].join('\n'),
-			usage: '[best|recent|beatmap] (BeatmapID|Username:string)',
+			usage: '[best|recent|beatmap] (BeatmapID|Username:string) [...]',
 			usageDelim: ' ',
 			subcommands: true
 		});
@@ -82,7 +82,7 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [username]) {
+	async run(msg, [...username]) {
 		let mode = 0;
 		if (msg.flags.mania) mode = 3;
 		if (msg.flags.catch) mode = 2;
@@ -93,7 +93,7 @@ module.exports = class extends Command {
 			.query({
 				k: osuAPIkey, // eslint-disable-line id-length
 				m: mode, // eslint-disable-line id-length
-				u: username, // eslint-disable-line id-length
+				u: username.join(this.usageDelim), // eslint-disable-line id-length
 				type: 'string'
 			});
 		if (!request.body.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
@@ -131,12 +131,12 @@ module.exports = class extends Command {
 		msg.send(embed);
 	}
 
-	async beatmap(msg, [mapID]) {
+	async beatmap(msg, [...mapID]) {
 		const { timezone } = msg.author.configs;
 
 		const queries = {
 			k: osuAPIkey, // eslint-disable-line id-length
-			b: mapID
+			b: mapID[0]
 		};
 		if (msg.flags.mania) queries.m = 3; // eslint-disable-line id-length
 		if (msg.flags.catch) queries.m = 2; // eslint-disable-line id-length
@@ -179,12 +179,12 @@ module.exports = class extends Command {
 		msg.send(embed);
 	}
 
-	async best(msg, [username]) {
-		return await this.top(msg, username, 'best');
+	async best(msg, [...username]) {
+		return await this.top(msg, username.join(this.usageDelim), 'best');
 	}
 
-	async recent(msg, [username]) {
-		return await this.top(msg, username, 'recent');
+	async recent(msg, [...username]) {
+		return await this.top(msg, username.join(this.usageDelim), 'recent');
 	}
 
 	async top(msg, username, type) {
