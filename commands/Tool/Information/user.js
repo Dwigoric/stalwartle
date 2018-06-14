@@ -38,8 +38,9 @@ module.exports = class extends Command {
 				roles = 'None';
 				roleNum = '';
 			} else {
-				if (guildMember.roles.size <= 10) roles = guildMember.roles.sort((a, b) => b.position - a.position).first(10).map(rl => rl).join(' | ');
-				else roles = guildMember.roles.sort((a, b) => b.position - a.position).map(rl => rl).join(' | ');
+				roles = guildMember.roles.sort((a, b) => b.position - a.position);
+				if (guildMember.roles.size <= 10) roles = roles.array().join(' | ');
+				else roles = `${roles.first(10).join(' | ')} **+ ${roles.size - 10} other role${roles.size - 10 === 1 ? '' : 's'}**`;
 				roleNum = `[${guildMember.roles.size}]`;
 			}
 		}
@@ -113,7 +114,7 @@ module.exports = class extends Command {
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle(`${user.username}'s Roles [${member.roles.size}]`)
-				.setDescription(member.roles.sort((a, b) => b.position - a.position).map(rl => rl).join(' | '))
+				.setDescription(member.roles.sort((a, b) => b.position - a.position).array().join(' | '))
 		});
 	}
 

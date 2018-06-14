@@ -33,7 +33,7 @@ module.exports = class extends Command {
 
 		const poster = `https://image.tmdb.org/t/p/original${tmdb.poster_path}`;
 		const url = tmdb.homepage || `https://www.themoviedb.org/tv/${tmdb.id}`;
-		const runtime = tmdb.episode_run_time.map(run => run);
+		const runtime = tmdb.episode_run_time;
 		const producers = tmdb.production_companies.map(producer => producer.name);
 		const networks = tmdb.networks.map(network => network.name);
 		const genres = tmdb.genres.map(genre => genre.name);

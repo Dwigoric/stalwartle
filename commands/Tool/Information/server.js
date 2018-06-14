@@ -67,8 +67,8 @@ module.exports = class extends Command {
 			emojiCount = '';
 		} else {
 			emojiCount = `[${dGuild.emojis.size}]`;
-			if (dGuild.emojis.size <= 10) emojis = dGuild.emojis.map(emoji => emoji).join(' ');
-			else emojis = `${dGuild.emojis.first(10).map(emoji => emoji).join(' ')} ** + ${dGuild.emojis.size - 10} other emoji${dGuild.emojis.size - 10 === 1 ? '' : 's'}**`;
+			if (dGuild.emojis.size <= 10) emojis = dGuild.emojis.array().join(' ');
+			else emojis = `${dGuild.emojis.first(10).join(' ')} **+ ${dGuild.emojis.size - 10} other emoji${dGuild.emojis.size - 10 === 1 ? '' : 's'}**`;
 		}
 
 		const avatarURL = msg.author.displayAvatarURL();
@@ -106,7 +106,7 @@ module.exports = class extends Command {
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle(`${dGuild.name}'s Roles [${dGuild.roles.size}]`)
-				.setDescription(dGuild.roles.sort((a, b) => b.position - a.position).map(role => role).join(' | '))
+				.setDescription(dGuild.roles.sort((a, b) => b.position - a.position).array().join(' | '))
 		});
 	}
 
