@@ -12,8 +12,8 @@ function resolveChannel(query, guild) {
 
 module.exports = class extends Argument {
 
-	async run(arg, possible, msg) {
-		if (!msg.guild) return new require(`${this.client.coreBaseDir}arguments/channel`)(arg, possible, msg);
+	run(arg, possible, msg) {
+		if (!msg.guild) return require(`${this.client.coreBaseDir}arguments/channel`)(arg, possible, msg);
 		const resChannel = resolveChannel(arg, msg.guild);
 		if (resChannel) return resChannel;
 
@@ -33,12 +33,9 @@ module.exports = class extends Argument {
 		}
 
 		switch (querySearch.length) {
-			case 0:
-				throw `<:redTick:399433440975519754>  ::  \`${possible.name}\` must be a valid name, ID, or channel mention.`;
-			case 1:
-				return querySearch[0];
-			default:
-				throw `Found multiple matches: ${querySearch.map(result => `\`#${result.name}\` (\`${result.id}\`)`).join(', ')}`;
+			case 0: throw `<:redTick:399433440975519754>  ::  \`${possible.name}\` must be a valid name, ID, or channel mention.`;
+			case 1: return querySearch[0];
+			default: throw `Found multiple matches: ${querySearch.map(result => `\`#${result.name}\` (\`${result.id}\`)`).join(', ')}`;
 		}
 	}
 

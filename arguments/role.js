@@ -11,8 +11,8 @@ function resolveRole(query, guild) {
 
 module.exports = class extends Argument {
 
-	async run(arg, possible, msg) {
-		if (!msg.guild) return new require(`${this.client.coreBaseDir}arguments/role`)(arg, possible, msg);
+	run(arg, possible, msg) {
+		if (!msg.guild) return require(`${this.client.coreBaseDir}arguments/role`)(arg, possible, msg);
 		const resRole = resolveRole(arg, msg.guild);
 		if (resRole) return resRole;
 
@@ -30,12 +30,9 @@ module.exports = class extends Argument {
 		}
 
 		switch (querySearch.length) {
-			case 0:
-				throw `<:redTick:399433440975519754>  ::  \`${possible.name}\` must be a valid name, ID, or role mention.`;
-			case 1:
-				return querySearch[0];
-			default:
-				throw `Found multiple matches: ${querySearch.map(result => `\`${result.name}\` (\`${result.id}\`)`).join(', ')}`;
+			case 0: throw `<:redTick:399433440975519754>  ::  \`${possible.name}\` must be a valid name, ID, or role mention.`;
+			case 1: return querySearch[0];
+			default: throw `Found multiple matches: ${querySearch.map(result => `\`${result.name}\` (\`${result.id}\`)`).join(', ')}`;
 		}
 	}
 
