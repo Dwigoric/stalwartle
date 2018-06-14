@@ -38,14 +38,13 @@ module.exports = class extends Command {
 		};
 		const gif = msg.flags.force && ['truth', 'lie'].includes(msg.flags.force) ? gifs[msg.flags.force] : Object.values(gifs)[Math.round(Math.random())];
 
-		if (member && text.length) text.unshift(member);
+		if (member && text.length > 1) text.unshift(member);
 		const embed = new MessageEmbed()
 			.setColor(gif[1])
 			.setImage(gif[0])
 			.setAuthor(`${this.client.user.username}'s Lie Detector`, this.client.user.displayAvatarURL())
 			.setDescription(text.join(this.usageDelim))
 			.setFooter(`It's ${gif[1] === 0x2ECC71 ? 'the truth' : 'a lie'}!`);
-		if (member) embed.setTitle(`From ${member.displayName}`);
 
 		msg.send(embed);
 	}
