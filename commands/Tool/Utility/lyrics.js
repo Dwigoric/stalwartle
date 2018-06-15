@@ -25,10 +25,11 @@ module.exports = class extends Command {
 		const $c = await cheerio.load(lyricFetch.body.toString());
 		const lyrics = $c('.lyrics').text().trim().split('\n');
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
-		return msg.channel.send([`__**${results[0].result.full_title}**__\n`]
+		const fullLyrics = [`__**${results[0].result.full_title}**__\n`]
 			.concat(lyrics)
 			.concat('\n__*Powered by Genius (https://genius.com)*__')
-			.join('\n'), { split: { char: '\u200b' } });
+			.join('\n');
+		return msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
 	}
 
 };
