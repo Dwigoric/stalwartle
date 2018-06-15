@@ -7,6 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			permissionLevel: 6,
+			runIn: ['text'],
 			aliases: ['modlogs', 'log', 'logs'],
 			description: 'Gives the modlogs for a certain person or the server, or the details of a specific case number.',
 			extendedHelp: [
