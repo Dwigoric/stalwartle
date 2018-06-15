@@ -29,6 +29,7 @@ module.exports = class extends Command {
 			.concat(lyrics)
 			.concat('\n__*Powered by Genius (https://genius.com)*__')
 			.join('\n');
+		if (lyrics.join('\n').length > 10000) throw '<:redTick:399433440975519754>  ::  Whoops! The result does not seem to be a song... Please try another search query.';
 		return msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
 	}
 
