@@ -4,7 +4,6 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			runIn: ['text'],
 			requiredPermissions: ['ATTACH_FILES'],
 			description: "Make Zero Two love your/someone else's picture!",
 			extendedHelp: [
