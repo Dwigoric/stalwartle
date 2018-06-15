@@ -1,7 +1,7 @@
 {
 	"name": "stalwartle",
 	"description": "A scrumptious project that does quirky things",
-	"version": "2.1.1b",
+	"version": "2.1.1c",
 	"main": "bot.js",
 	"scripts": {
 		"start": "pm2 start bot.js --name \"Stalwartle\""
@@ -18,7 +18,7 @@
 		"faceapp": "^0.4.3",
 		"fast-html-parser": "^1.0.1",
 		"figlet": "^1.2.0",
-		"idiotic-api": "^0.2.8",
+		"idiotic-api": "^0.2.10",
 		"maljs": "^0.3.0",
 		"mathjs": "^4.3.0",
 		"roll": "^1.2.0",
