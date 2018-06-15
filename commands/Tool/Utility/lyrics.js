@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		if (!results.length) throw '<:redTick:399433440975519754>  ::  No song lyrics found.';
 		const lyrics = await snekfetch.get(results[0].result.url);
 		const $c = await cheerio.load(lyrics.body.toString());
-		return msg.send(await $c('.lyrics').text().trim(), { split: '\n' });
+		return msg.send(`**${results[0].result.full_title}**\n\n${await $c('.lyrics').text().trim()}`, { split: '\n' });
 	}
 
 };
