@@ -11,7 +11,7 @@ function resolveRole(query, guild) {
 
 module.exports = class extends Argument {
 
-	run(arg, possible, msg) {
+	async run(arg, possible, msg) {
 		if (!msg.guild) return require(`${this.client.coreBaseDir}arguments/role`)(arg, possible, msg);
 		const resRole = resolveRole(arg, msg.guild);
 		if (resRole) return resRole;

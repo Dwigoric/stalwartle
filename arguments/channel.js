@@ -12,7 +12,7 @@ function resolveChannel(query, guild) {
 
 module.exports = class extends Argument {
 
-	run(arg, possible, msg) {
+	async run(arg, possible, msg) {
 		if (!msg.guild) return require(`${this.client.coreBaseDir}arguments/channel`)(arg, possible, msg);
 		const resChannel = resolveChannel(arg, msg.guild);
 		if (resChannel) return resChannel;
