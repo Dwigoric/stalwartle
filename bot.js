@@ -23,7 +23,7 @@ class Stalwartle extends Client {
 	async setGuildCount() {
 		this.user.setActivity(`${this.guilds.size} servers | ${config.prefix}help`, { type: 'LISTENING' });
 		if (!this.application.botPublic) return null;
-		if (!dblAPIkey || !dblAPIkey.length) return null;
+		if (!dblAPIkey) return null;
 		return snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
 			.set('Authorization', dblAPIkey)
 			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
