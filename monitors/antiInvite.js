@@ -25,7 +25,7 @@ module.exports = class extends Monitor {
 			command: this.client.commands.get('warn'),
 			channel: msg.channel,
 			guild: msg.guild
-		}, [msg.author, 'Sending invites with the AntiInvite enabled', null, inviteRegex.exec(msg.content)[0].split(/ +/)[0]]); // eslint-disable-line max-len
+		}, [msg.author, 'Sending invites with the AntiInvite enabled', null, msg.content.length > 900 ? inviteRegex.exec(msg.content)[0].split(/ +/)[0] : msg.content]); // eslint-disable-line max-len
 	}
 
 	async init() {

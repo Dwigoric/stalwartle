@@ -42,7 +42,7 @@ module.exports = class extends Monitor {
 			command: this.client.commands.get('warn'),
 			channel: msg.channel,
 			guild: msg.guild
-		}, [msg.author, 'Swearing with the AntiSwear enabled', null, swearRegex.exec(msg.content)[0]]);
+		}, [msg.author, 'Swearing with the AntiSwear enabled', null, msg.content.length > 900 ? swearRegex.exec(msg.content)[0] : msg.content]);
 	}
 
 	async init() {
