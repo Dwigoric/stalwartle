@@ -50,13 +50,13 @@ module.exports = class extends Command {
 		if (user) list = list.filter(ml => ml.user === user.id);
 		list = list.sort((a, b) => Number(a.id) - Number(b.id));
 		if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
-		while (list.length) first5.push(list.splice(0, 5));
 
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`<:blobBan:399433444670701568> Modlogs for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)
+			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? msg.flags.type.toTitleCase() : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`) // eslint-disable-line max-len
 		);
 
+		while (list.length) first5.push(list.splice(0, 5));
 		first5.forEach(modlog5 => {
 			display.addPage(template => {
 				const description = modlog5.map(modlog => {
