@@ -64,7 +64,16 @@ module.exports = class extends Command {
 		if (!guildSchema.automod) await guildSchema.add('automod', { type: 'Folder' });
 		if (!guildSchema.automod.ignoreBots) await guildSchema.automod.add('ignoreBots', { type: 'boolean', default: false, configurable: true });
 		if (!guildSchema.automod.ignoreMods) await guildSchema.automod.add('ignoreMods', { type: 'boolean', default: false, configurable: true });
-		if (!guildSchema.automod.filterIgnore) await guildSchema.automod.add('filterIgnore', { type: 'channel', array: true, default: [], configurable: true });
+		if (!guildSchema.automod.filterIgnore) await guildSchema.automod.add('filterIgnore', { type: 'Folder' });
+		['antiInvite', 'antiSpam', 'antiSwear', 'mentionSpam'].forEach(module => {
+			if (guildSchema.automod.filterIgnore[module]) return;
+			guildSchema.automod.filterIgnore.add(module, {
+				type: 'channel',
+				array: true,
+				default: [],
+				configurable: true
+			});
+		});
 	}
 
 };

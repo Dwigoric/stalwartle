@@ -14,7 +14,7 @@ module.exports = class extends Monitor {
 		if (!msg.guild.configs.automod.antiSpam) return null;
 		if (msg.author.bot && msg.guild.configs.automod.ignoreBots) return null;
 		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.configs.automod.ignoreMods) return null;
-		if (msg.guild.configs.automod.filterIgnore.includes(msg.channel.id)) return null;
+		if (msg.guild.configs.automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
 
 		if (msg.member.messages.length <= 5) return null;
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
