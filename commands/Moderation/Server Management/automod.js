@@ -13,7 +13,7 @@ module.exports = class extends Command {
 				'You can also ignore filters on mods. Juse use `s.automod ignoremods enable`. This is disabled by default.',
 				'\nTo add words to the swear filter, use `s.conf set automod.swearWords <word>`.',
 				'To disable filtering the words in the global filter, use `s.conf set automod.globalSwears false`. This is enabled by default.',
-				'\nYou can disable filtering on certain channels. Just use `s.conf set automod.filterIgnore <channel>`'
+				'\nYou can disable filtering on certain channels per module. Just use `s.conf set automod.filterIgnore.<module> <channel>`'
 			].join('\n'),
 			usage: '<invite|swear|spam|mentionspam|ignorebots|ignoremods> <enable|disable>',
 			usageDelim: ' ',
