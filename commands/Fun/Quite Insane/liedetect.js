@@ -5,7 +5,6 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			runIn: ['text'],
 			aliases: ['lie', 'liedetector'],
 			description: 'Detects a lie. Are you/they lying? Hmm... <:thonk:332119390365548545>',
 			extendedHelp: [
