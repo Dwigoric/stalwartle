@@ -19,6 +19,7 @@ module.exports = class extends Monitor {
 		if (msg.member.messages
 			.map(message => message.mentions.users ? message.mentions.users.size : 0 + message.mentions.bots ? message.mentions.bots.size : 0)
 			.reduce((prev, val) => prev + val) < 10) return null;
+		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! Don't spam mentions, ${msg.author}. Got it, ${msg.author}?`);
 		if (!msg.member.bannable) {
 			return this.client.finalizers.get('modlogging').run({
 				command: this.client.commands.get('warn'),

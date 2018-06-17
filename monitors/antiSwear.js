@@ -36,6 +36,7 @@ module.exports = class extends Monitor {
 		if (!swearArray.length) return;
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (!swearRegex.test(msg.content)) return;
+		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
 		this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('warn'),
