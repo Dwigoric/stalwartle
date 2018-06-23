@@ -30,7 +30,7 @@ module.exports = class extends Command {
 			.concat('\n__*Powered by Genius (https://genius.com)*__')
 			.join('\n');
 
-		const swearArray = msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`).concat([
+		const swearArray = (msg.guild ? msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`) : []).concat([
 			'nigga',
 			'nigger',
 			'fuc?k',
@@ -46,7 +46,7 @@ module.exports = class extends Command {
 			'porn'
 		]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
-		if (swearRegex.test(fullLyrics) && !msg.channel.nsfw) throw '<:redTick:399433440975519754>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
+		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw '<:redTick:399433440975519754>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
 		if (lyrics.join('\n').length > 10000) throw '<:redTick:399433440975519754>  ::  Whoops! The result does not seem to be a song... Please try another search query.';
 
 		return msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
