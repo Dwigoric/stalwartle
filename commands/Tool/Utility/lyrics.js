@@ -41,7 +41,9 @@ module.exports = class extends Command {
 			'pussy',
 			'asshole',
 			'blowjob',
-			'c(u|0|o|\\(\\))ck'
+			'c(u|0|o|\\(\\))ck',
+			'sex',
+			'porn'
 		]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (swearRegex.test(fullLyrics) && !msg.channel.nsfw) throw '<:redTick:399433440975519754>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';

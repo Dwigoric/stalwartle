@@ -30,7 +30,9 @@ module.exports = class extends Monitor {
 				'pussy',
 				'asshole',
 				'blowjob',
-				'c(u|0|o|\\(\\))ck'
+				'c(u|0|o|\\(\\))ck',
+				'sex',
+				'porn'
 			]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		}
 		if (!swearArray.length) return;
