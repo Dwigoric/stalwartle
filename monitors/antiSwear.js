@@ -20,6 +20,7 @@ module.exports = class extends Monitor {
 		let swearArray = msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		if (msg.guild.configs.automod.globalSwears) {
 			swearArray = swearArray.concat([
+				'bullshit',
 				'nigga',
 				'nigger',
 				'fuc?k',
