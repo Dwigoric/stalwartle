@@ -66,7 +66,7 @@ module.exports = class extends Command {
 			display.addPage(template => {
 				const description = top.map((topUser, onePower) => {
 					if (topUser === msg.author) authorPos = `${tenPower || ''}${onePower + 1}`;
-					return `\`${tenPower || ''}${onePower + 1}\`. ${topUser.tag} ➱ ${topUser.configs.cookies} Stalkie${topUser.configs.cookies === 1 ? '' : 's'}`;
+					return `\`${tenPower && onePower === 9 ? `${tenPower + 1}0` : `${tenPower || ''}${onePower + 1}`}\`. ${topUser.tag} ➱ ${topUser.configs.cookies} Stalkie${topUser.configs.cookies === 1 ? '' : 's'}`; // eslint-disable-line max-len
 				});
 				return template.setDescription(description.join('\n\n'));
 			});
