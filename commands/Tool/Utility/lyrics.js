@@ -31,6 +31,7 @@ module.exports = class extends Command {
 			.join('\n');
 
 		const swearArray = (msg.guild ? msg.guild.configs.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`) : []).concat([
+			'raped?',
 			'bullshit',
 			'nigga',
 			'nigger',
