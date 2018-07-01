@@ -5,7 +5,10 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'Marks you as AFK. Supplying a reason is optional.',
-			extendedHelp: "If someone mentions you, I will inform them that you are AFK (if you are), including how long you've been AFK.",
+			extendedHelp: [
+				"If someone mentions you, I will inform them that you are AFK (if you are), including how long you've been AFK.",
+				'If you want me to ignore a channel for you from AFK stuff, just use `s.userconf set afkIgnore <channel>`. Note that this applies only for you.'
+			],
 			usage: '[Reason:string]'
 		});
 	}
@@ -22,6 +25,8 @@ module.exports = class extends Command {
 	async init() {
 		const jsonProvider = this.client.providers.get('json');
 		if (!await jsonProvider.hasTable('afk')) jsonProvider.createTable('afk');
+		const userSchema = this.client.gateways.users.schema;
+		if (!userSchema.afkIgnore) userSchema.add('afkIgnore', { type: 'channel', array: true, default: [], configurable: true });
 	}
 
 };
