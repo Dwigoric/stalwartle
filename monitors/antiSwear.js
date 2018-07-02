@@ -24,7 +24,7 @@ module.exports = class extends Monitor {
 				'bullshit',
 				'nigga',
 				'nigger',
-				'fuc?k',
+				'fuc?ke?r?',
 				'cunt',
 				'cnut',
 				'b(i|1|!)tch',

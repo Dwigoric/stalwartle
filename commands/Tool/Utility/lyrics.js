@@ -35,7 +35,7 @@ module.exports = class extends Command {
 			'bullshit',
 			'nigga',
 			'nigger',
-			'fuc?k',
+			'fuc?ke?r?',
 			'cunt',
 			'cnut',
 			'b(i|1|!)tch',
