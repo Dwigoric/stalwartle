@@ -16,6 +16,7 @@ class Stalwartle extends Client {
 			.add(9, (client, msg) => config.owners.includes(msg.author.id))
 			.add(10, (client, msg) => config.ownerID === msg.author.id);
 
+		if (!idioticAPIkey) return null;
 		this.idiot = new idiotic.Client(idioticAPIkey, { dev: true });
 		Object.defineProperty(this.idiot, 'token', { value: this.idiot.token, enumerable: false });
 	}
