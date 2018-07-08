@@ -5,6 +5,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			cooldown: 10,
 			aliases: ['cookies', 'stalkie', 'stalkies'],
 			description: 'Gives a person a cookie!',
 			extendedHelp: [
