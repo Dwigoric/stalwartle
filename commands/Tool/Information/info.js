@@ -18,7 +18,6 @@ module.exports = class extends Command {
 		const now = moment(new Date());
 		const uptime = moment(new Date() - this.client.uptime);
 		const sinceUp = moment.duration(now.diff(uptime));
-		const upMonths = sinceUp.months();
 		const upDays = sinceUp.days();
 		const upHours = sinceUp.hours();
 		const upMins = sinceUp.minutes();
@@ -40,7 +39,7 @@ module.exports = class extends Command {
 				.addField('Servers', await this.client.guildCount(), true)
 			// .addField("Channels", await this.client.shard.broadcastEval('this.channels.size').then(results => results.reduce((prev, val) => prev + val, 0)), true)
 				.addField('Channels', this.client.channels.size, true)
-				.addField('Uptime', `${upMonths}mo ${upDays}d ${upHours}h ${upMins}m ${upSecs}s`, true)
+				.addField('Uptime', `${upDays}d ${upHours}h ${upMins}m ${upSecs}s`, true)
 				.addField('Memory Used', `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)}MB / ${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)}MB`, true)
 				.addField('Bot Version', require('../../../package.json').version, true)
 				.addField('Discord.js Version', require('discord.js').version, true)
