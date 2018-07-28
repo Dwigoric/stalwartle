@@ -9,18 +9,18 @@
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
 		"klasa": "github:dirigeants/klasa",
-		"moment-timezone": "^0.5.17",
+		"moment-timezone": "^0.5.21",
 		"rethinkdbdash": "^2.3.31"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
 		"currency-symbol-map": "^4.0.4",
-		"faceapp": "^0.4.3",
+		"faceapp": "^0.4.4",
 		"fast-html-parser": "^1.0.1",
 		"figlet": "^1.2.0",
-		"idiotic-api": "^0.2.10",
+		"idiotic-api": "^0.2.11",
 		"maljs": "^0.3.0",
-		"mathjs": "^4.3.0",
+		"mathjs": "^4.4.2",
 		"roll": "^1.2.0",
 		"steamapi": "^2.0.2"
 	},
