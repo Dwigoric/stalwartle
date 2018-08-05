@@ -13,14 +13,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [chan = msg.channel, ...details]) {
-		const gtick = this.client.emojis.get('399433439280889858'),
-			rtick = this.client.emojis.get('399433440975519754');
-
 		details = details.join(this.usageDelim);
 
-		if (!chan.postable) throw `${rtick}  ::  Sorry! I cannot send messages in that channel.`;
-		if (!chan.permissionsFor(msg.author).has('VIEW_CHANNEL', true)) throw `${rtick}  ::  It seems you cannot send messages in that channel...`; // eslint-disable-line max-len
-		if (chan !== msg.channel) msg.send(`${gtick}  ::  Poll created!`);
+		if (!chan.postable) throw `<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.`;
+		if (!chan.permissionsFor(msg.author).has('VIEW_CHANNEL', true)) throw `<:redTick:399433440975519754>  ::  It seems you cannot send messages in that channel...`; // eslint-disable-line max-len
+		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Poll created!`);
 
 		chan.send({
 			embed: new MessageEmbed()
@@ -29,7 +26,7 @@ module.exports = class extends Command {
 				.setDescription(details)
 				.setFooter(`Poll started by ${msg.author.tag}`)
 				.setTimestamp()
-		}).then(sent => [gtick, rtick, '🤷'].forEach(reaction => sent.react(reaction)));
+		}).then(sent => ['399433439280889858', '399433440975519754', '🤷'].forEach(reaction => sent.react(reaction)));
 	}
 
 };
