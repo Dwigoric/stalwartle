@@ -1,5 +1,5 @@
 const { Command, RichDisplay } = require('klasa');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
 module.exports = class extends Command {
@@ -68,7 +68,7 @@ module.exports = class extends Command {
 						`Moderator: ${moderator || 'Could not get user'} (\`${modlog.moderator}\`)`,
 						`User: ${_user || 'Could not get user'} (\`${modlog.user}\`)`,
 						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS')} (${moment(modlog.timestamp).fromNow()})`,
-						`Reason: ${modlog.reason || 'Not specified.'}`
+						`Reason: ${escapeMarkdown(modlog.reason) || 'Not specified.'}`
 					].join('\n');
 				});
 				return template.setDescription(description.join('\n\n'));
