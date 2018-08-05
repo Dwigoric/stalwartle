@@ -68,7 +68,7 @@ module.exports = class extends Command {
 						`Moderator: ${moderator || 'Could not get user'} (\`${modlog.moderator}\`)`,
 						`User: ${_user || 'Could not get user'} (\`${modlog.user}\`)`,
 						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS')} (${moment(modlog.timestamp).fromNow()})`,
-						`Reason: ${escapeMarkdown(modlog.reason) || 'Not specified.'}`
+						`Reason: ${modlog.reason ? escapeMarkdown(modlog.reason) : 'Not specified.'}`
 					].join('\n');
 				});
 				return template.setDescription(description.join('\n\n'));
