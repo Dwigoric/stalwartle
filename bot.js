@@ -44,4 +44,5 @@ class Stalwartle extends Client {
 
 }
 
-new Stalwartle(config).login(token);
+const bot = new Stalwartle(config);
+bot.login(token);
