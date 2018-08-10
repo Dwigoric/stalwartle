@@ -24,9 +24,6 @@
 		"roll": "^1.2.0",
 		"steamapi": "^2.0.2"
 	},
-	"devDependencies": {
-		"pm2": "^3.0.3"
-	},
 	"engines": {
 		"node": "10.x"
 	}
