@@ -40,7 +40,7 @@ module.exports = class extends Command {
 			`\n**Example:**\n${result.example}`,
 			`\n**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`,
 			`\n*By ${result.author}*`,
-			`\n**Tags**: ${body.tags.join(', ')}`
+			`\n**Tags**: ${body.tags ? body.tags.join(', ') : 'None'}`
 		].join('\n');
 	}
 
