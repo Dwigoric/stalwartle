@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 	async run(msg, [role]) {
 		if (role instanceof Role) {
-			msg.guild.configs.update('muteRole', role.id, msg.guild);
+			msg.guild.settings.update('muteRole', role.id, msg.guild);
 			return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${role.name}**.`);
 		}
 		const newRole = await msg.guild.roles.create({
@@ -40,7 +40,7 @@ module.exports = class extends Command {
 	}
 
 	async reset(msg) {
-		msg.guild.configs.reset('muteRole');
+		msg.guild.settings.reset('muteRole');
 		return msg.send('<:greenTick:399433439280889858>  ::  Successfully reset this server\'s mute role.');
 	}
 

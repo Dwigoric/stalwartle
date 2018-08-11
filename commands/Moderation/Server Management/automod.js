@@ -55,7 +55,7 @@ module.exports = class extends Command {
 		let _option;
 		if (option === 'enable') _option = true;
 		else _option = false;
-		msg.guild.configs.update(`automod.${type}`, _option);
+		msg.guild.settings.update(`automod.${type}`, _option);
 		return _option;
 	}
 

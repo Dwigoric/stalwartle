@@ -25,13 +25,13 @@ module.exports = class extends Command {
 
 	async setRole(msg, role, type) {
 		if (role === 'remove') {
-			msg.guild.configs.reset(`autorole.${type}`);
+			msg.guild.settings.reset(`autorole.${type}`);
 			return msg.send(`<:greenTick:399433439280889858>  ::  The autorole for ${type}s has been removed!`);
 		}
 		if (!role) throw `<:redTick:399433440975519754>  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
 		if (role.position >= msg.guild.me.roles.highest.position) throw '<:redTick:399433440975519754>  ::  Sorry! That role is higher than mine!';
 		if (role.position >= msg.member.roles.highest.position) throw '<:redTick:399433440975519754>  ::  It seems that role is higher than yours...';
-		msg.guild.configs.update(`autorole.${type}`, role.id, msg.guild);
+		msg.guild.settings.update(`autorole.${type}`, role.id, msg.guild);
 		return msg.send(`<:greenTick:399433439280889858>  ::  The autorole for ${type}s has been set to **${role.name}**.`);
 	}
 

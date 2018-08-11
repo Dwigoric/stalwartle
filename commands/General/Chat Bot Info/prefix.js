@@ -12,10 +12,10 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [newPrefix]) {
-		const { prefix } = msg.guild.configs;
+		const { prefix } = msg.guild.settings;
 		if (!newPrefix) throw `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`;
 		if (!await msg.hasAtLeastPermissionLevel(6)) throw '<:redTick:399433440975519754>  ::  Sorry! Only moderators or people with Manage Server permission may change the server prefix.'; // eslint-disable-line max-len
-		msg.guild.configs.update('prefix', newPrefix);
+		msg.guild.settings.update('prefix', newPrefix);
 		msg.send(`The prefix for **${msg.guild.name}** is now \`${newPrefix}\`.`);
 	}
 

@@ -10,7 +10,7 @@ class Stalwartle extends Client {
 		super(...args);
 
 		Stalwartle.defaultPermissionLevels
-			.add(6, (client, msg) => msg.guild && (msg.guild.configs.moderators.roles.some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.configs.moderators.users.includes(msg.member.id)))
+			.add(6, (client, msg) => msg.guild && (msg.guild.settings.moderators.roles.some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.moderators.users.includes(msg.member.id)))
 			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
 			.add(9, (client, msg) => config.owners.includes(msg.author.id))

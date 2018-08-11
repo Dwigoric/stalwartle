@@ -29,17 +29,17 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { roles, users } = msg.guild.configs.moderators;
+		const { roles, users } = msg.guild.settings.moderators;
 		const modRoles = roles.map(rl => {
 			const modRole = msg.guild.roles.get(rl);
 			if (modRole) return modRole.name;
-			else msg.guild.configs.update('moderators.roles', rl, msg.guild, { action: 'remove' });
+			else msg.guild.settings.update('moderators.roles', rl, msg.guild, { action: 'remove' });
 			return null;
 		});
 		const modUsers = await Promise.all(users.map(async us => {
 			const modUser = await msg.guild.members.fetch(us);
 			if (modUser) return modUser.user.tag;
-			else msg.guild.configs.update('moderators.users', us, msg.guild, { action: 'remove' });
+			else msg.guild.settings.update('moderators.users', us, msg.guild, { action: 'remove' });
 			return null;
 		}));
 		[modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));
@@ -56,7 +56,7 @@ module.exports = class extends Command {
 
 	async toggle(msg, mod, action) {
 		const type = mod.constructor.name === 'GuildMember' ? 'users' : 'roles';
-		const guildConf = msg.guild.configs;
+		const guildConf = msg.guild.settings;
 		if (action === 'add' && guildConf.moderators[type].includes(mod.id)) throw '<:redTick:399433440975519754>  ::  This role/user is already a moderator!';
 		if (action === 'remove' && !guildConf.moderators[type].includes(mod.id)) throw '<:redTick:399433440975519754>  ::  This role/user is already not a moderator!';
 		guildConf.update(`moderators.${type}`, mod.id, msg.guild, { action });

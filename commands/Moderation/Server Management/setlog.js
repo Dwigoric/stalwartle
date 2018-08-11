@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	}
 
 	async list(msg) {
-		const { modlogs } = msg.guild.configs;
+		const { modlogs } = msg.guild.settings;
 		const { channels } = msg.guild;
 		return msg.send(this.client.commands
 			.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action')
@@ -39,12 +39,12 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [modlog]) {
-		this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.configs.update(`modlogs.${action}`, modlog.id));
+		this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.settings.update(`modlogs.${action}`, modlog.id));
 		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully updated the modlog channel for all moderation actions to ${modlog}.`);
 	}
 
 	async reset(msg) {
-		this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.configs.reset(`modlogs.${action}`));
+		this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.settings.reset(`modlogs.${action}`));
 		return msg.send('<:greenTick:399433439280889858>  ::  Successfully reset the modlog channel for all moderation actions.');
 	}
 
@@ -73,8 +73,8 @@ module.exports = class extends Command {
 	}
 
 	async indivSet(msg, modlog, action) {
-		if (modlog === 'reset') msg.guild.configs.reset(`modlogs.${action}`);
-		else msg.guild.configs.update(`modlogs.${action}`, modlog.id, msg.guild);
+		if (modlog === 'reset') msg.guild.settings.reset(`modlogs.${action}`);
+		else msg.guild.settings.update(`modlogs.${action}`, modlog.id, msg.guild);
 		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully updated the modlog channel for member ${action}s to ${modlog}.`);
 	}
 

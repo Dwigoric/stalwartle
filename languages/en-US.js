@@ -51,7 +51,7 @@ module.exports = class extends Language {
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `<:redTick:399433440975519754>  ::  Insufficient permissions. Missing: **${missing}**`,
 			INHIBITOR_NSFW: `<:redTick:399433440975519754>  ::  You may not use NSFW commands in this channel.`,
 			INHIBITOR_PERMISSIONS: `<:redTick:399433440975519754>  ::  You do not have permission to use this command.`,
-			INHIBITOR_REQUIRED_CONFIGS: (configs) => `<:redTick:399433440975519754>  ::  The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`, // eslint-disable-line max-len
+			INHIBITOR_REQUIRED_SETTINGS: (configs) => `<:redTick:399433440975519754>  ::  The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`, // eslint-disable-line max-len
 			INHIBITOR_RUNIN: (types) => `<:redTick:399433440975519754>  ::  This command is only available in ${types} channels.`,
 			INHIBITOR_RUNIN_NONE: (name) => `<:redTick:399433440975519754>  ::  The \`${name}\` command is not configured to run in any channel.`,
 			COMMAND_BLACKLIST_DESCRIPTION: 'Blacklists or un-blacklists users and guilds from the bot.',

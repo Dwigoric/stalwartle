@@ -9,7 +9,7 @@ exports.config = {
 	// The default configurable prefix for each guild
 	prefix: 's.',
 	// If custom configs should be preserved when a guild removes your bot
-	preserveConfigs: true,
+	preserveSettings: true,
 	// Whether d.js should queue your rest request in 'sequential' or 'burst' mode
 	apiRequestMethod: 'sequential',
 	// If your bot should be able to mention @everyone
@@ -90,7 +90,7 @@ exports.config = {
 			permissionLevel: 0,
 			promptLimit: 0,
 			promptTime: 30000,
-			requiredConfigs: [],
+			requiredSettings: [],
 			runIn: ['text', 'dm', 'group'],
 			subcommands: false,
 			usage: '',

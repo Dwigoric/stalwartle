@@ -30,15 +30,15 @@ module.exports = class extends Finalizer {
 			reason: response[1]
 		});
 		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
-		const channel = msg.guild.channels.get(msg.guild.configs.modlogs[msg.command.name]);
-		if (!channel && msg.guild.configs.logging && msg.author) {
+		const channel = msg.guild.channels.get(msg.guild.settings.modlogs[msg.command.name]);
+		if (!channel && msg.guild.settings.logging && msg.author) {
 			return msg.send([
 				`⚠ It seems that the modlog channel for ${msg.command.name}s is not yet set.`,
 				'If you want to continue without logging in the future without this warning, you can use `s.conf set logging false`.',
 				'This does not mean that I will stop the logs. You can always view them at `s.modlogs`.'
 			].join(' '));
 		}
-		if (!msg.guild.configs.logging) return true;
+		if (!msg.guild.settings.logging) return true;
 		if (!channel) return true;
 		if (!channel.postable) return msg.send(`<:redTick:399433440975519754>  ::  It seems that I cannot send messages in ${channel}.`);
 		const embed = new MessageEmbed()
@@ -52,7 +52,7 @@ module.exports = class extends Finalizer {
 		if (response[2]) embed.addField('Duration', response[2] === Infinity ? '∞' : Duration.toNow(response[2]), true);
 		if (response[3]) {
 			embed.addField('Channel', msg.channel, true);
-			if (msg.guild.configs.modlogShowContent) embed.addField('Content', response[3]);
+			if (msg.guild.settings.modlogShowContent) embed.addField('Content', response[3]);
 		}
 		return channel.send(embed);
 	}

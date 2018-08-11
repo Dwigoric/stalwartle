@@ -81,9 +81,9 @@ module.exports = class extends Command {
 	}
 
 	async showcontent(msg) {
-		const { modlogShowContent } = msg.guild.configs;
-		if (modlogShowContent) msg.guild.configs.update('modlogShowContent', false);
-		else msg.guild.configs.update('modlogShowContent', true);
+		const { modlogShowContent } = msg.guild.settings;
+		if (modlogShowContent) msg.guild.settings.update('modlogShowContent', false);
+		else msg.guild.settings.update('modlogShowContent', true);
 		return msg.send(`<:greenTick:399433439280889858>  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
 	}
 

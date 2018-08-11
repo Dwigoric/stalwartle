@@ -24,13 +24,13 @@ module.exports = class extends Command {
 		if (channel.type === 'voice') throw '<:redTick:399433440975519754>  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.';
 		if (channel.type === 'category') channel = msg.guild.channels.filter(chan => chan.parentID === channel.id && chan.type === 'text');
 		else channel = [channel];
-		const { ignored } = msg.guild.configs;
+		const { ignored } = msg.guild.settings;
 		const added = [],
 			removed = [];
 		channel.forEach(chan => {
 			if (ignored.includes(chan.id)) removed.push(chan);
 			else added.push(chan);
-			msg.guild.configs.update('ignored', chan.id, msg.guild);
+			msg.guild.settings.update('ignored', chan.id, msg.guild);
 		});
 		return msg.send([
 			`🔇 Ignored  ::  ${added.length ? added.join(', ') : 'None'}`,
@@ -39,11 +39,11 @@ module.exports = class extends Command {
 	}
 
 	async list(msg) {
-		const { ignored } = msg.guild.configs;
+		const { ignored } = msg.guild.settings;
 		if (!ignored.length) throw 'This server currently has no ignored channels.';
 		const channels = ignored.map(ign => {
 			if (msg.guild.channels.has(ign)) return msg.guild.channels.get(ign);
-			else msg.guild.configs.update('ignored', ign, msg.guild, { action: 'remove' });
+			else msg.guild.settings.update('ignored', ign, msg.guild, { action: 'remove' });
 			return null;
 		});
 		channels.forEach(chan => { if (!chan) channels.splice(channels.indexOf(chan), 1); });
