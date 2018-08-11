@@ -39,8 +39,7 @@ module.exports = class extends Command {
 			`\n**Definition:** ${index + 1} out of ${body.list.length}\n_${wdef}_`,
 			`\n**Example:**\n${result.example}`,
 			`\n**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`,
-			`\n*By ${result.author}*`,
-			`\n**Tags**: ${body.tags ? body.tags.join(', ') : 'None'}`
+			`\n*By ${result.author}*`
 		].join('\n');
 	}
 
