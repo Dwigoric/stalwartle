@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { isFunction } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -23,9 +23,9 @@ module.exports = class extends Command {
 			return msg.send({
 				embed: new MessageEmbed()
 					.setTitle(`The \`${this.client.options.prefix}${category.name}\` command`)
-					.setDescription(typeof category.description === 'function' ? category.description(msg) : category.description)
+					.setDescription(isFunction(category.description) ? category.description(msg.language) : category.description)
 					.addField('Usage', `\`${this.client.options.prefix}${category.usage}\``)
-					.addField('Additional Information', typeof category.extendedHelp === 'function' ? category.extendedHelp(msg) : category.extendedHelp)
+					.addField('Additional Information', isFunction(category.extendedHelp) ? category.extendedHelp(msg.language) : category.extendedHelp)
 					.addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
 					.setFooter(`Classification: ${category.category} → ${category.subCategory} | Version: ${require('../../../package.json').version}`)
 			});
