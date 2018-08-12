@@ -75,7 +75,7 @@ module.exports = class extends Command {
 		});
 
 		this.createCustomResolver('string', (arg, possible, msg) => {
-			const { osu } = msg.author.configs;
+			const { osu } = msg.author.settings;
 			if (osu && !arg) return osu;
 			if (!arg) throw '<:redTick:399433440975519754>  ::  You did not provide a search query. Do you want a default osu! account? Use `s.userconf set osu <username here>`.';
 			return arg;
@@ -132,7 +132,7 @@ module.exports = class extends Command {
 	}
 
 	async beatmap(msg, [...mapID]) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 
 		const queries = {
 			k: osuAPIkey, // eslint-disable-line id-length
@@ -188,7 +188,7 @@ module.exports = class extends Command {
 	}
 
 	async top(msg, username, type) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 
 		let mode = 0;
 		if (msg.flags.mania) mode = 3;

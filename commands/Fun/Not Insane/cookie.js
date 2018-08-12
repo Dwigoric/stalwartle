@@ -27,16 +27,16 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [person]) {
-		if (!person) return msg.send(`🍪  ::  You have **${msg.author.configs.cookies}** cookie${msg.author.configs.cookies === 1 ? '' : 's'}.`);
+		if (!person) return msg.send(`🍪  ::  You have **${msg.author.settings.cookies}** cookie${msg.author.settings.cookies === 1 ? '' : 's'}.`);
 		if (person.id === msg.author.id) throw "<:redTick:399433440975519754>  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿";
 		if (person.id === this.client.user.id) throw `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`;
 		if (person.bot) throw '<:redTick:399433440975519754>  ::  I wonder if bots can eat cookies... 🤔';
-		const { cookies } = person.configs;
+		const { cookies } = person.settings;
 		if (msg.flags.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
 		const cookieTask = this.client.schedule.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
 		if (cookieTask.length) throw `<:redTick:399433440975519754>  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
 		await this.client.schedule.create('cookieReset', this.client.arguments.get('time').run('1h', 'time', msg), { data: { user: msg.author.id } });
-		await person.configs.update('cookies', cookies + 1);
+		await person.settings.update('cookies', cookies + 1);
 		return msg.send(`🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
 	}
 
@@ -51,8 +51,8 @@ module.exports = class extends Command {
 			userStore = collection;
 		}
 		const list = userStore
-			.filter(user => !user.bot && user.configs.cookies)
-			.sort((a, b) => b.configs.cookies > a.configs.cookies ? 1 : -1)
+			.filter(user => !user.bot && user.settings.cookies)
+			.sort((a, b) => b.settings.cookies > a.settings.cookies ? 1 : -1)
 			.array();
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		while (list.length) top10.push(list.splice(0, 10));
@@ -67,14 +67,14 @@ module.exports = class extends Command {
 			display.addPage(template => {
 				const description = top.map((topUser, onePower) => {
 					if (topUser === msg.author) authorPos = `${tenPower || ''}${onePower + 1}`;
-					return `\`${tenPower && onePower === 9 ? `${tenPower + 1}0` : `${tenPower || ''}${onePower + 1}`}\`. ${topUser.tag} ➱ ${topUser.configs.cookies} Stalkie${topUser.configs.cookies === 1 ? '' : 's'}`; // eslint-disable-line max-len
+					return `\`${tenPower && onePower === 9 ? `${tenPower + 1}0` : `${tenPower || ''}${onePower + 1}`}\`. ${topUser.tag} ➱ ${topUser.settings.cookies} Stalkie${topUser.settings.cookies === 1 ? '' : 's'}`; // eslint-disable-line max-len
 				});
 				return template.setDescription(description.join('\n\n'));
 			});
 		});
 
 		return display
-			.setFooterSuffix(` | Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${msg.author.configs.cookies} stalkie${msg.author.configs.cookies === 1 ? '' : 's'}.`)
+			.setFooterSuffix(` | Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${msg.author.settings.cookies} stalkie${msg.author.settings.cookies === 1 ? '' : 's'}.`)
 			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...'), { filter: (reaction, user) => user === msg.author });
 	}
 

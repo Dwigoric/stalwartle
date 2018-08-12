@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		await this.client.configs.update('restart', msg.channel.id);
+		await this.client.settings.update('restart', msg.channel.id);
 		await msg.send(`<a:loading:430269209415516160>  ::  Bot is restarting...`);
 		await this.client.destroy();
 		process.exit(0);

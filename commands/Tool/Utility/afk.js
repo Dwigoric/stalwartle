@@ -14,7 +14,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [reason = null]) {
-		if (await this.client.providers.get('json').has('afk', msg.author.id) && msg.author.configs.afktoggle) {
+		if (await this.client.providers.get('json').has('afk', msg.author.id) && msg.author.settings.afktoggle) {
 			await this.client.providers.get('json').delete('afk', msg.author.id);
 			return msg.send(`Welcome back, **${msg.author}**! I've removed your AFK status.`);
 		}

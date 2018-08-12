@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 
 		const now = moment(new Date());
 		const uptime = moment(new Date() - this.client.uptime);

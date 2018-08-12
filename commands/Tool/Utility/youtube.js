@@ -29,7 +29,7 @@ module.exports = class extends Command {
 	}
 
 	async query(msg, query, type, url) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 		const res = await snekfetch.get('https://www.googleapis.com/youtube/v3/search')
 			.query({
 				key: googleAPIkey,

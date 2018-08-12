@@ -17,7 +17,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query, page = 1]) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
 		const request = await snekfetch.get('https://api.themoviedb.org/3/search/tv')

@@ -23,7 +23,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user]) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 		const first5 = [];
 		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs);
 

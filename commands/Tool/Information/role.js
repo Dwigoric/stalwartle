@@ -17,7 +17,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [role]) {
-		const { timezone } = msg.author.configs;
+		const { timezone } = msg.author.settings;
 		const memCount = msg.guild.members.filter(mb => mb.roles.has(role.id) && mb.presence.status !== 'offline').size;
 		const memListMap = msg.guild.members.filter(mb => mb.roles.has(role.id)).map(us => us.user);
 		let memList;

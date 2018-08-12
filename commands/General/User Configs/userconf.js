@@ -27,30 +27,30 @@ module.exports = class extends Command {
 		if (!path) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
 		if (path.piece.type === 'Folder') {
 			return msg.sendMessage(msg.language.get('COMMAND_CONF_USER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-				codeBlock('asciidoc', msg.author.configs.list(msg, path.piece))));
+				codeBlock('asciidoc', msg.author.settings.list(msg, path.piece))));
 		}
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.piece.path, msg.author.configs.resolveString(msg, path.piece)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.piece.path, msg.author.settings.resolveString(msg, path.piece)));
 	}
 
 	async set(msg, [key, ...valueToSet]) {
-		const { errors, updated } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
+		const { errors, updated } = await msg.author.settings.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
 		if (errors.length) return msg.sendMessage(errors[0]);
 		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.configs.resolveString(msg, updated[0].piece)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.settings.resolveString(msg, updated[0].piece)));
 	}
 
 	async remove(msg, [key, ...valueToRemove]) {
-		const { errors, updated } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
+		const { errors, updated } = await msg.author.settings.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
 		if (errors.length) return msg.sendMessage(errors[0]);
 		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.configs.resolveString(msg, updated[0].piece)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.settings.resolveString(msg, updated[0].piece)));
 	}
 
 	async reset(msg, [key]) {
-		const { errors, updated } = await msg.author.configs.reset(key, true);
+		const { errors, updated } = await msg.author.settings.reset(key, true);
 		if (errors.length) return msg.sendMessage(errors[0]);
 		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, msg.author.configs.resolveString(msg, updated[0].piece)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, msg.author.settings.resolveString(msg, updated[0].piece)));
 	}
 
 };

@@ -5,7 +5,7 @@ module.exports = class extends Event {
 
 	async run() {
 		this.client.setGuildCount();
-		const { restart } = this.client.configs;
+		const { restart } = this.client.settings;
 		if (!restart) return;
 		this.client.channels.get(restart).send({
 			embed: new MessageEmbed()
@@ -15,7 +15,7 @@ module.exports = class extends Event {
 				.setDescription(`**Creeping through Discord...**\nand doing some magic!\n\nCurrently running on **${this.client.guilds.size}** guilds with **${this.client.users.size}** users.`)
 				.setTimestamp()
 		});
-		this.client.configs.reset('restart');
+		this.client.settings.reset('restart');
 	}
 
 	async init() {
