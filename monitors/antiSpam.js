@@ -21,10 +21,8 @@ module.exports = class extends Monitor {
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 
 		const duration = await this.client.arguments.get('time').run('3m', '', msg);
-		this.client.commands.get('mute')
-			.run(msg, [msg.member, duration, 'Spamming with AntiSpam enabled'], true)
-			.catch(err => msg.send(err));
-		this.client.finalizers.get('modlogging').run({
+		this.client.commands.get('mute').run(msg, [msg.member, duration, 'Spamming with AntiSpam enabled'], true).catch();
+		return this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('mute'),
 			channel: msg.channel,
 			guild: msg.guild
