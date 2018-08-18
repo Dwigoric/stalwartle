@@ -1,6 +1,6 @@
 const { Client } = require('klasa');
 const { config, token } = require('./config');
-const { dblAPIkey, idioticAPIkey } = require('./auth');
+const { blsAPIkey, dblAPIkey, dpwAPIkey, idioticAPIkey } = require('./auth');
 const snekfetch = require('snekfetch');
 const idiotic = require('idiotic-api');
 
@@ -26,10 +26,19 @@ class Stalwartle extends Client {
 		this.user.setActivity(`${this.guilds.size} servers | ${config.prefix}help`, { type: 'LISTENING' });
 		if (!this.application.botPublic) return null;
 		if (!dblAPIkey) return null;
-		return snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
+		snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
 			.set('Authorization', dblAPIkey)
 			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
 			.catch(err => this.emit('error', err.stack));
+		snekfetch.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
+			.set('Authorization', dpwAPIkey)
+			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+			.catch(err => this.emit('error', err.stack));
+		snekfetch.post(`https://botlist.space/api/bots/${this.user.id}`)
+			.set('Authorization', blsAPIkey)
+			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+			.catch(err => this.emit('error', err.stack));
+		return undefined;
 	}
 
 	async guildCount() {
