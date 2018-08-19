@@ -27,7 +27,7 @@ module.exports = class extends Command {
 			});
 	}
 
-	async run(msg, [role]) {
+	async run(msg, [...role]) {
 		if (role instanceof Role) {
 			msg.guild.settings.update('muteRole', role.id, msg.guild);
 			return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${role.name}**.`);
