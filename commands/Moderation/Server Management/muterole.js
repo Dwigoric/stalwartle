@@ -38,6 +38,7 @@ module.exports = class extends Command {
 				permissions: 0
 			}
 		});
+		msg.guild.settings.update('muteRole', newRole.id, msg.guild);
 		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${newRole.name}**.`);
 	}
 
