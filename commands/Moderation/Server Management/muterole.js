@@ -33,8 +33,10 @@ module.exports = class extends Command {
 			return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${role.name}**.`);
 		}
 		const newRole = await msg.guild.roles.create({
-			name: role.join(this.usageDelim),
-			permissions: 0
+			data: {
+				name: role.join(this.usageDelim),
+				permissions: 0
+			}
 		});
 		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${newRole.name}**.`);
 	}
