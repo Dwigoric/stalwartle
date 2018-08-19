@@ -35,6 +35,7 @@ module.exports = class extends Command {
 		const newRole = await msg.guild.roles.create({
 			data: {
 				name: role.join(this.usageDelim),
+				color: 'DARKER_GREY',
 				permissions: 0
 			}
 		});
