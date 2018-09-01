@@ -28,7 +28,7 @@ module.exports = class extends Monitor {
 			}, [msg.author, 'Spamming mentions with the MentionSpam enabled (member has higher permissions so I could not ban them)', null, msg.content.length > 900 ? null : msg.content]);
 		} // eslint-disable-line max-len
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
-		this.client.commands.get('ban').run(msg, [msg.author, null, null, 'Mention spamming with MentionSpam enabled'], true).catch();
+		this.client.commands.get('ban').run(msg, [msg.author, null, null, 'Mention spamming with MentionSpam enabled'], true).catch(() => null);
 		return this.client.finalizers.get('modlogging').run({
 			command: this.client.commands.get('ban'),
 			channel: msg.channel,
