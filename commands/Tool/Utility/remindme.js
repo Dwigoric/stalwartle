@@ -1,4 +1,5 @@
 const { Command, Duration } = require('klasa');
+const { Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
 
@@ -83,7 +84,7 @@ module.exports = class extends Command {
 		userRems.forEach(rem => {
 			const remPage = Object.values(userRems).map(rmd => rmd.id).indexOf(rem.id) + 1;
 			remList[remPage] = rem.id;
-			const text = rem.data.text ? `: ${rem.data.text}` : '.';
+			const text = rem.data.text ? `: ${escapeMarkdown(rem.data.text)}` : '.';
 			remList.list += `\`${remPage}\` (\`${rem.id}\`) | You'll be reminded in **${Duration.toNow(rem.time)}**${text}\n`;
 		});
 		return remList;
