@@ -25,19 +25,24 @@ class Stalwartle extends Client {
 	async setGuildCount() {
 		this.user.setActivity(`${this.guilds.size} servers | ${config.prefix}help`, { type: 'LISTENING' });
 		if (!this.application.botPublic) return null;
-		if (!dblAPIkey) return null;
-		snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
-			.set('Authorization', dblAPIkey)
-			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
-			.catch(err => this.emit('error', err.stack));
-		snekfetch.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
-			.set('Authorization', dpwAPIkey)
-			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
-			.catch(err => this.emit('error', err.stack));
-		snekfetch.post(`https://botlist.space/api/bots/${this.user.id}`)
-			.set('Authorization', blsAPIkey)
-			.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
-			.catch(err => this.emit('error', err.stack));
+		if (dblAPIkey) {
+			snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
+				.set('Authorization', dblAPIkey)
+				.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+				.catch(err => this.emit('error', err.stack));
+		}
+		if (dpwAPIkey) {
+			snekfetch.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
+				.set('Authorization', dpwAPIkey)
+				.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+				.catch(err => this.emit('error', err.stack));
+		}
+		if (blsAPIkey) {
+			snekfetch.post(`https://botlist.space/api/bots/${this.user.id}`)
+				.set('Authorization', blsAPIkey)
+				.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+				.catch(err => this.emit('error', err.stack));
+		}
 		return undefined;
 	}
 
