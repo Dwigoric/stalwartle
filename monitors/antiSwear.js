@@ -52,9 +52,9 @@ module.exports = class extends Monitor {
 	async init() {
 		await this.client.commands.get('automod').init();
 		const automodSchema = this.client.gateways.guilds.schema.automod;
-		if (!automodSchema.antiSwear) await automodSchema.add('antiSwear', { type: 'boolean', default: false, configurable: true });
-		if (!automodSchema.globalSwears) await automodSchema.add('globalSwears', { type: 'boolean', default: true, configurable: true });
-		if (!automodSchema.swearWords) await automodSchema.add('swearWords', { type: 'string', array: true, default: [], configurable: true });
+		if (!automodSchema.antiSwear) automodSchema.add('antiSwear', { type: 'boolean', default: false, configurable: true });
+		if (!automodSchema.globalSwears) automodSchema.add('globalSwears', { type: 'boolean', default: true, configurable: true });
+		if (!automodSchema.swearWords) automodSchema.add('swearWords', { type: 'string', array: true, default: [], configurable: true });
 	}
 
 };

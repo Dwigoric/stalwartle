@@ -84,7 +84,7 @@ module.exports = class extends Command {
 			await guildSchema.add('modlogs', { type: 'Folder' });
 		}
 		this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).forEach(async command => {
-			if (!guildSchema.modlogs.has(command)) await guildSchema.modlogs.add(command, { type: 'channel', configurable: true });
+			if (!guildSchema.modlogs.has(command)) guildSchema.modlogs.add(command, { type: 'channel', configurable: true });
 		});
 	}
 
