@@ -45,7 +45,7 @@ class Stalwartle extends Client {
 				.add('antiSpam', 'boolean', { default: false, configurable: true })
 				.add('antiSwear', 'boolean', { default: false, configurable: true })
 				.add('mentionSpam', 'boolean', { default: false, configurable: true })
-				.add('globalSwears', 'boolean', { default: false, configurable: true })
+				.add('globalSwears', 'boolean', { default: true, configurable: true })
 				.add('swearWords', 'string', { array: true, default: [], configurable: true })
 				.add('filterIgnore', filterIgnore => filterIgnore
 					.add('antiInvite', 'channel', { array: true, default: [], configurable: true })
