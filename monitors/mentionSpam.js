@@ -36,10 +36,4 @@ module.exports = class extends Monitor {
 		}, [msg.author, 'Mention spamming with MentionSpam enabled', Infinity]);
 	}
 
-	async init() {
-		await this.client.commands.get('automod').init();
-		const automodSchema = this.client.gateways.guilds.schema.automod;
-		if (!automodSchema.mentionSpam) automodSchema.add('mentionSpam', { type: 'boolean', default: false, configurable: true });
-	}
-
 };

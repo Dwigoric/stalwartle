@@ -48,9 +48,4 @@ module.exports = class extends Command {
 		return msg.send('<:greenTick:399433439280889858>  ::  Successfully reset this server\'s mute role.');
 	}
 
-	async init() {
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.muteRole) guildSchema.add('muteRole', { type: 'role', configurable: true });
-	}
-
 };

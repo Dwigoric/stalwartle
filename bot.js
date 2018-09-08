@@ -9,6 +9,50 @@ class Stalwartle extends Client {
 	constructor(...args) {
 		super(...args);
 
+		Stalwartle.defaultClientSchema
+			.add('restart', 'string', { default: '', configurable: false });
+
+		Stalwartle.defaultUserSchema
+			.add('cookies', 'integer', { default: 0, configurable: false })
+			.add('afktoggle', 'boolean', { default: false, configurable: true })
+			.add('timezone', 'string', { default: 'GMT', configurable: false })
+			.add('afkIgnore', 'channel', { array: true, default: [], configurable: true })
+			.add('osu', 'string', { max: 20 });
+
+		Stalwartle.defaultGuildSchema
+			.add('muteRole', 'role', { configurable: true })
+			.add('logging', 'boolean', { default: true, configurable: true })
+			.add('modlogShowContent', 'boolean', { default: true, configurable: true })
+			.add('ignored', 'channel', { array: true, default: [], configurable: true })
+			.add('autorole', autorole => autorole
+				.add('user', 'role', { configurable: true })
+				.add('bot', 'role', { configurable: true }))
+			.add('moderators', moderators => moderators
+				.add('users', 'user', { array: true, default: [], configurable: true })
+				.add('roles', 'role', { array: true, default: [], configurable: true }))
+			.add('modlogs', modlogs => modlogs
+				.add('ban', 'channel', { configurable: true })
+				.add('kick', 'channel', { configurable: true })
+				.add('mute', 'channel', { configurable: true })
+				.add('softban', 'channel', { configurable: true })
+				.add('unban', 'channel', { configurable: true })
+				.add('unmute', 'channel', { configurable: true })
+				.add('warn', 'channel', { configurable: true }))
+			.add('automod', automod => automod
+				.add('ignoreBots', 'boolean', { default: false, configurable: true })
+				.add('ignoreMods', 'boolean', { default: false, configurable: true })
+				.add('antiInvite', 'boolean', { default: false, configurable: true })
+				.add('antiSpam', 'boolean', { default: false, configurable: true })
+				.add('antiSwear', 'boolean', { default: false, configurable: true })
+				.add('mentionSpam', 'boolean', { default: false, configurable: true })
+				.add('globalSwears', 'boolean', { default: false, configurable: true })
+				.add('swearWords', 'string', { array: true, default: [], configurable: true })
+				.add('filterIgnore', filterIgnore => filterIgnore
+					.add('antiInvite', 'channel', { array: true, default: [], configurable: true })
+					.add('antiSpam', 'channel', { array: true, default: [], configurable: true })
+					.add('antiSwear', 'channel', { array: true, default: [], configurable: true })
+					.add('mentionSpam', 'channel', { array: true, default: [], configurable: true })));
+
 		Stalwartle.defaultPermissionLevels
 			.add(6, (client, msg) => msg.guild && (msg.guild.settings.moderators.roles.some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.moderators.users.includes(msg.member.id))) // eslint-disable-line max-len
 			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))

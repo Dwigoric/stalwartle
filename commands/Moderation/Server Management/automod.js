@@ -59,21 +59,4 @@ module.exports = class extends Command {
 		return _option;
 	}
 
-	async init() {
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.automod) guildSchema.add('automod', { type: 'Folder' });
-		if (!guildSchema.automod.ignoreBots) guildSchema.automod.add('ignoreBots', { type: 'boolean', default: false, configurable: true });
-		if (!guildSchema.automod.ignoreMods) guildSchema.automod.add('ignoreMods', { type: 'boolean', default: false, configurable: true });
-		if (!guildSchema.automod.filterIgnore) guildSchema.automod.add('filterIgnore', { type: 'Folder' });
-		['antiInvite', 'antiSpam', 'antiSwear', 'mentionSpam'].forEach(module => {
-			if (guildSchema.automod.filterIgnore[module]) return;
-			guildSchema.automod.filterIgnore.add(module, {
-				type: 'channel',
-				array: true,
-				default: [],
-				configurable: true
-			});
-		});
-	}
-
 };

@@ -29,10 +29,4 @@ module.exports = class extends Monitor {
 		}, [msg.author, 'Spamming with AntiSpam enabled', duration]);
 	}
 
-	async init() {
-		await this.client.commands.get('automod').init();
-		const automodSchema = this.client.gateways.guilds.schema.automod;
-		if (!automodSchema.antiSpam) automodSchema.add('antiSpam', { type: 'boolean', default: false, configurable: true });
-	}
-
 };

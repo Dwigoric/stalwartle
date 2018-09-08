@@ -78,14 +78,4 @@ module.exports = class extends Command {
 		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully updated the modlog channel for member ${action}s to ${modlog}.`);
 	}
 
-	async init() {
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.modlogs) {
-			await guildSchema.add('modlogs', { type: 'Folder' });
-		}
-		this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).forEach(async command => {
-			if (!guildSchema.modlogs.has(command)) guildSchema.modlogs.add(command, { type: 'channel', configurable: true });
-		});
-	}
-
 };

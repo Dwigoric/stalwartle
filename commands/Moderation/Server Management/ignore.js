@@ -52,9 +52,4 @@ module.exports = class extends Command {
 		return msg.send(`🔇  ::  ${ignoredChanCount}\n${channels.join(', ')}`);
 	}
 
-	async init() {
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.ignored) guildSchema.add('ignored', { type: 'channel', array: true, default: [], configurable: true });
-	}
-
 };

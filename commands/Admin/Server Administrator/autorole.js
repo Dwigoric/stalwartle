@@ -35,15 +35,5 @@ module.exports = class extends Command {
 		return msg.send(`<:greenTick:399433439280889858>  ::  The autorole for ${type}s has been set to **${role.name}**.`);
 	}
 
-	async init() {
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.autorole) {
-			guildSchema.add('autorole', {
-				type: 'Folder',
-				user: { type: 'role', configurable: true },
-				bot: { type: 'role', configurable: true }
-			});
-		}
-	}
 
 };

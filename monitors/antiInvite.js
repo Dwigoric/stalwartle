@@ -28,10 +28,4 @@ module.exports = class extends Monitor {
 		}, [msg.author, 'Sending invites with the AntiInvite enabled', null, msg.content.length > 900 ? inviteRegex.exec(msg.content)[0].split(/ +/)[0] : msg.content]); // eslint-disable-line max-len
 	}
 
-	async init() {
-		await this.client.commands.get('automod').init();
-		const automodSchema = this.client.gateways.guilds.schema.automod;
-		if (!automodSchema.antiInvite) automodSchema.add('antiInvite', { type: 'boolean', default: false, configurable: true });
-	}
-
 };

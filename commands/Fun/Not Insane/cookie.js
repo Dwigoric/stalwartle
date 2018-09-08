@@ -78,9 +78,4 @@ module.exports = class extends Command {
 			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...'), { filter: (reaction, user) => user === msg.author });
 	}
 
-	async init() {
-		const userSchema = this.client.gateways.users.schema;
-		if (!userSchema.cookies) userSchema.add('cookies', { type: 'integer', default: 0, configurable: false });
-	}
-
 };

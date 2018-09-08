@@ -23,9 +23,4 @@ module.exports = class extends Command {
 		});
 	}
 
-	async init() {
-		const userSchema = this.client.gateways.users.schema;
-		if (!userSchema.timezone) userSchema.add('timezone', { type: 'string', default: 'GMT', configurable: false });
-	}
-
 };

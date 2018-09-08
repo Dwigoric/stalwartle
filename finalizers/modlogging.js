@@ -60,9 +60,6 @@ module.exports = class extends Finalizer {
 	async init() {
 		const defProvider = this.client.providers.default;
 		if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.logging) guildSchema.add('logging', { type: 'boolean', default: true, configurable: true });
-		if (!guildSchema.modlogShowContent) guildSchema.add('modlogShowContent', { type: 'boolean', default: true, configurable: true });
 	}
 
 };

@@ -273,9 +273,4 @@ module.exports = class extends Command {
 		return msg.send(embed).catch(() => { throw `<:redTick:399433440975519754>  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
 	}
 
-	async init() {
-		const userSchema = this.client.gateways.users.schema;
-		if (!userSchema.osu) userSchema.add('osu', { type: 'string', max: 20 });
-	}
-
 };

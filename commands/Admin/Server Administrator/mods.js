@@ -63,25 +63,4 @@ module.exports = class extends Command {
 		msg.send(`<:greenTick:399433439280889858>  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
 	}
 
-	async init() {
-		const guildSchema = this.client.gateways.guilds.schema;
-		if (!guildSchema.moderators) {
-			guildSchema.add('moderators', {
-				type: 'Folder',
-				users: {
-					type: 'user',
-					array: true,
-					default: [],
-					configurable: true
-				},
-				roles: {
-					type: 'role',
-					array: true,
-					default: [],
-					configurable: true
-				}
-			});
-		}
-	}
-
 };

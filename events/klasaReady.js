@@ -18,9 +18,4 @@ module.exports = class extends Event {
 		this.client.settings.reset('restart');
 	}
 
-	async init() {
-		const clientSchema = this.client.gateways.clientStorage.schema;
-		if (!clientSchema.restart) clientSchema.add('restart', { type: 'string', default: '', configurable: false });
-	}
-
 };

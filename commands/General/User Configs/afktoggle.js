@@ -12,9 +12,4 @@ module.exports = class extends Command {
 		msg.author.settings.update('afktoggle', afkSet[1]);
 	}
 
-	async init() {
-		const userSchema = this.client.gateways.users.schema;
-		if (!userSchema.afktoggle) userSchema.add('afktoggle', { type: 'boolean', default: false, configurable: true });
-	}
-
 };

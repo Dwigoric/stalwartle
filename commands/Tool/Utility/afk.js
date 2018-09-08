@@ -25,8 +25,6 @@ module.exports = class extends Command {
 	async init() {
 		const jsonProvider = this.client.providers.get('json');
 		if (!await jsonProvider.hasTable('afk')) jsonProvider.createTable('afk');
-		const userSchema = this.client.gateways.users.schema;
-		if (!userSchema.afkIgnore) userSchema.add('afkIgnore', { type: 'channel', array: true, default: [], configurable: true });
 	}
 
 };

@@ -49,12 +49,4 @@ module.exports = class extends Monitor {
 		}, [msg.author, 'Swearing with the AntiSwear enabled', null, msg.content.length > 900 ? swearRegex.exec(msg.content)[0] : msg.content]);
 	}
 
-	async init() {
-		await this.client.commands.get('automod').init();
-		const automodSchema = this.client.gateways.guilds.schema.automod;
-		if (!automodSchema.antiSwear) automodSchema.add('antiSwear', { type: 'boolean', default: false, configurable: true });
-		if (!automodSchema.globalSwears) automodSchema.add('globalSwears', { type: 'boolean', default: true, configurable: true });
-		if (!automodSchema.swearWords) automodSchema.add('swearWords', { type: 'string', array: true, default: [], configurable: true });
-	}
-
 };
