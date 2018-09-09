@@ -8,7 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permissionLevel: 9,
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_TRANSFER_DESCRIPTION'),
+			description: language => language.get('COMMAND_TRANSFER_DESCRIPTION'),
 			usage: '<Piece:piece>'
 		});
 	}

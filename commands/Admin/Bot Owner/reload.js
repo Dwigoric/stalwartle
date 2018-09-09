@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['r'],
 			permissionLevel: 9,
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_RELOAD_DESCRIPTION'),
+			description: language => language.get('COMMAND_RELOAD_DESCRIPTION'),
 			usage: '<Store:store|Piece:piece>'
 		});
 	}

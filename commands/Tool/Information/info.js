@@ -8,7 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['bot', 'bi', 'details', 'what'],
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_INFO_DESCRIPTION')
+			description: language => language.get('COMMAND_INFO_DESCRIPTION')
 		});
 	}
 

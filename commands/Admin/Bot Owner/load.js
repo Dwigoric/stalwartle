@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['l'],
 			permissionLevel: 10,
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_LOAD_DESCRIPTION'),
+			description: language => language.get('COMMAND_LOAD_DESCRIPTION'),
 			usage: '[core] <Store:store> <path:string>',
 			usageDelim: ' '
 		});
