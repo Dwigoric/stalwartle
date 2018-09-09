@@ -6,7 +6,6 @@ module.exports = class extends Event {
 	async run() {
 		this.client.setGuildCount();
 		this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
-			let i = 1;
 			const statusLoop = () => {
 				setTimeout(() => {
 					const statuses = [
@@ -34,12 +33,9 @@ module.exports = class extends Event {
 					];
 					const status = statuses[Math.floor(Math.random() * statuses.length)];
 					this.client.user.setActivity(`${status.name} | ${this.client.options.prefix}help`, { type: status.type });
-					// keeps the loop going
-					i++;
-					if (i < Infinity) statusLoop();
+					statusLoop();
 				}, 60000);
 			};
-
 			setTimeout(() => { statusLoop(); }, 10000);
 		});
 		const { restart } = this.client.settings;
