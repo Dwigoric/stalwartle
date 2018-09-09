@@ -67,7 +67,6 @@ class Stalwartle extends Client {
 	}
 
 	async setGuildCount() {
-		this.user.setActivity(`${this.guilds.size} servers | ${config.prefix}help`, { type: 'LISTENING' });
 		if (!this.application.botPublic) return null;
 		if (dblAPIkey) {
 			snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
