@@ -36,7 +36,7 @@ module.exports = class extends Event {
 					statusLoop();
 				}, 60000);
 			};
-			setTimeout(() => { statusLoop(); }, 10000);
+			setTimeout(() => statusLoop(), 10000);
 		});
 		const { restart } = this.client.settings;
 		if (!restart) return;
