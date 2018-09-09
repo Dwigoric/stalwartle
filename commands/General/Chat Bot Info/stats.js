@@ -38,6 +38,7 @@ module.exports = class extends Command {
 		msg.sendMessage(new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(`${this.client.user.tag}'s Statistics 📟`, this.client.user.displayAvatarURL())
+			.setTimestamp()
 			.addField('🤖 General Information', [
 				`**Users**: ${this.client.guilds.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}`,
 				`**Servers**: ${this.client.guilds.size.toLocaleString()}`,
