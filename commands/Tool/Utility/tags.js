@@ -28,8 +28,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [userTag]) {
-		if (!await this.client.providers.get('json').get('tags', msg.author.id)) await this.client.providers.get('json').create('tags', msg.author.id);
-		const userTags = await this.client.providers.get('json').get('tags', msg.author.id);
+		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
+		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		const noTagErr = `<:redTick:399433440975519754>  ::  Sorry! You have no tag named **${userTag}**.`;
 		if (userTag === 'id') throw noTagErr;
 		const tag = userTags[userTag];
@@ -38,8 +38,8 @@ module.exports = class extends Command {
 	}
 
 	async list(msg) {
-		if (!await this.client.providers.get('json').get('tags', msg.author.id)) await this.client.providers.get('json').create('tags', msg.author.id);
-		const userTags = await this.client.providers.get('json').get('tags', msg.author.id);
+		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
+		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		const tags = Object.keys(userTags);
 		tags.splice(tags.indexOf('id'), 1);
 		if (!tags.length) throw '🗒  :: You currently have no tags.';
@@ -47,36 +47,36 @@ module.exports = class extends Command {
 	}
 
 	async create(msg, [tag, ...contents]) {
-		if (!await this.client.providers.get('json').get('tags', msg.author.id)) await this.client.providers.get('json').create('tags', msg.author.id);
-		const userTags = await this.client.providers.get('json').get('tags', msg.author.id);
+		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
+		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		if (userTags[tag]) throw `<:redTick:399433440975519754>  ::  **${tag}** is already your tag!`;
 		if (Object.keys(userTags).length > 15) throw `<:redTick:399433440975519754>  ::  You have already reached the limit of 15 tags!`;
-		await this.client.providers.get('json').update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
+		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
 		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been created!`);
 	}
 
 	async remove(msg, [tag]) {
-		if (!await this.client.providers.get('json').get('tags', msg.author.id)) await this.client.providers.get('json').create('tags', msg.author.id);
-		const userTags = await this.client.providers.get('json').get('tags', msg.author.id);
+		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
+		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		if (tag === 'id') throw `<:redTick:399433440975519754>  ::  Tag **${tag}** cannot be removed. Sorry!`;
 		if (!userTags[tag]) throw `<:redTick:399433440975519754>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
-		await this.client.providers.get('json')._removeValue('tags', [tag], userTags);
+		await this.client.providers.default._removeValue('tags', [tag], userTags);
 		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been removed!`);
 	}
 
 	async edit(msg, [tag, ...contents]) {
-		if (!await this.client.providers.get('json').get('tags', msg.author.id)) await this.client.providers.get('json').create('tags', msg.author.id);
-		const userTags = await this.client.providers.get('json').get('tags', msg.author.id);
+		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
+		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		if (tag === 'id') throw `<:redTick:399433440975519754>  ::  Tag **${tag}** cannot be edited. Sorry!`;
 		if (!userTags[tag]) throw `<:redTick:399433440975519754>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
 		if (!contents.length) throw `<:redTick:399433440975519754>  ::  Please provide the new contents of the tag **${tag}**.`;
-		await this.client.providers.get('json').update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
+		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
 		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been edited!`);
 	}
 
 	async init() {
-		const jsonProvider = this.client.providers.get('json');
-		if (!await jsonProvider.hasTable('tags')) jsonProvider.createTable('tags');
+		const defProvider = this.client.providers.default;
+		if (!await defProvider.hasTable('tags')) defProvider.createTable('tags');
 	}
 
 };

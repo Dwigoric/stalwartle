@@ -161,9 +161,9 @@ exports.config = {
      * Custom Setting Gateway Options
      */
 	gateways: {
-		guilds: { provider: 'json' },
-		users: { provider: 'json' },
-		clientStorage: { provider: 'json' }
+		guilds: { provider: 'rethinkdb' },
+		users: { provider: 'rethinkdb' },
+		clientStorage: { provider: 'rethinkdb' }
 	},
 
 	/**
