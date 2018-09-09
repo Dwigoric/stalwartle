@@ -88,7 +88,7 @@ module.exports = class extends Command {
 			const subCat = subcategory || command.subCategory;
 			if (!help.hasOwnProperty(cat)) help[cat] = {};
 			if (!help[cat].hasOwnProperty(subCat)) help[cat][subCat] = [];
-			const description = typeof command.description === 'function' ? command.description(msg) : command.description;
+			const description = typeof command.description === 'function' ? command.description(msg.language) : command.description;
 			return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
 		}));
 
