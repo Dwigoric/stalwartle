@@ -43,7 +43,7 @@ module.exports = class extends Command {
 			.setTitle(`${tmdb.title} (${page} out of ${request.body.results.length} result${request.body.results.length === 1 ? '' : 's'})`)
 			.setURL(url)
 			.setDescription(`[Poster Here](${poster})  ::  ${trim(tmdb.overview, 1024)}`)
-			.setFooter(`${this.client.user.username} uses the TMDb API but is not endorsed nor certified by TMDb.`, 'https://www.themoviedb.org/static_cache/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png'); // eslint-disable-line max-len
+			.setFooter(`${this.client.user.username} uses the TMDb API but is not endorsed nor certified by TMDb.`, 'https://www.themoviedb.org/assets/1/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png'); // eslint-disable-line max-len
 		if (tmdb.title !== tmdb.original_title) embed.addField('Original Title', tmdb.original_title, true);
 		embed
 			.addField('Language', tmdb.original_language.toUpperCase(), true)
