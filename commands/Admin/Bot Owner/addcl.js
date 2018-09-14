@@ -16,7 +16,7 @@ module.exports = class extends Command {
 		const avatarURL = this.client.user.displayAvatarURL();
 		[
 			// ChillGalaxy
-			'415153667600023552',
+			'489811169952137218',
 			// Insanity Bot Laboratory
 			'401349122902458378'
 		].forEach(chan => this.client.channels.get(chan).send({
