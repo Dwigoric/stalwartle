@@ -5,7 +5,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			aliases: ['changelogs', 'changelog', 'hub'],
+			aliases: ['hub'],
 			guarded: true,
 			description: 'Gives you the invite link to my server where you can view the changelog and hang out with us!'
 		});
