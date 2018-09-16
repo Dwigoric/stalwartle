@@ -1,6 +1,6 @@
 const { Client } = require('klasa');
 const { config, token } = require('./config');
-const { blsAPIkey, dblAPIkey, dpwAPIkey, idioticAPIkey } = require('./auth');
+const { blsAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
 const snekfetch = require('snekfetch');
 const idiotic = require('idiotic-api');
 
@@ -68,6 +68,12 @@ class Stalwartle extends Client {
 
 	async setGuildCount() {
 		if (!this.application.botPublic) return null;
+		if (ctxAPIkey) {
+			snekfetch.post('https://www.carbonitex.net/discord/data/botdata.php').send({
+				key: ctxAPIkey,
+				server_count: await this.guildCount() // eslint-disable-line camelcase
+			});
+		}
 		if (dblAPIkey) {
 			snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
 				.set('Authorization', dblAPIkey)
