@@ -69,10 +69,12 @@ class Stalwartle extends Client {
 	async setGuildCount() {
 		if (!this.application.botPublic) return null;
 		if (ctxAPIkey) {
-			snekfetch.post('https://www.carbonitex.net/discord/data/botdata.php').send({
-				key: ctxAPIkey,
-				server_count: await this.guildCount() // eslint-disable-line camelcase
-			});
+			snekfetch.post('https://www.carbonitex.net/discord/data/botdata.php')
+				.send({
+					key: ctxAPIkey,
+					server_count: await this.guildCount() // eslint-disable-line camelcase
+				})
+				.catch(err => this.emit('error', err.stack));
 		}
 		if (dblAPIkey) {
 			snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
