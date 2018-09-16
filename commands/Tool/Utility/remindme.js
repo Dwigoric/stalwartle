@@ -7,17 +7,16 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['remind', 'reminder'],
 			description: 'Schedules a reminder for you.',
-			usage: '[list|remove] (DurationUntilReminder:time) (Reminder:string) [...]',
+			usage: '[list|remove] (DurationUntilReminder:time) [Reminder:string] [...]',
 			extendedHelp: [
 				'e.g. `s.remindme 1m to get in the car, buy stuff, do stuff`',
 				"The subcommands `list` and `remove` are optional. If you want to add a reminder, simply don't use any subcommand.",
-				'**If you want daily, weekly, monthly or annual reminders, just use the flags `--daily` or `--annually` etc. and remove the reminder duration e.g. `s.remindme to eat cake --daily`**',
-				'***Recurring reminders ignore the duration. The command will still work with a given duration but the following will override the reminder:***',
-				'\n**Hourlies** `--hourly` → At 0 minute past every hour',
-				'**Dailies** `--daily` → At 00:00',
-				'**Weeklies** `--weekly` → At 00:00 every Saturday',
-				'**Monthlies** `--monthly` → At 00:00 every first day of the month',
-				'**Annuals** `--annually` → At 00:00 in January 1',
+				'**If you want daily, weekly, monthly or annual reminders, just replace the reminder duration with `daily`, `annually` etc., e.g. `s.remindme daily to eat cake`**',
+				'\n**Hourlies** `hourly` → At 0 minute past every hour',
+				'**Dailies** `daily` → At 00:00',
+				'**Weeklies** `weekly` → At 00:00 every Saturday',
+				'**Monthlies** `monthly` → At 00:00 every first day of the month',
+				'**Annuals** `annually` → At 00:00 in January 1',
 				'All of which are in GMT timezone.',
 				'\nIf you want to force the reminder to the channel, use the `--channel` flag.'
 			].join('\n'),
@@ -28,18 +27,13 @@ module.exports = class extends Command {
 		this
 			.createCustomResolver('time', (arg, possible, msg, [action]) => {
 				if (['list', 'remove'].includes(action)) return undefined;
-				const hasFlags = ['hourly', 'daily', 'weekly', 'monthly', 'annually'].some(flag => msg.flags.hasOwnProperty(flag));
-				if (!arg && !hasFlags) throw '<:redTick:399433440975519754>  ::  Please provide the duration (e.g. 2d3h4m) of the reminder.';
-				if (msg.flags.annually) return '0 0 1 1 *';
-				if (msg.flags.monthly) return '0 0 1 * *';
-				if (msg.flags.weekly) return '0 0 * * 6';
-				if (msg.flags.daily) return '0 0 * * *';
-				if (msg.flags.hourly) return '0 */1 * * *';
-				return this.client.arguments.get('time').run(arg, possible, msg);
-			})
-			.createCustomResolver('string', (arg, possible, msg, [action]) => {
-				if (['list', 'remove'].includes(action) || !arg) return undefined;
-				return arg;
+				if (!arg) throw '<:redTick:399433440975519754>  ::  Please provide the duration (e.g. 2d3h4m) of the reminder.';
+				if (arg === 'annually') return '0 0 1 1 *';
+				else if (arg === 'monthly') return '0 0 1 * *';
+				else if (arg === 'weekly') return '0 0 * * 6';
+				else if (arg === 'daily') return '0 0 * * *';
+				else if (arg === 'hourly') return '0 */1 * * *';
+				else return this.client.arguments.get('time').run(arg, possible, msg);
 			});
 	}
 
