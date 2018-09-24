@@ -25,7 +25,6 @@ module.exports = class extends Command {
 			.setAuthor(repUser.tag, repUser.displayAvatarURL())
 			.addField('Submission', repMsg.content)
 			.addField("High Lord's Comments", repCom.join(' '))
-			.setFooter(`#${msg.channel.name} | ${msg.channel.guild.name}`)
 			.setTimestamp();
 		const attachments = repMsg.attachments.size ? repMsg.attachments.filter(atch => {
 			const filename = atch.file.name;

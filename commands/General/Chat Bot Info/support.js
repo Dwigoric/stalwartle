@@ -15,10 +15,7 @@ module.exports = class extends Command {
 		msg.send({
 			embed: await new MessageEmbed()
 				.setColor('RANDOM')
-				.setDescription([
-					`Please visit my dev server (<https://discord.gg/gTtVN6h>) and go to the questions and support channel so we can give you the utmost support.`,
-					`If you want to be notified on the latest updates, run \`.iam Stalwartle User\` in ${this.client.channels.get('369341351201865744')}.`
-				].join('\n'))
+				.setDescription('Please visit my dev server (<https://discord.gg/ZzjZ8ba>) and go to the questions and support channel so we can give you the utmost support.')
 		});
 	}
 
