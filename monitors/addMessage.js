@@ -11,7 +11,7 @@ module.exports = class extends Monitor {
 
 	run(msg) {
 		if (!msg.member) return;
-		msg.member.messages = msg;
+		msg.member.addMessage(msg);
 	}
 
 };
