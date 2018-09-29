@@ -4,7 +4,7 @@
 	"version": "2.2.1",
 	"main": "bot.js",
 	"scripts": {
-		"start": "pm2 start bot.js --name \"Stalwartle\""
+		"start": "pm2 start bot.js --name \"Stalwartle\" --node-args=\"--max-old-space-size=256\""
 	},
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
