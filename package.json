@@ -1,10 +1,10 @@
 {
 	"name": "stalwartle",
 	"description": "A scrumptious project that does quirky things",
-	"version": "2.2.2",
+	"version": "2.2.2b",
 	"main": "bot.js",
 	"scripts": {
-		"start": "pm2 start bot.js --name \"Stalwartle\" --node-args=\"--max-old-space-size=256\""
+		"start": "pm2 start bot.js --name \"Stalwartle\""
 	},
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
