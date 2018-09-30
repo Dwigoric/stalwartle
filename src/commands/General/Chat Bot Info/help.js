@@ -27,7 +27,7 @@ module.exports = class extends Command {
 					.addField('Usage', `\`${this.client.options.prefix}${category.usage}\``)
 					.addField('Additional Information', isFunction(category.extendedHelp) ? category.extendedHelp(msg.language) : category.extendedHelp)
 					.addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
-					.setFooter(`Classification: ${category.category} → ${category.subCategory} | Version: ${require('../../../package.json').version}`)
+					.setFooter(`Classification: ${category.category} → ${category.subCategory}`)
 			});
 		}
 
@@ -41,7 +41,6 @@ module.exports = class extends Command {
 			for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
 			if (cat === categories.length - 1) {
 				helpMessage.push([
-					`***Version: ${require('../../../package.json').version}***`,
 					this.client.application.botPublic ? [
 						`\nWant to add ${this.client.user.username} to your own server or to a server you manage? If you have **Manage Server** permissions, you can add this bot by using the link:`,
 						`<http://bit.ly/${this.client.user.username.split(' ').join('-')}>`,
