@@ -74,7 +74,7 @@ module.exports = class extends Command {
 				.addField('Owner', `${dGuild.owner.user.tag}\n(${dGuild.owner.user})`, true)
 				.addField('Verification Level', verif, true)
 				.addField('Server Region', region, true)
-				.addField('Member Count', dGuild.memberCount, true)
+				.addField('Member Count (active/total)', `${dGuild.presences.size}/${dGuild.memberCount}`, true)
 				.addField('Role Count', roleCount, true)
 				.addField('Text Channel Count', tchanCount, true)
 				.addField('Voice Channel Count', vchanCount, true)
