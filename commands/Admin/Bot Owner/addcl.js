@@ -13,7 +13,6 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, ...params) {
-		const avatarURL = this.client.user.displayAvatarURL();
 		[
 			// ChillGalaxy
 			'445823150626832386',
@@ -23,7 +22,6 @@ module.exports = class extends Command {
 			embed: new MessageEmbed()
 				.setTitle(`<a:updating:417233654545383424> ${this.client.user.username}'s Changelog`)
 				.setDescription(params)
-				.setFooter(`Version ${require('../../../package.json').version}`, avatarURL)
 				.setTimestamp()
 		}));
 		msg.send(`<:greenTick:399433439280889858>  ::  Successfully posted changelog!`);
