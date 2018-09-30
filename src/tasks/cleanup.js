@@ -82,11 +82,11 @@ module.exports = class MemorySweeper extends Task {
 	}
 
 	async init() {
-		this.run();
-		do {
+		while (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length !== 1) {
 			this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').forEach(tk => this.client.schedule.delete(tk.id));
 			await this.client.schedule.create('cleanup', '*/30 * * * *');
-		} while (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length !== 1);
+		}
+		this.run();
 	}
 
 	/**
