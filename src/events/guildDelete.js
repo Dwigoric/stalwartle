@@ -14,7 +14,7 @@ module.exports = class extends Event {
 				.addField('Guild Owner', `${guild.owner.user.tag} (${guild.owner.user})`)
 				.addField('Guild Count', this.client.guilds.size, true)
 				.addField('Channel Count', this.client.channels.size, true)
-				.addField('User Count', this.client.users.size, true)
+				.addField('User Count', this.client.guilds.reduce((a, b) => a + b.memberCount, 1), true)
 				.setTimestamp()
 		});
 	}

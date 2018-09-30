@@ -19,7 +19,7 @@ exports.config = {
 	// A presence to login with
 	presence: { status: 'online' },
 	// A once ready message for your console
-	readyMessage: (client) => `${client.user.tag} has been given birth. Currently playing on ${client.guilds.size} servers with ${client.users.size} users.`,
+	readyMessage: (client) => `${client.user.tag} has been given birth. Currently playing on ${client.guilds.size} servers with ${client.guilds.reduce((a, b) => a + b.memberCount, 1)} users.`,
 
 	ownerID: '295391820744228867',
 	owners: ['295391820744228867', '296862433136476160', '296256174209105920', '147891648628654082'],
