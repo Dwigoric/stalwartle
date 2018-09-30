@@ -35,12 +35,6 @@ module.exports = class extends Command {
 
 		const verif = verifLevel[dGuild.verificationLevel];
 
-		const onlineMembers = dGuild.members.filter(mb => mb.presence.status !== 'offline');
-		const botCount = onlineMembers.filter(mb => mb.user.bot).size;
-		const userCount = onlineMembers.filter(mb => !mb.user.bot).size;
-		const botTotal = dGuild.members.filter(mb => mb.user.bot).size;
-		const userTotal = dGuild.members.filter(mb => !mb.user.bot).size;
-
 		const gregion = {
 			'eu-central': 'Central Europe',
 			'eu-west': 'Western Europe',
@@ -80,7 +74,7 @@ module.exports = class extends Command {
 				.addField('Owner', `${dGuild.owner.user.tag}\n(${dGuild.owner.user})`, true)
 				.addField('Verification Level', verif, true)
 				.addField('Server Region', region, true)
-				.addField('Member Count (online/total)', `Users: ${userCount}/${userTotal}\nBots: ${botCount}/${botTotal}\n\nOverall: ${userCount + botCount}/${dGuild.members.size}`, true)
+				.addField('Member Count', dGuild.memberCount, true)
 				.addField('Role Count', roleCount, true)
 				.addField('Text Channel Count', tchanCount, true)
 				.addField('Voice Channel Count', vchanCount, true)
