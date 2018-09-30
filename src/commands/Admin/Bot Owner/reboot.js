@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { exec } } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -14,7 +14,7 @@ module.exports = class extends Command {
 		await this.client.settings.update('restart', msg.channel.id);
 		await msg.send(`<a:loading:430269209415516160>  ::  Bot is restarting...`);
 		await this.client.destroy();
-		process.exit(0);
+		exec('pm2 restart Stalwartle');
 	}
 
 };
