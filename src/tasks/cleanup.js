@@ -79,13 +79,15 @@ module.exports = class MemorySweeper extends Task {
 			// `${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(lastMessages)} [Last Message]s`
 		].join('\n'));
+
+		// Create a schedule to make this task work
+		while (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length !== 1) {
+			this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').forEach(tk => this.client.schedule.delete(tk.id));
+			await this.client.schedule.create('cleanup', '*/30 * * * *');
+		}
 	}
 
 	async init() {
-		do {
-			this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').forEach(tk => this.client.schedule.delete(tk.id));
-			await this.client.schedule.create('cleanup', '*/30 * * * *');
-		} while (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length !== 1);
 		this.run();
 	}
 
