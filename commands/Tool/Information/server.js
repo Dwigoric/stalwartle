@@ -54,8 +54,7 @@ module.exports = class extends Command {
 		const regionArr = dGuild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
 		const rawRegion = regionArr.join('-');
-		const dregion = gregion[rawRegion];
-		let region = dregion || rawRegion.replace(/^./, i => i.toUpperCase());
+		let region = gregion[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
 		if (dGuild.region.includes('vip')) region += ' [Partnered]';
 
 		const roleCount = dGuild.roles.size > 1 ? dGuild.roles.size : 'None';
