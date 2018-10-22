@@ -46,7 +46,7 @@ module.exports = class extends Command {
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
 			.map(user => this.client.users.get(user.id)));
-		if (!msg.flags.global && msg.guild) list = list.filter(user => msg.guild.members.has(user.id)).map(mem => mem.user); // eslint-disable-line max-len
+		if (!msg.flags.global && msg.guild) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		while (list.length) top10.push(list.splice(0, 10));
 
