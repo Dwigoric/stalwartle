@@ -14,6 +14,8 @@ exports.config = {
 	apiRequestMethod: 'sequential',
 	// If your bot should be able to mention @everyone
 	disableEveryone: true,
+	// The time in ms to add to ratelimits, to ensure you won't hit a 429 response
+	restTimeOffset: 500,
 	// Any Websocket Events you don't want to listen to
 	disabledEvents: [],
 	// A presence to login with
