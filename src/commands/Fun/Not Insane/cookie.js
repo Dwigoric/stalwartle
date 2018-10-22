@@ -42,10 +42,10 @@ module.exports = class extends Command {
 
 	async lb(msg) {
 		const top10 = [];
-		let list = await this.client.providers.default.getAll('users').then(usr => usr
+		let list = await Promise.all(await this.client.providers.default.getAll('users').then(usr => usr
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
-			.map(user => this.client.users.get(user.id)));
+			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
 		if (!msg.flags.global && msg.guild) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		while (list.length) top10.push(list.splice(0, 10));
