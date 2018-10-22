@@ -60,7 +60,7 @@ module.exports = class extends Command {
 						q: request.snippet.channelId, // eslint-disable-line id-length
 						type: 'channel'
 					})
-					.then(result => result.body.items[0].snippet.thumbnails.high.url))
+					.then(result => result.body.items.length ? result.body.items[0].snippet.thumbnails.high.url : undefined))
 				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
 		}
 		embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS'))
