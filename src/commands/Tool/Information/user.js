@@ -20,10 +20,7 @@ module.exports = class extends Command {
 		msg.send('<a:loading:430269209415516160>  ::  Gathering information...');
 		const { timezone } = player.settings;
 		const guildMember = await msg.guild.members.fetch(player.id).catch(() => null);
-		let nick;
-		let joined;
-		let roles;
-		let roleNum;
+		let nick, joined, roles, roleNum;
 
 		if (!guildMember) {
 			nick = 'Not a member of this server';
@@ -47,10 +44,11 @@ module.exports = class extends Command {
 			}
 		}
 
-		const guildCount = await Promise.all(this.client.guilds.map(guild => guild.members.fetch(player.id).catch(() => false))).then(promise => promise.filter(Boolean).length);
-
 		const presences = await this.client.users.fetch(player.id).then(us => us.presence);
 		const gameplay = presences.activity;
+
+		const guildCount = this.client.guilds.filter(gd => gd.members.has(player.id)).size;
+
 		let presenceStatus;
 		if (!guildCount) {
 			presenceStatus = "I wouldn't know since we\nhave no mutual servers 😢";
@@ -76,10 +74,7 @@ module.exports = class extends Command {
 			Invisible: '<:offline:415894324966981632>'
 		};
 
-		let accType;
-		if (player.bot) accType = 'Bot';
-		else accType = 'User';
-
+		const accType = player.bot ? 'Bot' : 'User';
 		const avatarURL = player.displayAvatarURL();
 
 		const userEmbed = new MessageEmbed()
