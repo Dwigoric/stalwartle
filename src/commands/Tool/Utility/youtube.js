@@ -50,7 +50,19 @@ module.exports = class extends Command {
 			.setURL(`https://www.youtube.com/${url}${request.id[`${type}Id`]}`)
 			.setColor('RANDOM');
 		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
-		if (type !== 'channel') embed.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
+		if (type !== 'channel') {
+			embed
+				.setThumbnail(await snekfetch.get('https://www.googleapis.com/youtube/v3/search')
+					.query({
+						key: googleAPIkey,
+						part: 'snippet',
+						maxResults: 1,
+						q: request.snippet.channelId, // eslint-disable-line id-length
+						type: 'channel'
+					})
+					.then(result => result.body.items[0].snippet.thumbnails.high.url))
+				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
+		}
 		embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS'))
 			.addField('Description', request.snippet.description ? request.snippet.description : 'No Description');
 
