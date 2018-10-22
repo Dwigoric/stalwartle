@@ -8,6 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['ui', 'userinfo', 'uinfo', 'who', 'whois'],
 			runIn: ['text'],
+			cooldown: 10,
 			subcommands: true,
 			description: 'Gives information about you or another user (mention, tag, or ID).',
 			usage: '[rawavatar|avatar|roles|id] [User:user]',
@@ -16,6 +17,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [player = msg.author]) {
+		msg.send('<a:loading:430269209415516160>  ::  Gathering information...');
 		const { timezone } = player.settings;
 		const guildMember = await msg.guild.members.fetch(player.id).catch(() => null);
 		let nick;
@@ -45,9 +47,9 @@ module.exports = class extends Command {
 			}
 		}
 
-		const guildCount = this.client.guilds.filter(gd => gd.members.has(player.id)).size;
+		const guildCount = await Promise.all(this.client.guilds.map(guild => guild.members.fetch(player.id).catch(() => false))).then(promise => promise.filter(Boolean).length);
 
-		const presences = this.client.users.get(player.id).presence;
+		const presences = await this.client.users.fetch(player.id).then(us => us.presence);
 		const gameplay = presences.activity;
 		let presenceStatus;
 		if (!guildCount) {
