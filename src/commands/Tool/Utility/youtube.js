@@ -52,13 +52,12 @@ module.exports = class extends Command {
 		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
 		if (type !== 'channel') {
 			embed
-				.setThumbnail(await snekfetch.get('https://www.googleapis.com/youtube/v3/search')
+				.setThumbnail(await snekfetch.get('https://www.googleapis.com/youtube/v3/channels')
 					.query({
 						key: googleAPIkey,
 						part: 'snippet',
 						maxResults: 1,
-						q: request.snippet.channelId, // eslint-disable-line id-length
-						type: 'channel'
+						id: request.snippet.channelId
 					})
 					.then(result => result.body.items.length ? result.body.items[0].snippet.thumbnails.high.url : undefined))
 				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
