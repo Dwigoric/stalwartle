@@ -10,7 +10,7 @@ module.exports = class extends Event {
 		if (error instanceof Error) this.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
 		if (error.message) {
 			msg
-				.send(`⚠ Whoa! You found a bug! Please catch this bug and send it **with the error code \`${errorID}\`**using the \`bug\` command!${util.codeBlock('xl', error)}`)
+				.send(`⚠ Whoa! You found a bug! Please catch this bug and send it **with the error code \`${errorID}\`**using the \`bug\` command!${util.codeBlock('xl', error.message)}`)
 				.catch(err => this.client.emit('wtf', err));
 		} else {
 			return msg.sendMessage(error).catch(err => this.client.emit('wtf', err));
