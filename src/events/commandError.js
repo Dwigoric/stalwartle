@@ -24,7 +24,7 @@ module.exports = class extends Event {
 					`**Trigerrer**: ${msg.author} (${msg.author.id})`,
 					`**Guild**: ${msg.guild.name} (${msg.guild.id})`,
 					`**Channel**: #${msg.channel.name} (${msg.channel.id})`,
-					`**Command**: \`${util.regExpEsc(msg.content)}\``,
+					`**Command**: \`${msg.content}\``,
 					util.codeBlock('js', error.message),
 					util.codeBlock('xl', error.stack)
 				])
