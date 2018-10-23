@@ -21,10 +21,10 @@ module.exports = class extends Event {
 				.setTitle(`Details of Error ID \`${errorID}\``)
 				.setDescription([
 					`**Shard ID**: ${this.client.shard ? this.client.shard.id : 'N/A'}`,
-					`**Command**: ${command.name}`,
-					`**Trigerrer**: ${msg.author} | ${msg.author.id}`,
-					`**Guild**: ${msg.guild.name} | ${msg.guild.id}`,
-					`**Channel**: #${msg.channel.name} | ${msg.channel.id}`,
+					`**Trigerrer**: ${msg.author} (${msg.author.id})`,
+					`**Guild**: ${msg.guild.name} (${msg.guild.id})`,
+					`**Channel**: #${msg.channel.name} (${msg.channel.id})`,
+					`**Command**: \`${util.regExpEsc(msg.content)}\``,
 					util.codeBlock('js', error.message),
 					util.codeBlock('xl', error.stack)
 				])
