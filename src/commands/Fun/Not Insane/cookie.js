@@ -58,7 +58,7 @@ module.exports = class extends Command {
 		let authorPos;
 		top10.forEach((top, tenPower) => {
 			display.addPage(template => template.setDescription(top.map((topUser, onePower) => {
-				const currentPos = tenPower && onePower === 9 ? `${(tenPower + 1) * 10}` : `${(tenPower * 10) + (onePower + 1)}`;
+				const currentPos = onePower === 9 ? `${(tenPower + 1) * 10}` : `${(tenPower * 10) + (onePower + 1)}`;
 				if (topUser === msg.author) authorPos = currentPos;
 				return `\`${currentPos}\`. ${topUser.tag} ➱ ${topUser.settings.cookies} Stalkie${topUser.settings.cookies === 1 ? '' : 's'}`; // eslint-disable-line max-len
 			}).join('\n\n')));
