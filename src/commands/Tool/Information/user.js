@@ -96,7 +96,7 @@ module.exports = class extends Command {
 			return msg.send({
 				embed: userEmbed.setDescription(`${gameplay && gameplay.type === 'LISTENING' ?
 					'Listening to' :
-					gameplay.type.replace(/\B[a-zA-Z0-9]+/, str => str.toLowerCase())} **${gameplay.name}**`)
+					gameplay.type.replace(/\B[a-zA-Z0-9]+/, str => str.toLowerCase())} **${gameplay.name}**${gameplay.details ? ' <:richpresence:504544678364971008>' : ''}`)
 			});
 		}
 		return msg.send({ embed: userEmbed });
