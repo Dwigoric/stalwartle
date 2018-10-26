@@ -27,19 +27,16 @@ module.exports = class extends Command {
 			roles = 'Not a member of this server';
 			roleNum = '';
 		} else {
-			const { nickname } = guildMember;
-			if (nickname === null) nick = 'None';
-			else nick = nickname;
-
+			nick = guildMember.nickname || 'None';
 			joined = `${moment(guildMember.joinedAt).tz(timezone).format('dddd, LL | LTS')}\n>> ${moment(guildMember.joinedAt).fromNow()}`;
+			roleNum = guildMember.roles.size ? `[${guildMember.roles.size}]` : '';
+
 			if (!guildMember.roles.size) {
 				roles = 'None';
-				roleNum = '';
 			} else {
 				roles = guildMember.roles.sort((a, b) => b.position - a.position);
 				if (guildMember.roles.size <= 10) roles = roles.array().join(' | ');
 				else roles = `${roles.first(10).join(' | ')} **+ ${roles.size - 10} other role${roles.size - 10 === 1 ? '' : 's'}**`;
-				roleNum = `[${guildMember.roles.size}]`;
 			}
 		}
 
