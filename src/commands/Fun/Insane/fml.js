@@ -6,7 +6,10 @@ const HTMLParser = require('fast-html-parser');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Gets a random FML story.' });
+		super(...args, {
+			requiredPermissions: ['EMBED_LINKS'],
+			description: 'Gets a random FML story.'
+		});
 	}
 
 	async run(msg) {

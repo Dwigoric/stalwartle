@@ -7,6 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['sub'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Returns information on a subreddit.',
 			usage: '<Subreddit:str>'
 		});

@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			aliases: ['sts'],
 			bucket: 2,
 			cooldown: 15,
+			requiredPermissions: ['EMBED_LINKS'],
 			description: language => language.get('COMMAND_STATS_DESCRIPTION'),
 			extendedHelp: language => language.get('COMMAND_STATS_EXTENDED')
 		});

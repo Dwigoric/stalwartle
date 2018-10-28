@@ -11,6 +11,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Returns information on a Twitch.tv Account',
 			usage: '<TwitchName:string>'
 		});

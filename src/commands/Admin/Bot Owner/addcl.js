@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['addchangelog'],
 			permissionLevel: 9,
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Posts a changelog in the changelog channel on the support server.',
 			usage: '<Content:string>'
 		});

@@ -10,6 +10,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives information about a game on Steam.',
 			usage: '<Game:string>'
 		});

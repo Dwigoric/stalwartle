@@ -6,6 +6,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['lie', 'liedetector'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Detects a lie. Are you/they lying? Hmm... <:thonk:332119390365548545>',
 			extendedHelp: [
 				'To detect a lie, provide a text.',

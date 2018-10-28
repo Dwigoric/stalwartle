@@ -8,6 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['ci', 'cinfo', 'channelinfo'],
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: "Gives information about the channel you're on or the channel you provided.",
 			usage: '[id] [Channel:channel]',
 			usageDelim: ' ',

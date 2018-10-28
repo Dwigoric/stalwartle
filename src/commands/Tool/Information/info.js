@@ -8,6 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['bot', 'bi', 'details', 'what'],
 			guarded: true,
+			requiredPermissions: ['EMBED_LINKS'],
 			description: language => language.get('COMMAND_INFO_DESCRIPTION')
 		});
 	}

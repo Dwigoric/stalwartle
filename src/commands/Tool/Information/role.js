@@ -8,6 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['ri', 'rinfo', 'roleinfo'],
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives information about a role.',
 			extendedHelp: "You can use the role's name in providing the role.",
 			usage: '[id] <Role:role>',

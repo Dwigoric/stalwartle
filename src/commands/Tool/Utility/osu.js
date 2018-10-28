@@ -61,6 +61,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gets information about an osu! user.',
 			extendedHelp: [
 				'If you want to have a default osu! username every query, use the `s.userconf` command.\n',

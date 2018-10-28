@@ -8,6 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['si', 'sinfo', 'serverinfo'],
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives information about a server.',
 			usage: '[icon|roles|emojis|id] (Server:guild)',
 			usageDelim: ' ',

@@ -5,6 +5,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Creates a poll in the current channel or in the channel you specify.',
 			extendedHelp: 'The first you give is the question, then separated by `|`, you give the choices.',
 			runIn: ['text'],

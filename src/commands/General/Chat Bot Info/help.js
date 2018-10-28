@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands', 'cmds'],
 			guarded: true,
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Sends the command list to our DMs. Make sure I can send you one!',
 			extendedHelp: [
 				'If you want to get more information about a command, use `s.help <command>`.',

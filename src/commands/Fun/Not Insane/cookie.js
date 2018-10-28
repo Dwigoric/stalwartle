@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			cooldown: 10,
 			aliases: ['cookies', 'stalkie', 'stalkies'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives a person a cookie!',
 			extendedHelp: [
 				"If you want to check someone's cookies, just add the `--check` flag. e.g. `s.cookie @Stalwartle --check`",

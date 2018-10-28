@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['hub'],
 			guarded: true,
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives you the invite link to my server where you can view the changelog and hang out with us!'
 		});
 	}

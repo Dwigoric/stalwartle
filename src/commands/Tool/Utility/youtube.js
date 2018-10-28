@@ -9,6 +9,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['yt', 'ytsearch', 'yts'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Finds a video, channel, or playlist from YouTube.',
 			usage: '[channel|playlist] <VideoOrQuery:string> [...]',
 			usageDelim: ' ',

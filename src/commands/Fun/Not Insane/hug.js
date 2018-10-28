@@ -9,6 +9,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['hugs'],
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives a random hugging GIF.',
 			usage: '<Person:member>'
 		});

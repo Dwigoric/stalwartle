@@ -10,6 +10,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			cooldown: 10,
 			subcommands: true,
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives information about you or another user (mention, tag, or ID).',
 			usage: '[rawavatar|avatar|roles|id] [User:user]',
 			usageDelim: ' '

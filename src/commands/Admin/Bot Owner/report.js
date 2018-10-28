@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permissionLevel: 9,
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Replies to a bug report or a suggestion.',
 			extendedHelp: 'To deny, just add the flag `--deny`. It will not send to the resulting channel.',
 			usage: '<User:user> <Message:message> <Comment:string> [...]',

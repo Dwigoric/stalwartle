@@ -7,6 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['ani'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gets information of an anime series from MyAnimeList.',
 			usage: '<Anime:string>'
 		});

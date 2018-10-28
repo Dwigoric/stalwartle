@@ -9,6 +9,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['tvshows', 'tv', 'tvseries'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Finds a TV show on TMDB.org',
 			extendedHelp: 'e.g. `s.tvshow universe, 2`',
 			usage: '<Query:string> [Page:number]',

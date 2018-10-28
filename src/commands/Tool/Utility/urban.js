@@ -7,6 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['ud'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Searches the Urban Dictionary library for a definition to the search term.',
 			usage: '<SearchTerm:string> [resultNum:integer]',
 			usageDelim: ', '
