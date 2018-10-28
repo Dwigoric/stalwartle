@@ -11,7 +11,7 @@ module.exports = class extends Finalizer {
 		if (member.actions.length >= 3) {
 			if (msg.channel.postable) msg.channel.send(`${msg.author} made 3 actions within 5 minutes, which is punishable by a ten-minute automated mute.`);
 			const duration = await this.client.arguments.get('time').run('10m', '', msg);
-			this.client.commands.get('mute').run(msg, [msg.member, duration, 'Reached automod quota'])
+			this.client.commands.get('mute').run(msg, [member, duration, 'Reached automod quota'])
 				.then(() => {
 					member.resetActions();
 					this.run({
