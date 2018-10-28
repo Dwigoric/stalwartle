@@ -18,7 +18,7 @@ module.exports = class Actions extends Extendable {
 		this.client.setTimeout(() => Actions[this.id].shift(), 300000);
 	}
 
-	resetActions() {
+	async resetActions() {
 		Actions[this.id] = [];
 	}
 
