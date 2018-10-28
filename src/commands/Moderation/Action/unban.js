@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		reason = reason.length ? reason.join(this.usageDelim) : null;
 
 		await msg.guild.members.unban(user, reason);
-		msg.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return [user, reason];
 	}
 

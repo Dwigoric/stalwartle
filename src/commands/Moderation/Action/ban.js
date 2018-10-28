@@ -40,7 +40,7 @@ module.exports = class extends Command {
 		}
 
 		await msg.guild.members.ban(user, options);
-		msg.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return [user, reason, duration];
 	}
 

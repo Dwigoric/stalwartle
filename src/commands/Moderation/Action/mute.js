@@ -47,7 +47,7 @@ module.exports = class extends Command {
 			});
 		}
 
-		msg.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been muted. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been muted. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return [user, reason, duration];
 	}
 

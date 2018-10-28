@@ -17,7 +17,7 @@ module.exports = class extends Command {
 		if (member.id === this.client.user.id) throw 'Have I done something wrong?';
 
 		reason = reason.length > 0 ? reason.join(this.usageDelim) : null;
-		msg.send(`<:greenTick:399433439280889858>  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
 		return [member.user, reason];
 	}
 
