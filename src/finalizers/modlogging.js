@@ -14,7 +14,7 @@ module.exports = class extends Finalizer {
 			this.client.commands.get('mute').run(msg, [member, duration, 'Reached automod quota'])
 				.then(() => {
 					member.resetActions();
-					this.run({
+					this.client.finalizers.get('modlogging').run({
 						command: this.client.commands.get('mute'),
 						channel: msg.channel,
 						guild: msg.guild
