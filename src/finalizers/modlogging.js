@@ -3,9 +3,10 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Finalizer {
 
+	/* eslint "complexity": ["warn", 25] */
 	async run(msg, response) {
 		if (!this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).includes(msg.command.name)) return null;
-		if (!['unban', 'unmute'].includes(msg.command.name)) msg.member.addAction(msg.command.name);
+		if (!['unban', 'unmute'].includes(msg.command.name) && !msg.author.bot) msg.member.addAction(msg.command.name);
 		response[0]
 			.send(`You have been ${msg.command.name}${msg.command.name.slice(-3) === 'ban' ? 'n' : ''}${msg.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${msg.guild}**. ${response[1] ? `**Reason**: ${response[1]}` : ''}`) // eslint-disable-line max-len
 			.catch(() => {

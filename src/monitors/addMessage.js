@@ -11,6 +11,7 @@ module.exports = class extends Monitor {
 
 	run(msg) {
 		if (!msg.member) return;
+		if (msg.author.bot) return;
 		msg.member.addMessage(msg);
 	}
 
