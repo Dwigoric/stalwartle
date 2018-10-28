@@ -16,7 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [member, ...reason]) {
 		if (member.id === msg.author.id) throw 'Why would you kick yourself?';
 		if (member.id === this.client.user.id) throw 'Have I done something wrong?';
-		if (member.roles.highest.position >= msg.member.roles.highest.position) throw '<:redTick:399433440975519754>  ::  You cannot kick this user.';
+		if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:redTick:399433440975519754>  ::  You cannot kick this user.';
 		if (!member.kickable) throw '<:redTick:399433440975519754>  ::  I cannot kick this user.';
 
 		reason = reason.length ? reason.join(this.usageDelim) : null;

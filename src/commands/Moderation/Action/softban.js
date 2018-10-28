@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
 		if (member) {
-			if (member.roles.highest.position >= msg.member.roles.highest.position) throw '<:redTick:399433440975519754>  ::  You cannot ban this user.';
+			if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:redTick:399433440975519754>  ::  You cannot ban this user.';
 			if (!member.bannable) throw '<:redTick:399433440975519754>  ::  I cannot ban this user.';
 		}
 

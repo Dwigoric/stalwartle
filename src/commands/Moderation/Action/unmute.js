@@ -20,8 +20,8 @@ module.exports = class extends Command {
 
 		const user = await this.client.users.fetch(member.id).catch(() => null);
 		if (member) {
-			if (member.roles.highest.position >= msg.member.roles.highest.position) throw '<:redTick:399433440975519754>  ::  You cannot unmute this user.';
-			if (member.roles.highest.position >= msg.guild.me.roles.highest.position) throw '<:redTick:399433440975519754>  ::  I cannot unmute this user.';
+			if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:redTick:399433440975519754>  ::  You cannot unmute this user.';
+			if (member.permissions.bitfield >= msg.guild.me.permissions.bitfield) throw '<:redTick:399433440975519754>  ::  I cannot unmute this user.';
 		}
 
 		reason = reason.length ? reason.join(this.usageDelim) : null;
