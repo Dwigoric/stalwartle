@@ -42,6 +42,7 @@ class Stalwartle extends Client {
 				.add('ignoreBots', 'boolean', { default: false, configurable: true })
 				.add('ignoreMods', 'boolean', { default: false, configurable: true })
 				.add('antiInvite', 'boolean', { default: false, configurable: true })
+				.add('autoMute', 'boolean', { default: true, configurable: true })
 				.add('antiSpam', 'boolean', { default: false, configurable: true })
 				.add('antiSwear', 'boolean', { default: false, configurable: true })
 				.add('mentionSpam', 'boolean', { default: false, configurable: true })
