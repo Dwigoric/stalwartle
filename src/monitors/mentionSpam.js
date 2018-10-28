@@ -15,6 +15,7 @@ module.exports = class extends Monitor {
 		if (msg.author.bot && msg.guild.settings.automod.ignoreBots) return null;
 		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.automod.ignoreMods) return null;
 		if (msg.guild.settings.automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
+		if (msg.author === this.client.user) return null;
 
 		if (msg.member.messages
 			.map(message => message.mentions.users ? message.mentions.users.size : 0 + message.mentions.bots ? message.mentions.bots.size : 0)

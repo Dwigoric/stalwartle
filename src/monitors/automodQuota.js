@@ -15,6 +15,7 @@ module.exports = class extends Monitor {
 		if (msg.author.bot && msg.guild.settings.automod.ignoreBots) return null;
 		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.automod.ignoreMods) return null;
 		if (msg.guild.settings.automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
+		if (msg.author === this.client.user) return null;
 
 		if (msg.member.actions.length < 5) return null;
 		if (msg.channel.postable) msg.channel.send(`${msg.author} made 5 actions within 5 minutes, which is punishable by automated mute.`);
