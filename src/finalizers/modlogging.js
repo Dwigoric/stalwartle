@@ -7,7 +7,7 @@ module.exports = class extends Finalizer {
 	async run(msg, response) {
 		if (!this.client.commands.filter(cd => cd.category === 'Moderation' && cd.subCategory === 'Action').map(cmd => cmd.name).includes(msg.command.name)) return null;
 		const member = await msg.guild.members.fetch(response[0].id);
-		if (!['unban', 'unmute'].includes(msg.command.name) && !msg.author.bot) member.addAction(msg.command.name);
+		if (!['unban', 'unmute'].includes(msg.command.name) && msg.author && !msg.author.bot) member.addAction(msg.command.name);
 		if (member.actions.length >= 3) {
 			if (msg.channel.postable) msg.channel.send(`${member.user} made 3 actions within 5 minutes, which is punishable by a ten-minute automated mute.`);
 			const duration = await this.client.arguments.get('time').run('10m', '', msg);
