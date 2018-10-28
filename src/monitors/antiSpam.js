@@ -29,7 +29,7 @@ module.exports = class extends Monitor {
 					guild: msg.guild
 				}, [msg.author, 'Spamming with AntiSpam enabled', duration]);
 			})
-			.catch(() => null);
+			.catch(err => msg.send(err));
 	}
 
 };

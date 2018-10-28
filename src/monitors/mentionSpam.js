@@ -36,7 +36,7 @@ module.exports = class extends Monitor {
 					guild: msg.guild
 				}, [msg.author, 'Mention spamming with MentionSpam enabled', Infinity]);
 			})
-			.catch(() => null);
+			.catch(err => msg.send(err));
 	}
 
 };
