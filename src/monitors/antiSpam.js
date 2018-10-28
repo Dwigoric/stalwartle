@@ -20,7 +20,7 @@ module.exports = class extends Monitor {
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 
-		const duration = await this.client.arguments.get('time').run('3m', '', msg);
+		const duration = await this.client.arguments.get('time').run('5m', '', msg);
 		return this.client.commands.get('mute').run(msg, [msg.member, duration, 'Spamming with AntiSpam enabled'], true)
 			.then(() => {
 				this.client.finalizers.get('modlogging').run({
