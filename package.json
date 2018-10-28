@@ -15,14 +15,14 @@
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
 		"currency-symbol-map": "^4.0.4",
-		"faceapp": "^0.4.4",
+		"faceapp": "^0.4.5",
 		"fast-html-parser": "^1.0.1",
-		"figlet": "^1.2.0",
+		"figlet": "^1.2.1",
 		"idiotic-api": "^0.2.11",
 		"maljs": "^0.3.0",
-		"mathjs": "^4.4.2",
+		"mathjs": "^5.2.2",
 		"roll": "^1.2.0",
-		"steamapi": "^2.0.2"
+		"steamapi": "^2.0.3"
 	},
 	"engines": {
 		"node": "10.x"
