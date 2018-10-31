@@ -149,6 +149,7 @@ exports.config = {
 		// Alternatively a Moment Timestamp string can be provided to customize the timestamps.
 		timestamps: true,
 		utc: false,
+		useColor: true,
 		colors: {
 			debug: { time: { background: 'magenta' } },
 			error: { time: { background: 'red' } },
