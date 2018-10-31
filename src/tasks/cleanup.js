@@ -82,8 +82,6 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(lastMessages)} [Last Message]s`
 		].join('\n'));
 
-		global.gc();
-
 		// Create a schedule to make this task work
 		while (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length !== 1) {
 			this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').forEach(tk => this.client.schedule.delete(tk.id));
