@@ -52,9 +52,7 @@ module.exports = class extends Command {
 	}
 
 	async setAutoMod(msg, option, type) {
-		let _option;
-		if (option === 'enable') _option = true;
-		else _option = false;
+		const _option = option === 'enable';
 		msg.guild.settings.update(`automod.${type}`, _option);
 		return _option;
 	}
