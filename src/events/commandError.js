@@ -22,8 +22,8 @@ module.exports = class extends Event {
 				.setDescription([
 					`**Shard ID**: ${this.client.shard ? this.client.shard.id : 'N/A'}`,
 					`**Trigerrer**: ${msg.author} (${msg.author.id})`,
-					`**Guild**: ${msg.guild.name} (${msg.guild.id})`,
-					`**Channel**: #${msg.channel.name} (${msg.channel.id})`,
+					`**Guild**: ${msg.guild ? `${msg.guild.name} (${msg.guild.id})` : '[Direct Messages]'}`,
+					`**Channel**: ${msg.guild ? `#${msg.channel.name}` : '[Direct Messages]'} (${msg.channel.id})`,
 					`**Command**: \`${msg.content}\``,
 					util.codeBlock('js', error.message),
 					util.codeBlock('xl', error.stack)
