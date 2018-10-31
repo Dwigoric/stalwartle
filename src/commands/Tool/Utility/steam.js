@@ -4,7 +4,6 @@ const SteamAPI = require('steamapi');
 const { steamAPIkey } = require('../../../auth');
 const snekfetch = require('snekfetch');
 const cheerio = require('cheerio');
-const currencySymbol = require('currency-symbol-map');
 
 module.exports = class extends Command {
 
@@ -50,11 +49,9 @@ module.exports = class extends Command {
 				.setImage(steamData.header_image)
 				.setDescription(cheerio.load(steamData.short_description).text())
 				.addField(
+					'Price',
 					steamData.price_overview ?
-						`Price in ${steamData.price_overview.currency}` :
-						'Price',
-					steamData.price_overview ?
-						`${currencySymbol(steamData.price_overview.currency)}${(steamData.price_overview.final / 100).toFixed(2)}` :
+						`${(steamData.price_overview.final / 100).toFixed(2)} ${steamData.price_overview.currency}` :
 						'Free',
 					true)
 				.addField(`Available Platform${platforms.length === 1 ? '' : 's'}`, platforms.join(', '), true)

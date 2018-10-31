@@ -14,7 +14,6 @@
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
-		"currency-symbol-map": "^4.0.4",
 		"fast-html-parser": "^1.0.1",
 		"figlet": "^1.2.1",
 		"idiotic-api": "^0.2.11",
