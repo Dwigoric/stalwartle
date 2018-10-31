@@ -11,7 +11,7 @@ module.exports = class extends Command {
 			description: (language) => language.get('COMMAND_EVAL_DESCRIPTION'),
 			extendedHelp: (language) => language.get('COMMAND_EVAL_EXTENDED'),
 			guarded: true,
-			permissionLevel: 10,
+			permissionLevel: 9,
 			usage: '<expression:str>'
 		});
 
