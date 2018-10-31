@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const maljs = require('maljs');
+const snekfetch = require('snekfetch');
+const cheerio = require('cheerio');
 
 module.exports = class extends Command {
 
@@ -13,27 +14,36 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [query]) {
-		const aniEmbed = new MessageEmbed(),
-			res = await maljs.quickSearch(query, 'anime');
+	async run(msg, [keyword]) {
+		const search = await snekfetch.get('https://myanimelist.net/search/prefix.json')
+			.query({
+				type: 'anime',
+				keyword
+			}).then(res => res.body.categories[0]);
+		if (!search) throw '<:redTick:399433440975519754>  ::  Anime series not found!';
 
-		if (res) {
-			const anime = await res.anime[0].fetch();
+		const $ = cheerio.load(await snekfetch.get(search.items[0].url).then(res => res.body.toString())); // eslint-disable-line id-length
+		const anime = {
+			url: search.items[0].url,
+			title: $('h1').text().trim(),
+			description: $('span[itemprop=description]').text(),
+			score: parseFloat($('.fl-l.score').text()),
+			popularity: parseInt($('.numbers.popularity strong').text().substring(1)),
+			ranked: parseInt($('.numbers.ranked strong').text().substring(1)),
+			cover: $('.ac').eq(0).attr('src')
+		};
 
-			if (!anime) throw '<:redTick:399433440975519754>  ::  Anime series not found!';
-
-			aniEmbed
+		msg.send({
+			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle(anime.title)
-				.setImage(anime.cover)
+				.setThumbnail(anime.cover)
 				.setDescription(anime.description)
-				.setURL(`${anime.mal.url}${anime.path}`)
+				.setURL(anime.url)
 				.addField('Score', anime.score, true)
 				.addField('Popularity', anime.popularity, true)
-				.addField('Rank', anime.ranked, true);
-
-			msg.send({ embed: aniEmbed });
-		}
+				.addField('Rank', anime.ranked, true)
+		});
 	}
 
 };

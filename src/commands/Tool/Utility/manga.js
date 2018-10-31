@@ -1,6 +1,7 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const maljs = require('maljs');
+const snekfetch = require('snekfetch');
+const cheerio = require('cheerio');
 
 module.exports = class extends Command {
 
@@ -13,27 +14,36 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [query]) {
-		const aniEmbed = new MessageEmbed(),
-			res = await maljs.quickSearch(query, 'manga');
+	async run(msg, [keyword]) {
+		const search = await snekfetch.get('https://myanimelist.net/search/prefix.json')
+			.query({
+				type: 'manga',
+				keyword
+			}).then(res => res.body.categories[0]);
+		if (!search) throw '<:redTick:399433440975519754>  ::  Manga not found!';
 
-		if (res) {
-			const manga = await res.manga[0].fetch();
+		const $ = cheerio.load(await snekfetch.get(search.items[0].url).then(res => res.body.toString())); // eslint-disable-line id-length
+		const manga = {
+			url: search.items[0].url,
+			title: $('h1').text().trim(),
+			description: $('span[itemprop=description]').text(),
+			score: parseFloat($('.fl-l.score').text()),
+			popularity: parseInt($('.numbers.popularity strong').text().substring(1)),
+			ranked: parseInt($('.numbers.ranked strong').text().substring(1)),
+			cover: $('.ac').eq(0).attr('src')
+		};
 
-			if (!manga) throw '<:redTick:399433440975519754>  ::  Manga not found!';
-
-			aniEmbed
+		msg.send({
+			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle(manga.title)
-				.setImage(manga.cover)
+				.setThumbnail(manga.cover)
 				.setDescription(manga.description)
-				.setURL(`${manga.mal.url}${manga.path}`)
+				.setURL(manga.url)
 				.addField('Score', manga.score, true)
 				.addField('Popularity', manga.popularity, true)
-				.addField('Rank', manga.ranked, true);
-
-			msg.send({ embed: aniEmbed });
-		}
+				.addField('Rank', manga.ranked, true)
+		});
 	}
 
 };
