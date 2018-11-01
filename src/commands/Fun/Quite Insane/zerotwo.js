@@ -21,7 +21,8 @@ module.exports = class extends Command {
 			format: 'png',
 			size: 128
 		})}`, { headers: { Authorization: idioticAPIkey } })
-			.then(res => res.body.data)), 'zerotwo.png');
+			.then(res => res.json())
+			.then(res => res.data)), 'zerotwo.png');
 	}
 
 };
