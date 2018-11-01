@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const { googleAPIkey } = require('../../../auth');
 const snekfetch = require('snekfetch');
@@ -46,7 +46,7 @@ module.exports = class extends Command {
 			request = res.body.items[0];
 
 		embed
-			.setAuthor(`YouTube ${type.toTitleCase()}`, 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png')
+			.setAuthor(`YouTube ${toTitleCase(type)}`, 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png')
 			.setTitle(request.snippet.title)
 			.setURL(`https://www.youtube.com/${url}${request.id[`${type}Id`]}`)
 			.setColor('RANDOM');

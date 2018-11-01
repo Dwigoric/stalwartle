@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const snekfetch = require('snekfetch');
 const moment = require('moment-timezone');
@@ -266,7 +266,7 @@ module.exports = class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor(0xF462A3)
-			.setAuthor(`${type.toTitleCase()} Plays on osu!${osumode[mode]}`, 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png')
+			.setAuthor(`${toTitleCase(type)} Plays on osu!${osumode[mode]}`, 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png')
 			.setTitle(user.username)
 			.setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
 			.setDescription(top.join('\n\n'));

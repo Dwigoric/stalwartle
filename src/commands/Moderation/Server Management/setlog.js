@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { toTitleCase } } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -34,7 +34,7 @@ module.exports = class extends Command {
 		const { channels } = msg.guild;
 		return msg.send(this.client.commands
 			.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action')
-			.map(action => `${action.name.toTitleCase()}s: ${modlogs[action.name] ? channels.get(modlogs[action.name]) : 'Not yet set.'}`)
+			.map(action => `${toTitleCase(action.name)}s: ${modlogs[action.name] ? channels.get(modlogs[action.name]) : 'Not yet set.'}`)
 			.join('\n'));
 	}
 

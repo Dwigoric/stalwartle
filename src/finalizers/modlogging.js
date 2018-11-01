@@ -1,4 +1,4 @@
-const { Finalizer, Duration } = require('klasa');
+const { Finalizer, Duration, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Finalizer {
@@ -60,7 +60,7 @@ module.exports = class extends Finalizer {
 		if (!channel.postable) return msg.send(`<:redTick:399433440975519754>  ::  It seems that I cannot send messages in ${channel}.`);
 		const embed = new MessageEmbed()
 			.setColor(configs[msg.command.name][0])
-			.setTitle(`Case #${modlogs.length}: ${msg.command.name.toTitleCase()} ${configs[msg.command.name][1]}`)
+			.setTitle(`Case #${modlogs.length}: ${toTitleCase(msg.command.name)} ${configs[msg.command.name][1]}`)
 			.setFooter(`User ID: ${response[0].id}`)
 			.setTimestamp()
 			.addField('Moderator', moderator, true)

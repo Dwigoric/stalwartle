@@ -1,4 +1,4 @@
-const { Command, RichDisplay } = require('klasa');
+const { Command, RichDisplay, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -38,7 +38,7 @@ module.exports = class extends Command {
 					.setColor('RANDOM')
 					.setTitle(`<:blobBan:399433444670701568> Case #${modlog.id} | ${msg.guild.name}`)
 					.setDescription([
-						`Type: ${modlog.type.toTitleCase()}`,
+						`Type: ${toTitleCase(modlog.type)}`,
 						`Moderator: ${moderator} (\`${modlog.moderator}\`)`,
 						`User: ${_user} (\`${modlog.user}\`)`,
 						`Reason: ${modlog.reason || 'Not specified.'}`
@@ -54,7 +54,7 @@ module.exports = class extends Command {
 
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? msg.flags.type.toTitleCase() : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`) // eslint-disable-line max-len
+			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? toTitleCase(msg.flags.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`) // eslint-disable-line max-len
 		);
 
 		while (list.length) first5.push(list.splice(0, 5));
@@ -65,7 +65,7 @@ module.exports = class extends Command {
 					const moderator = this.client.users.get(modlog.moderator);
 					return [
 						`__**Case #${modlog.id}**__`,
-						`Type: ${modlog.type.toTitleCase()}`,
+						`Type: ${toTitleCase(modlog.type)}`,
 						`Moderator: ${moderator || 'Could not get user'} (\`${modlog.moderator}\`)`,
 						`User: ${_user || 'Could not get user'} (\`${modlog.user}\`)`,
 						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS')} (${moment(modlog.timestamp).fromNow()})`,

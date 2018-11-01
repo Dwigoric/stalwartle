@@ -1,4 +1,4 @@
-const { Command, util: { isFunction } } = require('klasa');
+const { Command, util: { isFunction, toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -33,7 +33,7 @@ module.exports = class extends Command {
 		}
 
 		const method = this.client.user.bot ? 'author' : 'channel';
-		const help = await this.buildHelp(msg, [category ? category.toTitleCase() : undefined, subcategory ? subcategory.toTitleCase() : undefined]);
+		const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
 		const categories = Object.keys(help);
 		const helpMessage = [];
 		for (let cat = 0; cat < categories.length; cat++) {

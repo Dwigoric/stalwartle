@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			.setColor('RANDOM')
 			.setAuthor(`Channel information for #${chan.name}`)
 			.addField('ID', chan.id, true)
-			.addField('Type', chan.type.toTitleCase(), true)
+			.addField('Type', toTitleCase(chan.type), true)
 			.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 			.setTimestamp();
 		if (chan.type === 'text') {

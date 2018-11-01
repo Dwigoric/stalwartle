@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
 const { steamAPIkey } = require('../../../auth');
@@ -55,7 +55,7 @@ module.exports = class extends Command {
 						'Free',
 					true)
 				.addField(`Available Platform${platforms.length === 1 ? '' : 's'}`, platforms.join(', '), true)
-				.addField('Controller Support', steamData.controller_support ? steamData.controller_support.toTitleCase() : 'None', true)
+				.addField('Controller Support', steamData.controller_support ? toTitleCase(steamData.controller_support) : 'None', true)
 				.addField('Age Limit', steamData.required_age !== 0 ? steamData.required_age : 'Everyone', true)
 				.addField(`Genre${genres.length === 1 ? '' : 's'}`, genres.join(', '))
 				.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers, true)
