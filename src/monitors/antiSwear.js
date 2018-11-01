@@ -43,11 +43,12 @@ module.exports = class extends Monitor {
 		if (!swearRegex.test(msg.content)) return;
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
-		this.client.finalizers.get('modlogging').run({
+		this.client.emit('modlogAction', {
 			command: this.client.commands.get('warn'),
 			channel: msg.channel,
-			guild: msg.guild
-		}, [msg.author, 'Swearing with the AntiSwear enabled', null, msg.content.length > 900 ? swearRegex.exec(msg.content)[0] : msg.content]);
+			guild: msg.guild,
+			content: msg.content.length > 900 ? swearRegex.exec(msg.content)[0] : msg.content
+		}, msg.author, 'Swearing with the AntiSwear enabled');
 	}
 
 };

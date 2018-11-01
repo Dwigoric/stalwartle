@@ -48,7 +48,7 @@ module.exports = class extends Command {
 		}
 
 		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been muted. ${reason ? `**Reason**: ${reason}` : ''}`);
-		return [user, reason, duration];
+		return this.client.emit('modlogAction', msg, user, reason, duration);
 	}
 
 };

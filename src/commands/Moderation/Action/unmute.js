@@ -34,7 +34,7 @@ module.exports = class extends Command {
 		if (task) this.client.schedule.delete(task.id);
 
 		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
-		return [user, reason];
+		return this.client.emit('modlogAction', msg, user, reason);
 	}
 
 };

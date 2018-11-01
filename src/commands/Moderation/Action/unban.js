@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
 		await msg.guild.members.unban(user, reason);
 		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
-		return [user, reason];
+		return this.client.emit('modlogAction', msg, user, reason);
 	}
 
 };

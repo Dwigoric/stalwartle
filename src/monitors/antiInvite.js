@@ -22,11 +22,12 @@ module.exports = class extends Monitor {
 		if (!inviteRegex.test(msg.content)) return;
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No sending invites allowed, or I'll punish you!`);
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete().catch(() => null);
-		this.client.finalizers.get('modlogging').run({
+		this.client.emit('modlogAction', {
 			command: this.client.commands.get('warn'),
 			channel: msg.channel,
-			guild: msg.guild
-		}, [msg.author, 'Sending invites with the AntiInvite enabled', null, msg.content.length > 900 ? inviteRegex.exec(msg.content)[0].split(/ +/)[0] : msg.content]); // eslint-disable-line max-len
+			guild: msg.guild,
+			content: msg.content.length > 900 ? inviteRegex.exec(msg.content)[0].split(/ +/)[0] : msg.content
+		}, msg.author, 'Sending invites with the AntiInvite enabled', null);
 	}
 
 };
