@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [search, index = 1]) {
-		const { body } = await snekfetch.get('http://api.urbandictionary.com/v0/define').query('term', encodeURIComponent(search));
+		const body = await fetch(`http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(search)}`).then(res => res.json());
 
 		const definition = this.getDefinition(search, body, --index);
 		return msg.send({

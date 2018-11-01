@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
@@ -14,12 +14,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		const article = await snekfetch
-			.get(`https://en.wikipedia.org/api/rest_v1/page/summary/${query}`)
-			.then(res => res.body)
-			.catch(() => {
-				throw `<:redTick:399433440975519754>  ::  I couldn't find a wikipedia article with title **${query}**.`;
-			});
+		const article = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`)
+			.then(res => res.json())
+			.catch(() => { throw `<:redTick:399433440975519754>  ::  I couldn't find a wikipedia article with title **${query}**.`; });
 
 		msg.send({
 			embed: await new MessageEmbed()

@@ -1,11 +1,11 @@
 const { Command, Timestamp } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 
 /**
  * https://dev.twitch.tv/docs/v5/guides/authentication/
  */
-const clientID = require('../../../auth').twitchAPIkey;
+const { twitchAPIkey } = require('../../../auth');
 
 module.exports = class extends Command {
 
@@ -19,23 +19,20 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [twitchName]) {
-		const body = await snekfetch.get(`https://api.twitch.tv/kraken/channels/${twitchName}`)
-			.query('client_id', clientID)
-			.then(res => res.body)
+		const channel = await fetch(`https://api.twitch.tv/kraken/channels/${twitchName}?client_id=${twitchAPIkey}`)
+			.then(res => res.json())
 			.catch(() => { throw `<:redTick:399433440975519754>  ::  Unable to find account **${twitchName}**. Did you spell it correctly?`; });
 
-		const creationDate = this.timestamp.display(body.created_at);
-		const embed = new MessageEmbed()
+		const creationDate = this.timestamp.display(channel.created_at);
+		return msg.sendEmbed(new MessageEmbed()
 			.setColor(6570406)
-			.setThumbnail(body.logo)
-			.setAuthor(body.display_name, 'https://i.imgur.com/OQwQ8z0.jpg', body.url)
+			.setThumbnail(channel.logo)
+			.setAuthor(channel.display_name, 'https://i.imgur.com/OQwQ8z0.jpg', channel.url)
 			.setFooter('Click at the account name above to go to the channel.')
-			.addField('Account ID', body._id, true)
-			.addField('Followers', body.followers, true)
+			.addField('Account ID', channel._id, true)
+			.addField('Followers', channel.followers, true)
 			.addField('Created On', creationDate, true)
-			.addField('Channel Views', body.views, true);
-
-		return msg.sendEmbed(embed);
+			.addField('Channel Views', channel.views, true));
 	}
 
 };

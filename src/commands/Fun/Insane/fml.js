@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
 module.exports = class extends Command {
@@ -13,8 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const res = await snekfetch.get('http://www.fmylife.com/random');
-		const $ = cheerio.load(res.text); // eslint-disable-line id-length
+		const $ = cheerio.load(await fetch('http://www.fmylife.com/random').then(res => res.text())); // eslint-disable-line id-length
 
 		const embed = new MessageEmbed()
 			.setTitle(`Requested by ${msg.author.tag}`)

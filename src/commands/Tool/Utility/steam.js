@@ -2,7 +2,7 @@ const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
 const { steamAPIkey } = require('../../../auth');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
 module.exports = class extends Command {
@@ -18,7 +18,7 @@ module.exports = class extends Command {
 	async run(msg, [game]) {
 		const steam = new SteamAPI(steamAPIkey),
 			embed = new MessageEmbed(),
-			steamSearch = await snekfetch.get('http://store.steampowered.com/search/').query('term', game);
+			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.json());
 
 		if (steamSearch) {
 			const $c = cheerio.load(steamSearch.text),

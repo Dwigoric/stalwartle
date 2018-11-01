@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
 module.exports = class extends Command {
@@ -15,14 +15,12 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [keyword]) {
-		const search = await snekfetch.get('https://myanimelist.net/search/prefix.json')
-			.query({
-				type: 'anime',
-				keyword
-			}).then(res => res.body.categories[0]);
+		const search = await fetch(`https://myanimelist.net/search/prefix.json?type=anime&keyword=${encodeURIComponent(keyword)}`)
+			.then(res => res.json())
+			.then(body => body.categories[0]);
 		if (!search) throw '<:redTick:399433440975519754>  ::  Anime series not found!';
 
-		const $ = cheerio.load(await snekfetch.get(search.items[0].url).then(res => res.body.toString())); // eslint-disable-line id-length
+		const $ = cheerio.load(await fetch(search.items[0].url).then(res => res.text())); // eslint-disable-line id-length
 		const anime = {
 			url: search.items[0].url,
 			title: $('h1').text().trim(),

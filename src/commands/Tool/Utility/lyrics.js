@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const { geniusAPIkey } = require('../../../auth');
 
@@ -13,19 +13,14 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		const results = await snekfetch
-			.get(`https://api.genius.com/search`)
-			.query({
-				access_token: geniusAPIkey, // eslint-disable-line camelcase
-				q: query // eslint-disable-line id-length
-			})
-			.then(snek => snek.body.response.hits);
-		if (!results.length) throw '<:redTick:399433440975519754>  ::  No song lyrics found.';
-		const lyricFetch = await snekfetch.get(results[0].result.url);
-		const $c = await cheerio.load(lyricFetch.body.toString());
+		const { hits } = await fetch(`https://api.genius.com/search?access_token=${geniusAPIkey}&q=${query}`)
+			.then(res => res.json())
+			.then(body => body.response);
+		if (!hits.length) throw '<:redTick:399433440975519754>  ::  No song lyrics found.';
+		const $c = await cheerio.load(await fetch(hits[0].result.url).then(res => res.text()));
 		const lyrics = $c('.lyrics').text().trim().split('\n');
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
-		const fullLyrics = [`__**${results[0].result.full_title}**__\n`]
+		const fullLyrics = [`__**${hits[0].result.full_title}**__\n`]
 			.concat(lyrics)
 			.concat('\n__*Powered by Genius (https://genius.com)*__')
 			.join('\n');

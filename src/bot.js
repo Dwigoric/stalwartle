@@ -1,7 +1,7 @@
 const { Client } = require('klasa');
 const { config, token } = require('./config');
 const { blsAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const idiotic = require('idiotic-api');
 
 class Stalwartle extends Client {
@@ -70,29 +70,28 @@ class Stalwartle extends Client {
 	async setGuildCount() {
 		if (!this.application.botPublic) return null;
 		if (ctxAPIkey) {
-			snekfetch.post('https://www.carbonitex.net/discord/data/botdata.php')
-				.send({
-					key: ctxAPIkey,
-					server_count: await this.guildCount() // eslint-disable-line camelcase
-				})
+			fetch(`https://www.carbonitex.net/discord/data/botdata.php?key=${ctxAPIkey}&server_count=${await this.guildCount()}`, { method: 'POST' })
 				.catch(err => this.emit('error', err.stack));
 		}
 		if (dblAPIkey) {
-			snekfetch.post(`https://discordbots.org/api/bots/${this.user.id}/stats`)
-				.set('Authorization', dblAPIkey)
-				.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats?server_count=${await this.guildCount()}`, {
+				method: 'POST',
+				headers: { Authorization: dblAPIkey }
+			})
 				.catch(err => this.emit('error', err.stack));
 		}
 		if (dpwAPIkey) {
-			snekfetch.post(`https://bots.discord.pw/api/bots/${this.user.id}/stats`)
-				.set('Authorization', dpwAPIkey)
-				.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+			fetch(`https://bots.discord.pw/api/bots/${this.user.id}/stats?server_count=${await this.guildCount()}`, {
+				method: 'POST',
+				headers: { Authorization: dpwAPIkey }
+			})
 				.catch(err => this.emit('error', err.stack));
 		}
 		if (blsAPIkey) {
-			snekfetch.post(`https://botlist.space/api/bots/${this.user.id}`)
-				.set('Authorization', blsAPIkey)
-				.send({ server_count: await this.guildCount() }) // eslint-disable-line camelcase
+			fetch(`https://botlist.space/api/bots/${this.user.id}?server_count=${await this.guildCount()}`, {
+				method: 'POST',
+				headers: { Authorization: blsAPIkey }
+			})
 				.catch(err => this.emit('error', err.stack));
 		}
 		return undefined;

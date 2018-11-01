@@ -1,7 +1,7 @@
 const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const { googleAPIkey } = require('../../../auth');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const moment = require('moment-timezone');
 
 module.exports = class extends Command {
@@ -31,19 +31,21 @@ module.exports = class extends Command {
 
 	async query(msg, query, type, url) {
 		const { timezone } = msg.author.settings;
-		const res = await snekfetch.get('https://www.googleapis.com/youtube/v3/search')
-			.query({
-				key: googleAPIkey,
-				part: 'snippet',
-				maxResults: 1,
-				q: query.join(this.usageDelim), // eslint-disable-line id-length
-				type
-			});
+		const queries = [];
 
-		if (!res || !res.body.items || !res.body.items.length) throw '<:redTick:399433440975519754>  ::  YouTube query not found!';
+		for (const [key, value] of Object.entries({
+			key: googleAPIkey,
+			part: 'snippet',
+			maxResults: 1,
+			q: query.join(this.usageDelim), // eslint-disable-line id-length
+			type
+		})) queries.push(`${key}=${value}`);
+		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${queries.join('&')}`).then(result => result.json());
+
+		if (!res || !res.items || !res.items.length) throw '<:redTick:399433440975519754>  ::  YouTube query not found!';
 
 		const embed = new MessageEmbed(),
-			request = res.body.items[0];
+			request = res.items[0];
 
 		embed
 			.setAuthor(`YouTube ${toTitleCase(type)}`, 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png')
@@ -53,14 +55,9 @@ module.exports = class extends Command {
 		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
 		if (type !== 'channel') {
 			embed
-				.setThumbnail(await snekfetch.get('https://www.googleapis.com/youtube/v3/channels')
-					.query({
-						key: googleAPIkey,
-						part: 'snippet',
-						maxResults: 1,
-						id: request.snippet.channelId
-					})
-					.then(result => result.body.items.length ? result.body.items[0].snippet.thumbnails.high.url : undefined))
+				.setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?key=${googleAPIkey}&part=snippet&maxResults=1&id=${request.snippet.channelId}`)
+					.then(result => result.json())
+					.then(result => result.items.length ? result.items[0].snippet.thumbnails.high.url : undefined))
 				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
 		}
 		embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS'))

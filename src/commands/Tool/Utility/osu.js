@@ -1,6 +1,6 @@
 const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const snekfetch = require('snekfetch');
+const fetch = require('node-fetch');
 const moment = require('moment-timezone');
 const { osuAPIkey } = require('../../../auth');
 
@@ -90,16 +90,17 @@ module.exports = class extends Command {
 		if (msg.flags.taiko) mode = 1;
 		if (msg.flags.standard) mode = 0;
 
-		const request = await snekfetch.get('https://osu.ppy.sh/api/get_user')
-			.query({
-				k: osuAPIkey, // eslint-disable-line id-length
-				m: mode, // eslint-disable-line id-length
-				u: username.join(this.usageDelim), // eslint-disable-line id-length
-				type: 'string'
-			});
-		if (!request.body.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
+		const queries = [];
+		for (const [key, value] of Object.entries({
+			k: osuAPIkey, // eslint-disable-line id-length
+			m: mode, // eslint-disable-line id-length
+			u: encodeURIComponent(username.join(this.usageDelim)), // eslint-disable-line id-length
+			type: 'string'
+		})) queries.push(`${key}=${value}`);
+		const request = await fetch(`https://osu.ppy.sh/api/get_user?${queries.join('&')}`).then(res => res.json());
+		if (!request.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
 
-		const user = request.body[0];
+		const user = request[0];
 		const accuracy = `${+`${`${Math.round(`${`${Number(user.accuracy)}e+2`}`)}e-2`}`}%`;
 		const thumbnails = [
 			'https://syrin.me/static/img/osu!next_icons/mode-0-sm.png',
@@ -135,19 +136,16 @@ module.exports = class extends Command {
 	async beatmap(msg, [...mapID]) {
 		const { timezone } = msg.author.settings;
 
-		const queries = {
-			k: osuAPIkey, // eslint-disable-line id-length
-			b: mapID[0]
-		};
-		if (msg.flags.mania) queries.m = 3; // eslint-disable-line id-length
-		if (msg.flags.catch) queries.m = 2; // eslint-disable-line id-length
-		if (msg.flags.taiko) queries.m = 1; // eslint-disable-line id-length
-		if (msg.flags.standard) queries.m = 0; // eslint-disable-line id-length
+		let mode;
+		if (msg.flags.mania) mode = 3; // eslint-disable-line id-length
+		else if (msg.flags.catch) mode = 2; // eslint-disable-line id-length
+		else if (msg.flags.taiko) mode = 1; // eslint-disable-line id-length
+		else mode = 0; // eslint-disable-line id-length
 
-		const request = await snekfetch.get('https://osu.ppy.sh/api/get_beatmaps').query(queries);
-		if (!request.body.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
+		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
+		if (!request.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
 
-		const beatmap = request.body[0];
+		const beatmap = request[0];
 		const genres = ['Any', 'Unspecified', 'Video Game', 'Anime', 'Rock', 'Pop', 'Other', 'Novelty', null, 'Hip-Hop', 'Electronic'];
 		const languages = ['Any', 'Other', 'English', 'Japanese', 'Chinese', 'Instrumental', 'Korean', 'French', 'German', 'Swedish', 'Spanish', 'Italian'];
 		const thumbnails = [
@@ -203,26 +201,14 @@ module.exports = class extends Command {
 			best: user => `**${user.username}** doesn't have best plays on **osu!${osumode[mode]}** mode yet.`
 		};
 
-		const userReq = await snekfetch.get('https://osu.ppy.sh/api/get_user')
-			.query({
-				k: osuAPIkey, // eslint-disable-line id-length
-				u: username, // eslint-disable-line id-length
-				type: 'string'
-			});
-		if (!userReq.body.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
-		const user = userReq.body[0];
+		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?k=${osuAPIkey}&u=${encodeURIComponent(username)}&type=string`).then(res => res.json());
+		if (!userReq.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
+		const user = userReq[0];
 
-		const request = await snekfetch.get(`https://osu.ppy.sh/api/get_user_${type}`)
-			.query({
-				k: osuAPIkey, // eslint-disable-line id-length
-				u: user.user_id, // eslint-disable-line id-length
-				type: 'id',
-				m: mode, // eslint-disable-line id-length
-				limit: 5
-			});
-		if (!request.body.length) throw `<:redTick:399433440975519754>  ::  Whoops! ${errString[type](user)}`;
+		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?k=${osuAPIkey}&u=${user.user_id}&type=id&m=${mode}&limit=5`).then(res => res.json());
+		if (!request.length) throw `<:redTick:399433440975519754>  ::  Whoops! ${errString[type](user)}`;
 
-		const top = await Promise.all(request.body.map(async list => {
+		const top = await Promise.all(request.map(async list => {
 			let urank;
 			switch (list.rank) {
 				case 'XH':
@@ -248,12 +234,10 @@ module.exports = class extends Command {
 			if (mods.includes('NC') && mods.includes('DT')) mods.splice(mods.indexOf('DT'), 1);
 			if (mods.includes('PF') && mods.includes('SD')) mods.splice(mods.indexOf('SD'), 1);
 
-			const beatmap = await snekfetch.get('https://osu.ppy.sh/api/get_beatmaps')
-				.query({
-					k: osuAPIkey, // eslint-disable-line id-length
-					b: list.beatmap_id
-				}).then(b => b.body[0]);
-			const requests = Object.values(request.body).map(body => body.date);
+			const beatmap = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${osuAPIkey}&b=${list.beatmap_id}`)
+				.then(res => res.json())
+				.then(b => b[0]);
+			const requests = Object.values(request).map(body => body.date);
 			const stats = [`Rank ${urank}`, `Score: ${list.score}`, `Combo: ${list.maxcombo}${beatmap.max_combo ? `/${beatmap.max_combo}` : ''}`];
 			if (list.pp) stats.splice(2, 0, `${list.pp}pp`);
 			return [
