@@ -22,7 +22,7 @@ module.exports = class extends Command {
 				message.content,
 				`[**⇶ Jump to Message**](https://discordapp.com/channels/${msg.guild.id}/${chan.id}/${message.id})`
 			].join('\n\n'))
-			.setFooter(`Quoted by ${msg.author.tag}`, msg.author.displayAvatarURL())
+			.setFooter(`Quoted by ${msg.author.tag} | #${message.channel.name}`, msg.author.displayAvatarURL())
 			.setTimestamp(new Date(message.createdTimestamp));
 		const attachments = message.attachments.size ? message.attachments.filter(atch => {
 			const filename = atch.file.name;
