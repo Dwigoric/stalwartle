@@ -18,7 +18,10 @@ module.exports = class extends Command {
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(message.author.tag, message.author.displayAvatarURL())
-			.setDescription(message.content)
+			.setDescription([
+				message.content,
+				`[**⇶ Jump to Message**](https://discordapp.com/channels/${msg.guild.id}/${chan.id}/${message.id})`
+			].join('\n\n'))
 			.setFooter(`Quoted by ${msg.author.tag}`, msg.author.displayAvatarURL())
 			.setTimestamp(new Date(message.createdTimestamp));
 		const attachments = message.attachments.size ? message.attachments.filter(atch => {
