@@ -33,6 +33,7 @@ module.exports = class extends Command {
 		}
 
 		const method = this.client.user.bot ? 'author' : 'channel';
+		if (!category.toTitleCase) throw `<:redTick:399433440975519754>  ::  **${category}** is not a valid command! Only use the name of the command.`;
 		const help = await this.buildHelp(msg, [category ? category.toTitleCase() : undefined, subcategory ? subcategory.toTitleCase() : undefined]);
 		const categories = Object.keys(help);
 		const helpMessage = [];
