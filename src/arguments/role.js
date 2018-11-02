@@ -12,7 +12,7 @@ function resolveRole(query, guild) {
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) return require(`${this.client.coreBaseDir}arguments/role`)(arg, possible, msg);
+		if (!msg.guild) return await require('../../node_modules/klasa/src/arguments/role')(arg, possible, msg);
 		const resRole = resolveRole(arg, msg.guild);
 		if (resRole) return resRole;
 

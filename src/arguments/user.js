@@ -19,7 +19,7 @@ function resolveUser(query, guild) {
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) return require(`${this.client.coreBaseDir}arguments/user`)(arg, possible, msg);
+		if (!msg.guild) return await require('../../node_modules/klasa/src/arguments/user')(arg, possible, msg);
 		const resUser = await resolveUser(arg, msg.guild);
 		if (resUser) return resUser;
 
