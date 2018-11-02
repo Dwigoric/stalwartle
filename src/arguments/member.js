@@ -3,23 +3,11 @@ const { GuildMember } = require('discord.js');
 
 const USER_REGEXP = Argument.regex.userOrMember;
 
-function resolveUser(query, guild) {
-	if (query instanceof GuildMember) return query;
-	if (typeof query === 'string') {
-		if (USER_REGEXP.test(query)) return guild.members.fetch(USER_REGEXP.exec(query)[1]).catch(() => null);
-		if (/\w{1,32}#\d{4}/.test(query)) {
-			const res = guild.members.find(member => member.user.tag === query);
-			return res || null;
-		}
-	}
-	return null;
-}
-
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) return await require('../../node_modules/klasa/src/arguments/member')(arg, possible, msg);
-		const resUser = await resolveUser(arg, msg.guild);
+		if (!msg.guild) throw `<:redTick:399433440975519754>  ::  There must be a server to get the member from.`;
+		const resUser = await this.resolveUser(arg, msg.guild);
 		if (resUser) return resUser;
 
 		const results = [];
@@ -43,6 +31,18 @@ module.exports = class extends Argument {
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`${result.user.tag}\` (\`${result.id}\`)`).join(', ')}`;
 		}
+	}
+
+	async resolveUser(query, guild) {
+		if (query instanceof GuildMember) return query;
+		if (typeof query === 'string') {
+			if (USER_REGEXP.test(query)) return guild.members.fetch(USER_REGEXP.exec(query)[1]).catch(() => null);
+			if (guild && /\w{1,32}#\d{4}/.test(query)) {
+				const res = guild.members.find(member => member.user.tag === query);
+				return res || null;
+			}
+		}
+		return null;
 	}
 
 };

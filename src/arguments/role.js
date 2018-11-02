@@ -3,17 +3,11 @@ const { Role } = require('discord.js');
 
 const ROLE_REGEXP = Argument.regex.role;
 
-function resolveRole(query, guild) {
-	if (query instanceof Role) return guild.roles.has(query.id) ? query : null;
-	if (typeof query === 'string' && ROLE_REGEXP.test(query)) return guild.roles.get(ROLE_REGEXP.exec(query)[1]);
-	return null;
-}
-
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) return await require('../../node_modules/klasa/src/arguments/role')(arg, possible, msg);
-		const resRole = resolveRole(arg, msg.guild);
+		if (!msg.guild) throw `<:redTick:399433440975519754>  ::  There must be a server to get the role from.`;
+		const resRole = this.resolveRole(arg, msg.guild);
 		if (resRole) return resRole;
 
 		const results = [];
@@ -34,6 +28,12 @@ module.exports = class extends Argument {
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`${result.name}\` (\`${result.id}\`)`).join(', ')}`;
 		}
+	}
+
+	async resolveRole(query, guild) {
+		if (query instanceof Role) return guild.roles.has(query.id) ? query : null;
+		if (typeof query === 'string' && ROLE_REGEXP.test(query)) return guild.roles.get(ROLE_REGEXP.exec(query)[1]);
+		return null;
 	}
 
 };

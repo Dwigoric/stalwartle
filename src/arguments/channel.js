@@ -3,18 +3,11 @@ const { Channel, Message } = require('discord.js');
 
 const CHANNEL_REGEXP = Argument.regex.channel;
 
-function resolveChannel(query, guild) {
-	if (query instanceof Channel) return guild.channels.has(query.id) ? query : null;
-	if (query instanceof Message) return query.guild.id === guild.id ? query.channel : null;
-	if (typeof query === 'string' && CHANNEL_REGEXP.test(query)) return guild.channels.get(CHANNEL_REGEXP.exec(query)[1]);
-	return null;
-}
-
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) return await require('../../node_modules/klasa/src/arguments/channel')(arg, possible, msg);
-		const resChannel = resolveChannel(arg, msg.guild);
+		if (!msg.guild) throw `<:redTick:399433440975519754>  ::  There must be a server to get the channel from.`;
+		const resChannel = this.resolveChannel(arg, msg.guild);
 		if (resChannel) return resChannel;
 
 		const results = [];
@@ -37,6 +30,13 @@ module.exports = class extends Argument {
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`#${result.name}\` (\`${result.id}\`)`).join(', ')}`;
 		}
+	}
+
+	resolveChannel(query, guild) {
+		if (query instanceof Channel) return guild.channels.has(query.id) ? query : null;
+		if (query instanceof Message) return query.guild.id === guild.id ? query.channel : null;
+		if (typeof query === 'string' && CHANNEL_REGEXP.test(query)) return guild.channels.get(CHANNEL_REGEXP.exec(query)[1]);
+		return null;
 	}
 
 };
