@@ -65,7 +65,7 @@ module.exports = class extends Command {
 			description: 'Gets information about an osu! user.',
 			extendedHelp: [
 				'If you want to have a default osu! username every query, use the `s.userconf` command.\n',
-				'- If you want to change the mode, use the flags `--standard`, `--taiko`, `--catch`, or `--mania`. The default mode is osu! standard.',
+				'- If you want to change the mode, use the flags `--taiko`, `--catch`, or `--mania`. Do not supply a flag if you want osu! standard mode. The default mode is osu! standard.',
 				"- If you want to get information about a beatmap, use the `beatmap` subcommand and supply the beatmap's ID. Be reminded that the beatmap ID varies from difficulty to difficulty.",
 				"- If you want to get a user's best/recent plays, use the `best` or `recent` subcommands and supply the username.",
 				'- If you simply want to get information about a user, do not use any subcommand and supply the username. (e.g. `s.osu dwigoric`)'
@@ -84,11 +84,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [...username]) {
-		let mode = 0;
+		let mode;
 		if (msg.flags.mania) mode = 3;
-		if (msg.flags.catch) mode = 2;
-		if (msg.flags.taiko) mode = 1;
-		if (msg.flags.standard) mode = 0;
+		else if (msg.flags.catch) mode = 2;
+		else if (msg.flags.taiko) mode = 1;
+		else mode = 0;
 
 		const queries = [];
 		for (const [key, value] of Object.entries({
@@ -137,10 +137,10 @@ module.exports = class extends Command {
 		const { timezone } = msg.author.settings;
 
 		let mode;
-		if (msg.flags.mania) mode = 3; // eslint-disable-line id-length
-		else if (msg.flags.catch) mode = 2; // eslint-disable-line id-length
-		else if (msg.flags.taiko) mode = 1; // eslint-disable-line id-length
-		else mode = 0; // eslint-disable-line id-length
+		if (msg.flags.mania) mode = 3;
+		else if (msg.flags.catch) mode = 2;
+		else if (msg.flags.taiko) mode = 1;
+		else mode = 0;
 
 		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
 		if (!request.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
@@ -189,11 +189,11 @@ module.exports = class extends Command {
 	async top(msg, username, type) {
 		const { timezone } = msg.author.settings;
 
-		let mode = 0;
+		let mode;
 		if (msg.flags.mania) mode = 3;
-		if (msg.flags.catch) mode = 2;
-		if (msg.flags.taiko) mode = 1;
-		if (msg.flags.standard) mode = 0;
+		else if (msg.flags.catch) mode = 2;
+		else if (msg.flags.taiko) mode = 1;
+		else mode = 0;
 		const osumode = [' Standard', 'taiko', 'catch', 'mania'];
 
 		const errString = {
