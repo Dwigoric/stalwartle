@@ -72,7 +72,7 @@ module.exports = class extends Event {
 						command: this.client.commands.get('mute'),
 						channel: message.channel,
 						guild: message.guild
-					}, message.author, 'Reached automod quota', duration);
+					}, member.user, 'Reached automod quota', duration);
 				})
 				.catch(err => message.send(err));
 		}
