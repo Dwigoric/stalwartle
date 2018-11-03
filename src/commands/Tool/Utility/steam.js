@@ -18,11 +18,10 @@ module.exports = class extends Command {
 	async run(msg, [game]) {
 		const steam = new SteamAPI(steamAPIkey),
 			embed = new MessageEmbed(),
-			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.json());
+			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.text()).catch(() => null);
 
 		if (steamSearch) {
-			const $c = cheerio.load(steamSearch.text),
-				hrefData = $c('#search_result_container > div:nth-child(2) > a:nth-child(2)').attr('href');
+			const hrefData = cheerio.load(steamSearch)('#search_result_container > div:nth-child(2) > a:nth-child(2)').attr('href');
 
 			if (!hrefData) throw '<:redTick:399433440975519754>  ::  Steam game not found!';
 
