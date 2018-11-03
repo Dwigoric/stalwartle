@@ -60,7 +60,7 @@ module.exports = class extends Command {
 		const userTags = await this.client.providers.default.get('tags', msg.author.id);
 		if (tag === 'id') throw `<:redTick:399433440975519754>  ::  Tag **${tag}** cannot be removed. Sorry!`;
 		if (!userTags[tag]) throw `<:redTick:399433440975519754>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
-		await this.client.providers.default._removeValue('tags', [tag], userTags);
+		await this.client.providers.default.db.table('tags').get(msg.author.id).replace(row => row.without({ [tag]: true }));
 		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been removed!`);
 	}
 
