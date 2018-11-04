@@ -34,7 +34,7 @@ module.exports = class extends Command {
 		if (attachments && attachments.size) embed.setImage(attachments.first().url);
 		if (!msg.flags.deny) this.client.channels.get(reportChans[msg.channel.name]).send(embed).catch();
 		msg.delete();
-		msg.send(`<:greenTick:399433439280889858>  ::  Report sent to **${repUser.tag}**.`).then(sent => {
+		msg.send(`<:check:508590521342623764>  ::  Report sent to **${repUser.tag}**.`).then(sent => {
 			setTimeout(() => {
 				sent.delete();
 			}, 5000);

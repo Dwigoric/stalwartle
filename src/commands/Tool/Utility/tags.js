@@ -15,14 +15,14 @@ module.exports = class extends Command {
 		this
 			.createCustomResolver('tagname', (arg, possible, msg, [action]) => {
 				if (['list'].includes(action)) return undefined;
-				if (!arg && !action) throw '<:redTick:399433440975519754>  ::  Whoops! Please use at least one subcommand or give the tag. e.g. `s.tag tagnamehere`';
-				if (['create', 'remove', 'edit'].includes(action) && !arg) throw '<:redTick:399433440975519754>  ::  Please provide the tag name.';
-				if (arg.length > 15) throw '<:redTick:399433440975519754>  ::  It seems your tag is longer than 15 characters. Tag names must be shorter than or equal to 15 characters.';
+				if (!arg && !action) throw '<:crossmark:508590460688924693>  ::  Whoops! Please use at least one subcommand or give the tag. e.g. `s.tag tagnamehere`';
+				if (['create', 'remove', 'edit'].includes(action) && !arg) throw '<:crossmark:508590460688924693>  ::  Please provide the tag name.';
+				if (arg.length > 15) throw '<:crossmark:508590460688924693>  ::  It seems your tag is longer than 15 characters. Tag names must be shorter than or equal to 15 characters.';
 				return arg;
 			})
 			.createCustomResolver('contents', (arg, possible, msg, [action]) => {
 				if (['list', 'remove'].includes(action)) return undefined;
-				if (['create', 'edit'].includes(action) && !arg) throw '<:redTick:399433440975519754>  ::  Please provide the new contents of the tag.';
+				if (['create', 'edit'].includes(action) && !arg) throw '<:crossmark:508590460688924693>  ::  Please provide the new contents of the tag.';
 				return arg;
 			});
 	}
@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	async run(msg, [userTag]) {
 		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
 		const userTags = await this.client.providers.default.get('tags', msg.author.id);
-		const noTagErr = `<:redTick:399433440975519754>  ::  Sorry! You have no tag named **${userTag}**.`;
+		const noTagErr = `<:crossmark:508590460688924693>  ::  Sorry! You have no tag named **${userTag}**.`;
 		if (userTag === 'id') throw noTagErr;
 		const tag = userTags[userTag];
 		if (!tag) throw noTagErr;
@@ -49,29 +49,29 @@ module.exports = class extends Command {
 	async create(msg, [tag, ...contents]) {
 		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
 		const userTags = await this.client.providers.default.get('tags', msg.author.id);
-		if (userTags[tag]) throw `<:redTick:399433440975519754>  ::  **${tag}** is already your tag!`;
-		if (Object.keys(userTags).length > 15) throw `<:redTick:399433440975519754>  ::  You have already reached the limit of 15 tags!`;
+		if (userTags[tag]) throw `<:crossmark:508590460688924693>  ::  **${tag}** is already your tag!`;
+		if (Object.keys(userTags).length > 15) throw `<:crossmark:508590460688924693>  ::  You have already reached the limit of 15 tags!`;
 		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
-		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been created!`);
+		msg.send(`<:check:508590521342623764>  ::  Tag **${tag}** has been created!`);
 	}
 
 	async remove(msg, [tag]) {
 		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
 		const userTags = await this.client.providers.default.get('tags', msg.author.id);
-		if (tag === 'id') throw `<:redTick:399433440975519754>  ::  Tag **${tag}** cannot be removed. Sorry!`;
-		if (!userTags[tag]) throw `<:redTick:399433440975519754>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
+		if (tag === 'id') throw `<:crossmark:508590460688924693>  ::  Tag **${tag}** cannot be removed. Sorry!`;
+		if (!userTags[tag]) throw `<:crossmark:508590460688924693>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
 		await this.client.providers.default.db.table('tags').get(msg.author.id).replace(row => row.without({ [tag]: true }));
-		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been removed!`);
+		msg.send(`<:check:508590521342623764>  ::  Tag **${tag}** has been removed!`);
 	}
 
 	async edit(msg, [tag, ...contents]) {
 		if (!await this.client.providers.default.get('tags', msg.author.id)) await this.client.providers.default.create('tags', msg.author.id);
 		const userTags = await this.client.providers.default.get('tags', msg.author.id);
-		if (tag === 'id') throw `<:redTick:399433440975519754>  ::  Tag **${tag}** cannot be edited. Sorry!`;
-		if (!userTags[tag]) throw `<:redTick:399433440975519754>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
-		if (!contents.length) throw `<:redTick:399433440975519754>  ::  Please provide the new contents of the tag **${tag}**.`;
+		if (tag === 'id') throw `<:crossmark:508590460688924693>  ::  Tag **${tag}** cannot be edited. Sorry!`;
+		if (!userTags[tag]) throw `<:crossmark:508590460688924693>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
+		if (!contents.length) throw `<:crossmark:508590460688924693>  ::  Please provide the new contents of the tag **${tag}**.`;
 		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
-		msg.send(`<:greenTick:399433439280889858>  ::  Tag **${tag}** has been edited!`);
+		msg.send(`<:check:508590521342623764>  ::  Tag **${tag}** has been edited!`);
 	}
 
 	async init() {

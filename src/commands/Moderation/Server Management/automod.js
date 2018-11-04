@@ -23,32 +23,32 @@ module.exports = class extends Command {
 
 	async invite(msg, [option]) {
 		await this.setAutoMod(msg, option, 'antiInvite');
-		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiInvite module has been ${option}d on ${msg.guild.name}.`);
+		return msg.send(`<:check:508590521342623764>  ::  The AntiInvite module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async swear(msg, [option]) {
 		await this.setAutoMod(msg, option, 'antiSwear');
-		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiSwear module has been ${option}d on ${msg.guild.name}.`);
+		return msg.send(`<:check:508590521342623764>  ::  The AntiSwear module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async spam(msg, [option]) {
 		await this.setAutoMod(msg, option, 'antiSpam');
-		return msg.send(`<:greenTick:399433439280889858>  ::  The AntiSpam module has been ${option}d on ${msg.guild.name}.`);
+		return msg.send(`<:check:508590521342623764>  ::  The AntiSpam module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async mentionspam(msg, [option]) {
 		await this.setAutoMod(msg, option, 'mentionSpam');
-		return msg.send(`<:greenTick:399433439280889858>  ::  The MentionSpam module has been ${option}d on ${msg.guild.name}.`);
+		return msg.send(`<:check:508590521342623764>  ::  The MentionSpam module has been ${option}d on ${msg.guild.name}.`);
 	}
 
 	async ignorebots(msg, [option]) {
 		const _option = await this.setAutoMod(msg, option, 'ignoreBots');
-		return msg.send(`<:greenTick:399433439280889858>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on bots in ${msg.guild.name}.`);
+		return msg.send(`<:check:508590521342623764>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on bots in ${msg.guild.name}.`);
 	}
 
 	async ignoremods(msg, [option]) {
 		const _option = await this.setAutoMod(msg, option, 'ignoreMods');
-		return msg.send(`<:greenTick:399433439280889858>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on moderators in ${msg.guild.name}.`);
+		return msg.send(`<:check:508590521342623764>  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on moderators in ${msg.guild.name}.`);
 	}
 
 	async setAutoMod(msg, option, type) {

@@ -73,11 +73,11 @@ module.exports = class extends Command {
 		let cmds;
 		if (!category && !subcategory) cmds = this.client.commands;
 		if (category) {
-			if (!this.client.commands.map(cmd => cmd.category).includes(category)) throw `<:redTick:399433440975519754>  ::  **${category}** is not a valid category!`;
+			if (!this.client.commands.map(cmd => cmd.category).includes(category)) throw `<:crossmark:508590460688924693>  ::  **${category}** is not a valid category!`;
 			cmds = this.client.commands.filter(cmd => cmd.category === category);
 		}
 		if (subcategory) {
-			if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `<:redTick:399433440975519754>  ::  **${subcategory}** is not a valid subcategory!`;
+			if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `<:crossmark:508590460688924693>  ::  **${subcategory}** is not a valid subcategory!`;
 			cmds = this.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
 		}
 
@@ -91,7 +91,7 @@ module.exports = class extends Command {
 			return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
 		}));
 
-		if (!Object.keys(help).length) throw `<:redTick:399433440975519754>  ::  It would seem that **${subcategory}** is not under **${category}**.`;
+		if (!Object.keys(help).length) throw `<:crossmark:508590460688924693>  ::  It would seem that **${subcategory}** is not under **${category}**.`;
 		return help;
 	}
 

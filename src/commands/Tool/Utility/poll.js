@@ -15,11 +15,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [chan = msg.channel, question, ...choices]) {
-		if (!chan.postable) throw `<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.`;
-		if (!chan.permissionsFor(msg.author).has('VIEW_CHANNEL', true)) throw `<:redTick:399433440975519754>  ::  It seems you cannot send messages in that channel...`; // eslint-disable-line max-len
-		if (choices.length < 2) throw '<:redTick:399433440975519754>  ::  Your poll must have at least two (2) choices!';
-		if (choices.length > 10) throw '<:redTick:399433440975519754>  ::  Sorry! You can only have a maximum of ten (10) choices.';
-		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Poll created!`);
+		if (!chan.postable) throw `<:crossmark:508590460688924693>  ::  Sorry! I cannot send messages in that channel.`;
+		if (!chan.permissionsFor(msg.author).has('VIEW_CHANNEL', true)) throw `<:crossmark:508590460688924693>  ::  It seems you cannot send messages in that channel...`; // eslint-disable-line max-len
+		if (choices.length < 2) throw '<:crossmark:508590460688924693>  ::  Your poll must have at least two (2) choices!';
+		if (choices.length > 10) throw '<:crossmark:508590460688924693>  ::  Sorry! You can only have a maximum of ten (10) choices.';
+		if (chan !== msg.channel) msg.send(`<:check:508590521342623764>  ::  Poll created!`);
 
 		choices = choices.splice(0, 10);
 		const emojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].splice(0, choices.length);

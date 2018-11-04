@@ -121,7 +121,7 @@ module.exports = class extends Command {
 	}
 
 	async rawavatar(msg, [user = msg.author]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES')) return msg.send(`<:redTick:399433440975519754>  ::  Sorry! I have no permissions to attach files in this channel.`);
+		if (!msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES')) return msg.send(`<:crossmark:508590460688924693>  ::  Sorry! I have no permissions to attach files in this channel.`);
 		return msg.send(`**${user.username}**'s avatar`, { files: [new MessageAttachment(user.displayAvatarURL())] });
 	}
 

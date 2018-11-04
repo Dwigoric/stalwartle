@@ -15,24 +15,24 @@ module.exports = class extends Command {
 
 	async run(msg, [chan = msg.channel, ...msgargs]) {
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.'; // eslint-disable-line max-len
-		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
+		if (!chan.postable) throw '<:crossmark:508590460688924693>  ::  Sorry! I cannot send messages in that channel.'; // eslint-disable-line max-len
+		if (chan !== msg.channel) msg.send(`<:check:508590521342623764>  ::  Message sent!`);
 		return chan.send(msgargs);
 	}
 
 	async delete(msg, [chan = msg.channel, ...msgargs]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot delete messages in this channel.';
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:crossmark:508590460688924693>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.';
-		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
+		if (!chan.postable) throw '<:crossmark:508590460688924693>  ::  Sorry! I cannot send messages in that channel.';
+		if (chan !== msg.channel) msg.send(`<:check:508590521342623764>  ::  Message sent!`);
 		chan.send(msgargs);
 		return msg.delete().catch(() => null);
 	}
 
 	async embed(msg, [chan = msg.channel, ...msgargs]) {
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.';
-		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
+		if (!chan.postable) throw '<:crossmark:508590460688924693>  ::  Sorry! I cannot send messages in that channel.';
+		if (chan !== msg.channel) msg.send(`<:check:508590521342623764>  ::  Message sent!`);
 		return chan.send({
 			embed: await new MessageEmbed()
 				.setColor(0x40E0D0)
@@ -44,10 +44,10 @@ module.exports = class extends Command {
 	}
 
 	async anonymous(msg, [chan = msg.channel, ...msgargs]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot delete messages in this channel.';
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:crossmark:508590460688924693>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
-		if (!chan.postable) throw '<:redTick:399433440975519754>  ::  Sorry! I cannot send messages in that channel.';
-		if (chan !== msg.channel) msg.send(`<:greenTick:399433439280889858>  ::  Message sent!`);
+		if (!chan.postable) throw '<:crossmark:508590460688924693>  ::  Sorry! I cannot send messages in that channel.';
+		if (chan !== msg.channel) msg.send(`<:check:508590521342623764>  ::  Message sent!`);
 		chan.send({
 			embed: await new MessageEmbed()
 				.setColor(0x40E0D0)

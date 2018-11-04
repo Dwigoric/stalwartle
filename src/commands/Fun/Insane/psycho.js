@@ -16,7 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [mentioned]) {
 		const msgargs = msg.args.join(' ');
 		const crimec = Math.round(Math.random() * 1000);
-		if (msgargs && !mentioned) throw '<:redTick:399433440975519754>  ::  No person specified. Cymatic scanner was not used.';
+		if (msgargs && !mentioned) throw '<:crossmark:508590460688924693>  ::  No person specified. Cymatic scanner was not used.';
 
 		let results;
 		if (!msgargs) {

@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 	getDefinition(search, body, index) {
 		const result = body.list[index];
-		if (!result) throw `<:redTick:399433440975519754>  ::  No entry found for **${search}**.`;
+		if (!result) throw `<:crossmark:508590460688924693>  ::  No entry found for **${search}**.`;
 
 		const wdef = result.definition.length > 1000 ?
 			`${this.splitText(result.definition, 1000)}...` :

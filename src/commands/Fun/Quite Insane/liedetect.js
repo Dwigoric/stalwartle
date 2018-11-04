@@ -23,9 +23,9 @@ module.exports = class extends Command {
 				if (member) {
 					return await msg.channel.messages.fetch(member.lastMessageID)
 						.then(mg => mg.content)
-						.catch(() => { throw "<:redTick:399433440975519754>  ::  Whoops... that person hasn't messaged this channel for quite some time..."; });
+						.catch(() => { throw "<:crossmark:508590460688924693>  ::  Whoops... that person hasn't messaged this channel for quite some time..."; });
 				} else {
-					throw '<:redTick:399433440975519754>  ::  Um... what lie will I judge? 🤔';
+					throw '<:crossmark:508590460688924693>  ::  Um... what lie will I judge? 🤔';
 				}
 			}
 			return arg;

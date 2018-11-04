@@ -23,7 +23,7 @@ module.exports = class extends Command {
 
 		const request = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${tmdbAPIkey}&query=${encodeURIComponent(query)}`).then(res => res.json());
 		const short = request.results[page - 1];
-		if (!short) throw `<:redTick:399433440975519754>  ::  I couldn't find a TV show with title **${query}** in page ${page}.`;
+		if (!short) throw `<:crossmark:508590460688924693>  ::  I couldn't find a TV show with title **${query}** in page ${page}.`;
 		const tmdb = await fetch(`https://api.themoviedb.org/3/tv/${short.id}?api_key=${tmdbAPIkey}`).then(res => res.json());
 
 		const poster = `https://image.tmdb.org/t/p/original${tmdb.poster_path}`;

@@ -25,7 +25,7 @@ module.exports = class extends Command {
 				.setDescription(params)
 				.setTimestamp()
 		}));
-		msg.send(`<:greenTick:399433439280889858>  ::  Successfully posted changelog!`);
+		msg.send(`<:check:508590521342623764>  ::  Successfully posted changelog!`);
 	}
 
 };

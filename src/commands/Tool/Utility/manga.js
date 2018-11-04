@@ -18,7 +18,7 @@ module.exports = class extends Command {
 		const search = await fetch(`https://myanimelist.net/search/prefix.json?type=manga&keyword=${encodeURIComponent(keyword)}`)
 			.then(res => res.json())
 			.then(body => body.categories[0]);
-		if (!search) throw '<:redTick:399433440975519754>  ::  Manga not found!';
+		if (!search) throw '<:crossmark:508590460688924693>  ::  Manga not found!';
 
 		const $ = cheerio.load(await fetch(search.items[0].url).then(res => res.text())); // eslint-disable-line id-length
 		const manga = {

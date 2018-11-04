@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		try {
 			msg.send(`\`${rgb.join(', ')}\` has the HEX code of \`${rgbToHex(red, grn, blu)}\`.`);
 		} catch (err) {
-			msg.send(`<:redTick:399433440975519754>  ::  Invalid color RGB value!`);
+			msg.send(`<:crossmark:508590460688924693>  ::  Invalid color RGB value!`);
 		}
 	}
 

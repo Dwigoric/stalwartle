@@ -78,7 +78,7 @@ module.exports = class extends Command {
 		this.createCustomResolver('string', (arg, possible, msg) => {
 			const { osu } = msg.author.settings;
 			if (osu && !arg) return osu;
-			if (!arg) throw '<:redTick:399433440975519754>  ::  You did not provide a search query. Do you want a default osu! account? Use `s.userconf set osu <username here>`.';
+			if (!arg) throw '<:crossmark:508590460688924693>  ::  You did not provide a search query. Do you want a default osu! account? Use `s.userconf set osu <username here>`.';
 			return arg;
 		});
 	}
@@ -98,7 +98,7 @@ module.exports = class extends Command {
 			type: 'string'
 		})) queries.push(`${key}=${value}`);
 		const request = await fetch(`https://osu.ppy.sh/api/get_user?${queries.join('&')}`).then(res => res.json());
-		if (!request.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
+		if (!request.length) throw '<:crossmark:508590460688924693>  ::  Whoops! You supplied an invalid osu! username.';
 
 		const user = request[0];
 		const accuracy = `${+`${`${Math.round(`${`${Number(user.accuracy)}e+2`}`)}e-2`}`}%`;
@@ -143,7 +143,7 @@ module.exports = class extends Command {
 		else mode = 0;
 
 		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
-		if (!request.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
+		if (!request.length) throw '<:crossmark:508590460688924693>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
 
 		const beatmap = request[0];
 		const genres = ['Any', 'Unspecified', 'Video Game', 'Anime', 'Rock', 'Pop', 'Other', 'Novelty', null, 'Hip-Hop', 'Electronic'];
@@ -202,11 +202,11 @@ module.exports = class extends Command {
 		};
 
 		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?k=${osuAPIkey}&u=${encodeURIComponent(username)}&type=string`).then(res => res.json());
-		if (!userReq.length) throw '<:redTick:399433440975519754>  ::  Whoops! You supplied an invalid osu! username.';
+		if (!userReq.length) throw '<:crossmark:508590460688924693>  ::  Whoops! You supplied an invalid osu! username.';
 		const user = userReq[0];
 
 		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?k=${osuAPIkey}&u=${user.user_id}&type=id&m=${mode}&limit=5`).then(res => res.json());
-		if (!request.length) throw `<:redTick:399433440975519754>  ::  Whoops! ${errString[type](user)}`;
+		if (!request.length) throw `<:crossmark:508590460688924693>  ::  Whoops! ${errString[type](user)}`;
 
 		const top = await Promise.all(request.map(async list => {
 			let urank;
@@ -255,7 +255,7 @@ module.exports = class extends Command {
 			.setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
 			.setDescription(top.join('\n\n'));
 
-		return msg.send(embed).catch(() => { throw `<:redTick:399433440975519754>  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
+		return msg.send(embed).catch(() => { throw `<:crossmark:508590460688924693>  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
 	}
 
 };

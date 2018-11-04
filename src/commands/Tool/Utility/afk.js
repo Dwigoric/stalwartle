@@ -19,7 +19,7 @@ module.exports = class extends Command {
 			return msg.send(`Welcome back, **${msg.author}**! I've removed your AFK status.`);
 		}
 		await this.client.providers.default.create('afk', msg.author.id, { reason, timestamp: Date.now() });
-		return msg.send(`<:greenTick:399433439280889858>  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
+		return msg.send(`<:check:508590521342623764>  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
 	}
 
 	async init() {

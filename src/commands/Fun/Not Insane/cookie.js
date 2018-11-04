@@ -29,13 +29,13 @@ module.exports = class extends Command {
 
 	async run(msg, [person]) {
 		if (!person) return msg.send(`🍪  ::  You have **${msg.author.settings.cookies}** cookie${msg.author.settings.cookies === 1 ? '' : 's'}.`);
-		if (person.id === msg.author.id) throw "<:redTick:399433440975519754>  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿";
+		if (person.id === msg.author.id) throw "<:crossmark:508590460688924693>  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿";
 		if (person.id === this.client.user.id) throw `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`;
-		if (person.bot) throw '<:redTick:399433440975519754>  ::  I wonder if bots can eat cookies... 🤔';
+		if (person.bot) throw '<:crossmark:508590460688924693>  ::  I wonder if bots can eat cookies... 🤔';
 		const { cookies } = person.settings;
 		if (msg.flags.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
 		const cookieTask = this.client.schedule.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
-		if (cookieTask.length) throw `<:redTick:399433440975519754>  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
+		if (cookieTask.length) throw `<:crossmark:508590460688924693>  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
 		await this.client.schedule.create('cookieReset', this.client.arguments.get('time').run('1h', 'time', msg), { data: { user: msg.author.id } });
 		await person.settings.update('cookies', cookies + 1);
 		return msg.send(`🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);

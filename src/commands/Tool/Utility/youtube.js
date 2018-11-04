@@ -42,7 +42,7 @@ module.exports = class extends Command {
 		})) queries.push(`${key}=${value}`);
 		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${queries.join('&')}`).then(result => result.json());
 
-		if (!res || !res.items || !res.items.length) throw '<:redTick:399433440975519754>  ::  YouTube query not found!';
+		if (!res || !res.items || !res.items.length) throw '<:crossmark:508590460688924693>  ::  YouTube query not found!';
 
 		const embed = new MessageEmbed(),
 			request = res.items[0];

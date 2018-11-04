@@ -15,14 +15,14 @@ module.exports = class extends Command {
 
 		this
 			.createCustomResolver('member', (arg, possible, msg, [action]) => {
-				if (['add', 'remove'].includes(action) && !arg) throw '<:redTick:399433440975519754>  ::  Please provide the user/role.';
-				if (arg && !['add', 'remove'].includes(action)) throw '<:redTick:399433440975519754>  ::  Please specify if the role/user should be added or removed.';
+				if (['add', 'remove'].includes(action) && !arg) throw '<:crossmark:508590460688924693>  ::  Please provide the user/role.';
+				if (arg && !['add', 'remove'].includes(action)) throw '<:crossmark:508590460688924693>  ::  Please specify if the role/user should be added or removed.';
 				if (!arg) return undefined;
 				return this.client.arguments.get('member').run(arg, possible, msg);
 			})
 			.createCustomResolver('role', (arg, possible, msg, [action]) => {
-				if (['add', 'remove'].includes(action) && !arg) throw '<:redTick:399433440975519754>  ::  Please provide the user/role.';
-				if (arg && !['add', 'remove'].includes(action)) throw '<:redTick:399433440975519754>  ::  Please specify if the role/user should be added or removed.';
+				if (['add', 'remove'].includes(action) && !arg) throw '<:crossmark:508590460688924693>  ::  Please provide the user/role.';
+				if (arg && !['add', 'remove'].includes(action)) throw '<:crossmark:508590460688924693>  ::  Please specify if the role/user should be added or removed.';
 				if (!arg) return undefined;
 				return this.client.arguments.get('role').run(arg, possible, msg);
 			});
@@ -57,10 +57,10 @@ module.exports = class extends Command {
 	async toggle(msg, mod, action) {
 		const type = mod.constructor.name === 'GuildMember' ? 'users' : 'roles';
 		const guildConf = msg.guild.settings;
-		if (action === 'add' && guildConf.moderators[type].includes(mod.id)) throw '<:redTick:399433440975519754>  ::  This role/user is already a moderator!';
-		if (action === 'remove' && !guildConf.moderators[type].includes(mod.id)) throw '<:redTick:399433440975519754>  ::  This role/user is already not a moderator!';
+		if (action === 'add' && guildConf.moderators[type].includes(mod.id)) throw '<:crossmark:508590460688924693>  ::  This role/user is already a moderator!';
+		if (action === 'remove' && !guildConf.moderators[type].includes(mod.id)) throw '<:crossmark:508590460688924693>  ::  This role/user is already not a moderator!';
 		guildConf.update(`moderators.${type}`, mod.id, msg.guild, { action });
-		msg.send(`<:greenTick:399433439280889858>  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
+		msg.send(`<:check:508590521342623764>  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
 	}
 
 };

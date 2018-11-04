@@ -14,7 +14,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [mssg, chan = msg.channel]) {
-		const message = await chan.messages.fetch(mssg).catch(() => { throw `<:redTick:399433440975519754>  ::  \`${mssg}\` is not a valid message ID from ${chan}.`; });
+		const message = await chan.messages.fetch(mssg).catch(() => { throw `<:crossmark:508590460688924693>  ::  \`${mssg}\` is not a valid message ID from ${chan}.`; });
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(message.author.tag, message.author.displayAvatarURL())

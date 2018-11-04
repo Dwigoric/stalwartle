@@ -28,7 +28,7 @@ module.exports = class extends Argument {
 		}
 
 		switch (querySearch.length) {
-			case 0: throw `<:redTick:399433440975519754>  ::  \`${possible.name}\` must be a valid user tag, ID, mention, or nickname.`;
+			case 0: throw `<:crossmark:508590460688924693>  ::  \`${possible.name}\` must be a valid user tag, ID, mention, or nickname.`;
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`${result.tag}\` (\`${result.id}\`)`).join(', ')}`;
 		}

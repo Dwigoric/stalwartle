@@ -32,7 +32,7 @@ module.exports = class extends Command {
 			message.delete().catch(() => deleted--);
 			deleted++;
 		});
-		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`);
+		return msg.send(`<:check:508590521342623764>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`);
 	}
 
 	getFilter(msg, filter, user) {

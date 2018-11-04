@@ -14,12 +14,12 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user, ...reason]) {
-		if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) throw `<:redTick:399433440975519754>  ::  This user isn't banned from this server.`;
+		if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) throw `<:crossmark:508590460688924693>  ::  This user isn't banned from this server.`;
 
 		reason = reason.length ? reason.join(this.usageDelim) : null;
 
 		await msg.guild.members.unban(user, reason);
-		msg.channel.send(`<:greenTick:399433439280889858>  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508590521342623764>  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, user, reason);
 	}
 

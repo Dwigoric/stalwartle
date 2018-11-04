@@ -16,7 +16,7 @@ module.exports = class extends Command {
 		const { hits } = await fetch(`https://api.genius.com/search?access_token=${geniusAPIkey}&q=${query}`)
 			.then(res => res.json())
 			.then(body => body.response);
-		if (!hits.length) throw '<:redTick:399433440975519754>  ::  No song lyrics found.';
+		if (!hits.length) throw '<:crossmark:508590460688924693>  ::  No song lyrics found.';
 		const $c = await cheerio.load(await fetch(hits[0].result.url).then(res => res.text()));
 		const lyrics = $c('.lyrics').text().trim().split('\n');
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
@@ -43,8 +43,8 @@ module.exports = class extends Command {
 			'porn'
 		]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
-		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw '<:redTick:399433440975519754>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
-		if (lyrics.join('\n').length > 10000) throw '<:redTick:399433440975519754>  ::  Whoops! The result does not seem to be a song... Please try another search query.';
+		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw '<:crossmark:508590460688924693>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
+		if (lyrics.join('\n').length > 10000) throw '<:crossmark:508590460688924693>  ::  Whoops! The result does not seem to be a song... Please try another search query.';
 
 		return msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
 	}

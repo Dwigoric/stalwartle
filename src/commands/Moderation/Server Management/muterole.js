@@ -22,7 +22,7 @@ module.exports = class extends Command {
 			})
 			.createCustomResolver('string', (arg, possible, msg, [action]) => {
 				if (action === 'reset') return undefined;
-				if (!arg) throw '<:redTick:399433440975519754>  ::  Please provide the role ID, name or make a new one by providing the new name.';
+				if (!arg) throw '<:crossmark:508590460688924693>  ::  Please provide the role ID, name or make a new one by providing the new name.';
 				return arg;
 			});
 	}
@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	async run(msg, [...role]) {
 		if (role instanceof Role) {
 			msg.guild.settings.update('muteRole', role.id, msg.guild);
-			return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${role.name}**.`);
+			return msg.send(`<:check:508590521342623764>  ::  Successfully set this server's mute role to **${role.name}**.`);
 		}
 		const newRole = await msg.guild.roles.create({
 			data: {
@@ -40,12 +40,12 @@ module.exports = class extends Command {
 			}
 		});
 		msg.guild.settings.update('muteRole', newRole.id, msg.guild);
-		return msg.send(`<:greenTick:399433439280889858>  ::  Successfully set this server's mute role to **${newRole.name}**.`);
+		return msg.send(`<:check:508590521342623764>  ::  Successfully set this server's mute role to **${newRole.name}**.`);
 	}
 
 	async reset(msg) {
 		msg.guild.settings.reset('muteRole');
-		return msg.send('<:greenTick:399433439280889858>  ::  Successfully reset this server\'s mute role.');
+		return msg.send('<:check:508590521342623764>  ::  Successfully reset this server\'s mute role.');
 	}
 
 };
