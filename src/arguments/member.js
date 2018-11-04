@@ -6,7 +6,7 @@ const USER_REGEXP = Argument.regex.userOrMember;
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) throw `<:crossmark:508590460688924693>  ::  There must be a server to get the member from.`;
+		if (!msg.guild) throw `<:error:508595005481549846>  ::  There must be a server to get the member from.`;
 		const resUser = await this.resolveUser(arg, msg.guild);
 		if (resUser) return resUser;
 
@@ -27,7 +27,7 @@ module.exports = class extends Argument {
 		}
 
 		switch (querySearch.length) {
-			case 0: throw `<:crossmark:508590460688924693>  ::  \`${possible.name}\` must be a valid user tag, ID, mention, or nickname from this server.`;
+			case 0: throw `<:error:508595005481549846>  ::  \`${possible.name}\` must be a valid user tag, ID, mention, or nickname from this server.`;
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`${result.user.tag}\` (\`${result.id}\`)`).join(', ')}`;
 		}

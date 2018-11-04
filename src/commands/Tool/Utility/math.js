@@ -29,7 +29,7 @@ module.exports = class extends Command {
 			msg.send(`🔢  ::  Your expression evaluates to \`${math.eval(expr)}\`.`);
 		} catch (err) {
 			msg.send([
-				`<:crossmark:508590460688924693>  ::  I would love to evaluate **${mExp}** but my magical calculator says it gave an error:`,
+				`<:error:508595005481549846>  ::  I would love to evaluate **${mExp}** but my magical calculator says it gave an error:`,
 				`\`\`\`js\n${err.name}: ${err.message}\n\`\`\``
 			].join('\n'));
 		}

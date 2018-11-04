@@ -23,8 +23,8 @@ module.exports = class extends Command {
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
 		if (!force && member) {
-			if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:crossmark:508590460688924693>  ::  You cannot ban this user.';
-			if (!member.bannable) throw '<:crossmark:508590460688924693>  ::  I cannot ban this user.';
+			if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:error:508595005481549846>  ::  You cannot ban this user.';
+			if (!member.bannable) throw '<:error:508595005481549846>  ::  I cannot ban this user.';
 		}
 
 		const options = { days };
@@ -40,7 +40,7 @@ module.exports = class extends Command {
 		}
 
 		await msg.guild.members.ban(user, options);
-		msg.channel.send(`<:check:508590521342623764>  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508594899117932544>   ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, user, reason, duration);
 	}
 

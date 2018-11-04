@@ -21,7 +21,7 @@ module.exports = class extends Command {
 	async run(msg, [twitchName]) {
 		const channel = await fetch(`https://api.twitch.tv/kraken/channels/${twitchName}?client_id=${twitchAPIkey}`)
 			.then(res => res.json())
-			.catch(() => { throw `<:crossmark:508590460688924693>  ::  Unable to find account **${twitchName}**. Did you spell it correctly?`; });
+			.catch(() => { throw `<:error:508595005481549846>  ::  Unable to find account **${twitchName}**. Did you spell it correctly?`; });
 
 		const creationDate = this.timestamp.display(channel.created_at);
 		return msg.sendEmbed(new MessageEmbed()

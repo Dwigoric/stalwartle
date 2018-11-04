@@ -20,12 +20,12 @@ module.exports = class extends Command {
 				if (member) {
 					try {
 						const message = await msg.channel.messages.fetch(member.lastMessageID).then(mg => mg.content);
-						if (!message) throw "<:crossmark:508590460688924693>  ::  Whoops! That user's message has either no content or just an embed... I can't mockify embeds.";
+						if (!message) throw "<:error:508595005481549846>  ::  Whoops! That user's message has either no content or just an embed... I can't mockify embeds.";
 						return this.client.idiot.mock(message);
 					} catch (err) {
-						throw "<:crossmark:508590460688924693>  ::  Whoops... that person hasn't messaged this channel for quite some time...";
+						throw "<:error:508595005481549846>  ::  Whoops... that person hasn't messaged this channel for quite some time...";
 					}
-				} else { throw '<:crossmark:508590460688924693>  ::  Um... what exactly am I going to mockify? 👀'; }
+				} else { throw '<:error:508595005481549846>  ::  Um... what exactly am I going to mockify? 👀'; }
 			}
 			return this.client.idiot.mock(arg);
 		});

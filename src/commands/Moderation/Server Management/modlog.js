@@ -30,7 +30,7 @@ module.exports = class extends Command {
 
 		if (typeof user === 'number') {
 			const modlog = await this.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs[user - 1]);
-			if (!modlog) throw `<:crossmark:508590460688924693>  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
+			if (!modlog) throw `<:error:508595005481549846>  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
 			const _user = await this.client.users.fetch(modlog.user).catch(() => null);
 			const moderator = await this.client.users.fetch(modlog.moderator).catch(() => null);
 			return msg.send({
@@ -85,7 +85,7 @@ module.exports = class extends Command {
 		const { modlogShowContent } = msg.guild.settings;
 		if (modlogShowContent) msg.guild.settings.update('modlogShowContent', false);
 		else msg.guild.settings.update('modlogShowContent', true);
-		return msg.send(`<:check:508590521342623764>  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
+		return msg.send(`<:check:508594899117932544>   ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
 	}
 
 	async reset(msg) {
@@ -95,9 +95,9 @@ module.exports = class extends Command {
 		} while (!['yes', 'no', null].includes(prompt.content));
 		if (prompt.content === 'yes') {
 			await this.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
-			return msg.send(`<:check:508590521342623764>  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
+			return msg.send(`<:check:508594899117932544>   ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
 		} else {
-			return msg.send("<:check:508590521342623764>  ::  Alright! You don't want to reset your modlogs.");
+			return msg.send("<:check:508594899117932544>   ::  Alright! You don't want to reset your modlogs.");
 		}
 	}
 

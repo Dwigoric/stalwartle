@@ -15,13 +15,13 @@ module.exports = class extends Command {
 
 		this.createCustomResolver('channel', (arg, possible, msg, [action]) => {
 			if (action === 'list') return undefined;
-			if (!arg) throw '<:crossmark:508590460688924693>  ::  Please provide the channel you want me to ignore.';
+			if (!arg) throw '<:error:508595005481549846>  ::  Please provide the channel you want me to ignore.';
 			return this.client.arguments.get('channel').run(arg, possible, msg);
 		});
 	}
 
 	async run(msg, [channel]) {
-		if (channel.type === 'voice') throw '<:crossmark:508590460688924693>  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.';
+		if (channel.type === 'voice') throw '<:error:508595005481549846>  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.';
 		if (channel.type === 'category') channel = msg.guild.channels.filter(chan => chan.parentID === channel.id && chan.type === 'text');
 		else channel = [channel];
 		const { ignored } = msg.guild.settings;

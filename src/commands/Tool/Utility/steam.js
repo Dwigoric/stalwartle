@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		if (steamSearch) {
 			const hrefData = cheerio.load(steamSearch)('#search_result_container > div:nth-child(2) > a:nth-child(2)').attr('href');
 
-			if (!hrefData) throw '<:crossmark:508590460688924693>  ::  Steam game not found!';
+			if (!hrefData) throw '<:error:508595005481549846>  ::  Steam game not found!';
 
 			const gameID = hrefData.split('/')[4],
 				steamData = await steam.getGameDetails(gameID);

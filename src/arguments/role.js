@@ -6,7 +6,7 @@ const ROLE_REGEXP = Argument.regex.role;
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) throw `<:crossmark:508590460688924693>  ::  There must be a server to get the role from.`;
+		if (!msg.guild) throw `<:error:508595005481549846>  ::  There must be a server to get the role from.`;
 		const resRole = this.resolveRole(arg, msg.guild);
 		if (resRole) return resRole;
 
@@ -24,7 +24,7 @@ module.exports = class extends Argument {
 		}
 
 		switch (querySearch.length) {
-			case 0: throw `<:crossmark:508590460688924693>  ::  \`${possible.name}\` must be a valid name, ID, or role mention.`;
+			case 0: throw `<:error:508595005481549846>  ::  \`${possible.name}\` must be a valid name, ID, or role mention.`;
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`${result.name}\` (\`${result.id}\`)`).join(', ')}`;
 		}

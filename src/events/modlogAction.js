@@ -42,7 +42,7 @@ module.exports = class extends Event {
 		}
 		if (!message.guild.settings.logging) return true;
 		if (!channel) return true;
-		if (!channel.postable) return message.send(`<:crossmark:508590460688924693>  ::  It seems that I cannot send messages in ${channel}.`);
+		if (!channel.postable) return message.send(`<:error:508595005481549846>  ::  It seems that I cannot send messages in ${channel}.`);
 		const embed = new MessageEmbed()
 			.setColor(configs[message.command.name][0])
 			.setTitle(`Case #${modlogs.length}: ${toTitleCase(message.command.name)} ${configs[message.command.name][1]}`)

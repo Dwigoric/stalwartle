@@ -38,14 +38,14 @@ module.exports = class extends Command {
 	async handleMessage(msg, options, result) {
 		switch (options.sendAs) {
 			case 'file': {
-				if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', '<:check:508590521342623764>  ::  Sent the ban list as a file.');
+				if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', '<:check:508594899117932544>   ::  Sent the ban list as a file.');
 				await this.getTypeOutput(msg, options);
 				return this.handleMessage(msg, options, result);
 			}
 			case 'haste':
 			case 'hastebin': {
 				if (!options.url) options.url = await this.getHaste(result).catch(() => null);
-				if (options.url) return msg.sendMessage(`<:check:508590521342623764>  ::  Sent the ban list to hastebin: ${options.url}`);
+				if (options.url) return msg.sendMessage(`<:check:508594899117932544>   ::  Sent the ban list to hastebin: ${options.url}`);
 				options.hastebinUnavailable = true;
 				await this.getTypeOutput(msg, options);
 				return this.handleMessage(msg, options);
@@ -63,7 +63,7 @@ module.exports = class extends Command {
 		const _options = [];
 		if (msg.channel.attachable) _options.push('file');
 		if (!options.hastebinUnavailable) _options.push('hastebin');
-		if (!_options.length) throw '<:crossmark:508590460688924693>  ::  It seems that hastebin is unavailable, and I cannot send an attachment to this channel. Please check my permissions and retry.';
+		if (!_options.length) throw '<:error:508595005481549846>  ::  It seems that hastebin is unavailable, and I cannot send an attachment to this channel. Please check my permissions and retry.';
 		let _choice;
 		do {
 			_choice = await msg.prompt(`Choose one of the following options: ${_options.join(', ')}`).catch(() => ({ content: 'none' }));
