@@ -7,7 +7,10 @@ module.exports = class extends Language {
 		this.language = {
 			DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
-			PREFIX_REMINDER: (prefix) => `The prefix in this guild is set to: ${Array.isArray(prefix) ? prefix.map(pre => `\`${pre}\``).join(', ') : `\`${prefix}\``}`,
+			PREFIX_REMINDER: (prefix = `@${this.client.user.tag}`) => `The prefix${Array.isArray(prefix) ?
+				`es for this guild are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
+				` in this guild is set to: \`${prefix}\``
+			}`,
 			SETTING_GATEWAY_EXPECTS_GUILD: `<:error:508595005481549846>  ::  The parameter <Guild> expects either a Guild or a Guild Object.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `<:error:508595005481549846>  ::  The value ${data} for the key ${key} does not exist.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `<:error:508595005481549846>  ::  The value ${data} for the key ${key} already exists.`,
@@ -15,9 +18,10 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_KEY_NOT_ARRAY: (key) => `<:error:508595005481549846>  ::  The key ${key} is not an Array.`,
 			SETTING_GATEWAY_KEY_NOEXT: (key) => `<:error:508595005481549846>  ::  The key ${key} does not exist in the current data schema.`,
 			SETTING_GATEWAY_INVALID_TYPE: `The type parameter must be either add or remove.`,
+			RESOLVER_MULTI_TOO_FEW: (name, min = 1) => `<:error:508595005481549846>  ::  Provided too few ${name}s. Atleast ${min} ${min === 1 ? 'is' : 'are'} required.`,
 			RESOLVER_INVALID_CUSTOM: (name, type) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid ${type}.`,
 			RESOLVER_INVALID_PIECE: (name, piece) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid ${piece} name.`,
-			RESOLVER_INVALID_MSG: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid message ID.`,
+			RESOLVER_INVALID_MESSAGE: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid message ID.`,
 			RESOLVER_INVALID_USER: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a mention or valid user ID.`,
 			RESOLVER_INVALID_MEMBER: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a mention or valid user ID from this server.`,
 			RESOLVER_INVALID_CHANNEL: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a channel tag or valid channel ID.`,
@@ -29,6 +33,7 @@ module.exports = class extends Language {
 			RESOLVER_INVALID_INT: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be an integer.`,
 			RESOLVER_INVALID_FLOAT: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid number.`,
 			RESOLVER_INVALID_REGEX_MATCH: (name, pattern) => `<:error:508595005481549846>  ::  \`${name}\` must follow this regex pattern: \`${pattern}\`.`,
+			RESOLVER_INVALID_STRING: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid string.`,
 			RESOLVER_INVALID_URL: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid URL.`,
 			RESOLVER_INVALID_DATE: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid date.`,
 			RESOLVER_INVALID_DURATION: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid duration string.`,
@@ -51,7 +56,7 @@ module.exports = class extends Language {
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `<:error:508595005481549846>  ::  Insufficient permissions. Missing: **${missing}**`,
 			INHIBITOR_NSFW: `<:error:508595005481549846>  ::  You may not use NSFW commands in this channel.`,
 			INHIBITOR_PERMISSIONS: `<:error:508595005481549846>  ::  You do not have permission to use this command.`,
-			INHIBITOR_REQUIRED_SETTINGS: (configs) => `<:error:508595005481549846>  ::  The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`, // eslint-disable-line max-len
+			INHIBITOR_REQUIRED_SETTINGS: (settings) => `<:error:508595005481549846>  ::  The guild is missing the **${settings.join(', ')}** guild setting${settings.length !== 1 ? 's' : ''} and thus the command cannot run.`, // eslint-disable-line max-len
 			INHIBITOR_RUNIN: (types) => `<:error:508595005481549846>  ::  This command is only available in ${types} channels.`,
 			INHIBITOR_RUNIN_NONE: (name) => `<:error:508595005481549846>  ::  The \`${name}\` command is not configured to run in any channel.`,
 			COMMAND_BLACKLIST_DESCRIPTION: 'Blacklists or un-blacklists users and guilds from the bot.',
@@ -85,8 +90,10 @@ module.exports = class extends Language {
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `<:check:508594899117932544>  ::  Successfully transferred ${type}: \`${name}\``,
 			COMMAND_TRANSFER_FAILED: (type, name) => `<:error:508595005481549846>  ::  Transfer of ${type}: \`${name}\` to Client has failed. Please check your Console.`,
 			COMMAND_TRANSFER_DESCRIPTION: 'Transfers a core piece to its respective folder.',
-			COMMAND_RELOAD: (type, name) => `<:check:508594899117932544>  ::  Reloaded ${type}: \`${name}\``,
-			COMMAND_RELOAD_ALL: (type) => `<:check:508594899117932544>  ::  Reloaded all ${type}.`,
+			COMMAND_RELOAD: (type, name, time) => `<:check:508594899117932544>  ::  Reloaded ${type}: \`${name}\` (Took ${time})`,
+			COMMAND_RELOAD_FAILED: (type, name) => `<:error:508595005481549846>  ::  Failed to reload ${type}: \`${name}\`. Please check your console.`,
+			COMMAND_RELOAD_ALL: (type, time) => `<:check:508594899117932544>  ::  Reloaded all ${type}. (Took ${time})`,
+			COMMAND_RELOAD_EVERYTHING: (time) => `<:check:508594899117932544>  ::  Reloaded everything. (Took ${time})`,
 			COMMAND_RELOAD_DESCRIPTION: 'Reloads a klasa piece, or all pieces of a klasa store.',
 			COMMAND_REBOOT: 'Rebooting...',
 			COMMAND_REBOOT_DESCRIPTION: 'Reboots the bot.',
