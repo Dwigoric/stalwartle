@@ -40,7 +40,7 @@ module.exports = class extends Command {
 		}
 
 		await msg.guild.members.ban(user, options);
-		msg.channel.send(`<:check:508594899117932544>   ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508594899117932544>  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, user, reason, duration);
 	}
 

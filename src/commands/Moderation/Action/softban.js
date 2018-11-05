@@ -30,7 +30,7 @@ module.exports = class extends Command {
 
 		await msg.guild.members.ban(user, options);
 		await msg.guild.members.unban(user, 'Softban released.');
-		msg.channel.send(`<:check:508594899117932544>   ::  **${user.tag}** (\`${user.id}\`) has been softbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508594899117932544>  ::  **${user.tag}** (\`${user.id}\`) has been softbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, user, reason);
 	}
 

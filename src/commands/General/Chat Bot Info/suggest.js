@@ -27,7 +27,7 @@ module.exports = class extends Command {
 			{ files: [{ attachment: await this.client.idiot.suggestion(msg.author.displayAvatarURL(), suggestion), name: 'suggestion.png' }] } :
 			{};
 		msg.send([
-			`<:check:508594899117932544>   ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
+			`<:check:508594899117932544>  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
 			'***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'
 		].join('\n'), messageOptions);
 	}

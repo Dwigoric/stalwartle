@@ -33,7 +33,7 @@ module.exports = class extends Command {
 		const task = this.client.schedule.tasks.filter(tk => tk.data.user === user.id)[0];
 		if (task) this.client.schedule.delete(task.id);
 
-		msg.channel.send(`<:check:508594899117932544>   ::  **${user.tag}** (\`${user.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508594899117932544>  ::  **${user.tag}** (\`${user.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, user, reason);
 	}
 

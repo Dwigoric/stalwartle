@@ -19,7 +19,7 @@ module.exports = class extends Command {
 			if (prompted.content.toLowerCase().split(' ').includes('cancel')) return msg.send("Alright! You don't want to change your timezone.");
 			if (!moment.tz.zone(prompted.content)) return msg.send(`<:error:508595005481549846>  ::  **${prompted.content}** is not a valid timezone!`);
 			msg.author.settings.update('timezone', prompted.content);
-			return msg.send(`<:check:508594899117932544>   ::  Your timezone has been changed to \`${prompted.content}\`.`);
+			return msg.send(`<:check:508594899117932544>  ::  Your timezone has been changed to \`${prompted.content}\`.`);
 		});
 	}
 

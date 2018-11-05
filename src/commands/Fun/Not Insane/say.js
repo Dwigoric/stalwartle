@@ -16,7 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [chan = msg.channel, ...msgargs]) {
 		msgargs = msgargs.join(this.usageDelim);
 		if (!chan.postable) throw '<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.'; // eslint-disable-line max-len
-		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>   ::  Message sent!`);
+		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Message sent!`);
 		return chan.send(msgargs);
 	}
 
@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
 		if (!chan.postable) throw '<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.';
-		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>   ::  Message sent!`);
+		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Message sent!`);
 		chan.send(msgargs);
 		return msg.delete().catch(() => null);
 	}
@@ -32,7 +32,7 @@ module.exports = class extends Command {
 	async embed(msg, [chan = msg.channel, ...msgargs]) {
 		msgargs = msgargs.join(this.usageDelim);
 		if (!chan.postable) throw '<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.';
-		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>   ::  Message sent!`);
+		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Message sent!`);
 		return chan.send({
 			embed: await new MessageEmbed()
 				.setColor(0x40E0D0)
@@ -47,7 +47,7 @@ module.exports = class extends Command {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
 		if (!chan.postable) throw '<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.';
-		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>   ::  Message sent!`);
+		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Message sent!`);
 		chan.send({
 			embed: await new MessageEmbed()
 				.setColor(0x40E0D0)

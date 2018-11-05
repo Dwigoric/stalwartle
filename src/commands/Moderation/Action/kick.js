@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
 		reason = reason.length ? reason.join(this.usageDelim) : null;
 		await member.kick(reason);
-		msg.channel.send(`<:check:508594899117932544>   ::  **${member.user.tag}** (\`${member.id}\`) has been kicked.${reason ? ` **Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508594899117932544>  ::  **${member.user.tag}** (\`${member.id}\`) has been kicked.${reason ? ` **Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, member.user, reason);
 	}
 

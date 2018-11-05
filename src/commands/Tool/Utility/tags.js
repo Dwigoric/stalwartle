@@ -52,7 +52,7 @@ module.exports = class extends Command {
 		if (userTags[tag]) throw `<:error:508595005481549846>  ::  **${tag}** is already your tag!`;
 		if (Object.keys(userTags).length > 15) throw `<:error:508595005481549846>  ::  You have already reached the limit of 15 tags!`;
 		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
-		msg.send(`<:check:508594899117932544>   ::  Tag **${tag}** has been created!`);
+		msg.send(`<:check:508594899117932544>  ::  Tag **${tag}** has been created!`);
 	}
 
 	async remove(msg, [tag]) {
@@ -61,7 +61,7 @@ module.exports = class extends Command {
 		if (tag === 'id') throw `<:error:508595005481549846>  ::  Tag **${tag}** cannot be removed. Sorry!`;
 		if (!userTags[tag]) throw `<:error:508595005481549846>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
 		await this.client.providers.default.db.table('tags').get(msg.author.id).replace(row => row.without({ [tag]: true }));
-		msg.send(`<:check:508594899117932544>   ::  Tag **${tag}** has been removed!`);
+		msg.send(`<:check:508594899117932544>  ::  Tag **${tag}** has been removed!`);
 	}
 
 	async edit(msg, [tag, ...contents]) {
@@ -71,7 +71,7 @@ module.exports = class extends Command {
 		if (!userTags[tag]) throw `<:error:508595005481549846>  ::  Tag **${tag}** doesn't exist or isn't yours!`;
 		if (!contents.length) throw `<:error:508595005481549846>  ::  Please provide the new contents of the tag **${tag}**.`;
 		await this.client.providers.default.update('tags', msg.author.id, { [tag]: contents.join(this.usageDelim) });
-		msg.send(`<:check:508594899117932544>   ::  Tag **${tag}** has been edited!`);
+		msg.send(`<:check:508594899117932544>  ::  Tag **${tag}** has been edited!`);
 	}
 
 	async init() {

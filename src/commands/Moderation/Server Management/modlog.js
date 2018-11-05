@@ -85,7 +85,7 @@ module.exports = class extends Command {
 		const { modlogShowContent } = msg.guild.settings;
 		if (modlogShowContent) msg.guild.settings.update('modlogShowContent', false);
 		else msg.guild.settings.update('modlogShowContent', true);
-		return msg.send(`<:check:508594899117932544>   ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
+		return msg.send(`<:check:508594899117932544>  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
 	}
 
 	async reset(msg) {
@@ -95,9 +95,9 @@ module.exports = class extends Command {
 		} while (!['yes', 'no', null].includes(prompt.content));
 		if (prompt.content === 'yes') {
 			await this.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
-			return msg.send(`<:check:508594899117932544>   ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
+			return msg.send(`<:check:508594899117932544>  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
 		} else {
-			return msg.send("<:check:508594899117932544>   ::  Alright! You don't want to reset your modlogs.");
+			return msg.send("<:check:508594899117932544>  ::  Alright! You don't want to reset your modlogs.");
 		}
 	}
 

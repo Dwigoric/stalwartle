@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		if (member.roles.highest.position >= msg.member.roles.highest.position) throw `<:error:508595005481549846>  ::  It seems you cannot edit ${member}'s roles...`;
 		if (member.roles.has(role.id)) throw `<:error:508595005481549846>  ::  ${member} already has **${role.name}**! I mean, what's the point of giving someone something they already have?`; // eslint-disable-line max-len
 		await member.roles.add(role, `Given using ${this.client.user.username}'s Give Role feature`);
-		return msg.send(`<:check:508594899117932544>   ::  Successfully given ${member} the role **${role.name}**.`);
+		return msg.send(`<:check:508594899117932544>  ::  Successfully given ${member} the role **${role.name}**.`);
 	}
 
 };

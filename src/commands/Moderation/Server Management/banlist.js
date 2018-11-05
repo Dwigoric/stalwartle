@@ -38,14 +38,14 @@ module.exports = class extends Command {
 	async handleMessage(msg, options, result) {
 		switch (options.sendAs) {
 			case 'file': {
-				if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', '<:check:508594899117932544>   ::  Sent the ban list as a file.');
+				if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', '<:check:508594899117932544>  ::  Sent the ban list as a file.');
 				await this.getTypeOutput(msg, options);
 				return this.handleMessage(msg, options, result);
 			}
 			case 'haste':
 			case 'hastebin': {
 				if (!options.url) options.url = await this.getHaste(result).catch(() => null);
-				if (options.url) return msg.sendMessage(`<:check:508594899117932544>   ::  Sent the ban list to hastebin: ${options.url}`);
+				if (options.url) return msg.sendMessage(`<:check:508594899117932544>  ::  Sent the ban list to hastebin: ${options.url}`);
 				options.hastebinUnavailable = true;
 				await this.getTypeOutput(msg, options);
 				return this.handleMessage(msg, options);

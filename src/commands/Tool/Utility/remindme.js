@@ -48,7 +48,7 @@ module.exports = class extends Command {
 			}
 		});
 		msg.send([
-			`<:check:508594899117932544>   ::  Alright! I created you a reminder with the ID: \`${reminder.id}\``,
+			`<:check:508594899117932544>  ::  Alright! I created you a reminder with the ID: \`${reminder.id}\``,
 			`You will be reminded of this in ${Duration.toNow(reminder.time)}.`,
 			reminder.data.forceChannel ?
 				'The people of this channel will be reminded.' :
@@ -68,7 +68,7 @@ module.exports = class extends Command {
 		if (isNaN(remNum)) throw "<:error:508595005481549846>  ::  You didn't give a number! :3";
 		if (!this.client.schedule.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw "<:error:508595005481549846>  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?"; // eslint-disable-line max-len
 		this.client.schedule.delete(remList[remNum]);
-		return msg.send(`<:check:508594899117932544>   ::  Successfully deleted reminder ID \`${remList[remNum]}\`.`);
+		return msg.send(`<:check:508594899117932544>  ::  Successfully deleted reminder ID \`${remList[remNum]}\`.`);
 	}
 
 	async remlist(msg) {

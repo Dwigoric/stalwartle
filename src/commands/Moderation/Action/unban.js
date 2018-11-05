@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		reason = reason.length ? reason.join(this.usageDelim) : null;
 
 		await msg.guild.members.unban(user, reason);
-		msg.channel.send(`<:check:508594899117932544>   ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
+		msg.channel.send(`<:check:508594899117932544>  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, user, reason);
 	}
 

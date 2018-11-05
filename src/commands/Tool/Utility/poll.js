@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		if (!chan.permissionsFor(msg.author).has('VIEW_CHANNEL', true)) throw `<:error:508595005481549846>  ::  It seems you cannot send messages in that channel...`; // eslint-disable-line max-len
 		if (choices.length < 2) throw '<:error:508595005481549846>  ::  Your poll must have at least two (2) choices!';
 		if (choices.length > 10) throw '<:error:508595005481549846>  ::  Sorry! You can only have a maximum of ten (10) choices.';
-		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>   ::  Poll created!`);
+		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Poll created!`);
 
 		choices = choices.splice(0, 10);
 		const emojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].splice(0, choices.length);
