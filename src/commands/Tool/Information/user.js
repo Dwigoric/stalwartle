@@ -29,7 +29,7 @@ module.exports = class extends Command {
 			roleNum = '';
 		} else {
 			nick = guildMember.nickname || 'None';
-			joined = `${moment(guildMember.joinedAt).tz(timezone).format('dddd, LL | LTS')}\n>> ${moment(guildMember.joinedAt).fromNow()}`;
+			joined = `${moment(guildMember.joinedAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guildMember.joinedAt).fromNow()}`;
 			roleNum = guildMember.roles.size ? `[${guildMember.roles.size}]` : '';
 
 			if (!guildMember.roles.size) {
@@ -85,7 +85,7 @@ module.exports = class extends Command {
 			.addField('Account Type', accType, true)
 			.addField('Timezone Used', timezone, true)
 			.addField('Joined Server', joined)
-			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS')}\n>> ${moment(player.createdAt).fromNow()}`)
+			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
 			.addField(`Roles ${roleNum}`, roles)
 			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
 			.setTimestamp();

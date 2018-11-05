@@ -60,7 +60,7 @@ module.exports = class extends Command {
 					.then(result => result.items.length ? result.items[0].snippet.thumbnails.high.url : undefined))
 				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
 		}
-		embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS'))
+		embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS z'))
 			.addField('Description', request.snippet.description ? request.snippet.description : 'No Description');
 
 		return msg.send(embed);

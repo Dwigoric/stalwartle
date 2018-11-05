@@ -45,7 +45,7 @@ module.exports = class extends Command {
 				.addField('Discord.js Version', require('discord.js').version, true)
 				.addField('Node.js Version', process.version, true)
 				.addField('Bot Creator', this.client.application.owner.tag, true)
-				.addField('Created', `${moment(this.client.user.createdAt).tz(timezone).format('dddd, LL | LTS')}\n>> ${moment(this.client.user.createdAt).fromNow()}`)
+				.addField('Created', `${moment(this.client.user.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(this.client.user.createdAt).fromNow()}`)
 				.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
 				.setTimestamp()
 		});

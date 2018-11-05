@@ -37,7 +37,7 @@ module.exports = class extends Command {
 				.addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
 				.addField('User Limit', chan.userLimit, true);
 		}
-		embed = embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS')}\n>> ${moment(chan.createdAt).fromNow()}`);
+		embed = embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`);
 		return msg.send({ embed: embed });
 	}
 

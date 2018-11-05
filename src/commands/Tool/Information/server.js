@@ -79,7 +79,7 @@ module.exports = class extends Command {
 				.addField('Role Count', roleCount, true)
 				.addField('Text Channel Count', tchanCount, true)
 				.addField('Voice Channel Count', vchanCount, true)
-				.addField('Created', `${moment(dGuild.createdAt).tz(timezone).format('dddd, LL | LTS')}\n>> ${moment(dGuild.createdAt).fromNow()}`)
+				.addField('Created', `${moment(dGuild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(dGuild.createdAt).fromNow()}`)
 				.addField(`Custom Emojis ${emojiCount}`, emojis)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 				.setTimestamp()

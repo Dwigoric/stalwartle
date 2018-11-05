@@ -68,7 +68,7 @@ module.exports = class extends Command {
 						`Type: ${toTitleCase(modlog.type)}`,
 						`Moderator: ${moderator || 'Could not get user'} (\`${modlog.moderator}\`)`,
 						`User: ${_user || 'Could not get user'} (\`${modlog.user}\`)`,
-						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS')} (${moment(modlog.timestamp).fromNow()})`,
+						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS z')} (${moment(modlog.timestamp).fromNow()})`,
 						`Reason: ${modlog.reason ? escapeMarkdown(modlog.reason) : 'Not specified.'}`
 					].join('\n');
 				});
