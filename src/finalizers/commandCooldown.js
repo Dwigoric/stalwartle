@@ -2,12 +2,12 @@ const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
 
-	run(message) {
+	run(message, command) {
 		if (this.client.options.owners.includes(message.author.id)) return;
-		if (message.command.cooldown <= 0) return;
+		if (command.cooldown <= 0) return;
 
 		const id = message.levelID;
-		const rateLimit = message.command.cooldowns.get(id) || message.command.cooldowns.create(id);
+		const rateLimit = command.cooldowns.get(id) || command.cooldowns.create(id);
 
 		try {
 			rateLimit.drip();
