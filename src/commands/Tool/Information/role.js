@@ -19,28 +19,6 @@ module.exports = class extends Command {
 
 	async run(msg, [role]) {
 		const { timezone } = msg.author.settings;
-		const memCount = msg.guild.members.filter(mb => mb.roles.has(role.id) && mb.presence.status !== 'offline').size;
-		const memListMap = msg.guild.members.filter(mb => mb.roles.has(role.id)).map(us => us.user);
-		let memList;
-		if (memListMap.length === 0) {
-			memList = 'None';
-		} else if (memListMap.length <= 10) {
-			memList = memListMap.join(', ');
-		} else {
-			memList = memListMap.slice(0, 10).join(', ');
-			memList += `** + ${memListMap.length - 10} other member${memListMap.length - 10 === 1 ? '' : 's'}**`;
-		}
-
-		const totalMem = msg.guild.members.filter(mb => mb.roles.has(role.id)).size;
-		let tMem;
-		let mCount;
-		if (totalMem === 0) {
-			tMem = '';
-			mCount = 0;
-		} else {
-			tMem = `[${totalMem}]`;
-			mCount = `${memCount} online out of ${totalMem}`;
-		}
 
 		function hexToRgb(hex) {
 			var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -61,12 +39,10 @@ module.exports = class extends Command {
 				.setColor(role.hexColor)
 				.setAuthor(`Role information for ${role.name}`)
 				.addField('ID', role.id)
-				.addField(`Members ${tMem}`, memList)
 				.addField('Hoisted', `${role.hoist}`.replace(/^./, i => i.toUpperCase()), true)
 				.addField('Managed', `${role.managed}`.replace(/^./, i => i.toUpperCase()), true)
 				.addField('Mentionable', `${role.mentionable}`.replace(/^./, i => i.toUpperCase()), true)
 				.addField('Color', `HEX: ${role.hexColor}\nRGB: ${hexToRgb(role.hexColor).join(', ')}`, true)
-				.addField('Member Count', `${mCount}`, true)
 				.addField('Position', `${msg.guild.roles.size - role.position} out of ${msg.guild.roles.size}`, true)
 				.addField('Created', `${moment(role.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(role.createdAt).fromNow()}`)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
