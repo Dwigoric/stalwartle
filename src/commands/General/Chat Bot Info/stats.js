@@ -53,7 +53,7 @@ module.exports = class extends Command {
 				`**Total**: ${Duration.toNow(now - (process.uptime() * 1000))}`
 			], true)
 			.addField('💾 Usage', [
-				`**CPU Load**: ${Math.round(loadavg()[0] * 10000) / 100}%`,
+				`**CPU Load**: ${Math.round(loadavg()[0] * 1000) / 100}%`,
 				`**RAM Used**: ${Math.round(100 * (process.memoryUsage().heapUsed / 1048576)) / 100}MB`,
 				`**RAM Total**: ${Math.round(100 * (process.memoryUsage().heapTotal / 1048576)) / 100}MB`
 			], true));
