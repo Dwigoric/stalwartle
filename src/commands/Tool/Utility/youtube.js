@@ -37,7 +37,7 @@ module.exports = class extends Command {
 			key: googleAPIkey,
 			part: 'snippet',
 			maxResults: 1,
-			q: query.join(this.usageDelim), // eslint-disable-line id-length
+			q: encodeURIComponent(query.join(this.usageDelim)), // eslint-disable-line id-length
 			type
 		})) queries.push(`${key}=${value}`);
 		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${queries.join('&')}`).then(result => result.json());
