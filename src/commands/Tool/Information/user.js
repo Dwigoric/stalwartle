@@ -71,10 +71,9 @@ module.exports = class extends Command {
 			Invisible: '<:invisible:415894324899872768>'
 		};
 
-		const accType = player.bot ? 'Bot' : 'User';
 		const avatarURL = player.displayAvatarURL();
 
-		const userEmbed = new MessageEmbed()
+		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(player.tag, avatarURL)
 			.setThumbnail(avatarURL)
@@ -82,7 +81,6 @@ module.exports = class extends Command {
 			.addField('Server Nickname', nick, true)
 			.addField('Status', `${guildCount ? statusEmoji[presenceStatus] : ''} ${presenceStatus}`, true)
 			.addField('Mutual Server Count', guildCount, true)
-			.addField('Account Type', accType, true)
 			.addField('Timezone Used', timezone, true)
 			.addField('Joined Server', joined)
 			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
@@ -90,14 +88,13 @@ module.exports = class extends Command {
 			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
 			.setTimestamp();
 
+		let description = player.bot ? '<:bot:415894324589363211> ' : '';
 		if (gameplay) {
-			return msg.send({
-				embed: userEmbed.setDescription(`${gameplay && gameplay.type === 'LISTENING' ?
-					'Listening to' :
-					gameplay.type.replace(/\B[a-zA-Z0-9]+/, str => str.toLowerCase())} **${gameplay.name}**${gameplay.details ? ' <:richpresence:504544678364971008>' : ''}`)
-			});
+			description += `${gameplay && gameplay.type === 'LISTENING' ?
+				'Listening to' :
+				gameplay.type.replace(/\B[a-zA-Z0-9]+/, str => str.toLowerCase())} **${gameplay.name}**${gameplay.details ? ' <:richpresence:504544678364971008>' : ''}`;
 		}
-		return msg.send({ embed: userEmbed });
+		return msg.sendEmbed(embed.setDescription(description));
 	}
 
 	async roles(msg, [user = msg.author]) {
