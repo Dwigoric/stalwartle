@@ -68,7 +68,7 @@ module.exports = class extends Command {
 			'Do Not Disturb': '<:dnd:415894324522254338>',
 			Streaming: '<:streaming:415894325075902474>',
 			Offline: '<:offline:415894324966981632>',
-			Invisible: '<:offline:415894324966981632>'
+			Invisible: '<:invisible:415894324899872768>'
 		};
 
 		const accType = player.bot ? 'Bot' : 'User';
