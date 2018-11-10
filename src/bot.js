@@ -1,6 +1,6 @@
 const { Client } = require('klasa');
 const { config, token } = require('./config');
-const { blsAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
+const { blsAPIkey, bodAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
 const fetch = require('node-fetch');
 const idiotic = require('idiotic-api');
 
@@ -91,6 +91,14 @@ class Stalwartle extends Client {
 			fetch(`https://botlist.space/api/bots/${this.user.id}?server_count=${await this.guildCount()}`, {
 				method: 'POST',
 				headers: { Authorization: blsAPIkey }
+			})
+				.catch(err => this.emit('error', err.stack));
+		}
+		if (bodAPIkey) {
+			fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
+				method: 'POST',
+				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' },
+				body: JSON.stringify({ guildCount: await this.guildCount() })
 			})
 				.catch(err => this.emit('error', err.stack));
 		}
