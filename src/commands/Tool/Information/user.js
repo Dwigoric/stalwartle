@@ -18,7 +18,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [player = msg.author]) {
-		const { timezone } = player.settings;
+		const { timezone } = msg.author.settings;
 		const guildMember = await msg.guild.members.fetch(player.id).catch(() => null);
 		let nick, joined, roles, roleNum;
 
