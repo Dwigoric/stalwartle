@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		const { hits } = await fetch(`https://api.genius.com/search?access_token=${geniusAPIkey}&q=${query}`)
+		const { hits } = await fetch(`https://api.genius.com/search?access_token=${geniusAPIkey}&q=${encodeURIComponent(query)}`)
 			.then(res => res.json())
 			.then(body => body.response);
 		if (!hits.length) throw '<:error:508595005481549846>  ::  No song lyrics found.';
