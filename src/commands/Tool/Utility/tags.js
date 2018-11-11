@@ -34,7 +34,7 @@ module.exports = class extends Command {
 		if (userTag === 'id') throw noTagErr;
 		const tag = userTags[userTag];
 		if (!tag) throw noTagErr;
-		msg.send(`🗒  ::  ${tag}`);
+		msg.send(tag);
 	}
 
 	async list(msg) {
