@@ -3,11 +3,6 @@ const { WebhookClient, MessageEmbed } = require('discord.js');
 
 module.exports = class extends Event {
 
-	constructor(...args) {
-		super(...args);
-		this.hook = new WebhookClient(this.client.settings.error.channel, this.client.settings.error.hooKToken);
-	}
-
 	async run(msg, command, params, error) {
 		const errorID = (this.client.shard ? this.client.shard.id.toString(36) : '') + Date.now().toString(36);
 		if (error instanceof Error) this.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
@@ -34,6 +29,10 @@ module.exports = class extends Event {
 			);
 		}
 		return error.stack;
+	}
+
+	async init() {
+		this.hook = new WebhookClient(this.client.settings.error.channel, this.client.settings.error.hooKToken);
 	}
 
 };
