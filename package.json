@@ -10,7 +10,9 @@
 		"discord.js": "github:discordjs/discord.js",
 		"klasa": "github:dirigeants/klasa",
 		"moment-timezone": "^0.5.21",
-		"rethinkdbdash": "^2.3.31"
+		"opusscript": "0.0.6",
+		"rethinkdbdash": "^2.3.31",
+		"ytdl-core": "^0.28.0"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
