@@ -10,7 +10,9 @@ class Stalwartle extends Client {
 		super(...args);
 
 		Stalwartle.defaultClientSchema
-			.add('restart', 'string', { default: '', configurable: false });
+			.add('restart', restart => restart
+				.add('channel', 'textchannel')
+				.add('timestamp', 'number'));
 
 		Stalwartle.defaultUserSchema
 			.add('cookies', 'integer', { default: 0, configurable: false })

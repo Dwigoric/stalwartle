@@ -11,10 +11,10 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		await this.client.settings.update('restart', msg.channel.id);
-		await msg.send(`<a:loading:430269209415516160>  ::  Bot is restarting...`);
+		await this.client.settings.update([['restart.channel', msg.channel.id], ['restart.timestamp', msg.createdTimestamp]]);
+		await msg.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		await this.client.destroy();
-		exec('pm2 restart Stalwartle');
+		exec('pm2 restart Stalwartle').catch(() => process.exit());
 	}
 
 };
