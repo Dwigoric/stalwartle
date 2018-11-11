@@ -1,19 +1,24 @@
-const { Event, util } = require('klasa');
+const { Event, util: { codeBlock } } = require('klasa');
 const { WebhookClient, MessageEmbed } = require('discord.js');
 
 module.exports = class extends Event {
+
+	constructor(...args) {
+		super(...args);
+		this.hook = null;
+	}
 
 	async run(msg, command, params, error) {
 		const errorID = (this.client.shard ? this.client.shard.id.toString(36) : '') + Date.now().toString(36);
 		if (error instanceof Error) this.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
 		if (error.message) {
 			msg
-				.send(`⚠ Whoa! You found a bug! Please catch this bug and send it with the **error ID \`${errorID}\`** using the \`bug\` command!${util.codeBlock('xl', error.message)}`)
+				.send(`⚠ Whoa! You found a bug! Please catch this bug and send it with the **error ID \`${errorID}\`** using the \`bug\` command!${codeBlock('xl', error.message)}`)
 				.catch(err => this.client.emit('wtf', err));
 		} else {
 			return msg.sendMessage(error).catch(err => this.client.emit('wtf', err));
 		}
-		if (typeof error.stack !== 'undefined') {
+		if (error.stack) {
 			return this.hook.send(`${this.client.application.owner}, an error occured with **${this.client.user.tag}**!`, new MessageEmbed()
 				.setColor(0xE74C3C)
 				.setTitle(`Details of Error ID \`${errorID}\``)
@@ -23,8 +28,8 @@ module.exports = class extends Event {
 					`**Guild**: ${msg.guild ? `${msg.guild.name} (${msg.guild.id})` : '[Direct Messages]'}`,
 					`**Channel**: ${msg.guild ? `#${msg.channel.name}` : '[Direct Messages]'} (${msg.channel.id})`,
 					`**Command**: \`${msg.content}\``,
-					util.codeBlock('js', error.message),
-					util.codeBlock('xl', error.stack)
+					codeBlock('js', error.message),
+					codeBlock('xl', error.stack)
 				])
 			);
 		}
@@ -32,7 +37,8 @@ module.exports = class extends Event {
 	}
 
 	async init() {
-		this.hook = new WebhookClient(this.client.settings.errorHook.id, this.client.settings.errorHook.token);
+		const { id, token } = this.client.settings.errorHook;
+		this.hook = new WebhookClient(id, token);
 	}
 
 };
