@@ -32,7 +32,7 @@ module.exports = class extends Event {
 	}
 
 	async init() {
-		this.hook = new WebhookClient(this.client.settings.error.channel, this.client.settings.error.hooKToken);
+		this.hook = new WebhookClient(this.client.settings.errorHook.id, this.client.settings.errorHook.token);
 	}
 
 };

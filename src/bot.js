@@ -15,9 +15,9 @@ class Stalwartle extends Client {
 			.add('restart', restart => restart
 				.add('channel', 'textchannel')
 				.add('timestamp', 'number'))
-			.add('error', webhook => webhook
-				.add('channel', 'textchannel')
-				.add('hookToken', 'string'));
+			.add('errorHook', webhook => webhook
+				.add('id', 'string')
+				.add('token', 'string'));
 
 		Stalwartle.defaultUserSchema
 			.add('cookies', 'integer', { default: 0, configurable: false })
