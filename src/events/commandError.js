@@ -1,9 +1,12 @@
 const { Event, util } = require('klasa');
 const { WebhookClient, MessageEmbed } = require('discord.js');
 
-const hook = new WebhookClient('504419680899956747', 'yWNIgYTXiV86RueXlu5u41P-J_LpFdOIIHi3KdlYVD9-l5RxUWFKBEB3tjTnicT2GxaB');
-
 module.exports = class extends Event {
+
+	constructor(...args) {
+		super(...args);
+		this.hook = new WebhookClient(this.client.settings.error.channel, this.client.settings.error.hooKToken);
+	}
 
 	async run(msg, command, params, error) {
 		const errorID = (this.client.shard ? this.client.shard.id.toString(36) : '') + Date.now().toString(36);
@@ -16,7 +19,7 @@ module.exports = class extends Event {
 			return msg.sendMessage(error).catch(err => this.client.emit('wtf', err));
 		}
 		if (typeof error.stack !== 'undefined') {
-			return hook.send(`${this.client.application.owner}, an error occured with **${this.client.user.tag}**!`, new MessageEmbed()
+			return this.hook.send(`${this.client.application.owner}, an error occured with **${this.client.user.tag}**!`, new MessageEmbed()
 				.setColor(0xE74C3C)
 				.setTitle(`Details of Error ID \`${errorID}\``)
 				.setDescription([
