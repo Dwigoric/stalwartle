@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
 	async run(msg, [user, days = 0, duration = Infinity, ...reason], force) {
 		if (!force && user.id === msg.author.id) throw 'Why would you ban yourself?';
-		if (!force && user.id === this.client.user.id) throw 'Have I done something wrong?';
+		if (!force && user.equals(this.client.user)) throw 'Have I done something wrong?';
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
 		if (!force && member) {

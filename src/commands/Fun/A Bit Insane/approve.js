@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.approved(user.displayAvatarURL({ format: 'png', size: 2048 })), 'approved.png', msg.author === user ? '' : `${user} has been approved!`);
+		msg.channel.sendFile(await this.client.idiot.approved(user.displayAvatarURL({ format: 'png', size: 2048 })), 'approved.png', user.equals(msg.author) ? '' : `${user} has been approved!`);
 	}
 
 };

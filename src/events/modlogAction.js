@@ -20,7 +20,7 @@ module.exports = class extends Event {
 			.catch(() => {
 				if (message.command.name === 'warn' && message.author) message.send(`⚠ I couldn't send messages to **${user.tag}**, so I couldn't warn them; but this will still be logged.`);
 			});
-		const moderator = message.author ? user === message.author ? this.client.user : message.author : this.client.user;
+		const moderator = message.author ? message.author.equals(user) ? this.client.user : message.author : this.client.user;
 		const { modlogs } = await this.client.providers.default.get('modlogs', message.guild.id);
 		modlogs.push({
 			id: (modlogs.length + 1).toString(),

@@ -20,7 +20,7 @@ module.exports = class extends Command {
 			'magical-ideas': '445822516364181535',
 			'magical-bugs': '445822556214394880'
 		};
-		if (repMsg.author.id !== this.client.user.id) return null;
+		if (!repMsg.author.equals(this.client.user)) return null;
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(repUser.tag, repUser.displayAvatarURL())
