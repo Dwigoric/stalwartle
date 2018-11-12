@@ -24,11 +24,11 @@ module.exports = class extends Command {
 			].join('\n\n'))
 			.setFooter(`Quoted by ${msg.author.tag} | #${message.channel.name}`, msg.author.displayAvatarURL())
 			.setTimestamp(new Date(message.createdTimestamp));
-		const attachments = message.attachments.size ? message.attachments.filter(atch => {
-			const filename = atch.file.name;
+		const media = message.attachments.size ? message.attachments.filter(atch => {
+			const filename = atch.name;
 			return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
 		}) : null;
-		if (attachments && attachments.size) embed.setImage(attachments.first().url);
+		if (media && media.size) embed.setImage(media.first().url);
 		return msg.send(embed);
 	}
 
