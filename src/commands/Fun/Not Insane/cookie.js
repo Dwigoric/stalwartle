@@ -1,4 +1,4 @@
-const { Command, Duration, RichDisplay, util } = require('klasa');
+const { Command, Duration, RichDisplay, util: { chunk } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -48,7 +48,7 @@ module.exports = class extends Command {
 			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
 		if (!msg.flags.global && msg.guild) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
-		list = util.chunk(list, 10);
+		list = chunk(list, 10);
 
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
