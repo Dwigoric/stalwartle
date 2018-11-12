@@ -15,8 +15,8 @@ module.exports = class extends Command {
 
 	async run(msg, [member, ...reason]) {
 		if (!msg.guild.settings.muteRole) throw '<:error:508595005481549846>  ::  The mute role has not yet been set up for this server. You can do so by using the `s.muterole` command.';
-		if (member.user.id === msg.author.id) throw 'Look... how are you able to use this command if you were already unmuted?';
-		if (member.user.id === this.client.user.id) throw '*Unmutes self*. Oh, I would not have been able to respond if I were in the first place!';
+		if (member.user.equals(msg.author)) throw 'Look... how are you able to use this command if you were already unmuted?';
+		if (member.user.equals(this.client.user)) throw '*Unmutes self*. Oh, I would not have been able to respond if I were in the first place!';
 
 		const user = await this.client.users.fetch(member.id).catch(() => null);
 		if (member) {

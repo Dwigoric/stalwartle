@@ -13,8 +13,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [member, ...reason]) {
-		if (member.id === msg.author.id) throw 'Why would you warn yourself?';
-		if (member.id === this.client.user.id) throw 'Have I done something wrong?';
+		if (member.user.equals(msg.author)) throw 'Why would you warn yourself?';
+		if (member.user.equals(this.client.user)) throw 'Have I done something wrong?';
 
 		reason = reason.length > 0 ? reason.join(this.usageDelim) : null;
 		msg.channel.send(`<:check:508594899117932544>  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
