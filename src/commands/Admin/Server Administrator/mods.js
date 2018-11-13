@@ -59,7 +59,7 @@ module.exports = class extends Command {
 		const guildMods = msg.guild.settings.get('moderators');
 		if (action === 'add' && guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already a moderator!';
 		if (action === 'remove' && !guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already not a moderator!';
-		guildConf.update(`moderators.${type}`, mod.id, msg.guild, { action });
+		msg.guild.settings.update(`moderators.${type}`, mod.id, msg.guild, { action });
 		msg.send(`<:check:508594899117932544>  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
 	}
 
