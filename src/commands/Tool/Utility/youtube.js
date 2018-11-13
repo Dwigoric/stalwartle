@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	}
 
 	async query(msg, query, type, url) {
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 		const queries = [];
 
 		for (const [key, value] of Object.entries({

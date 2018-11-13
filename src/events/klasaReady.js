@@ -35,7 +35,7 @@ module.exports = class extends Event {
 				this.client.user.setActivity(`${status.name} | ${this.client.options.prefix}help`, { type: status.type });
 			}, 60000);
 		});
-		const { restart: { channel, timestamp } } = this.client.settings;
+		const { channel, timestamp } = this.client.settings.get('restart');
 		if (!channel) return;
 		this.client.channels.get(channel).send({
 			embed: new MessageEmbed()

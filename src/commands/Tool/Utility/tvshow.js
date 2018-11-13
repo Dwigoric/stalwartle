@@ -18,7 +18,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query, page = 1]) {
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
 		const request = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${tmdbAPIkey}&query=${encodeURIComponent(query)}`).then(res => res.json());

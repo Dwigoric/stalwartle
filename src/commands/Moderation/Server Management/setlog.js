@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	}
 
 	async list(msg) {
-		const { modlogs } = msg.guild.settings;
+		const modlogs = msg.guild.settings.get('modlogs');
 		const { channels } = msg.guild;
 		return msg.send(this.client.commands
 			.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action')

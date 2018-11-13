@@ -24,7 +24,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user]) {
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 		const first5 = [];
 		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs);
 
@@ -82,7 +82,7 @@ module.exports = class extends Command {
 	}
 
 	async showcontent(msg) {
-		const { modlogShowContent } = msg.guild.settings;
+		const modlogShowContent = msg.guild.settings.get('modlogShowContent');
 		if (modlogShowContent) msg.guild.settings.update('modlogShowContent', false);
 		else msg.guild.settings.update('modlogShowContent', true);
 		return msg.send(`<:check:508594899117932544>  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);

@@ -10,8 +10,8 @@ module.exports = class extends Monitor {
 	}
 
 	async run(msg) {
-		if (msg.author.settings.afkIgnore.includes(msg.channel.id)) return;
-		if (await this.client.providers.default.has('afk', msg.author.id) && !msg.author.settings.afktoggle) {
+		if (msg.author.settings.get('afkIgnore').includes(msg.channel.id)) return;
+		if (await this.client.providers.default.has('afk', msg.author.id) && !msg.author.settings.get('afktoggle')) {
 			const wbMsg = `<:blobwave:447713448051081216>  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`;
 			this.client.providers.default.delete('afk', msg.author.id);
 			msg.send(wbMsg).catch(() => msg.author.send(wbMsg).catch());

@@ -25,7 +25,7 @@ module.exports = class extends Command {
 			.concat('\n__*Powered by Genius (https://genius.com)*__')
 			.join('\n');
 
-		const swearArray = (msg.guild ? msg.guild.settings.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`) : []).concat([
+		const swearArray = (msg.guild ? msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : []).concat([
 			'raped?',
 			'bullshit',
 			'nigga',

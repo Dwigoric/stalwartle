@@ -25,9 +25,9 @@ module.exports = class extends Command {
 
 			await this.client.settings.update(`${type}Blacklist`, userOrGuild.id || userOrGuild, msg.guild);
 
-			if (type === 'guild' && this.client.settings.guildBlacklist.includes(userOrGuild.id || userOrGuild)) guildsAdded.push(userOrGuild.name || userOrGuild);
+			if (type === 'guild' && this.client.settings.get('guildBlacklist').includes(userOrGuild.id || userOrGuild)) guildsAdded.push(userOrGuild.name || userOrGuild);
 			else if (type === 'guild') guildsRemoved.push(userOrGuild.name || userOrGuild);
-			else if (type === 'user' && this.client.settings.userBlacklist.includes(userOrGuild.id)) usersAdded.push(userOrGuild.username);
+			else if (type === 'user' && this.client.settings.get('userBlacklist').includes(userOrGuild.id)) usersAdded.push(userOrGuild.username);
 			else usersRemoved.push(userOrGuild.username);
 		}
 

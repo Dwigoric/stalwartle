@@ -63,7 +63,7 @@ class Stalwartle extends Client {
 					.add('mentionSpam', 'channel', { array: true, default: [], configurable: true })));
 
 		Stalwartle.defaultPermissionLevels
-			.add(6, (client, msg) => msg.guild && (msg.guild.settings.moderators.roles.some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.moderators.users.includes(msg.member.id))) // eslint-disable-line max-len
+			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
 			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
 			.add(9, (client, msg) => config.owners.includes(msg.author.id))

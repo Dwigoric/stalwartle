@@ -18,7 +18,7 @@ module.exports = class extends Command {
 
 	async run(msg, [chan = msg.channel]) {
 		const avatarURL = msg.author.displayAvatarURL();
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 
 		let embed = new MessageEmbed()
 			.setColor('RANDOM')

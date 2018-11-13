@@ -12,10 +12,10 @@ module.exports = class extends Monitor {
 
 	async run(msg) {
 		if (!msg.guild) return;
-		if (!msg.guild.settings.automod.antiInvite) return;
-		if (msg.author.bot && msg.guild.settings.automod.ignoreBots) return;
-		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.automod.ignoreMods) return;
-		if (msg.guild.settings.automod.filterIgnore.antiInvite.includes(msg.channel.id)) return;
+		if (!msg.guild.settings.get('automod.antiInvite')) return;
+		if (msg.author.bot && msg.guild.settings.get('automod.ignoreBots')) return;
+		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.get('automod.ignoreMods')) return;
+		if (msg.guild.settings.get('automod.filterIgnore.antiInvite').includes(msg.channel.id)) return;
 		if (msg.author.equals(this.client.user)) return;
 
 		const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;

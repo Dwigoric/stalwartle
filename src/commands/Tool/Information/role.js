@@ -18,7 +18,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [role]) {
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 
 		function hexToRgb(hex) {
 			var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;

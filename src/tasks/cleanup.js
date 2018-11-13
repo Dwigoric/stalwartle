@@ -46,7 +46,7 @@ module.exports = class MemorySweeper extends Task {
 				if (member === guild.owner) continue;
 				if (member.voice.channelID) continue;
 				if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
-				if (member.user.settings.cookies) continue;
+				if (member.user.settings.get('cookies')) continue;
 				guildMembers++;
 				guild.members.delete(id);
 			}
@@ -66,7 +66,7 @@ module.exports = class MemorySweeper extends Task {
 		// Per-User sweeper
 		for (const user of this.client.users.values()) {
 			if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
-			if (user.settings.cookies) continue;
+			if (user.settings.get('cookies')) continue;
 			this.client.users.delete(user.id);
 			this.client.gateways.users.cache.delete(user.id);
 			users++;

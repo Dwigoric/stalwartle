@@ -12,14 +12,14 @@ module.exports = class extends Monitor {
 
 	async run(msg) {
 		if (!msg.guild) return;
-		if (!msg.guild.settings.automod.antiSwear) return;
-		if (msg.author.bot && msg.guild.settings.automod.ignoreBots) return;
-		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.automod.ignoreMods) return;
-		if (msg.guild.settings.automod.filterIgnore.antiSwear.includes(msg.channel.id)) return;
+		if (!msg.guild.settings.get('automod.antiSwear')) return;
+		if (msg.author.bot && msg.guild.settings.get('automod.ignoreBots')) return;
+		if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.get('automod.ignoreMods')) return;
+		if (msg.guild.settings.get('automod.filterIgnore.antiSwear').includes(msg.channel.id)) return;
 		if (msg.author.equals(this.client.user)) return;
 
-		let swearArray = msg.guild.settings.automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
-		if (msg.guild.settings.automod.globalSwears) {
+		let swearArray = msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+		if (msg.guild.settings.get('automod.globalSwears')) {
 			swearArray = swearArray.concat([
 				'raped?',
 				'bullshit',

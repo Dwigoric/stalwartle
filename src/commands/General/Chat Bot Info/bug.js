@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
 	async run(msg, ...params) {
 		const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
-		this.client.channels.get(this.client.settings.bugChannel).send([
+		this.client.channels.get(this.client.settings.get('bugChannel')).send([
 			`🐛  ::  Bug Report by **${msg.author.tag}** | ${msg.author.id}`,
 			`\t\t\tServer: ${server}`,
 			`\`\`\`${params}\`\`\``

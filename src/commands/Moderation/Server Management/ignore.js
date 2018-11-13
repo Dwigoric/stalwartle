@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		if (channel.type === 'voice') throw '<:error:508595005481549846>  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.';
 		if (channel.type === 'category') channel = msg.guild.channels.filter(chan => chan.parentID === channel.id && chan.type === 'text');
 		else channel = [channel];
-		const { ignored } = msg.guild.settings;
+		const ignored = msg.guild.settings.get('ignored');
 		const added = [],
 			removed = [];
 		channel.forEach(chan => {
@@ -39,7 +39,7 @@ module.exports = class extends Command {
 	}
 
 	async list(msg) {
-		const { ignored } = msg.guild.settings;
+		const ignored = msg.guild.settings.get('ignored');
 		if (!ignored.length) throw 'This server currently has no ignored channels.';
 		const channels = ignored.map(ign => {
 			if (msg.guild.channels.has(ign)) return msg.guild.channels.get(ign);

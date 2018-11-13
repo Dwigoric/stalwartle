@@ -37,7 +37,7 @@ module.exports = class extends Event {
 	}
 
 	async init() {
-		const { id, token } = this.client.settings.errorHook;
+		const { id, token } = this.client.settings.get('errorHook');
 		this.hook = new WebhookClient(id, token);
 	}
 

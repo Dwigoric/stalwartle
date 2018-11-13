@@ -22,7 +22,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [dGuild = msg.guild]) {
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 		const tchanCount = dGuild.channels.filter(ch => ch.type === 'text').size;
 		const vchanCount = dGuild.channels.filter(ch => ch.type === 'voice').size;
 

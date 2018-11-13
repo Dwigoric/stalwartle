@@ -18,7 +18,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [player = msg.author]) {
-		const { timezone } = msg.author.settings;
+		const timezone = msg.author.settings.get('timezone');
 		const guildMember = await msg.guild.members.fetch(player.id).catch(() => null);
 		let nick, joined, roles, roleNum;
 
@@ -81,7 +81,7 @@ module.exports = class extends Command {
 			.addField('Server Nickname', nick, true)
 			.addField('Status', `${guildCount ? statusEmoji[presenceStatus] : ''} ${presenceStatus}`, true)
 			.addField('Mutual Server Count', guildCount, true);
-		if (!player.bot) embed.addField('User\'s Timezone', player.settings.timezone, true);
+		if (!player.bot) embed.addField('User\'s Timezone', player.settings.get('timezone'), true);
 		embed.addField('Joined Server', joined)
 			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
 			.addField(`Roles ${roleNum}`, roles)

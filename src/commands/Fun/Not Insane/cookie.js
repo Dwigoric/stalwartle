@@ -28,11 +28,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [person]) {
-		if (!person) return msg.send(`🍪  ::  You have **${msg.author.settings.cookies}** cookie${msg.author.settings.cookies === 1 ? '' : 's'}.`);
+		if (!person) return msg.send(`🍪  ::  You have **${msg.author.settings.get('cookies')}** cookie${msg.author.settings.get('cookies') === 1 ? '' : 's'}.`);
 		if (person.id === msg.author.id) throw "<:error:508595005481549846>  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿";
 		if (person.equals(this.client.user)) throw `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`;
 		if (person.bot) throw '<:error:508595005481549846>  ::  I wonder if bots can eat cookies... 🤔';
-		const { cookies } = person.settings;
+		const cookies = person.settings.get('cookies');
 		if (msg.flags.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
 		const cookieTask = this.client.schedule.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
 		if (cookieTask.length) throw `<:error:508595005481549846>  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
@@ -60,12 +60,12 @@ module.exports = class extends Command {
 			display.addPage(template => template.setDescription(top.map((topUser, onePower) => {
 				const currentPos = onePower === 9 ? (tenPower + 1) * 10 : (tenPower * 10) + (onePower + 1);
 				if (msg.author.equals(topUser)) authorPos = currentPos;
-				return `\`${currentPos}\`. ${topUser.tag} ➱ ${topUser.settings.cookies} Stalkie${topUser.settings.cookies === 1 ? '' : 's'}`; // eslint-disable-line max-len
+				return `\`${currentPos}\`. ${topUser.tag} ➱ ${topUser.settings.get('cookies')} Stalkie${topUser.settings.get('cookies') === 1 ? '' : 's'}`; // eslint-disable-line max-len
 			}).join('\n\n')));
 		});
 
 		return display
-			.setFooterSuffix(` | Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${msg.author.settings.cookies} stalkie${msg.author.settings.cookies === 1 ? '' : 's'}.`)
+			.setFooterSuffix(` | Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${msg.author.settings.get('cookies')} stalkie${msg.author.settings.get('cookies') === 1 ? '' : 's'}.`)
 			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...'), { filter: (reaction, user) => msg.author.equals(user) });
 	}
 

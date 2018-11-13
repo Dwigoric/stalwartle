@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [member, duration = Infinity, ...reason], force) {
-		if (!msg.guild.settings.muteRole) throw '<:error:508595005481549846>  ::  The mute role has not yet been set up for this server. You can do so by using the `s.muterole` command.';
+		if (!msg.guild.settings.get('muteRole')) throw '<:error:508595005481549846>  ::  The mute role has not yet been set up for this server. You can do so by using the `s.muterole` command.';
 		if (!force && member.user.equals(msg.author)) throw 'Why would you mute yourself?';
 		if (!force && member.user.equals(this.client.user)) throw 'Have I done something wrong?';
 
@@ -26,7 +26,7 @@ module.exports = class extends Command {
 		}
 
 		reason = reason.length ? reason.join(this.usageDelim) : null;
-		const muteRole = msg.guild.roles.get(msg.guild.settings.muteRole);
+		const muteRole = msg.guild.roles.get(msg.guild.settings.get('muteRole'));
 		if (!muteRole) throw '<:error:508595005481549846>  ::  Whoops! The mute role has been deleted. Please reconfigure this server\'s mute role by using the `s.muterole` command.';
 		if (muteRole.position >= msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  The mute role **${muteRole.name}** is higher than me, so I can't give ${user.tag} the mute role.`; // eslint-disable-line max-len
 		if (member.roles.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} has been already muted!`;
@@ -42,7 +42,7 @@ module.exports = class extends Command {
 				data: {
 					user: user.id,
 					guild: msg.guild.id,
-					role: msg.guild.settings.muteRole
+					role: msg.guild.settings.get('muteRole')
 				}
 			});
 		}
