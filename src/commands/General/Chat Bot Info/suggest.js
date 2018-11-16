@@ -23,9 +23,9 @@ module.exports = class extends Command {
 			`\t\t\tServer: ${server}`,
 			`\`\`\`${suggestion}\`\`\``
 		].join('\n'), { files: msg.attachments.map(a => a.url) });
-		const messageOptions = msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES') ?
+		const messageOptions = msg.guild ? msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES') ?
 			{ files: [{ attachment: await this.client.idiot.suggestion(msg.author.displayAvatarURL(), suggestion), name: 'suggestion.png' }] } :
-			{};
+			{} : { files: [{ attachment: await this.client.idiot.suggestion(msg.author.displayAvatarURL(), suggestion), name: 'suggestion.png' }] };
 		msg.send([
 			`<:check:508594899117932544>  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
 			'***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'

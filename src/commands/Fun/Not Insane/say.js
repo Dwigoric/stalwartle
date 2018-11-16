@@ -21,7 +21,7 @@ module.exports = class extends Command {
 	}
 
 	async delete(msg, [chan = msg.channel, ...msgargs]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  Sorry! I cannot delete messages in this channel.';
+		if (!msg.guild || !msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
 		if (!chan.postable) throw '<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.';
 		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Message sent!`);
@@ -44,7 +44,7 @@ module.exports = class extends Command {
 	}
 
 	async anonymous(msg, [chan = msg.channel, ...msgargs]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  Sorry! I cannot delete messages in this channel.';
+		if (!msg.guild || !msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  Sorry! I cannot delete messages in this channel.';
 		msgargs = msgargs.join(this.usageDelim);
 		if (!chan.postable) throw '<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.';
 		if (chan !== msg.channel) msg.send(`<:check:508594899117932544>  ::  Message sent!`);

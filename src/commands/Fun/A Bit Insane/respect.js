@@ -15,8 +15,8 @@ module.exports = class extends Command {
 	async run(msg, [respected = msg.author]) {
 		msg.channel.sendFile(await this.client.idiot.respect(respected.displayAvatarURL()), 'respect.png', 'Press 🇫 to Pay Respects')
 			.then(sent => {
-				if (sent.channel.type !== 'text') return sent.react('🇫');
-				if (!sent.channel.permissionsFor(this.client.user).has('ADD_REACTIONS')) return false;
+				if (sent.channel.type !== 'text') return null;
+				if (sent.guild && !sent.channel.permissionsFor(this.client.user).has('ADD_REACTIONS')) return false;
 				return sent.react('🇫');
 			});
 	}
