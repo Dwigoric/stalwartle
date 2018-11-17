@@ -19,7 +19,7 @@ module.exports = class extends Monitor {
 		const defProvider = this.client.providers.default;
 		if (await this.client.providers.default.get(table, guild)) return;
 		await defProvider.create(table, guild);
-		await defProvider.update(table, guild, { [table]: [] });
+		await defProvider.update(table, guild, { [table === 'music' ? 'queue' : table]: [] });
 	}
 
 };
