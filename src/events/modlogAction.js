@@ -65,7 +65,7 @@ module.exports = class extends Event {
 
 		const { limit, duration, action, within } = message.guild.settings.get('automod.options.quota');
 		if (member.actions.length >= limit) {
-			if (message.channel.postable) message.channel.send(`${member.user} made ${limit} actions within ${within} minutes, which is punishable by a ${duration}-minute automated mute.`);
+			if (message.channel.postable) message.channel.send(`${member.user} made ${limit} actions within ${within} minutes, which is punishable by a ${duration}-minute automated ${action}.`);
 			await member.resetActions();
 
 			const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', message) : null;
