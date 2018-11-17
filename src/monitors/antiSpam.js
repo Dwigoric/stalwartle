@@ -17,7 +17,7 @@ module.exports = class extends Monitor {
 		if (msg.guild.settings.get('automod.filterIgnore.antiSpam').includes(msg.channel.id)) return null;
 		if (msg.author.equals(this.client.user)) return null;
 
-		if (msg.member.messages.length <= 5) return null;
+		if (msg.member.messages.length <= msg.guild.settings.get('automod.options.antiSpam.limit')) return null;
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 
