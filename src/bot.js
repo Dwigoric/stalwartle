@@ -64,21 +64,23 @@ class Stalwartle extends Client {
 				.add('options', options => options
 					.add('antiInvite', antiInvite => antiInvite
 						.add('action', 'string', { default: 'warn' })
-						.add('duration', 'integer', { default: 5, configurable: true }))
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
 					.add('quota', quota => quota
 						.add('action', 'string', { default: 'mute' })
-						.add('limit', 'integer', { default: 3, configurable: true })
-						.add('within', 'integer', { default: 5, configurable: true })
-						.add('duration', 'integer', { default: 10, configurable: true }))
+						.add('limit', 'integer', { default: 3, min: 3, max: 50, configurable: true })
+						.add('within', 'integer', { default: 5, min: 1, max: 1440, configurable: true })
+						.add('duration', 'integer', { default: 10, min: 1, max: 43200, configurable: true }))
 					.add('antiSpam', antiSpam => antiSpam
 						.add('action', 'string', { default: 'mute' })
-						.add('duration', 'integer', { default: 5, configurable: true }))
+						.add('limit', 'integer', { default: 5, min: 5, max: 50 })
+						.add('within', 'integer', { default: 5, min: 3, max: 600 })
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
 					.add('antiSwear', antiSwear => antiSwear
 						.add('action', 'string', { default: 'warn' })
-						.add('duration', 'integer', { default: 5, configurable: true }))
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
 					.add('mentionSpam', mentionSpam => mentionSpam
 						.add('action', 'string', { default: 'ban' })
-						.add('duration', 'integer', { default: 30, configurable: true }))));
+						.add('duration', 'integer', { default: 30, min: 1, max: 43200, configurable: true }))));
 
 		Stalwartle.defaultPermissionLevels
 			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
