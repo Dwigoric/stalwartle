@@ -50,7 +50,7 @@ class Stalwartle extends Client {
 				.add('ignoreBots', 'boolean', { default: false, configurable: true })
 				.add('ignoreMods', 'boolean', { default: false, configurable: true })
 				.add('antiInvite', 'boolean', { default: false, configurable: true })
-				.add('autoMute', 'boolean', { default: true, configurable: true })
+				.add('quota', 'boolean', { default: true, configurable: true })
 				.add('antiSpam', 'boolean', { default: false, configurable: true })
 				.add('antiSwear', 'boolean', { default: false, configurable: true })
 				.add('mentionSpam', 'boolean', { default: false, configurable: true })
@@ -60,7 +60,25 @@ class Stalwartle extends Client {
 					.add('antiInvite', 'channel', { array: true, default: [], configurable: true })
 					.add('antiSpam', 'channel', { array: true, default: [], configurable: true })
 					.add('antiSwear', 'channel', { array: true, default: [], configurable: true })
-					.add('mentionSpam', 'channel', { array: true, default: [], configurable: true })));
+					.add('mentionSpam', 'channel', { array: true, default: [], configurable: true }))
+				.add('options', options => options
+					.add('antiInvite', antiInvite => antiInvite
+						.add('action', 'string', { default: 'warn' })
+						.add('duration', 'integer', { default: 5, configurable: true }))
+					.add('quota', quota => quota
+						.add('action', 'string', { default: 'mute' })
+						.add('limit', 'integer', { default: 3, configurable: true })
+						.add('within', 'integer', { default: 5, configurable: true })
+						.add('duration', 'integer', { default: 10, configurable: true }))
+					.add('antiSpam', antiSpam => antiSpam
+						.add('action', 'string', { default: 'mute' })
+						.add('duration', 'integer', { default: 5, configurable: true }))
+					.add('antiSwear', antiSwear => antiSwear
+						.add('action', 'string', { default: 'warn' })
+						.add('duration', 'integer', { default: 5, configurable: true }))
+					.add('mentionSpam', mentionSpam => mentionSpam
+						.add('action', 'string', { default: 'ban' })
+						.add('duration', 'integer', { default: 30, configurable: true }))));
 
 		Stalwartle.defaultPermissionLevels
 			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
