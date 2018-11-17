@@ -15,7 +15,7 @@ module.exports = class Actions extends Extendable {
 	async addAction(action) {
 		if (!Actions[this.id]) Actions[this.id] = [];
 		Actions[this.id].push(action);
-		this.client.setTimeout(() => Actions[this.id].shift(), 300000);
+		this.client.setTimeout(() => Actions[this.id].shift(), this.guild.settings.get('automod.options.quota.within') * 60000);
 	}
 
 	async resetActions() {

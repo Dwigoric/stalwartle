@@ -15,7 +15,7 @@ module.exports = class Messages extends Extendable {
 	async addMessage(message) {
 		if (!Messages[this.id]) Messages[this.id] = [];
 		Messages[this.id].push(message);
-		this.client.setTimeout(() => Messages[this.id].shift(), 5000);
+		this.client.setTimeout(() => Messages[this.id].shift(), this.guild.settings.get('automod.options.antiSpam.within') * 1000);
 	}
 
 };
