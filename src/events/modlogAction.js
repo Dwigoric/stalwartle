@@ -14,7 +14,7 @@ const configs = {
 module.exports = class extends Event {
 
 	async run(message, user, reason, duration) {
-		this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));
+		if (message.guild.settings.get('automod.quota')) this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));
 		user
 			.send(`You have been ${message.command.name}${message.command.name.slice(-3) === 'ban' ? 'n' : ''}${message.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${message.guild}**. ${reason ? `**Reason**: ${reason}` : ''}`) // eslint-disable-line max-len
 			.catch(() => {
@@ -54,7 +54,7 @@ module.exports = class extends Event {
 		if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
 		if (message.content) {
 			embed.addField('Channel', message.channel, true);
-			if (message.guild.settings.get('modlogShowContent')) embed.addField('Content', message.content);
+			if (message.guild.settings.get('modlogShowContent')) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
 		}
 		return channel.send(embed);
 	}
@@ -62,19 +62,25 @@ module.exports = class extends Event {
 	async checkAutomodQuota(message, member) {
 		if (!member) return null;
 		if (!['unban', 'unmute'].includes(message.command.name) && message.author && !message.author.bot) member.addAction(message.command.name);
-		if (member.actions.length >= 3) {
-			if (message.channel.postable) message.channel.send(`${member.user} made 3 actions within 5 minutes, which is punishable by a ten-minute automated mute.`);
-			const duration = await this.client.arguments.get('time').run('10m', '', message);
-			this.client.commands.get('mute').run(message, [member, duration, 'Reached automod quota'])
-				.then(async () => {
-					await member.resetActions();
-					this.client.emit('modlogAction', {
-						command: this.client.commands.get('mute'),
-						channel: message.channel,
-						guild: message.guild
-					}, member.user, 'Reached automod quota', duration);
-				})
-				.catch(err => message.send(err));
+
+		const { limit, duration, action, within } = message.guild.settings.get('automod.options.quota');
+		if (member.actions.length >= limit) {
+			if (message.channel.postable) message.channel.send(`${member.user} made ${limit} actions within ${within} minutes, which is punishable by a ${duration}-minute automated mute.`);
+			await member.resetActions();
+
+			const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', message) : null;
+			switch (action) {
+				case 'warn': return this.client.emit('modlogAction', {
+					command: this.client.commands.get('warn'),
+					channel: message.channel,
+					guild: message.guild,
+					content: message.content
+				}, message.author, 'Reached automod quota', null);
+				case 'kick': return this.client.commands.get('kick').run(message, [message.author, ['Reached automod quota']]).catch(err => message.send(err));
+				case 'mute': return this.client.commands.get('mute').run(message, [message.member, actionDuration, 'Reached automod quota'], true).catch(err => message.send(err));
+				case 'ban': return this.client.commands.get('ban').run(message, [message.author, null, actionDuration, ['Reached automod quota']], true).catch(err => message.send(err));
+				case 'softban': return this.client.commands.get('softban').run(message, [message.author, null, ['Reached automod quota']]).catch(err => message.send(err));
+			}
 		}
 		return member.actions.length >= 3;
 	}

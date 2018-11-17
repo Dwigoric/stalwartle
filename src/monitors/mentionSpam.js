@@ -9,6 +9,7 @@ module.exports = class extends Monitor {
 		});
 	}
 
+	/* eslint complexity: ['warn', 25] */
 	async run(msg) {
 		if (!msg.guild) return null;
 		if (!msg.guild.settings.get('automod.mentionSpam')) return null;
@@ -31,11 +32,24 @@ module.exports = class extends Monitor {
 					`**Users**: ${msg.member.messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
 				].join('\n') : msg.content
 			}, msg.author, 'Spamming mentions with the MentionSpam enabled (member has higher permissions so I could not ban them)', null);
-		} // eslint-disable-line max-len
+		}
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
-		return this.client.commands.get('ban')
-			.run(msg, [msg.author, null, await this.client.arguments.get('time').run('30m', '', msg), 'Mention spamming with MentionSpam enabled'], true)
-			.catch(err => msg.send(err));
+
+		const { duration, action } = msg.guild.settings.get('automod.options.mentionSpam');
+		const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
+		switch (action) {
+			case 'warn': return this.client.emit('modlogAction', {
+				command: this.client.commands.get('warn'),
+				channel: msg.channel,
+				guild: msg.guild,
+				content: msg.content
+			}, msg.author, 'Spamming mentions with MentionSpam enabled', null);
+			case 'kick': return this.client.commands.get('kick').run(msg, [msg.author, ['Spamming mentions with MentionSpam enabled']]).catch(err => msg.send(err));
+			case 'mute': return this.client.commands.get('mute').run(msg, [msg.member, actionDuration, 'Spamming mentions with MentionSpam enabled'], true).catch(err => msg.send(err));
+			case 'ban': return this.client.commands.get('ban').run(msg, [msg.author, null, actionDuration, ['Spamming mentions with MentionSpam enabled']], true).catch(err => msg.send(err));
+			case 'softban': return this.client.commands.get('softban').run(msg, [msg.author, null, ['Spamming mentions with MentionSpam enabled']]).catch(err => msg.send(err));
+		}
+		return msg;
 	}
 
 };
