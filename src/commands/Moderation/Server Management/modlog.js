@@ -1,4 +1,4 @@
-const { Command, RichDisplay, util: { toTitleCase } } = require('klasa');
+const { Command, RichDisplay, util: { toTitleCase, chunk } } = require('klasa');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -25,8 +25,7 @@ module.exports = class extends Command {
 
 	async run(msg, [user]) {
 		const timezone = msg.author.settings.get('timezone');
-		const first5 = [];
-		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs);
+		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id)));
 
 		if (typeof user === 'number') {
 			const modlog = await this.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs[user - 1]);
@@ -49,32 +48,23 @@ module.exports = class extends Command {
 
 		if (msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type)) list = list.filter(ml => ml.type === msg.flags.type); // eslint-disable-line max-len
 		if (user) list = list.filter(ml => ml.user === user.id);
-		list = list.sort((a, b) => Number(a.id) - Number(b.id));
 		if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
-
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? toTitleCase(msg.flags.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`) // eslint-disable-line max-len
-		);
+			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? toTitleCase(msg.flags.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
 
-		while (list.length) first5.push(list.splice(0, 5));
-		first5.forEach(modlog5 => {
-			display.addPage(template => {
-				const description = modlog5.map(modlog => {
-					const _user = this.client.users.get(modlog.user);
-					const moderator = this.client.users.get(modlog.moderator);
-					return [
-						`__**Case #${modlog.id}**__`,
-						`Type: ${toTitleCase(modlog.type)}`,
-						`Moderator: ${moderator || 'Could not get user'} (\`${modlog.moderator}\`)`,
-						`User: ${_user || 'Could not get user'} (\`${modlog.user}\`)`,
-						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS z')} (${moment(modlog.timestamp).fromNow()})`,
-						`Reason: ${modlog.reason ? escapeMarkdown(modlog.reason) : 'Not specified.'}`
-					].join('\n');
-				});
-				return template.setDescription(description.join('\n\n'));
-			});
-		});
+		Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
+			const _user = this.client.users.get(modlog.user) || await this.client.users.fetch(modlog.user).catch(() => null);
+			const moderator = this.client.users.get(modlog.moderator) || await this.client.users.fetch(modlog.moderator).catch(() => null);
+			return [
+				`__**Case #${modlog.id}**__`,
+				`Type: ${toTitleCase(modlog.type)}`,
+				`Moderator: ${moderator || 'Could not get user'} (\`${modlog.moderator}\`)`,
+				`User: ${_user || 'Could not get user'} (\`${modlog.user}\`)`,
+				`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS z')} (${moment(modlog.timestamp).fromNow()})`,
+				`Reason: ${modlog.reason ? escapeMarkdown(modlog.reason) : 'Not specified.'}`
+			].join('\n');
+		})))).then(modlogs => modlogs.forEach(modlog5 => display.addPage(template => template.setDescription(modlog5.join('\n\n')))));
 
 		return display
 			.setFooterPrefix('Page ')
