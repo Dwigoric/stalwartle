@@ -75,11 +75,11 @@ module.exports = class extends Event {
 					channel: message.channel,
 					guild: message.guild,
 					content: message.content
-				}, message.author, 'Reached automod quota', null);
-				case 'kick': return this.client.commands.get('kick').run(message, [message.author, ['Reached automod quota']]).catch(err => message.send(err));
-				case 'mute': return this.client.commands.get('mute').run(message, [message.member, actionDuration, 'Reached automod quota'], true).catch(err => message.send(err));
-				case 'ban': return this.client.commands.get('ban').run(message, [message.author, null, actionDuration, ['Reached automod quota']], true).catch(err => message.send(err));
-				case 'softban': return this.client.commands.get('softban').run(message, [message.author, null, ['Reached automod quota']]).catch(err => message.send(err));
+				}, member.user, 'Reached automod quota', null);
+				case 'kick': return this.client.commands.get('kick').run(message, [member.user, ['Reached automod quota']]).catch(err => message.send(err));
+				case 'mute': return this.client.commands.get('mute').run(message, [member, actionDuration, 'Reached automod quota'], true).catch(err => message.send(err));
+				case 'ban': return this.client.commands.get('ban').run(message, [member.user, null, actionDuration, ['Reached automod quota']], true).catch(err => message.send(err));
+				case 'softban': return this.client.commands.get('softban').run(message, [member.user, null, ['Reached automod quota']]).catch(err => message.send(err));
 			}
 		}
 		return member.actions.length >= 3;
