@@ -31,7 +31,7 @@ module.exports = class extends Monitor {
 					`**Users**: ${msg.member.messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
 				].join('\n') : msg.content
 			}, msg.author, 'Spamming mentions with the MentionSpam enabled (member has higher permissions so I could not ban them)', null);
-		} // eslint-disable-line max-len
+		}
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 		return this.client.commands.get('ban')
 			.run(msg, [msg.author, null, await this.client.arguments.get('time').run('30m', '', msg), 'Mention spamming with MentionSpam enabled'], true)
