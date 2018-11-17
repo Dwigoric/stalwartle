@@ -21,7 +21,7 @@ module.exports = class extends Command {
 		});
 
 		this.createCustomResolver('string', (arg, possible, message) => {
-			if (!arg) throw message.language.get('COMMANDMESSAGE_MISSING_REQUIRED')(possible.name);
+			if (!arg) throw message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name);
 			if (['enable', 'disable'].includes(arg)) return arg;
 			const modcommands = this.client.commands.filter(cmd => !['unban', 'unmute'].includes(cmd.name) && cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name);
 			if (modcommands.includes(arg)) return arg;
