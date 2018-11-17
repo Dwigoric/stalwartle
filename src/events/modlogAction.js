@@ -14,7 +14,7 @@ const configs = {
 module.exports = class extends Event {
 
 	async run(message, user, reason, duration) {
-		this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));
+		if (message.guild.settings.get('automod.autoMute')) this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));
 		user
 			.send(`You have been ${message.command.name}${message.command.name.slice(-3) === 'ban' ? 'n' : ''}${message.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${message.guild}**. ${reason ? `**Reason**: ${reason}` : ''}`) // eslint-disable-line max-len
 			.catch(() => {
