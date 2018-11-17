@@ -4,7 +4,7 @@ module.exports = class extends Event {
 
 	async run(member) {
 		const autorole = member.guild.settings.get('autorole');
-		if (!autorole.bot && !autorole.user && !member.guild.me.permissions.has('MANAGE_ROLES')) return member.guild.owner.send(`⚠ I don't have **Manage Roles** permission on ${member.guild.name}, so I couldn't give ${member.user.tag} the autorole.`); // eslint-disable-line max-len
+		if ((autorole.bot || autorole.user) && !member.guild.me.permissions.has('MANAGE_ROLES')) return member.guild.owner.send(`⚠ I don't have **Manage Roles** permission on ${member.guild.name}, so I couldn't give ${member.user.tag} the autorole.`); // eslint-disable-line max-len
 		if (member.user.bot && autorole.bot) return await this.giveRole(member, 'bot');
 		if (!member.user.bot && autorole.user) return await this.giveRole(member, 'user');
 		return null;
