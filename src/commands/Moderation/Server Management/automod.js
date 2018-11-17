@@ -13,7 +13,12 @@ module.exports = class extends Command {
 				'You can also ignore filters on mods. Juse use `s.automod ignoremods enable`. This is disabled by default.',
 				'\nTo add words to the swear filter, use `s.conf set automod.swearWords <word>`.',
 				'To disable filtering the words in the global filter, use `s.conf set automod.globalSwears false`. This is enabled by default.',
-				'\nYou can disable filtering on certain channels per module. Just use `s.conf set automod.filterIgnore.<module> <channel>`'
+				'\nYou can disable filtering on certain channels per module. Just use `s.conf set automod.filterIgnore.<module> <channel>`',
+				'\nTo change the action for an automod module, just use `s.automod <module> <action>` e.g. `s.automod mentionspam ban`.',
+				'To change the duration for mutes and bans, just use `s.conf set automod.options.<module>.duration <duration>`.',
+				'`within` in the server settings means "within x minutes" (except for antiSpam, where it means "within x seconds").',
+				'For example, if you set `5` for `within` on antiSpam (with `limit` set to `3`), it would mean "3 messages within 5 seconds". Just do `s.conf set automod.options.antiSpam.within 5`',
+				'However, for quota, it would mean "3 offenses within 5 minutes". Please do not be confused. 😉'
 			].join('\n'),
 			usage: '<invite|swear|spam|mentionspam|quota|ignorebots|ignoremods> (enable|disable|actionType:string)',
 			usageDelim: ' ',
