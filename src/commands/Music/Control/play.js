@@ -54,6 +54,7 @@ module.exports = class extends Command {
 				].join('\n'));
 			}
 		}
+		msg.member.voice.channel.join();
 		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, url);
@@ -69,7 +70,6 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song) {
-		msg.member.voice.channel.join();
 		msg.guild.me.setDeaf(true);
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
 		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
