@@ -10,6 +10,10 @@ module.exports = class extends Command {
 		super(...args, {
 			requiredPermissions: ['CONNECT', 'SPEAK'],
 			description: 'Plays music in the server.',
+			extendedHelp: [
+				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
+				'To force play a song, use the `--force` flag. Only usable by DJs and moderators.'
+			],
 			usage: '[YouTubeLink:url|Song:integer|Query:string]'
 		});
 	}
