@@ -35,21 +35,24 @@ module.exports = class extends Command {
 
 		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue yet! Add one with \`${msg.guildSettings.get('prefix')}play\``;
 		const np = await ytdl.getBasicInfo(queue[0]);
+		const npStatus = msg.guild.voiceConnection && msg.guild.voiceConnection.dispatcher ?
+			!msg.guild.voiceConnection.dispatcher.pausedSince ?
+				'▶  :: ' :
+				'⏸  :: ' :
+			'⤴ Up Next:';
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle(`🎶 Server Music Queue: ${msg.guild.name}`));
 
 		queue.shift();
+		if (!queue.length) return msg.channel.send(`${npStatus} **${np.title}** by ${np.author.name}`);
+
 		await Promise.all(chunk(queue, 10).map(async (music10, tenPower) => await Promise.all(music10.map(async (music, onePower) => {
 			const currentPos = (tenPower * 10) + (onePower + 1);
 			const info = await ytdl.getBasicInfo(music);
 			return `\`${currentPos}\`. **${escapeMarkdown(info.title)}** by ${escapeMarkdown(info.author.name)}`;
 		})))).then(songs => songs.forEach(songList => display.addPage(template => template.setDescription(
-			[`${msg.guild.voiceConnection && msg.guild.voiceConnection.dispatcher ?
-				!msg.guild.voiceConnection.dispatcher.pausedSince ?
-					'▶  :: ' :
-					'⏸  :: ' :
-				'⤴ Up Next:'} **${np.title}** by ${np.author.name}\n`].concat(songList).join('\n')
+			[`${npStatus} **${np.title}** by ${np.author.name}\n`].concat(songList).join('\n')
 		))));
 
 		return display
@@ -60,6 +63,7 @@ module.exports = class extends Command {
 	async remove(msg, [songs]) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs and moderators can remove songs from the queue.';
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
 		if (Array.isArray(songs)) {
 			if (songs[0] > queue.length || songs[1] > queue.length) throw `<:error:508595005481549846>  ::  There are only ${queue.length} songs in the queue.`;
 			queue.splice(songs[0], songs[1] - songs[0] + 1);
