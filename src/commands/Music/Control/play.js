@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { escapeMarkdown } } = require('klasa');
 const { googleAPIkey } = require('../../../auth');
 const ytdl = require('ytdl-core');
 const fetch = require('node-fetch');
@@ -44,7 +44,7 @@ module.exports = class extends Command {
 				].join('\n'));
 			}
 		}
-		const info = await ytdl.getBasicInfo(msg.member.queue[song - 1]);
+		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
 		return this.play(msg, url);
 	}
@@ -57,22 +57,25 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song) {
-		if (!msg.flags.force && msg.guild.voiceConnection && msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable) return this.addToQueue(msg, song);
 		msg.member.voice.channel.join();
-		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
-			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-			if (queue.length) {
-				this.play(msg, queue[0]);
-			} else {
-				msg.channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-				msg.guild.voiceConnection.dispatcher.destroy();
-				msg.guild.me.voice.channel.leave();
-			}
-			queue.shift();
-			this.client.providers.default.update('music', msg.guild.id, { queue });
-		});
+		if (msg.flags.force || !msg.guild.voiceConnection.dispatcher || !msg.guild.voiceConnection.dispatcher.writable) {
+			msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
+				const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+				queue.shift();
+				this.client.providers.default.update('music', msg.guild.id, { queue });
+				if (queue.length) {
+					this.play(msg, queue[0]);
+				} else {
+					msg.channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
+					msg.guild.voiceConnection.dispatcher.destroy();
+					msg.guild.me.voice.channel.leave();
+				}
+			});
+		} else {
+			return this.addToQueue(msg, song);
+		}
 		const info = await ytdl.getBasicInfo(song);
-		return msg.channel.send(`🎧  ::  Now Playing: **${info.title}** by ${info.author.name}`);
+		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(info.title)}** on *${escapeMarkdown(info.author.name)}*`);
 	}
 
 	async init() {
