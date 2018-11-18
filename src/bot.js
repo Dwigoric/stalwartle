@@ -32,13 +32,11 @@ class Stalwartle extends Client {
 			.add('logging', 'boolean', { default: true, configurable: true })
 			.add('modlogShowContent', 'boolean', { default: true, configurable: true })
 			.add('ignored', 'channel', { array: true, default: [], configurable: true })
+			.add('dj', 'role', { array: true, default: [], configurable: true })
 			.add('autorole', autorole => autorole
 				.add('user', 'role', { configurable: true })
 				.add('bot', 'role', { configurable: true }))
 			.add('moderators', moderators => moderators
-				.add('users', 'user', { array: true, default: [], configurable: true })
-				.add('roles', 'role', { array: true, default: [], configurable: true }))
-			.add('dj', dj => dj
 				.add('users', 'user', { array: true, default: [], configurable: true })
 				.add('roles', 'role', { array: true, default: [], configurable: true }))
 			.add('modlogs', modlogs => modlogs
