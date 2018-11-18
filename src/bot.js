@@ -32,6 +32,7 @@ class Stalwartle extends Client {
 			.add('logging', 'boolean', { default: true, configurable: true })
 			.add('modlogShowContent', 'boolean', { default: true, configurable: true })
 			.add('ignored', 'channel', { array: true, default: [], configurable: true })
+			.add('dj', 'role', { array: true, default: [], configurable: true })
 			.add('autorole', autorole => autorole
 				.add('user', 'role', { configurable: true })
 				.add('bot', 'role', { configurable: true }))
@@ -83,6 +84,7 @@ class Stalwartle extends Client {
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200, configurable: true }))));
 
 		Stalwartle.defaultPermissionLevels
+			.add(5, (client, msg) => msg.guild && ((!msg.guild.settings.get('dj.users').length && !msg.guild.settings.get('dj.roles').length) || (msg.guild.settings.get('dj.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('dj.users').includes(msg.member.id)))) // eslint-disable-line max-len
 			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
 			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))

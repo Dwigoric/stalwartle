@@ -4,7 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			aliases: ['yw', 'np', 'noprob', 'yourewelcome'],
+			aliases: ['yw', 'noprob', 'yourewelcome'],
 			description: "Sends a YouTube video link of Maui's \"You're Welcome\" from Moana.",
 			extendedHelp: 'You can use this if you want to say "You\'re welcome" in a fashionable way.'
 		});
