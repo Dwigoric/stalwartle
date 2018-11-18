@@ -20,6 +20,7 @@ module.exports = class extends Command {
 
 	async run(msg, [song]) {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
+		if (msg.guild.voiceConnection && !msg.guild.voiceConnection.channel.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  There's already a music session in #${msg.guild.voiceConnection.channel.name}.`; // eslint-disable-line max-len
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!song) {
 			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
@@ -57,7 +58,6 @@ module.exports = class extends Command {
 		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, url);
-		if (msg.member.voice.channel && msg.guild.voiceConnection && !msg.guild.voiceConnection.channel.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  There's already a music session in #${msg.guild.voiceConnection.channel.name}.`; // eslint-disable-line max-len
 		return this.play(msg, queue.length ? queue[0] : url);
 	}
 
