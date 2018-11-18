@@ -19,11 +19,9 @@ module.exports = class extends Command {
 		if (typeof song === 'number') {
 			if (!msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please provide a search query first.`;
 			if (song > msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please pick a number from 1 to ${msg.member.queue.length}.`;
-			const info = await ytdl.getBasicInfo(msg.member.queue[song - 1]);
-			if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
 			url = msg.member.queue[song - 1];
 			msg.member.clearPrompt();
-		} else if (ytdl.validateURL(String(song))) {
+		} else if (ytdl.validateURL(song)) {
 			url = song;
 		} else {
 			const params = [];
@@ -46,6 +44,8 @@ module.exports = class extends Command {
 				].join('\n'));
 			}
 		}
+		const info = await ytdl.getBasicInfo(msg.member.queue[song - 1]);
+		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
 		return this.play(msg, url);
 	}
 
