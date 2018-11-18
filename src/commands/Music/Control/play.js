@@ -10,12 +10,17 @@ module.exports = class extends Command {
 		super(...args, {
 			requiredPermissions: ['CONNECT', 'SPEAK'],
 			description: 'Plays music in the server.',
-			usage: '<YouTubeLink:url|Song:integer|Query:string>'
+			usage: '[YouTubeLink:url|Song:integer|Query:string]'
 		});
 	}
 
 	async run(msg, [song]) {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		if (!song) {
+			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+			else return this.play(msg, queue[0]);
+		}
 		let url;
 		if (typeof song === 'number') {
 			if (!msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please provide a search query first.`;
@@ -47,9 +52,8 @@ module.exports = class extends Command {
 		}
 		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
-		msg.member.voice.channel.join();
 		await this.addToQueue(msg, url);
-		return this.play(msg, await this.client.providers.default.get('music', msg.guild.id).then(ms => ms.queue[0]));
+		return this.play(msg, queue[0]);
 	}
 
 	async addToQueue(msg, url) {
@@ -61,6 +65,7 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song) {
+		msg.member.voice.channel.join();
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
 		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
