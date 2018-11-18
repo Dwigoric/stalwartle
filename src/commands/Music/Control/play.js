@@ -53,7 +53,7 @@ module.exports = class extends Command {
 		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, url);
-		return this.play(msg, queue[0]);
+		return this.play(msg, queue.length ? queue[0] : url);
 	}
 
 	async addToQueue(msg, url) {
