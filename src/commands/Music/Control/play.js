@@ -76,7 +76,7 @@ module.exports = class extends Command {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 			queue.shift();
 			this.client.providers.default.update('music', msg.guild.id, { queue });
-			if (!queue.length) {
+			if (queue.length) {
 				this.play(msg, queue[0]);
 			} else if (!msg.guild.me.voice.channel.members.filter(mb => mb.id !== msg.guild.me.id).size) {
 				msg.channel.send('🚶  ::  There is no one listening to me sing... Guess I\'ll leave then...');
