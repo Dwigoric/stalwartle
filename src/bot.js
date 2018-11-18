@@ -100,37 +100,39 @@ class Stalwartle extends Client {
 	async setGuildCount() {
 		if (!this.application.botPublic) return null;
 		if (ctxAPIkey) {
-			fetch(`https://www.carbonitex.net/discord/data/botdata.php?key=${ctxAPIkey}&server_count=${await this.guildCount()}`, { method: 'POST' })
-				.catch(err => this.emit('error', err.stack));
+			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
+				method: 'POST',
+				body: JSON.stringify({ key: ctxAPIkey, server_count: this.guildCount() }), // eslint-disable-line camelcase
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 		if (dblAPIkey) {
-			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats?server_count=${await this.guildCount()}`, {
+			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats`, {
 				method: 'POST',
-				headers: { Authorization: dblAPIkey }
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				headers: { Authorization: dblAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		if (dpwAPIkey) {
-			fetch(`https://bots.discord.pw/api/bots/${this.user.id}/stats?server_count=${await this.guildCount()}`, {
+			fetch(`https://bots.discord.pw/api/bots/${this.user.id}/stats`, {
 				method: 'POST',
-				headers: { Authorization: dpwAPIkey }
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				headers: { Authorization: dpwAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		if (blsAPIkey) {
-			fetch(`https://botlist.space/api/bots/${this.user.id}?server_count=${await this.guildCount()}`, {
+			fetch(`https://botlist.space/api/bots/${this.user.id}`, {
 				method: 'POST',
-				headers: { Authorization: blsAPIkey }
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				headers: { Authorization: blsAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		if (bodAPIkey) {
 			fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
 				method: 'POST',
-				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' },
-				body: JSON.stringify({ guildCount: await this.guildCount() })
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ guildCount: await this.guildCount() }),
+				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		return undefined;
 	}
