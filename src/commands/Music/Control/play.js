@@ -70,6 +70,7 @@ module.exports = class extends Command {
 
 	async play(msg, song) {
 		msg.member.voice.channel.join();
+		msg.guild.me.setDeaf(true);
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
 		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
