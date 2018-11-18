@@ -8,6 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			description: 'Shows the queue for the server.',
 			extendedHelp: [
+				'To get the queue, simply do not supply any arguments',
 				'To remove a single song from the queue, use `s.queue remove <songID>`',
 				'To remove multiple songs from the queue, use `s.queue remove <startSongID>-<endSongID>`',
 				'e.g. to remove songs #3 to #5, use `s.queue remove 3-5`'
