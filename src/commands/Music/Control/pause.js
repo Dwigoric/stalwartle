@@ -3,7 +3,10 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Pauses music playing in the voice channel.' });
+		super(...args, {
+			permissionLevel: 5,
+			description: 'Pauses music playing in the voice channel.'
+		});
 	}
 
 	async run(msg) {

@@ -1,4 +1,5 @@
-const { Command, util: { escapeMarkdown } } = require('klasa');
+const { Command } = require('klasa');
+const { escapeMarkdown } = require('discord.js').Util;
 const { googleAPIkey } = require('../../../auth');
 const ytdl = require('ytdl-core');
 const fetch = require('node-fetch');
@@ -46,36 +47,35 @@ module.exports = class extends Command {
 		}
 		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
-		return this.play(msg, url);
+		msg.member.voice.channel.join();
+		await this.addToQueue(msg, url);
+		return this.play(msg, await this.client.providers.default.get('music', msg.guild.id).then(ms => ms.queue[0]));
 	}
 
 	async addToQueue(msg, url) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
 		queue.push(url);
 		this.client.providers.default.update('music', msg.guild.id, { queue });
 		return msg.channel.send(`🎶  ::  **${await ytdl.getBasicInfo(url).then(info => info.title)}** has been added to the queue.`);
 	}
 
 	async play(msg, song) {
-		msg.member.voice.channel.join();
-		if (msg.flags.force || !msg.guild.voiceConnection.dispatcher || !msg.guild.voiceConnection.dispatcher.writable) {
-			msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
-				const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-				queue.shift();
-				this.client.providers.default.update('music', msg.guild.id, { queue });
-				if (queue.length) {
-					this.play(msg, queue[0]);
-				} else {
-					msg.channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-					msg.guild.voiceConnection.dispatcher.destroy();
-					msg.guild.me.voice.channel.leave();
-				}
-			});
-		} else {
-			return this.addToQueue(msg, song);
-		}
+		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
+		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
+			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+			queue.shift();
+			this.client.providers.default.update('music', msg.guild.id, { queue });
+			if (queue.length) {
+				this.play(msg, queue[0]);
+			} else {
+				msg.channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
+				msg.guild.voiceConnection.dispatcher.destroy();
+				msg.guild.me.voice.channel.leave();
+			}
+		});
 		const info = await ytdl.getBasicInfo(song);
-		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(info.title)}** on *${escapeMarkdown(info.author.name)}*`);
+		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(info.title)}** by ${info.author.name}`);
 	}
 
 	async init() {
