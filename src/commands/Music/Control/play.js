@@ -32,8 +32,8 @@ module.exports = class extends Command {
 		}
 		let url;
 		if (typeof song === 'number') {
-			if (!msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please provide a search query first.`;
-			if (song > msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please pick a number from 1 to ${msg.member.queue.length}.`;
+			if (!msg.member.queue.length) throw '<:error:508595005481549846>  ::  Please provide a search query first.';
+			if (song < 1 || song > msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please pick a number from 1 to ${msg.member.queue.length}.`;
 			url = msg.member.queue[song - 1];
 			msg.member.clearPrompt();
 		} else if (ytdl.validateURL(song)) {
@@ -55,7 +55,7 @@ module.exports = class extends Command {
 				msg.member.addPrompt(videos.map(vid => `https://youtu.be/${vid.id.videoId}`));
 				return msg.send([
 					`🎶  ::  Please pick the number of the video you want to play: \`${msg.guildSettings.get('prefix')}play <number>\``,
-					videos.map((vid, index) => `\`${index + 1}\`. **${vid.snippet.title}** by ${vid.snippet.channelTitle}`).join('\n')
+					videos.map((vid, index) => `\`${index + 1}\`. **${escapeMarkdown(vid.snippet.title)}** by ${escapeMarkdown(vid.snippet.channelTitle)}`).join('\n')
 				].join('\n'));
 			}
 		}
