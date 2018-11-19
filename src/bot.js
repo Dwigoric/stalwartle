@@ -22,66 +22,67 @@ class Stalwartle extends Client {
 
 		Stalwartle.defaultUserSchema
 			.add('cookies', 'integer', { default: 0, configurable: false })
-			.add('afktoggle', 'boolean', { default: false, configurable: true })
+			.add('afktoggle', 'boolean', { default: false })
 			.add('timezone', 'string', { default: 'GMT', configurable: false })
-			.add('afkIgnore', 'channel', { array: true, default: [], configurable: true })
+			.add('afkIgnore', 'channel', { array: true, default: [] })
 			.add('osu', 'string', { max: 20 });
 
 		Stalwartle.defaultGuildSchema
-			.add('muteRole', 'role', { configurable: true })
-			.add('logging', 'boolean', { default: true, configurable: true })
-			.add('modlogShowContent', 'boolean', { default: true, configurable: true })
-			.add('ignored', 'channel', { array: true, default: [], configurable: true })
-			.add('dj', 'role', { array: true, default: [], configurable: true })
+			.add('muteRole', 'role')
+			.add('logging', 'boolean', { default: true })
+			.add('modlogShowContent', 'boolean', { default: true })
+			.add('ignored', 'channel', { array: true, default: [] })
+			.add('dj', 'role', { array: true, default: [] })
+			.add('repeat', 'string')
 			.add('autorole', autorole => autorole
-				.add('user', 'role', { configurable: true })
-				.add('bot', 'role', { configurable: true }))
+				.add('user', 'role')
+				.add('bot', 'role'))
 			.add('moderators', moderators => moderators
-				.add('users', 'user', { array: true, default: [], configurable: true })
-				.add('roles', 'role', { array: true, default: [], configurable: true }))
+				.add('users', 'user', { array: true, default: [] })
+				.add('roles', 'role', { array: true, default: [] }))
 			.add('modlogs', modlogs => modlogs
-				.add('ban', 'channel', { configurable: true })
-				.add('kick', 'channel', { configurable: true })
-				.add('mute', 'channel', { configurable: true })
-				.add('softban', 'channel', { configurable: true })
-				.add('unban', 'channel', { configurable: true })
-				.add('unmute', 'channel', { configurable: true })
-				.add('warn', 'channel', { configurable: true }))
+				.add('ban', 'channel')
+				.add('kick', 'channel')
+				.add('mute', 'channel')
+				.add('softban', 'channel')
+				.add('unban', 'channel')
+				.add('unmute', 'channel')
+				.add('warn', 'channel'))
 			.add('automod', automod => automod
-				.add('ignoreBots', 'boolean', { default: false, configurable: true })
-				.add('ignoreMods', 'boolean', { default: false, configurable: true })
-				.add('antiInvite', 'boolean', { default: false, configurable: true })
-				.add('quota', 'boolean', { default: true, configurable: true })
-				.add('antiSpam', 'boolean', { default: false, configurable: true })
-				.add('antiSwear', 'boolean', { default: false, configurable: true })
-				.add('mentionSpam', 'boolean', { default: false, configurable: true })
-				.add('globalSwears', 'boolean', { default: true, configurable: true })
-				.add('swearWords', 'string', { array: true, default: [], configurable: true })
+				.add('ignoreBots', 'boolean', { default: false })
+				.add('ignoreMods', 'boolean', { default: false })
+				.add('antiInvite', 'boolean', { default: false })
+				.add('quota', 'boolean', { default: true })
+				.add('antiSpam', 'boolean', { default: false })
+				.add('antiSwear', 'boolean', { default: false })
+				.add('mentionSpam', 'boolean', { default: false })
+				.add('globalSwears', 'boolean', { default: true })
+				.add('swearWords', 'string', { array: true, default: [] })
 				.add('filterIgnore', filterIgnore => filterIgnore
-					.add('antiInvite', 'channel', { array: true, default: [], configurable: true })
-					.add('antiSpam', 'channel', { array: true, default: [], configurable: true })
-					.add('antiSwear', 'channel', { array: true, default: [], configurable: true })
-					.add('mentionSpam', 'channel', { array: true, default: [], configurable: true }))
+					.add('antiInvite', 'channel', { array: true, default: [] })
+					.add('antiSpam', 'channel', { array: true, default: [] })
+					.add('antiSwear', 'channel', { array: true, default: [] })
+					.add('mentionSpam', 'channel', { array: true, default: [] }))
 				.add('options', options => options
 					.add('antiInvite', antiInvite => antiInvite
-						.add('action', 'string', { default: 'warn' })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
+						.add('action', 'string', { default: 'warn', configurable: false })
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
 					.add('quota', quota => quota
-						.add('action', 'string', { default: 'mute' })
-						.add('limit', 'integer', { default: 3, min: 3, max: 50, configurable: true })
-						.add('within', 'integer', { default: 5, min: 1, max: 1440, configurable: true })
-						.add('duration', 'integer', { default: 10, min: 1, max: 43200, configurable: true }))
+						.add('action', 'string', { default: 'mute', configurable: false })
+						.add('limit', 'integer', { default: 3, min: 3, max: 50 })
+						.add('within', 'integer', { default: 5, min: 1, max: 1440 })
+						.add('duration', 'integer', { default: 10, min: 1, max: 43200 }))
 					.add('antiSpam', antiSpam => antiSpam
-						.add('action', 'string', { default: 'mute' })
+						.add('action', 'string', { default: 'mute', configurable: false })
 						.add('limit', 'integer', { default: 5, min: 5, max: 50 })
 						.add('within', 'integer', { default: 5, min: 3, max: 600 })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
 					.add('antiSwear', antiSwear => antiSwear
-						.add('action', 'string', { default: 'warn' })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
+						.add('action', 'string', { default: 'warn', configurable: false })
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
 					.add('mentionSpam', mentionSpam => mentionSpam
-						.add('action', 'string', { default: 'ban' })
-						.add('duration', 'integer', { default: 30, min: 1, max: 43200, configurable: true }))));
+						.add('action', 'string', { default: 'ban', configurable: false })
+						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
 		Stalwartle.defaultPermissionLevels
 			.add(5, (client, msg) => msg.guild && msg.guild.settings.get('dj').some(role => msg.member.roles.keyArray().includes(role))) // eslint-disable-line max-len
