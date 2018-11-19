@@ -23,8 +23,12 @@ module.exports = class extends Command {
 		if (msg.guild.voiceConnection && !msg.guild.voiceConnection.channel.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  There's already a music session in #${msg.guild.voiceConnection.channel.name}.`; // eslint-disable-line max-len
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!song) {
-			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
-			else return this.play(msg, queue[0]);
+			if (!queue.length) {
+				throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+			} else {
+				await msg.member.voice.channel.join();
+				return this.play(msg, queue[0]);
+			}
 		}
 		let url;
 		if (typeof song === 'number') {
@@ -57,6 +61,7 @@ module.exports = class extends Command {
 		}
 		const info = await ytdl.getBasicInfo(url);
 		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
+		await msg.member.voice.channel.join();
 		await this.addToQueue(msg, url);
 		return this.play(msg, queue.length ? queue[0] : url);
 	}
@@ -70,7 +75,6 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song) {
-		if (msg.member.voice.channel) msg.member.voice.channel.join();
 		msg.guild.me.setDeaf(true);
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
 		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
