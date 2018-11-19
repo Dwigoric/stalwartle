@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [repeat]) {
-		msg.guild.settings.update('repeat', repeat);
+		msg.guild.settings.update('music.repeat', repeat);
 		msg.send(`<:check:508594899117932544>  ::  Music sessions in this server are now set to repeat ${repeat === 'none' ? 'nothing' : `the ${repeat}`}.`);
 	}
 

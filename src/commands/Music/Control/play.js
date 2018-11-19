@@ -78,8 +78,8 @@ module.exports = class extends Command {
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
 		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' })).on('end', async () => {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-			if (msg.guild.settings.get('repeat') === 'queue') queue.push(queue[0]);
-			if (msg.guild.settings.get('repeat') !== 'song') queue.shift();
+			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
+			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
 			this.client.providers.default.update('music', msg.guild.id, { queue });
 			if (queue.length) {
 				this.play(msg, queue[0]);
