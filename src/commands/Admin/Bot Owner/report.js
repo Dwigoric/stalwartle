@@ -28,7 +28,7 @@ module.exports = class extends Command {
 			.addField("High Lord's Comments", repCom.join(' '))
 			.setTimestamp();
 		const attachments = repMsg.attachments.size ? repMsg.attachments.filter(atch => {
-			const filename = atch.file.name;
+			const filename = atch.name;
 			return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
 		}) : null;
 		if (attachments && attachments.size) embed.setImage(attachments.first().url);

@@ -22,69 +22,70 @@ class Stalwartle extends Client {
 
 		Stalwartle.defaultUserSchema
 			.add('cookies', 'integer', { default: 0, configurable: false })
-			.add('afktoggle', 'boolean', { default: false, configurable: true })
+			.add('afktoggle', 'boolean', { default: false })
 			.add('timezone', 'string', { default: 'GMT', configurable: false })
-			.add('afkIgnore', 'channel', { array: true, default: [], configurable: true })
+			.add('afkIgnore', 'channel', { array: true, default: [] })
 			.add('osu', 'string', { max: 20 });
 
 		Stalwartle.defaultGuildSchema
-			.add('muteRole', 'role', { configurable: true })
-			.add('logging', 'boolean', { default: true, configurable: true })
-			.add('modlogShowContent', 'boolean', { default: true, configurable: true })
-			.add('ignored', 'channel', { array: true, default: [], configurable: true })
-			.add('dj', 'role', { array: true, default: [], configurable: true })
+			.add('muteRole', 'role')
+			.add('logging', 'boolean', { default: true })
+			.add('modlogShowContent', 'boolean', { default: true })
+			.add('ignored', 'channel', { array: true, default: [] })
+			.add('dj', 'role', { array: true, default: [] })
+			.add('repeat', 'string', { default: 'none' })
 			.add('autorole', autorole => autorole
-				.add('user', 'role', { configurable: true })
-				.add('bot', 'role', { configurable: true }))
+				.add('user', 'role')
+				.add('bot', 'role'))
 			.add('moderators', moderators => moderators
-				.add('users', 'user', { array: true, default: [], configurable: true })
-				.add('roles', 'role', { array: true, default: [], configurable: true }))
+				.add('users', 'user', { array: true, default: [] })
+				.add('roles', 'role', { array: true, default: [] }))
 			.add('modlogs', modlogs => modlogs
-				.add('ban', 'channel', { configurable: true })
-				.add('kick', 'channel', { configurable: true })
-				.add('mute', 'channel', { configurable: true })
-				.add('softban', 'channel', { configurable: true })
-				.add('unban', 'channel', { configurable: true })
-				.add('unmute', 'channel', { configurable: true })
-				.add('warn', 'channel', { configurable: true }))
+				.add('ban', 'channel')
+				.add('kick', 'channel')
+				.add('mute', 'channel')
+				.add('softban', 'channel')
+				.add('unban', 'channel')
+				.add('unmute', 'channel')
+				.add('warn', 'channel'))
 			.add('automod', automod => automod
-				.add('ignoreBots', 'boolean', { default: false, configurable: true })
-				.add('ignoreMods', 'boolean', { default: false, configurable: true })
-				.add('antiInvite', 'boolean', { default: false, configurable: true })
-				.add('quota', 'boolean', { default: true, configurable: true })
-				.add('antiSpam', 'boolean', { default: false, configurable: true })
-				.add('antiSwear', 'boolean', { default: false, configurable: true })
-				.add('mentionSpam', 'boolean', { default: false, configurable: true })
-				.add('globalSwears', 'boolean', { default: true, configurable: true })
-				.add('swearWords', 'string', { array: true, default: [], configurable: true })
+				.add('ignoreBots', 'boolean', { default: false })
+				.add('ignoreMods', 'boolean', { default: false })
+				.add('antiInvite', 'boolean', { default: false })
+				.add('quota', 'boolean', { default: true })
+				.add('antiSpam', 'boolean', { default: false })
+				.add('antiSwear', 'boolean', { default: false })
+				.add('mentionSpam', 'boolean', { default: false })
+				.add('globalSwears', 'boolean', { default: true })
+				.add('swearWords', 'string', { array: true, default: [] })
 				.add('filterIgnore', filterIgnore => filterIgnore
-					.add('antiInvite', 'channel', { array: true, default: [], configurable: true })
-					.add('antiSpam', 'channel', { array: true, default: [], configurable: true })
-					.add('antiSwear', 'channel', { array: true, default: [], configurable: true })
-					.add('mentionSpam', 'channel', { array: true, default: [], configurable: true }))
+					.add('antiInvite', 'channel', { array: true, default: [] })
+					.add('antiSpam', 'channel', { array: true, default: [] })
+					.add('antiSwear', 'channel', { array: true, default: [] })
+					.add('mentionSpam', 'channel', { array: true, default: [] }))
 				.add('options', options => options
 					.add('antiInvite', antiInvite => antiInvite
-						.add('action', 'string', { default: 'warn' })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
+						.add('action', 'string', { default: 'warn', configurable: false })
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
 					.add('quota', quota => quota
-						.add('action', 'string', { default: 'mute' })
-						.add('limit', 'integer', { default: 3, min: 3, max: 50, configurable: true })
-						.add('within', 'integer', { default: 5, min: 1, max: 1440, configurable: true })
-						.add('duration', 'integer', { default: 10, min: 1, max: 43200, configurable: true }))
+						.add('action', 'string', { default: 'mute', configurable: false })
+						.add('limit', 'integer', { default: 3, min: 3, max: 50 })
+						.add('within', 'integer', { default: 5, min: 1, max: 1440 })
+						.add('duration', 'integer', { default: 10, min: 1, max: 43200 }))
 					.add('antiSpam', antiSpam => antiSpam
-						.add('action', 'string', { default: 'mute' })
+						.add('action', 'string', { default: 'mute', configurable: false })
 						.add('limit', 'integer', { default: 5, min: 5, max: 50 })
 						.add('within', 'integer', { default: 5, min: 3, max: 600 })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
 					.add('antiSwear', antiSwear => antiSwear
-						.add('action', 'string', { default: 'warn' })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200, configurable: true }))
+						.add('action', 'string', { default: 'warn', configurable: false })
+						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
 					.add('mentionSpam', mentionSpam => mentionSpam
-						.add('action', 'string', { default: 'ban' })
-						.add('duration', 'integer', { default: 30, min: 1, max: 43200, configurable: true }))));
+						.add('action', 'string', { default: 'ban', configurable: false })
+						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
 		Stalwartle.defaultPermissionLevels
-			.add(5, (client, msg) => msg.guild && ((!msg.guild.settings.get('dj.users').length && !msg.guild.settings.get('dj.roles').length) || (msg.guild.settings.get('dj.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('dj.users').includes(msg.member.id)))) // eslint-disable-line max-len
+			.add(5, (client, msg) => msg.guild && msg.guild.settings.get('dj').some(role => msg.member.roles.keyArray().includes(role))) // eslint-disable-line max-len
 			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
 			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
@@ -100,37 +101,39 @@ class Stalwartle extends Client {
 	async setGuildCount() {
 		if (!this.application.botPublic) return null;
 		if (ctxAPIkey) {
-			fetch(`https://www.carbonitex.net/discord/data/botdata.php?key=${ctxAPIkey}&server_count=${await this.guildCount()}`, { method: 'POST' })
-				.catch(err => this.emit('error', err.stack));
+			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
+				method: 'POST',
+				body: JSON.stringify({ key: ctxAPIkey, server_count: this.guildCount() }), // eslint-disable-line camelcase
+				headers: { 'Content-Type': 'application/json' }
+			});
 		}
 		if (dblAPIkey) {
-			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats?server_count=${await this.guildCount()}`, {
+			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats`, {
 				method: 'POST',
-				headers: { Authorization: dblAPIkey }
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				headers: { Authorization: dblAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		if (dpwAPIkey) {
-			fetch(`https://bots.discord.pw/api/bots/${this.user.id}/stats?server_count=${await this.guildCount()}`, {
+			fetch(`https://bots.discord.pw/api/bots/${this.user.id}/stats`, {
 				method: 'POST',
-				headers: { Authorization: dpwAPIkey }
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				headers: { Authorization: dpwAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		if (blsAPIkey) {
-			fetch(`https://botlist.space/api/bots/${this.user.id}?server_count=${await this.guildCount()}`, {
+			fetch(`https://botlist.space/api/bots/${this.user.id}`, {
 				method: 'POST',
-				headers: { Authorization: blsAPIkey }
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				headers: { Authorization: blsAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		if (bodAPIkey) {
 			fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
 				method: 'POST',
-				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' },
-				body: JSON.stringify({ guildCount: await this.guildCount() })
-			})
-				.catch(err => this.emit('error', err.stack));
+				body: JSON.stringify({ guildCount: await this.guildCount() }),
+				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' }
+			});
 		}
 		return undefined;
 	}

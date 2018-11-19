@@ -20,10 +20,11 @@ module.exports = class extends Command {
 		const $c = await cheerio.load(await fetch(hits[0].result.url).then(res => res.text()));
 		const lyrics = $c('.lyrics').text().trim().split('\n');
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
-		const fullLyrics = [`__**${hits[0].result.full_title}**__\n`]
-			.concat(lyrics)
-			.concat('\n__*Powered by Genius (https://genius.com)*__')
-			.join('\n');
+		const fullLyrics = [
+			`__**${hits[0].result.full_title}**__\n`,
+			lyrics,
+			'\n__*Powered by Genius (https://genius.com)*__'
+		].join('\n');
 
 		const swearArray = (msg.guild ? msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : []).concat([
 			'raped?',
