@@ -5,6 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['loop'],
+			permissionLevel: 5,
 			description: 'Sets if the current song will be repeated or the whole queue.',
 			usage: '<song|queue|none>'
 		});
