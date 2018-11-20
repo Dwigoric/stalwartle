@@ -76,7 +76,6 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song) {
-		msg.guild.settings.reset('music.seek');
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
 		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' }), { volume: msg.guild.settings.get('music.volume') / 100 }).on('end', async () => {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
