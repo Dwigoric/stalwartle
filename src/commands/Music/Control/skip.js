@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+            runIn: ['text'],
 			description: 'Skips current song playing in the voice channel.',
 			extendedHelp: 'If you want to force skip, just use the `--force` flag. Usable only by DJs and moderators.'
 		});

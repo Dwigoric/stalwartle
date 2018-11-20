@@ -6,6 +6,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			runIn: ['text'],
 			description: 'Shows the queue for the server.',
 			extendedHelp: [
 				'To get the queue, simply do not supply any arguments',
@@ -52,7 +53,7 @@ module.exports = class extends Command {
 			const info = await ytdl.getBasicInfo(music);
 			return `\`${currentPos}\`. **${escapeMarkdown(info.title)}** by ${escapeMarkdown(info.author.name)}`;
 		})))).then(songs => songs.forEach(songList => display.addPage(template => template.setDescription(
-			[`${npStatus} **${np.title}** by ${np.author.name}\n`].concat(songList).join('\n')
+			[`${npStatus} **${escapeMarkdown(np.title)}** by ${escapeMarkdown(np.author.name)}\n`].concat(songList).join('\n')
 		))));
 
 		return display
