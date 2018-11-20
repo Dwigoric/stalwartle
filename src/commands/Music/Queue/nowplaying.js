@@ -28,6 +28,8 @@ module.exports = class extends Command {
 				.setTitle(np.title)
 				.setURL(queue[0])
 				.setColor('RANDOM')
+				.setAuthor(`🎶 Now Playing on ${msg.guild.name}`)
+				.setFooter(`on ${np.author.name}`)
 				.setDescription(`${progress.join('')} ${parseInt((playedDuration / npDuration) * 100)}%`)
 				.addField('Repeat', toTitleCase(msg.guild.settings.get('music.repeat')), true)
 				.addField('Time', `\`${timestamp.display(playedDuration)} / ${timestamp.display(npDuration)}\``, true)
