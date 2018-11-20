@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			runIn: ['text'],
 			permissionLevel: 5,
 			description: 'Resumes paused music in the server.'
 		});

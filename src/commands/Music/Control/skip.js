@@ -3,7 +3,10 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Skips current song playing in the voice channel.' });
+		super(...args, {
+			runIn: ['text'],
+			description: 'Skips current song playing in the voice channel.'
+		});
 	}
 
 	async run(msg) {

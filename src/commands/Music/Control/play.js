@@ -8,6 +8,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			runIn: ['text'],
 			requiredPermissions: ['CONNECT', 'SPEAK'],
 			description: 'Plays music in the server.',
 			extendedHelp: [
