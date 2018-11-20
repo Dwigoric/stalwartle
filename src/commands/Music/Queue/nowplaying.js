@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		const played = moment(playedSecs * 1000);
 
 		const progress = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'.split('');
-		progress.splice(Math.ceil((playedSecs / npSecs) * 20) - 1, 1, '🔘');
+		progress.splice(Math.ceil((playedSecs / npSecs) * progress.length) - 1, 1, '🔘');
 
 		msg.send({
 			embed: new MessageEmbed()
