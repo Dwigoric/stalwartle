@@ -8,6 +8,7 @@ module.exports = class extends Command {
 			permissionLevel: 5,
 			runIn: ['text'],
 			description: 'Sets if the current song will be repeated or the whole queue.',
+			extendedHelp: 'Supply `song` if you want to repeat the song, or `queue` if you want the queue to repeat.',
 			usage: '[song|queue|none]'
 		});
 		this.symbols = {
