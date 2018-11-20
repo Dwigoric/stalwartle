@@ -24,22 +24,24 @@ class Stalwartle extends Client {
 			.add('cookies', 'integer', { default: 0, configurable: false })
 			.add('afktoggle', 'boolean', { default: false })
 			.add('timezone', 'string', { default: 'GMT', configurable: false })
-			.add('afkIgnore', 'channel', { array: true, default: [] })
+			.add('afkIgnore', 'channel', { array: true })
 			.add('osu', 'string', { max: 20 });
 
 		Stalwartle.defaultGuildSchema
 			.add('muteRole', 'role')
 			.add('logging', 'boolean', { default: true })
 			.add('modlogShowContent', 'boolean', { default: true })
-			.add('ignored', 'channel', { array: true, default: [] })
-			.add('dj', 'role', { array: true, default: [] })
-			.add('repeat', 'string', { default: 'none' })
+			.add('ignored', 'channel', { array: true })
 			.add('autorole', autorole => autorole
 				.add('user', 'role')
 				.add('bot', 'role'))
 			.add('moderators', moderators => moderators
-				.add('users', 'user', { array: true, default: [] })
-				.add('roles', 'role', { array: true, default: [] }))
+				.add('users', 'user', { array: true })
+				.add('roles', 'role', { array: true }))
+			.add('music', music => music
+				.add('dj', 'role', { array: true })
+				.add('repeat', 'string', { default: 'none', configurable: false })
+				.add('volume', 'integer', { default: 100, min: 1, max: 300 }))
 			.add('modlogs', modlogs => modlogs
 				.add('ban', 'channel')
 				.add('kick', 'channel')
@@ -57,12 +59,12 @@ class Stalwartle extends Client {
 				.add('antiSwear', 'boolean', { default: false })
 				.add('mentionSpam', 'boolean', { default: false })
 				.add('globalSwears', 'boolean', { default: true })
-				.add('swearWords', 'string', { array: true, default: [] })
+				.add('swearWords', 'string', { array: true })
 				.add('filterIgnore', filterIgnore => filterIgnore
-					.add('antiInvite', 'channel', { array: true, default: [] })
-					.add('antiSpam', 'channel', { array: true, default: [] })
-					.add('antiSwear', 'channel', { array: true, default: [] })
-					.add('mentionSpam', 'channel', { array: true, default: [] }))
+					.add('antiInvite', 'channel', { array: true })
+					.add('antiSpam', 'channel', { array: true })
+					.add('antiSwear', 'channel', { array: true })
+					.add('mentionSpam', 'channel', { array: true }))
 				.add('options', options => options
 					.add('antiInvite', antiInvite => antiInvite
 						.add('action', 'string', { default: 'warn', configurable: false })
@@ -85,7 +87,7 @@ class Stalwartle extends Client {
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
 		Stalwartle.defaultPermissionLevels
-			.add(5, (client, msg) => msg.guild && msg.guild.settings.get('dj').some(role => msg.member.roles.keyArray().includes(role))) // eslint-disable-line max-len
+			.add(5, (client, msg) => msg.guild && msg.guild.settings.get('music.dj').some(role => msg.member.roles.keyArray().includes(role))) // eslint-disable-line max-len
 			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
 			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
