@@ -41,7 +41,8 @@ class Stalwartle extends Client {
 			.add('music', music => music
 				.add('dj', 'role', { array: true })
 				.add('repeat', 'string', { default: 'none', configurable: false })
-				.add('volume', 'integer', { default: 100, min: 1, max: 300 }))
+				.add('volume', 'integer', { default: 100, min: 1, max: 300 })
+				.add('seek', 'integer', { default: 0, configurable: false }))
 			.add('modlogs', modlogs => modlogs
 				.add('ban', 'channel')
 				.add('kick', 'channel')

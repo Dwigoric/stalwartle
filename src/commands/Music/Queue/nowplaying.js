@@ -17,7 +17,7 @@ module.exports = class extends Command {
 		if (!queue.length || !msg.guild.voiceConnection || !msg.guild.voiceConnection.dispatcher) throw '<:error:508595005481549846>  ::  There\'s nothing playing in this server.';
 		const np = await ytdl.getBasicInfo(queue[0]);
 		const npDuration = parseInt(np.length_seconds) * 1000;
-		const playedDuration = parseInt(msg.guild.voiceConnection.dispatcher.streamTime);
+		const playedDuration = parseInt(msg.guild.voiceConnection.dispatcher.streamTime) + msg.guild.settings.get('music.seek');
 		const timestamp = new Timestamp(npDuration >= 60000 ? npDuration >= 3600000 ? 'hh:mm:ss' : 'mm:ss' : 'ss');
 
 		const progress = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'.split('');
