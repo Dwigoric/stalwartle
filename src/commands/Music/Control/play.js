@@ -77,9 +77,7 @@ module.exports = class extends Command {
 
 	async play(msg, song) {
 		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
-		const stream = msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' }));
-		stream.setVolume(msg.guild.settings.get('music.volume') / 100);
-		stream.on('end', async () => {
+		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' }), { volume: msg.guild.settings.get('music.volume') / 100 }).on('end', async () => {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
