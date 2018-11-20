@@ -18,7 +18,7 @@ module.exports = class extends Command {
 		}
 		if (msg.guild.voteskips.includes(msg.author.id)) throw '<:error:508595005481549846>  ::  You\'ve already voted to skip the current song.';
 		msg.guild.addVoteskip(msg.author.id, msg.guild.voiceConnection.channel.members);
-		const requiredVotes = msg.guild.voiceConnection.channel.members.filter(mb => !mb.user.bot && mb.id !== msg.guild.me.id).size / 2;
+		const requiredVotes = msg.guild.voiceConnection.channel.members.filter(mb => !mb.user.bot).size / 2;
 		if (msg.guild.voteskips.length <= requiredVotes) return msg.send(`<:check:508594899117932544>  ::  Successfully added your vote to skip the current song! Current votes: \`${msg.guild.voteskips.length}\`/\`${Math.ceil(requiredVotes) + 1}\`. Bots are not counted.`); // eslint-disable-line max-len
 		msg.guild.clearVoteskips();
 		msg.guild.voiceConnection.dispatcher.end();
