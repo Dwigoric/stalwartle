@@ -22,7 +22,7 @@ module.exports = class extends Command {
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
 		const fullLyrics = [
 			`__**${hits[0].result.full_title}**__\n`,
-			lyrics,
+			lyrics.join('\n'),
 			'\n__*Powered by Genius (https://genius.com)*__'
 		].join('\n');
 
