@@ -30,9 +30,9 @@ module.exports = class extends Command {
 				.setColor('RANDOM')
 				.setAuthor(`🎶 Now Playing on ${msg.guild.name}`)
 				.setFooter(`on ${np.author.name}`)
-				.setDescription(`${progress.join('')} ${parseInt((playedDuration / npDuration) * 100)}%`)
+				.setDescription(`${progress.join('')} ${np.pltype === 'content' ? `${parseInt((playedDuration / npDuration) * 100)}%` : 'N/A'}`)
 				.addField('Repeat', toTitleCase(msg.guild.settings.get('music.repeat')), true)
-				.addField('Time', `\`${timestamp.display(playedDuration)} / ${timestamp.display(npDuration)}\``, true)
+				.addField('Time', np.pltype === 'content' ? `\`${timestamp.display(playedDuration)} / ${timestamp.display(npDuration)}\`` : 'N/A - YouTube Livestream', true)
 				.setImage(np.thumbnail_url)
 		});
 	}
