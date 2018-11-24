@@ -56,7 +56,7 @@ module.exports = class extends Command {
 	}
 
 	async getSongs(query) {
-		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=ytsearch:${query}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
+		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=ytsearch:${encodeURIComponent(query)}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
 	}
 
 	async addToQueue(msg, song) {
