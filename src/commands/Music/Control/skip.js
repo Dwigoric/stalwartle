@@ -15,6 +15,7 @@ module.exports = class extends Command {
 		const chan = msg.guild.channels.get(msg.guild.player.channel);
 		if (!chan.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  You must be connected to #**${chan.name}** to be able to skip songs.`;
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
+			msg.guild.clearVoteSkips();
 			msg.guild.player.stop();
 			return msg.send('<:check:508594899117932544>  ::  Successfully forcibly skipped the music for this server.');
 		}
