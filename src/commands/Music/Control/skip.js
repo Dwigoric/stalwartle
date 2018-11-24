@@ -6,14 +6,19 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			description: 'Skips current song playing in the voice channel.',
-			extendedHelp: 'If you want to force skip, just use the `--force` flag. Usable only by DJs and moderators.'
+			extendedHelp: [
+				'If you want to force skip, just use the `--force` flag. Usable only by DJs and moderators.',
+				'To skip to a specific entry in the queue, just do `s.skip <entry number>`. Also usable only by DJs and moderators.'
+			],
+			usage: '[QueueEntry:integer]'
 		});
 	}
 
-	async run(msg) {
+	async run(msg, [entry]) {
 		if (!msg.guild.player.channel || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 		const chan = msg.guild.channels.get(msg.guild.player.channel);
 		if (!chan.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  You must be connected to #**${chan.name}** to be able to skip songs.`;
+		if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.guild.clearVoteSkips();
 			msg.guild.player.stop();
@@ -26,6 +31,17 @@ module.exports = class extends Command {
 		msg.guild.clearVoteskips();
 		msg.guild.player.stop();
 		return msg.send('<:check:508594899117932544>  ::  Successfully skipped the music for this server.');
+	}
+
+	async skipToEntry(msg, entry) {
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		if (queue.length < 2) throw '<:error:508595005481549846>  ::  There is no queue entry to skip to.';
+		if (entry > queue.length - 1) throw `<:error:508595005481549846>  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`;
+		queue.splice(1, 0, queue.splice(entry, 1)[0]);
+		await this.client.providers.default.update('music', msg.guild.id, { queue });
+		msg.guild.clearVoteskips();
+		msg.guild.player.stop();
+		return msg.send(`<:check:508594899117932544>  ::  Successfully skipped to entry \`#${entry}\`.`);
 	}
 
 };
