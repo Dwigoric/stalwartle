@@ -1,4 +1,5 @@
 const { Client } = require('klasa');
+const { Collection } = require('discord.js');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
 const { blsAPIkey, bodAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
@@ -100,6 +101,12 @@ class Stalwartle extends Client {
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
 			.add(9, (client, msg) => config.owners.includes(msg.author.id))
 			.add(10, (client, msg) => config.ownerID === msg.author.id);
+	}
+
+	get voiceConnections() {
+		const connections = new Collection();
+		for (const gd of this.guilds.filter(guild => guild.channels.filter(ch => ch.type === 'voice' && ch.members.has(this.user.id)).size).values()) connections.set(gd.id, gd.player);
+		return connections;
 	}
 
 	async setGuildCount() {
