@@ -9,7 +9,10 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			description: 'Plays music in the server.',
-			extendedHelp: 'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
+			extendedHelp: [
+				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
+				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Natural - Imagine Dragons --soundcloud`'
+			],
 			usage: '[YouTubeLink:url|Song:integer|Query:string]'
 		});
 	}
@@ -33,16 +36,16 @@ module.exports = class extends Command {
 			song = msg.member.queue[query - 1];
 			msg.member.clearPrompt();
 		} else {
-			const results = await this.getSongs(query);
+			const results = await this.getSongs(query, Boolean(msg.flags.soundcloud));
 			if (!results.length) {
-				throw `<:error:508595005481549846>  ::  No video found for **${query}**.`;
+				throw `<:error:508595005481549846>  ::  No result found for **${query}**.`;
 			} else if (results.length === 1) {
 				song = results[0]; // eslint-disable-line prefer-destructuring
 			} else {
 				const finds = results.splice(0, 5);
 				msg.member.addPrompt(finds);
 				return msg.send([
-					`🎶  ::  Please pick the number of the video you want to play: \`${msg.guildSettings.get('prefix')}play <number>\``,
+					`🎶  ::  Please pick the number of the song you want to play: \`${msg.guildSettings.get('prefix')}play <number>\``,
 					finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
 				].join('\n'));
 			}
@@ -52,8 +55,8 @@ module.exports = class extends Command {
 		return this.play(msg, queue.length ? queue[0] : song);
 	}
 
-	async getSongs(query) {
-		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=ytsearch:${encodeURIComponent(query)}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
+	async getSongs(query, soundcloud) {
+		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${soundcloud ? 'soundcloud' : 'ytsearch'}:${encodeURIComponent(query)}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
 	}
 
 	async addToQueue(msg, song) {
