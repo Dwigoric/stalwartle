@@ -73,7 +73,8 @@ module.exports = class extends Command {
 		msg.guild.player.play(song.track);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.player.once('error', error => this.client.emit('wtf', error));
-		msg.guild.player.once('end', async () => {
+		msg.guild.player.once('end', async data => {
+			if (data.reason === 'REPLACED') return;
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
