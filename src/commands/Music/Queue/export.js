@@ -20,15 +20,15 @@ module.exports = class extends Command {
 		switch (choice.content) {
 			case 'file': {
 				if (!msg.channel.attachable) throw '<:error:508595005481549846>  ::  I do not have the permissions to attach files to this channel.';
-				return msg.channel.sendFile(Buffer.from(queue.map((track, position) => `${position}  ::  ${track.info.uri}`).join('\r\n')), 'output.txt', 'Sent the result as file.');
+				return msg.channel.sendFile(Buffer.from(queue.map((track, position) => `${position + 1}  ::  ${track.info.uri}`).join('\r\n')), 'output.txt', '<:check:508594899117932544>  ::  Exported the queue as file.'); // eslint-disable-line max-len
 			}
 			case 'haste':
 			case 'hastebin': {
 				const { key } = await fetch('https://hastebin.com/documents', {
 					method: 'POST',
-					body: queue.map((track, position) => `${position}  ::  ${track.info.uri}`).join('\r\n')
+					body: queue.map((track, position) => `${position + 1}  ::  ${track.info.uri}`).join('\r\n')
 				}).then(res => res.json());
-				return msg.send(`Sent the result to hastebin: <https://hastebin.com/${key}>`);
+				return msg.send(`<:check:508594899117932544>  ::  Exported the queue to hastebin: <https://hastebin.com/${key}>`);
 			}
 		}
 		return null;
