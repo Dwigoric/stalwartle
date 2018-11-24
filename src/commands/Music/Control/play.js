@@ -11,7 +11,8 @@ module.exports = class extends Command {
 			description: 'Plays music in the server.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
-				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Natural - Imagine Dragons --soundcloud`'
+				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
+				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit` AND THEN `s.play <choice number> -- force`. For URLs, just use the `--force` flag directly.'
 			],
 			usage: '[YouTubeLink:url|Song:integer|Query:string]'
 		});
