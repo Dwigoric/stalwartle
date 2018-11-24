@@ -6,13 +6,14 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			permissionLevel: 5,
-			description: 'Stops the music playing in the voice channel.'
+			description: 'Stops the music session in the server.'
 		});
 	}
 
 	async run(msg) {
-		if (this.client.player.leave(msg.guild.id)) return msg.send('<:check:508594899117932544>  ::  Successfully ended the music session for this server.');
-		else throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
+		if (!msg.guild.player.channel) throw '<:error:508595005481549846>  ::  There is no music session in this server.';
+		this.client.player.leave(msg.guild.id);
+		return msg.send('<:check:508594899117932544>  ::  Successfully ended the music session for this server.');
 	}
 
 };
