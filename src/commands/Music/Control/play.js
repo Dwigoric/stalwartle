@@ -8,13 +8,13 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			description: 'Plays music in the server.',
+			description: 'Plays music in the server. Uses YouTube and SoundCloud.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
 				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit` AND THEN `s.play <choice number> -- force`. For URLs, just use the `--force` flag directly.'
 			],
-			usage: '[YouTubeLink:url|Song:integer|Query:string]'
+			usage: '[YouTubeOrSoundCloud:url|Song:integer|Query:string]'
 		});
 	}
 
