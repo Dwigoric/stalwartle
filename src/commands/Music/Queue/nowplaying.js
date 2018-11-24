@@ -27,7 +27,7 @@ module.exports = class extends Command {
 				.setURL(queue[0].info.uri)
 				.setColor('RANDOM')
 				.setAuthor(`🎶 Now Playing on ${msg.guild.name}`)
-				.setFooter(`on ${queue[0].info.author}`)
+				.setFooter(`by ${queue[0].info.author}`)
 				.setDescription(`${progress.join('')} ${queue[0].info.isStream ? 'N/A' : `${parseInt((playedDuration / npDuration) * 100)}%`}`)
 				.addField('Repeat', toTitleCase(msg.guild.settings.get('music.repeat')), true)
 				.addField('Time', queue[0].info.isStream ? 'N/A - YouTube Livestream' : `\`${timestamp.display(playedDuration)} / ${timestamp.display(npDuration)}\``, true)
