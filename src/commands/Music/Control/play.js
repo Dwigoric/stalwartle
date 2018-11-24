@@ -52,6 +52,7 @@ module.exports = class extends Command {
 		}
 		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, song);
+		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
 		return this.play(msg, queue.length ? queue[0] : song);
 	}
 
@@ -61,10 +62,16 @@ module.exports = class extends Command {
 
 	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
-		queue.push(song);
-		this.client.providers.default.update('music', msg.guild.id, { queue });
-		return msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
+		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
+			queue.splice(1, 0, song);
+			msg.channel.send(`🎶  ::  Forcibly played **${song.info.title}**.`);
+		} else {
+			if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
+			queue.push(song);
+			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
+		}
+		await this.client.providers.default.update('music', msg.guild.id, { queue });
+		return queue;
 	}
 
 	async play(msg, song) {
