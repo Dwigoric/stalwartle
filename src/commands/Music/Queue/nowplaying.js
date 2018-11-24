@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['np'],
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Shows information about the current song playing in the server.'
 		});
 	}
