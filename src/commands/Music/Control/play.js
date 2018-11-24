@@ -60,6 +60,7 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
+		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return null;
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
 		queue.push(song);
@@ -68,7 +69,7 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song, skip) {
-		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (!skip && msg.guild.player.playing)) return null; // eslint-disable-line max-len
+		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (!msg.flags.force && !skip && msg.guild.player.playing)) return null; // eslint-disable-line max-len
 		msg.guild.player.play(song.track);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.player.once('error', error => this.client.emit('wtf', error));
