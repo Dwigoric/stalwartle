@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		const url = parse(String(query));
 		let song;
 		if (url.protocol && url.hostname) {
-			const linkRes = await this.getSongs(url);
+			const linkRes = await this.getSongs(url, true);
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
 			song = linkRes[0]; // eslint-disable-line prefer-destructuring
 		} else if (typeof query === 'number') {
@@ -36,7 +36,7 @@ module.exports = class extends Command {
 			song = msg.member.queue[query - 1];
 			msg.member.clearPrompt();
 		} else {
-			const results = await this.getSongs(query, Boolean(msg.flags.soundcloud));
+			const results = await this.getSongs(query, false, Boolean(msg.flags.soundcloud));
 			if (!results.length) {
 				throw `<:error:508595005481549846>  ::  No result found for **${query}**.`;
 			} else if (results.length === 1) {
@@ -55,8 +55,8 @@ module.exports = class extends Command {
 		return this.play(msg, queue.length ? queue[0] : song);
 	}
 
-	async getSongs(query, soundcloud) {
-		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
+	async getSongs(query, raw, soundcloud) {
+		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${soundcloud ? 'scsearch' : 'ytsearch'}:${raw ? query : encodeURIComponent(query)}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
 	}
 
 	async addToQueue(msg, song) {
