@@ -1,0 +1,39 @@
+const { Command } = require('klasa');
+
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, {
+			runIn: ['text'],
+			permissionLevel: 5,
+			description: 'Removes a single entry or multiple entries from the server music queue.',
+			extendedHelp: [
+				'To remove a single song from the queue, use `s.remove <songID>`',
+				'To remove multiple songs from the queue, use `s.remove <startSongID>-<endSongID>`',
+				'e.g. to remove songs #3 to #5, use `s.remove 3-5`'
+			],
+			usage: '<QueueItems:string>'
+		});
+	}
+
+	async run(msg, [songs]) {
+		songs = songs.split('-').slice(0, 2);
+		songs = [parseInt(songs[0]), parseInt(songs[1])];
+		if (!songs[1]) songs = songs[0]; // eslint-disable-line prefer-destructuring
+		if (songs === 0 || songs[0] === 0) throw '<:error:508595005481549846>  ::  The current song playing cannot be removed from the queue.';
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+		if (Array.isArray(songs)) {
+			if (songs[0] > songs[1]) throw '<:error:508595005481549846>  ::  Invalid queue range. The first number must be less than the second.';
+			if (songs[0] - 1 > queue.length || songs[1] - 1 > queue.length) throw `<:error:508595005481549846>  ::  There are only ${queue.length} songs in the queue.`;
+			queue.splice(songs[0], songs[1] - songs[0] + 1);
+			msg.send(`<:check:508594899117932544>  ::  Successfully removed songs \`#${songs[0]}\` to \`#${songs[1]}\` from the queue.`);
+		} else {
+			if (songs - 1 > queue.length) throw `<:error:508595005481549846>  ::  There are only ${queue.length} songs in the queue.`;
+			queue.splice(songs, 1);
+			msg.send(`<:check:508594899117932544>  ::  Successfully removed song \`#${songs}\` from the queue.`);
+		}
+		return this.client.providers.default.update('music', msg.guild.id, { queue });
+	}
+
+};
