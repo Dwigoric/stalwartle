@@ -5,6 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			permissionLevel: 5,
+			runIn: ['text'],
 			description: 'Shuffles the server music queue.'
 		});
 	}

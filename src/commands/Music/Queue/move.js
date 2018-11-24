@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			runIn: ['text'],
 			description: 'Moves a queue entry to a specified position in the queue.',
 			extendedHelp: 'If you want to move e.g. entry #3 to position #7, do `s.move 3 7`',
 			usage: '<QueueEntry:integer> <NewPosition:integer>',
