@@ -9,10 +9,7 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			description: 'Plays music in the server.',
-			extendedHelp: [
-				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
-				'To force play a song, use the `--force` flag. Only usable by DJs and moderators.'
-			],
+			extendedHelp: 'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 			usage: '[YouTubeLink:url|Song:integer|Query:string]'
 		});
 	}
@@ -60,7 +57,6 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
-		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return null;
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
 		queue.push(song);
@@ -68,8 +64,8 @@ module.exports = class extends Command {
 		return msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
 	}
 
-	async play(msg, song, skip) {
-		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (!msg.flags.force && !skip && msg.guild.player.playing)) return null; // eslint-disable-line max-len
+	async play(msg, song) {
+		if (msg.guild.player.playing) return null;
 		msg.guild.player.play(song.track);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.player.once('error', error => this.client.emit('wtf', error));
