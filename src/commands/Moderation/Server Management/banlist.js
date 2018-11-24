@@ -32,7 +32,7 @@ module.exports = class extends Command {
 				const users = thisArray.map(res => res[0]);
 				const longest = users.reduce((long, str) => Math.max(long, str.length), 0);
 				return `${index + 1}. ${result[0].padEnd(longest)} :: ${result[1] || 'Not specified.'}`;
-			}).join('\n'));
+			}).join('\r\n'));
 	}
 
 	async handleMessage(msg, options, result) {
