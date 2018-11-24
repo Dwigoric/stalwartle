@@ -28,6 +28,7 @@ const statuses = [
 module.exports = class extends Event {
 
 	async run() {
+		this.client._initplayer();
 		this.client.setGuildCount();
 		this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
 			setInterval(() => {

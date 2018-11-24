@@ -11,10 +11,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		if (!msg.guild.voiceConnection || !msg.guild.voiceConnection.dispatcher) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
-		msg.guild.voiceConnection.dispatcher.destroy();
-		msg.guild.me.voice.channel.leave();
-		return msg.send('<:check:508594899117932544>  ::  Successfully ended the music session for this server.');
+		if (this.client.player.leave(msg.guild.id)) return msg.send('<:check:508594899117932544>  ::  Successfully ended the music session for this server.');
+		else throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 	}
 
 };

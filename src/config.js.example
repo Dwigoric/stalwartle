@@ -25,6 +25,8 @@ exports.config = {
 
 	ownerID: '295391820744228867',
 	owners: ['295391820744228867', '296862433136476160', '296256174209105920', '147891648628654082'],
+
+	nodes: [{ host: 'localhost', port: 80, region: 'us', password: '' }],
 	/**
      * Caching Options
      */
@@ -176,4 +178,4 @@ exports.config = {
 };
 
 // The token for this bot to login with
-exports.token = ''; // eslint-disable-line no-process-env
+exports.token = '';

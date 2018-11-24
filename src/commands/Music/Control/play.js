@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
-const { googleAPIkey } = require('../../../auth');
-const ytdl = require('ytdl-core');
+const { parse } = require('url');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
@@ -9,7 +8,6 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			requiredPermissions: ['CONNECT', 'SPEAK'],
 			description: 'Plays music in the server.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
@@ -19,65 +17,62 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [song]) {
-		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
-		if (msg.guild.voiceConnection && !msg.guild.voiceConnection.channel.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  There's already a music session in #${msg.guild.voiceConnection.channel.name}.`; // eslint-disable-line max-len
+	async run(msg, [query]) {
+		if (!msg.guild.player.channel) throw `<:error:508595005481549846>  ::  The bot is not connected to a voice channel. Please use the \`${msg.guildSettings.get('prefix')}join\` command.`;
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!song) {
-			if (!queue.length) {
-				throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
-			} else {
-				await msg.member.voice.channel.join();
-				return this.play(msg, queue[0]);
-			}
+		if (!query) {
+			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+			else return this.play(msg, queue[0]);
 		}
-		let url;
-		if (typeof song === 'number') {
+		const url = parse(String(query));
+		let song;
+		if (url.protocol && url.hostname) {
+			const linkRes = await this.getSongs(url);
+			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
+			song = linkRes[0]; // eslint-disable-line prefer-destructuring
+		} else if (typeof query === 'number') {
 			if (!msg.member.queue.length) throw '<:error:508595005481549846>  ::  Please provide a search query first.';
-			if (song < 1 || song > msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please pick a number from 1 to ${msg.member.queue.length}.`;
-			url = msg.member.queue[song - 1];
+			if (query < 1 || query > msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please pick a number from 1 to ${msg.member.queue.length}.`;
+			song = msg.member.queue[query - 1];
 			msg.member.clearPrompt();
-		} else if (ytdl.validateURL(song)) {
-			url = song;
 		} else {
-			const params = [];
-			for (const [key, value] of Object.entries({
-				key: googleAPIkey,
-				type: 'video',
-				part: 'snippet',
-				q: encodeURIComponent(song) // eslint-disable-line id-length
-			})) params.push(`${key}=${value}`);
-			const videos = await fetch(`https://www.googleapis.com/youtube/v3/search?${params.join('&')}`).then(res => res.json()).then(res => res.items);
-			if (!videos.length) {
-				throw `<:error:508595005481549846>  ::  No video found for **${song}**.`;
-			} else if (videos.length === 1) {
-				url = `https://youtu.be/${videos[0].id.videoId}`;
+			const results = await this.getSongs(query);
+			if (!results.length) {
+				throw `<:error:508595005481549846>  ::  No video found for **${query}**.`;
+			} else if (results.length === 1) {
+				song = results[0]; // eslint-disable-line prefer-destructuring
 			} else {
-				msg.member.addPrompt(videos.map(vid => `https://youtu.be/${vid.id.videoId}`));
+				const finds = results.splice(0, 5);
+				msg.member.addPrompt(finds);
 				return msg.send([
 					`🎶  ::  Please pick the number of the video you want to play: \`${msg.guildSettings.get('prefix')}play <number>\``,
-					videos.map((vid, index) => `\`${index + 1}\`. **${escapeMarkdown(vid.snippet.title)}** by ${escapeMarkdown(vid.snippet.channelTitle)}`).join('\n')
+					finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
 				].join('\n'));
 			}
 		}
-		const info = await ytdl.getBasicInfo(url);
-		if (parseInt(info.length_seconds) > 18000) throw `<:error:508595005481549846>  ::  **${info.title}** is longer than 5 hours.`;
-		await msg.member.voice.channel.join();
-		await this.addToQueue(msg, url);
-		return this.play(msg, queue.length ? queue[0] : url);
+		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
+		await this.addToQueue(msg, song);
+		return this.play(msg, queue.length ? queue[0] : song);
 	}
 
-	async addToQueue(msg, url) {
+	async getSongs(query) {
+		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=ytsearch:${query}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
+	}
+
+	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
-		queue.push(url);
+		queue.push(song);
 		this.client.providers.default.update('music', msg.guild.id, { queue });
-		return msg.channel.send(`🎶  ::  **${await ytdl.getBasicInfo(url).then(info => info.title)}** has been added to the queue.`);
+		return msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
 	}
 
-	async play(msg, song) {
-		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (msg.guild.voiceConnection.dispatcher && msg.guild.voiceConnection.dispatcher.writable)) return null;
-		msg.guild.voiceConnection.play(ytdl(song, { quality: 'highestaudio' }), { volume: msg.guild.settings.get('music.volume') / 100 }).on('end', async () => {
+	async play(msg, song, skip) {
+		if ((msg.flags.force && !await msg.hasAtLeastPermissionLevel(5)) || (!skip && msg.guild.player.playing)) return null; // eslint-disable-line max-len
+		msg.guild.player.play(song.track);
+		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
+		msg.guild.player.once('error', error => this.client.emit('wtf', error));
+		msg.guild.player.once('end', async () => {
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
@@ -86,12 +81,10 @@ module.exports = class extends Command {
 				this.play(msg, queue[0]);
 			} else {
 				msg.channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-				msg.guild.voiceConnection.dispatcher.destroy();
-				msg.guild.me.voice.channel.leave();
+				this.client.player.leave(msg.guild.id);
 			}
 		});
-		const info = await ytdl.getBasicInfo(song);
-		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(info.title)}** by ${info.author.name}`);
+		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${song.info.author}`);
 	}
 
 	async init() {

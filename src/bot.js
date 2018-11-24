@@ -1,4 +1,5 @@
 const { Client } = require('klasa');
+const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
 const { blsAPIkey, bodAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
 const fetch = require('node-fetch');
@@ -8,6 +9,12 @@ class Stalwartle extends Client {
 
 	constructor(...args) {
 		super(...args);
+
+		this.player = null;
+		if (idioticAPIkey) {
+			this.idiot = new idiotic.Client(idioticAPIkey, { dev: true });
+			Object.defineProperty(this.idiot, 'token', { value: this.idiot.token, enumerable: false });
+		}
 
 		Stalwartle.defaultClientSchema
 			.add('bugChannel', 'textchannel')
@@ -93,11 +100,6 @@ class Stalwartle extends Client {
 			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
 			.add(9, (client, msg) => config.owners.includes(msg.author.id))
 			.add(10, (client, msg) => config.ownerID === msg.author.id);
-
-		if (idioticAPIkey) {
-			this.idiot = new idiotic.Client(idioticAPIkey, { dev: true });
-			Object.defineProperty(this.idiot, 'token', { value: this.idiot.token, enumerable: false });
-		}
 	}
 
 	async setGuildCount() {
@@ -149,6 +151,13 @@ class Stalwartle extends Client {
 			guilds = this.guilds.size;
 		}
 		return guilds;
+	}
+
+	_initplayer() {
+		this.player = new PlayerManager(this, config.nodes, {
+			user: this.user.id,
+			shards: this.options.shardCount
+		});
 	}
 
 }

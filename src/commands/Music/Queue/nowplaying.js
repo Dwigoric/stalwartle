@@ -1,6 +1,5 @@
 const { Command, Timestamp, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const ytdl = require('ytdl-core');
 
 module.exports = class extends Command {
 
@@ -14,26 +13,24 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!queue.length || !msg.guild.voiceConnection || !msg.guild.voiceConnection.dispatcher) throw '<:error:508595005481549846>  ::  There\'s nothing playing in this server.';
-		const np = await ytdl.getBasicInfo(queue[0]);
-		const npDuration = parseInt(np.length_seconds) * 1000;
-		const playedDuration = parseInt(msg.guild.voiceConnection.dispatcher.streamTime);
-		const timestamp = new Timestamp(npDuration >= 60000 ? npDuration >= 3600000 ? 'hh:mm:ss' : 'mm:ss' : 'ss');
+		if (!queue.length || !msg.guild.player.channel || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
+		const npDuration = parseInt(queue[0].info.length);
+		const playedDuration = parseInt(msg.guild.player.state.position);
+		const timestamp = new Timestamp(npDuration >= 3600000 ? 'hh:mm:ss' : 'mm:ss');
 
 		const progress = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'.split('');
-		progress.splice(Math.ceil((playedDuration / npDuration) * progress.length) - 1, 1, '🔘');
+		progress.splice(Math.ceil(((playedDuration / npDuration) || 0.01) * progress.length) - 1, 1, '🔘');
 
 		return msg.send({
 			embed: new MessageEmbed()
-				.setTitle(np.title)
-				.setURL(queue[0])
+				.setTitle(queue[0].info.title)
+				.setURL(queue[0].info.uri)
 				.setColor('RANDOM')
 				.setAuthor(`🎶 Now Playing on ${msg.guild.name}`)
-				.setFooter(`on ${np.author.name}`)
-				.setDescription(`${progress.join('')} ${np.livestream ? 'N/A' : `${parseInt((playedDuration / npDuration) * 100)}%`}`)
+				.setFooter(`on ${queue[0].info.author}`)
+				.setDescription(`${progress.join('')} ${queue[0].info.isStream ? 'N/A' : `${parseInt((playedDuration / npDuration) * 100)}%`}`)
 				.addField('Repeat', toTitleCase(msg.guild.settings.get('music.repeat')), true)
-				.addField('Time', np.livestream ? 'N/A - YouTube Livestream' : `\`${timestamp.display(playedDuration)} / ${timestamp.display(npDuration)}\``, true)
-				.setImage(np.thumbnail_url)
+				.addField('Time', queue[0].info.isStream ? 'N/A - YouTube Livestream' : `\`${timestamp.display(playedDuration)} / ${timestamp.display(npDuration)}\``, true)
 		});
 	}
 
