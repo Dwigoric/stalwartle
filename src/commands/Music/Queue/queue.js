@@ -58,6 +58,7 @@ module.exports = class extends Command {
 
 	async remove(msg, [songs]) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs and moderators can remove songs from the queue.';
+		if (!songs || !songs[0]) throw '<:error:508595005481549846>  ::  The current song playing cannot be removed from the queue.';
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
 		if (Array.isArray(songs)) {
