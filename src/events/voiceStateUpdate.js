@@ -3,6 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	run(oldState, newState) {
+		if (!this.client.player) return;
 		if (!newState.guild.player.channel) return;
 		if (newState.guild.channels.get(newState.guild.player.channel).members.filter(mb => !mb.user.bot).size) return;
 		this.client.setTimeout(guild => {
