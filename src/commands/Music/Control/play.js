@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		const url = parse(String(query));
 		let song;
 		if (url.protocol && url.hostname) {
-			const linkRes = await this.getSongs(query, true);
+			const linkRes = await this.getSongs(query, true, url.hostname.includes('soundcloud'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
 			song = linkRes[0]; // eslint-disable-line prefer-destructuring
 		} else if (typeof query === 'number') {
