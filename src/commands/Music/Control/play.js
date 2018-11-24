@@ -53,7 +53,7 @@ module.exports = class extends Command {
 		}
 		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, song);
-		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
+		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.pause(false) && msg.guild.player.stop();
 		return this.play(msg, queue.length ? queue[0] : song);
 	}
 
