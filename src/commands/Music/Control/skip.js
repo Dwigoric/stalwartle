@@ -16,8 +16,6 @@ module.exports = class extends Command {
 
 	async run(msg, [entry]) {
 		if (!msg.guild.player.channel || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
-		const chan = msg.guild.channels.get(msg.guild.player.channel);
-		if (!chan.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  You must be connected to #**${chan.name}** to be able to skip songs.`;
 		if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.guild.clearVoteskips();
@@ -25,8 +23,9 @@ module.exports = class extends Command {
 			return msg.send('<:check:508594899117932544>  ::  Successfully forcibly skipped the music for this server.');
 		}
 		if (msg.guild.voteskips.includes(msg.author.id)) throw '<:error:508595005481549846>  ::  You\'ve already voted to skip the current song.';
-		msg.guild.addVoteskip(msg.author.id, chan.members);
-		const requiredVotes = chan.members.filter(mb => !mb.user.bot).size / 2;
+		const { members } = msg.guild.channels.get(msg.guild.player.channel);
+		msg.guild.addVoteskip(msg.author.id, members);
+		const requiredVotes = members.filter(mb => !mb.user.bot).size / 2;
 		if (msg.guild.voteskips.length <= requiredVotes) return msg.send(`<:check:508594899117932544>  ::  Successfully added your vote to skip the current song! Current votes: \`${msg.guild.voteskips.length}\`/\`${Math.ceil(requiredVotes) + 1}\`. Bots are not counted.`); // eslint-disable-line max-len
 		msg.guild.clearVoteskips();
 		msg.guild.player.stop();

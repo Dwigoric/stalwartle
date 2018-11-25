@@ -21,27 +21,28 @@ module.exports = class extends Command {
 	async run(msg, [query]) {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
-		const chan = msg.guild.channels.get(msg.guild.player.channel);
-		if (msg.guild.player.playing && chan && !chan.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  There's already a music session in #**${chan.name}**.`;
-		if (!msg.guild.player.channel) {
-			this.client.player.leave(msg.guild.id);
-			this.client.player.join({
-				host: this.client.options.nodes[0].host,
-				guild: msg.guild.id,
-				channel: msg.member.voice.channel.id
-			}, { selfdeaf: true });
-		}
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!query) {
 			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+			if (!msg.guild.player.channel) this.join(msg);
 			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
 			else return this.play(msg, queue[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
+		if (!msg.guild.player.channel) this.join(msg);
 		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, song);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
 		return this.play(msg, queue.length ? queue[0] : song);
+	}
+
+	join(msg) {
+		this.client.player.leave(msg.guild.id);
+		this.client.player.join({
+			host: this.client.options.nodes[0].host,
+			guild: msg.guild.id,
+			channel: msg.member.voice.channel.id
+		}, { selfdeaf: true });
 	}
 
 	async resolveQuery(msg, query) {
@@ -111,6 +112,7 @@ module.exports = class extends Command {
 		msg.guild.player.play(song.track);
 		msg.guild.player.pause(false);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
+		msg.guild.clearVoteskips();
 		msg.guild.player.once('error', error => this.client.emit('wtf', error));
 		msg.guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return;
