@@ -16,6 +16,7 @@ module.exports = class extends Command {
 		seek -= Date.now();
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!queue.length || !msg.guild.player.channel || !msg.guild.player.playing) throw `<:error:508595005481549846>  ::  No song playing! Add one using \`${msg.guildSettings.get('prefix')}play\``; // eslint-disable-line max-len
+		if (!queue[0].info.isSeekable) throw '<:error:508595005481549846>  ::  The current song cannot be seeked.';
 		if (queue[0].info.length < seek) throw '<:error:508595005481549846>  ::  The time you supplied is longer than the song\'s length.';
 		msg.guild.player.seek(seek);
 		return msg.send('<:check:508594899117932544>  ::  Successfully seeked the music.');
