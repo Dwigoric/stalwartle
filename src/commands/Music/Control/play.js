@@ -77,8 +77,8 @@ module.exports = class extends Command {
 
 	async play(msg, song) {
 		if (msg.guild.player.playing) return null;
-		msg.guild.player.pause(false);
 		msg.guild.player.play(song.track);
+		msg.guild.player.pause(false);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.player.once('error', error => this.client.emit('wtf', error));
 		msg.guild.player.once('end', async data => {
