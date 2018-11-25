@@ -17,8 +17,8 @@ module.exports = class extends Command {
 		const np = queue[0];
 		const npStatus = msg.guild.player.playing ?
 			!msg.guild.player.paused ?
-				'▶  :: ' :
-				'⏸  :: ' :
+				'▶' :
+				'⏸' :
 			'⤴ Up Next:';
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
@@ -35,7 +35,7 @@ module.exports = class extends Command {
 
 		return display
 			.setFooterPrefix('Page ')
-			.setFooterSuffix(`  ::  ${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}`)
+			.setFooterSuffix(` [${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}]`)
 			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music queue...'), { filter: (reaction, author) => author === msg.author });
 	}
 
