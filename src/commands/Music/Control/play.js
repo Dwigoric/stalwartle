@@ -14,17 +14,37 @@ module.exports = class extends Command {
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
 				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit` AND THEN `s.play <choice number> -- force`. For URLs, just use the `--force` flag directly.'
 			],
-			usage: '[YouTubeOrSoundCloud:url|Song:integer|Query:string]'
+			usage: '[YouTubeOrSoundCloud:url|Query:string]'
 		});
 	}
 
 	async run(msg, [query]) {
-		if (!msg.guild.player.channel) throw `<:error:508595005481549846>  ::  The bot is not connected to a voice channel. Please use the \`${msg.guildSettings.get('prefix')}join\` command.`;
+		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
+		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
+		const chan = msg.guild.channels.get(msg.guild.player.channel);
+		if (msg.guild.player.playing && chan && !chan.members.has(msg.member.id)) throw `<:error:508595005481549846>  ::  There's already a music session in #**${chan.name}**.`;
+		if (!msg.guild.player.channel) {
+			this.client.player.leave(msg.guild.id);
+			this.client.player.join({
+				host: this.client.options.nodes[0].host,
+				guild: msg.guild.id,
+				channel: msg.member.voice.channel.id
+			}, { selfdeaf: true });
+		}
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!query) {
 			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
 			else return this.play(msg, queue[0]);
 		}
+		const song = await this.resolveQuery(msg, query);
+		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
+		await this.addToQueue(msg, song);
+		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
+		return this.play(msg, queue.length ? queue[0] : song);
+	}
+
+	async resolveQuery(msg, query) {
 		const url = parse(String(query));
 		let song;
 		if (url.protocol && url.hostname) {
@@ -43,18 +63,29 @@ module.exports = class extends Command {
 			} else if (results.length === 1) {
 				song = results[0]; // eslint-disable-line prefer-destructuring
 			} else {
-				const finds = results.splice(0, 5);
+				const finds = results.slice(0, 5);
 				msg.member.addPrompt(finds);
-				return msg.send([
-					`🎶  ::  Please pick the number of the song you want to play: \`${msg.guildSettings.get('prefix')}play <number>\``,
-					finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
-				].join('\n'));
+				let limit = 0, choice;
+				do {
+					if (limit >= 5) {
+						msg.member.clearPrompt();
+						throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
+					}
+					limit++;
+					choice = await msg.prompt([
+						`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
+						finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
+					].join('\n')).catch(() => ({ content: 'cancel' }));
+				} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > msg.member.queue.length);
+				if (choice.content === 'cancel') {
+					msg.member.clearPrompt();
+					throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
+				}
+				song = msg.member.queue[parseInt(choice.content) - 1];
+				msg.member.clearPrompt();
 			}
 		}
-		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
-		await this.addToQueue(msg, song);
-		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
-		return this.play(msg, queue.length ? queue[0] : song);
+		return song;
 	}
 
 	async getSongs(query, raw, soundcloud) {
