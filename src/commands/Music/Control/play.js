@@ -1,6 +1,5 @@
 const { Command } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
-const { parse } = require('url');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
@@ -47,17 +46,11 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		const url = parse(String(query));
 		let song;
-		if (url.protocol && url.hostname) {
-			const linkRes = await this.getSongs(query, true, url.hostname.includes('soundcloud'));
+		if (/^(https?:\/\/)?(www\.)?(soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/.test(query)) {
+			const linkRes = await this.getSongs(query, true, query.includes('soundcloud.com'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
 			song = linkRes[0]; // eslint-disable-line prefer-destructuring
-		} else if (typeof query === 'number') {
-			if (!msg.member.queue.length) throw '<:error:508595005481549846>  ::  Please provide a search query first.';
-			if (query < 1 || query > msg.member.queue.length) throw `<:error:508595005481549846>  ::  Please pick a number from 1 to ${msg.member.queue.length}.`;
-			song = msg.member.queue[query - 1];
-			msg.member.clearPrompt();
 		} else {
 			const results = await this.getSongs(query, false, Boolean(msg.flags.soundcloud));
 			if (!results.length) {
