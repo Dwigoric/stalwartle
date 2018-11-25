@@ -2,6 +2,9 @@ const { Command } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
 const fetch = require('node-fetch');
 
+const YOUTUBE_SOUNDCLOUD_REGEX = /^(https?:\/\/)?(www\.)?(soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
+	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
+
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -30,6 +33,7 @@ module.exports = class extends Command {
 		}
 		const song = await this.resolveQuery(msg, query);
 		msg.member.clearPrompt();
+		if (Array.isArray(song)) return this.addToQueue(msg, song);
 		if (!msg.guild.player.channel) this.join(msg);
 		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, song);
@@ -47,12 +51,13 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		if (/^(https?:\/\/)?(www\.)?(soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/.test(query)) {
-			const linkRes = await this.getSongs(query, true, query.includes('soundcloud.com'));
+		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query)) {
+			const linkRes = await this.getSongs(query, query.includes('soundcloud.com'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
-			return linkRes[0];
+			if (YOUTUBE_PLAYLIST_REGEX.test(query)) return linkRes;
+			else return linkRes[0];
 		} else {
-			const results = await this.getSongs(query, false, Boolean(msg.flags.soundcloud));
+			const results = await this.getSongs(query, Boolean(msg.flags.soundcloud));
 			if (!results.length) throw `<:error:508595005481549846>  ::  No result found for **${query}**.`;
 			else if (results.length === 1) return results[0];
 
@@ -78,13 +83,30 @@ module.exports = class extends Command {
 		}
 	}
 
-	async getSongs(query, raw, soundcloud) {
-		return await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${soundcloud ? 'scsearch' : 'ytsearch'}:${raw ? query : encodeURIComponent(query)}`, { headers: { Authorization: this.client.options.nodes[0].password } }).then(res => res.json()).then(res => res.tracks); // eslint-disable-line max-len
+	async getSongs(query, soundcloud) {
+		let searchString;
+		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query)) {
+			searchString = query;
+			if (searchString.includes('&list') || searchString.includes('?list')) {
+				searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
+			}
+		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${query}`; }
+		const data = await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.nodes[0].password } }) // eslint-disable-line max-len
+			.then(res => res.json())
+			.catch(err => {
+				this.client.emit('wtf', err);
+				throw '<:error:508595005481549846>  ::  There was an error, please try again.';
+			});
+		return data.tracks;
 	}
 
 	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
+		if (Array.isArray(song)) {
+			if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
+			for (const track of song) queue.push(track);
+			msg.channel.send(`🎶  ::  **${song.length} songs** have been added to the queue.`);
+		} else if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			queue.splice(1, 0, song);
 			msg.channel.send(`🎶  ::  Forcibly played **${song.info.title}**.`);
 		} else {
