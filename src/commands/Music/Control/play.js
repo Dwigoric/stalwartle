@@ -10,11 +10,13 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			description: 'Plays music in the server. Uses YouTube and SoundCloud.',
+			description: 'Plays music in the server. Accepts YouTube, YouTube playlists, SoundCloud, and online radios.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
-				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit` AND THEN `s.play <choice number> -- force`. For URLs, just use the `--force` flag directly.'
+				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit` AND THEN `s.play <choice number> -- force`. For URLs, just use the `--force` flag directly.',
+				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
+				'To play an online radio (`.m3u`, `.pls`, `.xspf`), simply supply the radio link.'
 			],
 			usage: '[YouTubeOrSoundCloud:url|Query:string]'
 		});
@@ -34,8 +36,8 @@ module.exports = class extends Command {
 		const song = await this.resolveQuery(msg, query);
 		msg.member.clearPrompt();
 		if (Array.isArray(song)) return this.addToQueue(msg, song);
+		if (!song.info.isStream && parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		if (!msg.guild.player.channel) this.join(msg);
-		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, song);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
 		return this.play(msg, queue.length ? queue[0] : song);
@@ -51,7 +53,7 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query)) {
+		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
 			const linkRes = await this.getSongs(query, query.includes('soundcloud.com'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
 			if (YOUTUBE_PLAYLIST_REGEX.test(query)) return linkRes;
@@ -85,7 +87,7 @@ module.exports = class extends Command {
 
 	async getSongs(query, soundcloud) {
 		let searchString;
-		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query)) {
+		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
 			searchString = query;
 			if (searchString.includes('&list') || searchString.includes('?list')) {
 				searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
