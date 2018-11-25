@@ -92,7 +92,7 @@ module.exports = class extends Command {
 			if (searchString.includes('&list') || searchString.includes('?list')) {
 				searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 			}
-		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${query}`; }
+		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
 		const data = await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.nodes[0].password } }) // eslint-disable-line max-len
 			.then(res => res.json())
 			.catch(err => {
