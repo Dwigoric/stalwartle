@@ -21,7 +21,6 @@ module.exports = class extends Command {
 		if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.guild.clearVoteskips();
-			msg.guild.player.pause(false);
 			msg.guild.player.stop();
 			return msg.send('<:check:508594899117932544>  ::  Successfully forcibly skipped the music for this server.');
 		}
@@ -30,7 +29,6 @@ module.exports = class extends Command {
 		const requiredVotes = chan.members.filter(mb => !mb.user.bot).size / 2;
 		if (msg.guild.voteskips.length <= requiredVotes) return msg.send(`<:check:508594899117932544>  ::  Successfully added your vote to skip the current song! Current votes: \`${msg.guild.voteskips.length}\`/\`${Math.ceil(requiredVotes) + 1}\`. Bots are not counted.`); // eslint-disable-line max-len
 		msg.guild.clearVoteskips();
-		msg.guild.player.pause(false);
 		msg.guild.player.stop();
 		return msg.send('<:check:508594899117932544>  ::  Successfully skipped the music for this server.');
 	}
@@ -42,7 +40,6 @@ module.exports = class extends Command {
 		queue.splice(1, 0, queue.splice(entry, 1)[0]);
 		await this.client.providers.default.update('music', msg.guild.id, { queue });
 		msg.guild.clearVoteskips();
-		msg.guild.player.pause(false);
 		msg.guild.player.stop();
 		return msg.send(`<:check:508594899117932544>  ::  Successfully skipped to entry \`#${entry}\`.`);
 	}
