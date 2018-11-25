@@ -22,7 +22,8 @@ module.exports = class extends Command {
 			'⤴ Up Next:';
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`🎶 Server Music Queue: ${msg.guild.name}`));
+			.setTitle(`🎶 Server Music Queue: ${msg.guild.name}`)
+			.setTimestamp());
 
 		queue.shift();
 		if (!queue.length) return msg.channel.send(`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)}`);
@@ -34,6 +35,7 @@ module.exports = class extends Command {
 
 		return display
 			.setFooterPrefix('Page ')
+			.setFooterSuffix(` ${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}`)
 			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music queue...'), { filter: (reaction, author) => author === msg.author });
 	}
 
