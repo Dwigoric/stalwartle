@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		const { position } = msg.guild.player.state;
 		const timestamp = new Timestamp(length >= 3600000 ? 'hh:mm:ss' : 'mm:ss');
 
-		const progress = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬'.split('');
+		const progress = '▬'.repeat(25).split('');
 		progress.splice(Math.ceil(((position / length) || 0.01) * progress.length) - 1, 1, '🔘');
 
 		return msg.send({
