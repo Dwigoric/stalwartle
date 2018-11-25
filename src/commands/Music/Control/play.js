@@ -14,7 +14,7 @@ module.exports = class extends Command {
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
-				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit` AND THEN `s.play <choice number> -- force`. For URLs, just use the `--force` flag directly.',
+				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit`.',
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
 				'To play an online radio (`.m3u`, `.pls`, `.xspf`), simply supply the radio link.'
 			],
