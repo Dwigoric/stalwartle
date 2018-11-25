@@ -31,7 +31,7 @@ module.exports = class extends Command {
 				.setFooter(`by ${queue[0].info.author}`)
 				.setDescription(`${progress.join('')} ${queue[0].info.isStream ? 'N/A' : `${parseInt((position / length) * 100)}%`}`)
 				.addField('Time', queue[0].info.isStream ? 'N/A - YouTube Livestream' : `\`${timestamp.display(position)} / ${timestamp.display(length)}\``, true)
-				.addField('Volume', `${msg.guild.player.state.volume}%`)
+				.addField('Volume', `${msg.guild.player.state.volume}%`, true)
 				.addField('Repeat', toTitleCase(msg.guild.settings.get('music.repeat')), true)
 				.setTimestamp()
 		});
