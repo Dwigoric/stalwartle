@@ -25,11 +25,11 @@ module.exports = class extends Command {
 		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
 		if (Array.isArray(songs)) {
 			if (songs[0] > songs[1]) throw '<:error:508595005481549846>  ::  Invalid queue range. The first number must be less than the second.';
-			if (songs[0] > queue.length - 1 || songs[1] > queue.length - 1) throw `<:error:508595005481549846>  ::  There are only ${queue.length} songs in the queue.`;
+			if (songs[0] > queue.length - 1 || songs[1] > queue.length - 1) throw `<:error:508595005481549846>  ::  There are only ${queue.length - 1} songs in the queue.`;
 			queue.splice(songs[0], songs[1] - songs[0] + 1);
 			msg.send(`<:check:508594899117932544>  ::  Successfully removed songs \`#${songs[0]}\` to \`#${songs[1]}\` from the queue.`);
 		} else {
-			if (songs > queue.length - 1) throw `<:error:508595005481549846>  ::  There are only ${queue.length} songs in the queue.`;
+			if (songs > queue.length - 1) throw `<:error:508595005481549846>  ::  There are only ${queue.length - 1} songs in the queue.`;
 			queue.splice(songs, 1);
 			msg.send(`<:check:508594899117932544>  ::  Successfully removed song \`#${songs}\` from the queue.`);
 		}
