@@ -73,7 +73,6 @@ module.exports = class extends Command {
 				msg.member.clearPrompt();
 				throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
 			}
-			msg.member.clearPrompt();
 			return msg.member.queue[parseInt(choice.content) - 1];
 		}
 	}
