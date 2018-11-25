@@ -15,6 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [chan = msg.channel, ratelimit]) {
+		if (chan.type !== 'text') throw '<:error:508595005481549846>  ::  Only text channels can have ratelimits.';
 		if (!chan.permissionsFor(msg.guild.me.id).has('MANAGE_CHANNEL')) throw '<:error:508595005481549846>  ::  I need **Manage Channel** permissions to set ratelimit!';
 		chan.setRateLimitPerUser(ratelimit);
 		return msg.send(`<:check:508594899117932544>  ::  Successfully changed the ratelimit of ${chan} to 1 message / ${ratelimit} second${ratelimit === 1 ? '' : 's'}.`);
