@@ -46,41 +46,36 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		let song;
 		if (/^(https?:\/\/)?(www\.)?(soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/.test(query)) {
 			const linkRes = await this.getSongs(query, true, query.includes('soundcloud.com'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
-			song = linkRes[0]; // eslint-disable-line prefer-destructuring
+			return linkRes[0];
 		} else {
 			const results = await this.getSongs(query, false, Boolean(msg.flags.soundcloud));
-			if (!results.length) {
-				throw `<:error:508595005481549846>  ::  No result found for **${query}**.`;
-			} else if (results.length === 1) {
-				song = results[0]; // eslint-disable-line prefer-destructuring
-			} else {
-				const finds = results.slice(0, 5);
-				msg.member.addPrompt(finds);
-				let limit = 0, choice;
-				do {
-					if (limit >= 5) {
-						msg.member.clearPrompt();
-						throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
-					}
-					limit++;
-					choice = await msg.prompt([
-						`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
-						finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
-					].join('\n')).catch(() => ({ content: 'cancel' }));
-				} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > msg.member.queue.length);
-				if (choice.content === 'cancel') {
+			if (!results.length) throw `<:error:508595005481549846>  ::  No result found for **${query}**.`;
+			else if (results.length === 1) return results[0];
+
+			const finds = results.slice(0, 5);
+			msg.member.addPrompt(finds);
+			let limit = 0, choice;
+			do {
+				if (limit >= 5) {
 					msg.member.clearPrompt();
-					throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
+					throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
 				}
-				song = msg.member.queue[parseInt(choice.content) - 1];
+				limit++;
+				choice = await msg.prompt([
+					`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
+					finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
+				].join('\n')).catch(() => ({ content: 'cancel' }));
+			} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > msg.member.queue.length);
+			if (choice.content === 'cancel') {
 				msg.member.clearPrompt();
+				throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
 			}
+			msg.member.clearPrompt();
+			return msg.member.queue[parseInt(choice.content) - 1];
 		}
-		return song;
 	}
 
 	async getSongs(query, raw, soundcloud) {
