@@ -9,15 +9,16 @@ module.exports = class extends Command {
 			permissionLevel: 7,
 			requiredPermissions: ['MANAGE_CHANNEL'],
 			description: 'Enables slowmode and sets ratelimit (1 message / x seconds) per user in the text channel.',
-			usage: '[TextChannel:channel] <RateLimitSeconds:integer{1}>',
+			usage: '[TextChannel:channel] <RateLimitSeconds:integer{0}>',
 			usageDelim: ' '
 		});
 	}
 
 	async run(msg, [chan = msg.channel, ratelimit]) {
 		if (chan.type !== 'text') throw '<:error:508595005481549846>  ::  Only text channels can have ratelimits.';
-		if (!chan.permissionsFor(msg.guild.me.id).has('MANAGE_CHANNEL')) throw '<:error:508595005481549846>  ::  I need **Manage Channel** permissions to set ratelimit!';
+		if (!chan.permissionsFor(msg.guild.me.id).has('MANAGE_CHANNEL')) throw '<:error:508595005481549846>  ::  I need the **Manage Channel** permission to set ratelimit!';
 		chan.setRateLimitPerUser(ratelimit);
+		if (!ratelimit) return msg.send(`<:check:508594899117932544>  ::  Successfully disabled slowmode in ${chan}.`);
 		return msg.send(`<:check:508594899117932544>  ::  Successfully changed the ratelimit of ${chan} to 1 message / ${ratelimit} second${ratelimit === 1 ? '' : 's'}.`);
 	}
 
