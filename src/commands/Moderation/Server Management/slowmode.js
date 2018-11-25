@@ -9,7 +9,7 @@ module.exports = class extends Command {
 			permissionLevel: 7,
 			requiredPermissions: ['MANAGE_CHANNEL'],
 			description: 'Enables slowmode and sets ratelimit (1 message / x seconds) per user in the text channel.',
-			usage: '[TextChannel:channel] <RateLimitSeconds:integer{0}>',
+			usage: '[TextChannel:channel] <RateLimitSeconds:integer{0,120}>',
 			usageDelim: ' '
 		});
 	}
