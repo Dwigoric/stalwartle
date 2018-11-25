@@ -29,6 +29,7 @@ module.exports = class extends Command {
 			else return this.play(msg, queue[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
+		msg.member.clearPrompt();
 		if (!msg.guild.player.channel) this.join(msg);
 		if (parseInt(song.info.length) > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`;
 		await this.addToQueue(msg, song);
