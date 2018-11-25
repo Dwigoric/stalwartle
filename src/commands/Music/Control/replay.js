@@ -13,6 +13,7 @@ module.exports = class extends Command {
 	async run(msg) {
 		if (!msg.guild.player.channel || !msg.guild.player.playing) throw `<:error:508595005481549846>  ::  No song playing! Add one using \`${msg.guildSettings.get('prefix')}play\``;
 		msg.guild.player.seek(0);
+		msg.guild.player.pause(false);
 		return msg.send('<:check:508594899117932544>  ::  Successfully replayed the music.');
 	}
 
