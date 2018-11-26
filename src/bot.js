@@ -24,7 +24,10 @@ class Stalwartle extends Client {
 			.add('restart', restart => restart
 				.add('channel', 'textchannel')
 				.add('timestamp', 'number'))
-			.add('errorHook', webhook => webhook
+			.add('errorHook', errorHook => errorHook
+				.add('id', 'string')
+				.add('token', 'string'))
+			.add('guildHook', guildHook => guildHook
 				.add('id', 'string')
 				.add('token', 'string'));
 
@@ -110,7 +113,7 @@ class Stalwartle extends Client {
 	}
 
 	async setGuildCount() {
-		if (!this.application.botPublic) return null;
+		if (!this.application.botPublic) return;
 		if (ctxAPIkey) {
 			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
 				method: 'POST',
@@ -146,7 +149,6 @@ class Stalwartle extends Client {
 				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
-		return undefined;
 	}
 
 	async guildCount() {
