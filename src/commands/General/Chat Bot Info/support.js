@@ -16,7 +16,7 @@ module.exports = class extends Command {
 		msg.send({
 			embed: await new MessageEmbed()
 				.setColor('RANDOM')
-				.setDescription('Please visit my dev server (<https://discord.gg/ZzjZ8ba>) and go to the questions and support channel so we can give you the utmost support.')
+				.setDescription('Please visit my dev server (<https://discord.gg/EH7jKFH>) and go to the questions and support channel so we can give you the utmost support.')
 		});
 	}
 
