@@ -16,7 +16,7 @@ module.exports = class extends Event {
 			.setThumbnail(guild.iconURL({ format: 'png' }))
 			.setTitle(`${guild.name}  |  ${guild.id}`)
 			.addField('Guild Owner', `${guild.owner.user.tag} (${guild.owner.user})`)
-			.addField('Large Guild', guild.large ? '<:check:508594899117932544>' : '<:error:508595005481549846>', true)
+			.addField('Large Guild', guild.large ? '✅' : '❌', true)
 			.addField('New Guild Count', await this.client.guildCount(), true)
 			.setTimestamp()
 		);
