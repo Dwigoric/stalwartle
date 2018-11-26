@@ -7,6 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['sts'],
+			guarded: true,
 			bucket: 2,
 			cooldown: 15,
 			requiredPermissions: ['EMBED_LINKS'],
