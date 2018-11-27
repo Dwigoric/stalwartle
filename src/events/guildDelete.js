@@ -17,6 +17,7 @@ module.exports = class extends Event {
 			.setTitle(`${guild.name}  |  ${guild.id}`)
 			.addField('Guild Owner', `${guild.owner.user.tag} (${guild.owner.user})`)
 			.addField('Large Guild', guild.large ? '✅' : '❌', true)
+			.addField('Guild Members', guild.memberCount, true)
 			.addField('New Guild Count', await this.client.guildCount(), true)
 			.setTimestamp()
 		);
