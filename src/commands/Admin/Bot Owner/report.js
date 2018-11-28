@@ -17,10 +17,11 @@ module.exports = class extends Command {
 
 	async run(msg, [repUser, repMsg, ...repCom]) {
 		const reportChans = {
-			'magical-ideas': '445822516364181535',
-			'magical-bugs': '445822556214394880'
+			[this.client.settings.get('bugs.reports')]: this.client.settings.get('bugs.processed'),
+			[this.client.settings.get('suggestions.reports')]: this.client.settings.get('suggestions.processed')
 		};
 		if (!repMsg.author.equals(this.client.user)) return null;
+		if (!Object.keys(reportChans).includes(msg.channel.id)) throw '<:error:508595005481549846>  ::  This command can only be run in bug and suggestions channels.';
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(repUser.tag, repUser.displayAvatarURL())
@@ -32,14 +33,14 @@ module.exports = class extends Command {
 			return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
 		}) : null;
 		if (attachments && attachments.size) embed.setImage(attachments.first().url);
-		if (!msg.flags.deny) this.client.channels.get(reportChans[msg.channel.name]).send(embed).catch();
+		if (!msg.flags.deny) this.client.channels.get(reportChans[msg.channel.id]).send(embed).catch();
 		msg.delete();
 		msg.send(`<:check:508594899117932544>  ::  Report sent to **${repUser.tag}**.`).then(sent => {
 			setTimeout(() => {
 				sent.delete();
 			}, 5000);
 		});
-		return repUser.send(`Your ${msg.channel.name.slice(0, -1).split('-').join(' ')} has been acknowledged by a high lord!`, { embed })
+		return repUser.send('Your submission has been acknowledged by a high lord!', { embed })
 			.then(() => repMsg.delete())
 			.catch(() => null);
 	}

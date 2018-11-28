@@ -18,9 +18,13 @@ class Stalwartle extends Client {
 		}
 
 		Stalwartle.defaultClientSchema
-			.add('bugChannel', 'textchannel')
-			.add('suggestionChannel', 'textchannel')
 			.add('changelogs', 'textchannel')
+			.add('bugs', bugs => bugs
+				.add('reports', 'textchannel')
+				.add('processed', 'textchannel'))
+			.add('suggestions', suggestions => suggestions
+				.add('reports', 'textchannel')
+				.add('processed', 'textchannel'))
 			.add('restart', restart => restart
 				.add('channel', 'textchannel')
 				.add('timestamp', 'number'))
