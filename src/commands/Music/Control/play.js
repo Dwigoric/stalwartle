@@ -39,7 +39,7 @@ module.exports = class extends Command {
 		if (!msg.guild.player.channel) this.join(msg);
 		await this.addToQueue(msg, song);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
-		return this.play(msg, queue.length ? queue[0] : song);
+		return this.play(msg, queue.length ? queue[0] : Array.isArray(song) ? song[0] : song);
 	}
 
 	join(msg) {
@@ -107,10 +107,9 @@ module.exports = class extends Command {
 			if (queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`;
 			let songCount = 0;
 			for (const track of song) {
-				if (track.info.length <= 18000000) {
-					queue.push(track);
-					songCount++;
-				}
+				if (track.info.length > 18000000) continue;
+				queue.push(track);
+				songCount++;
 			}
 			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? '' : 's'} been added to the queue. All songs longer than 5 hours weren't added.`);
 		} else if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
