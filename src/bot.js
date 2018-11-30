@@ -103,12 +103,12 @@ class Stalwartle extends Client {
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
 		Stalwartle.defaultPermissionLevels
-			.add(5, (client, msg) => msg.guild && msg.guild.settings.get('music.dj').some(role => msg.member.roles.keyArray().includes(role))) // eslint-disable-line max-len
-			.add(6, (client, msg) => msg.guild && (msg.guild.settings.get('moderators.roles').some(role => msg.member.roles.keyArray().includes(role)) || msg.guild.settings.get('moderators.users').includes(msg.member.id))) // eslint-disable-line max-len
-			.add(7, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
-			.add(8, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
-			.add(9, (client, msg) => config.owners.includes(msg.author.id))
-			.add(10, (client, msg) => config.ownerID === msg.author.id);
+			.add(5, ({ guild, member }) => guild && guild.settings.get('music.dj').some(role => member.roles.keyArray().includes(role)))
+			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
+			.add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
+			.add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
+			.add(9, ({ author }) => config.owners.includes(author.id))
+			.add(10, ({ author }) => config.ownerID === author.id);
 	}
 
 	get voiceConnections() {
