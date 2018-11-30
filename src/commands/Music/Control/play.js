@@ -2,8 +2,9 @@ const { Command } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
 const fetch = require('node-fetch');
 
-const YOUTUBE_SOUNDCLOUD_REGEX = /^(https?:\/\/)?(www\.)?(soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
-	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
+const URL_REGEX = /^(https?:\/\/)?(www\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
+	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i'),
+	BANDCAMP_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+).', 'i');
 
 module.exports = class extends Command {
 
@@ -52,10 +53,10 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
+		if (URL_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
 			const linkRes = await this.getSongs(query, query.includes('soundcloud.com'));
-			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid URL.';
-			if (YOUTUBE_PLAYLIST_REGEX.test(query)) return linkRes;
+			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid stream or URL.';
+			if (YOUTUBE_PLAYLIST_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query)) return linkRes;
 			else return linkRes[0];
 		} else {
 			const results = await this.getSongs(query, Boolean(msg.flags.soundcloud));
@@ -86,11 +87,9 @@ module.exports = class extends Command {
 
 	async getSongs(query, soundcloud) {
 		let searchString;
-		if (YOUTUBE_SOUNDCLOUD_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
+		if (URL_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
 			searchString = query;
-			if (searchString.includes('&list') || searchString.includes('?list')) {
-				searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
-			}
+			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
 		const data = await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.nodes[0].password } }) // eslint-disable-line max-len
 			.then(res => res.json())
