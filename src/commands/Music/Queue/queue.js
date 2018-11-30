@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue yet! Add one with \`${msg.guildSettings.get('prefix')}play\``;
+		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue yet! Add one with \`${msg.guild.settings.get('prefix')}play\``;
 		const np = queue[0];
 		const npStatus = msg.guild.player.playing ?
 			!msg.guild.player.paused ?

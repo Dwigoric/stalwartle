@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		if (msg.member.queue.length) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!query) {
-			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guildSettings.get('prefix')}play\``;
+			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guild.settings.get('prefix')}play\``;
 			if (!msg.guild.player.channel) this.join(msg);
 			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
 			else return this.play(msg, queue[0]);

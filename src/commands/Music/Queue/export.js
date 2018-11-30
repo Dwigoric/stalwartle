@@ -12,7 +12,7 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!queue.length) throw `<:error:508595005481549846>  ::  The queue is empty. Add one using the \`${msg.guildSettings.get('prefix')}play\` command.`;
+		if (!queue.length) throw `<:error:508595005481549846>  ::  The queue is empty. Add one using the \`${msg.guild.settings.get('prefix')}play\` command.`;
 		let choice;
 		do {
 			choice = await msg.prompt('📜  ::  Should the queue be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
