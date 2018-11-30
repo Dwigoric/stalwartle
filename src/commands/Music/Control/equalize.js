@@ -12,7 +12,7 @@ module.exports = class extends Command {
 				'**Gain** is the multiplier for the given band. The default value of gain each band is `0`.',
 				'Valid values range from `-0.25` to `1.0`, where `-0.25` means the given band is completely muted, and `0.25` means it is doubled.',
 				'\nModifying the gain could also change the volume of the output.',
-				'\nTo set gain for all bands, replace the `band` with `setall`.'
+				'\nTo set gain for all bands, replace the `band` with `setall`, e.g. `s.eq setall 0`.'
 			].join('\n'),
 			usage: '<setall|Band:integer{0,14}> <Gain:number{-0.25,1.0}>',
 			usageDelim: ' '
