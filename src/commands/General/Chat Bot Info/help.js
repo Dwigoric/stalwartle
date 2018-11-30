@@ -50,8 +50,10 @@ module.exports = class extends Command {
 						`\nUse the command \`${this.client.options.prefix}bug\` to report a bug and \`${this.client.options.prefix}suggest\` if you have suggestions.`,
 						'\n__**DONATION PERKS**__',
 						'$3 ⇒ Removal of Music Queue limit of 250.',
-						'$5 ⇒ Removal of 5-hour limit for each track in music.',
-						'$8 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel.'
+						'$5 ⇒ Removal of 5-hour limit for each track in music. ($3 perk is included)',
+						'$8 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel. ($3 and $5 perks are included)',
+						'*Please pay at <https://paypal.me/Dwigoric>. Make sure to use **USD**.*',
+						`*AFTER donating, contact ${this.client.application.owner.tag} or go to my support server to avail of these perks.*`
 					].join('\n') : '',
 					`\nBot developed by **${this.client.application.owner.tag}**`,
 					`💡 **ProTip #1**: By mentioning "${this.client.user}", I will give the server's current prefix.`,
