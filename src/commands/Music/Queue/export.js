@@ -28,7 +28,7 @@ module.exports = class extends Command {
 					method: 'POST',
 					body: queue.map(track => track.info.uri).join('\r\n')
 				}).then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  Sorry! An unknown error occurred.'; });
-				return msg.send(`<:check:508594899117932544>  ::  Exported the queue to hastebin: <https://hastebin.com/${key}>`);
+				return msg.send(`<:check:508594899117932544>  ::  Exported the queue to hastebin: <https://hastebin.com/${key}.stalwartle>`);
 			}
 		}
 		return null;
