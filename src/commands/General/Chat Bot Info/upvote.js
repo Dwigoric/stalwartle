@@ -15,7 +15,7 @@ module.exports = class extends Command {
 		return msg.sendEmbed(new MessageEmbed()
 			.setAuthor(`Upvote ${this.client.user.username}`, this.client.user.displayAvatarURL())
 			.setDescription([
-				'Aside from donations, you can support me simply by upvoting me on bot listing sites!',
+				'Aside from donations, you can support me by simply upvoting me on bot listing sites!',
 				`• [Discord Bot List](https://discordbots.org/bot/${this.client.user.id}/vote)`,
 				`• [botlist.space](https://botlist.space/bot/${this.client.user.id})`,
 				`• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.client.user.id})`,
