@@ -24,7 +24,10 @@ module.exports = class extends Command {
 			const bands = [];
 			for (band of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]) bands.push({ band, gain });
 			msg.guild.player.setEQ(bands);
-			return msg.send(`<:check:508594899117932544>  ::  Successfully equalized all bands' gain to \`${gain}\`.`);
+			return msg.send([
+				`<:check:508594899117932544>  ::  Successfully equalized all bands' gain to \`${gain}\`.`,
+				gain !== 0 ? ` *Make sure you know what you're doing. Run \`${msg.guild.settings.get('prefix')}eq setall 0\` if you're unsure.*` : ''
+			].join(''));
 		}
 		msg.guild.player.setEQ([{ gain, band }]);
 		return msg.send([
