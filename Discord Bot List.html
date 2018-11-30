@@ -1,364 +1,103 @@
-<!DOCTYPE html>
 <html>
+<head>
 <style>
-    body {
-        background: url('https://i.imgur.com/yKfQlhl.png');
-        background-color: rgb(54, 57, 62);
-        background-repeat: repeat;
-        font-family: Trebuchet MS;
-    }
-    
-    p {
-        text-align: center;
-        color: black;
-    }
-    
-    .table {
-        margin: 10px;
-        border: 3px solid rgba(0, 0, 0, 0.644);
-        background-color: rgba(211, 211, 211, 0.75);
-    }
-    
-    .table th,
-    .table td {
-        padding: 3px;
-        text-align: center;
-        border-inline-end: 1px solid rgba(0, 0, 0, 0.644);
-    }
-    
-    .table td {
-        border-top: 2px solid rgba(0, 0, 0, 0.644);
-        width: 3%;
-        font-family: Courier New, Courier, monospace;
-    }
-    
-    .table td#desc {
-        text-align: left;
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    }
-    
-    .footer {
-        position: relative;
-        padding: 20px;
-        bottom: 0;
-        width: 100%;
-        background: rgba(0, 0, 0, .75);
-        text-align: center;
-        color: white;
-        font-size: 16px;
-        font-family: Verdana;
-    }
-    
-    #site-header {
-        background-color: rgb(54, 57, 62)!important;
-    }
-    
-    element.style {
-        background-color: rgb(54, 57, 62)!important;
-    }
-    
-    h1 {
-        color: rgba(54, 57, 62);
-    }
-    
-    h2 {
-        color: rgb(158, 240, 238);
-        text-align: center;
-        background-color: rgba(212, 175, 55, .75);
-        margin-left: 25%;
-        margin-right: 25%;
-        padding: 10px;
-    }
-    
-    h3 {
-        color: saddlebrown;
-        text-align: center;
-        background-color: rgba(212, 175, 55, .75);
-        margin-left: 40%;
-        margin-right: 40%;
-        padding: 10px;
-        border-radius: 5px;
-    }
-</style>
+.depth {
+	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.3);
+}
 
+.stalwartle-card {
+	background: url("https://i.imgur.com/yKfQlhl.png"), linear-gradient(to bottom, rgb(185, 47, 47), #b66e10);
+	font-family: Trebuchet MS;
+	margin-top: 30px;
+	padding: 10px 0 0 0;
+}
+.stalwartle-card h1 {
+	font-size: 40px;
+	line-height: 40px;
+	letter-spacing: 10px;
+	font-weight: 600;
+	margin: 0px 5% 0 5%;
+	font-family: Trebuchet MS;
+}
+.stalwartle-card h2 {
+	font-size: 25px;
+	line-height: 20px;
+	font-weight: 400;
+	margin: 10px 5% 0 5%;
+	font-family: Trebuchet MS;
+    text-align: center;
+}
+.stalwartle-card h3 {
+	background-color: rgba(212, 175, 55, .75);
+	font-size: 20px;
+	line-height: 20px;
+	font-weight: 400;
+	margin: 10px 30% 0 30%;
+	font-family: Trebuchet MS;
+	border-radius: 5px;
+	padding: 10px;
+    text-align: center;
+}
+.stalwartle-card p {
+	background-color: rgba(250,235,215,.75);
+	border-radius: 10px;
+	padding: 20px;
+	margin: 10px;
+}
+.stalwartle-card li {
+	text-align: left;
+	margin: 10px 5% 0 5%;
+	border-radius: 5px 5px 0 0;
+}
+.footer {
+	position: relative;
+	padding: 20px;
+	bottom: 0;
+	width: 100%;
+	background: rgba(0, 0, 0, .75);
+	text-align: center;
+	color: white;
+	font-size: 16px;
+	font-family: Verdana;
+}
+</style>
+</head>
 <body>
-    <h2>Unique Features</h2>
-    <h3>Customizable Prefix</h3>
-    <p>You can customize the prefix of this bot server-wide. I mean, the aim of this bot is high customizability, so of course this is a feature.</p>
-    <h3>Bug Reports and Suggestions</h3>
-    <p>If you have bug reports or suggestions, you can use the respective command or you can tell us directly in our support server. You can also just hang out with us there or in our community server Insanity Philippines (shown above).</p>
-    <h3>AFK System</h3>
-    <p>This bot has a very customizable AFK system. You can remove your AFK status by using the AFK command or just by talking -- whichever you want -- by using the AFK toggle command (s.afktoggle). This also shows the last moment you've been seen (e.g.
-		"2 hours ago").</p>
+<link href="https://fonts.googleapis.com/css?family=Trebuchet MS" rel="stylesheet"/>
+<div class="stalwartle-card">
+	<h1><b>Why Stalwartle is a GREAT BOT</b></h1>
+	<h2>Type <code>s.help</code> to get a list of commands</h2>
+	<h3>Music</h3>
+	<p>
+		With sound equalizer, you can play your favorite online radio (<code>.m3u</code>, <code>.pls</code>, <code>.xspf</code>), SoundCloud tracks, YouTube playlists, or your favorite meme song! More information on <code>s.help Music</code>
+		<br>
+		<b>Supported ways to play music:</b>
+	</p>
+		<li>YouTube</li>
+		<li>SoundCloud</li>
+		<li>Bandcamp</li>
+		<li>Twitch</li>
+		<li>Beam.pro</li>
+		<li>Vimeo</li>
+	<h3>Configuration Commands</h3>
+	<p>If you want to change something in your server's settings, or in your user configuration, simply use <code>s.conf</code> or <code>s.userconf</code> respectively! Things such as timezone, swear words, automod modules, and ignored channels are there! Just use <code>&lt;folder&gt;.&lt;item&gt;</code> to access stuff inside folders!</p>
+	<h3>Memeful!</h3>
+	<p>This bot has been infested with a lot, like, a LOT, of meme commands. They're all under the Fun category (<code>s.help Fun</code>), feel free to explore. ;)</p>
 	<h3>Reminders</h3>
 	<p>Did you want to be reminded of that daily reward in that MMO you always play? Or you just want to be reminded of a monthly giveaway in an RPG? Or you just want to be reminded to buy that item on sale but you can't go on your desktop until later? Worry not! Stalwartle has reminders which you can customize!</p>
 	<h3>Warns, Mutes, Modlogs, and much more!</h3>
 	<p>Have you ever wanted to keep track of all your moderation actions? We just have the thing for you! Stalwartle has modlogs -- and in case you don't want to log them, that is possible too! Oh, you wanted to get the warnings of a specific user? You wanted to get the modlogs of a user? Our moderation commands are perfectly flexible!</p>
 	<h3>TV Show and Movie Searches</h3>
-	<p>Oh! You wanna know how many seasons The Big Bang Theory has? Just run the s.tvshow command! Oh! You want info about movies instead? Just run the s.movie command!</p>
-    <h3>Timezones</h3>
-    <p>Struggled in timezones? Worry not! This bot allows you to have your own timezone Discord-wide (well, as long as you use the bot). This applies for all time-related information except in embed timestamps. The default timezone is GMT.</p>
-    <h3>Community Polls</h3>
-    <p>This bot can fix most of your arguments! By using the poll command (s.poll), you can start a poll in the channel you want and have people react to the poll to settle it with votes.</p>
-    <h3>Need a Die?</h3>
+	<p>Oh! You wanna know how many seasons The Big Bang Theory has? Just run the <code>s.tvshow</code> command! Oh! You want info about movies instead? Just run the <code>s.movie</code> command!</p>
+	<h3>Timezones</h3>
+	<p>Struggled in timezones? Worry not! This bot allows you to have your own timezone Discord-wide (well, as long as you use the bot). This applies for all time-related information except in embed timestamps. The default timezone is GMT.</p>
+	<h3>Community Polls</h3>
+	<p>This bot can fix most of your arguments! By using the poll command (<code>s.poll</code>), you can start a poll in the channel you want and have people react to the poll to settle it with votes.</p>
+	<h3>Need a Die?</h3>
 	<p>This bot can roll a die or multiple dice, in case you have a board game with a friend and you don't have the necessary die and decide whether to heal yourself or attack the monster.</p>
-	<h3>And much more! <a href="https://bit.ly/Stalwartle">Invite Stalwartle</a> to your server now!</h3>
-    <hr>
-    <hr>
-    <h2>Stalwartle's Command Documentation (s.help [command])</h2>
-  	<p>*This command list is <b><i>extremely</i></b> outdated. Please use s.commands instead.</p>
-    <h3>
-        Bot Stuff
-    </h3><br>
-    <table class="table">
-        <tr>
-            <th>Command</th>
-            <th>Arguments (optional) [required]</th>
-            <th>Description</th>
-            <th>Aliases</th>
-        </tr>
-        <tr>
-            <td>s.prefix</td>
-            <td>(prefix to change to)</td>
-            <td id="desc">Changes the bot prefix server-wide or gives the current server prefix. Only users with <b>Manage Server</b> permission may change the prefix.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.hub</td>
-            <td></td>
-            <td id="desc">Gives the invite link to my server.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.invite</td>
-            <td></td>
-            <td id="desc">Gives you the invite link to invite me to your server.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.ping</td>
-            <td></td>
-            <td id="desc">Displays the bot's latency in terms of a ping-pong game.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.checkban</td>
-            <td>(user ID)</td>
-            <td id="desc">Do you want to know if you or your friend is banned from the bot? Just use this command <b>with the default prefix</b>. Add your friend's user ID to check if they are banned.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.changelog</td>
-            <td></td>
-            <td id="desc">This command does not send you the changelog, but instead gives you the invite link to my dev server so you can check out the announcements channel and see the latest changes for the bot.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.bug</td>
-            <td>[bug report details]</td>
-            <td id="desc">This command is used to report bugs. Those who submit silly bug reports will be banned from the bot. Your bug report is escorted by a samurai to my dev server where my developers can fix the bug as soon as they can.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.suggest</td>
-            <td>[suggestion]</td>
-            <td id="desc">Got a suggestion for the bot? Suggestions include message edits, text edits, image edits, basically anything except anything silly AND suggesting to use the bot for something against the <a href="https://discordapp.com/guidelines">Discord Guidelines</a>.
-                These will lead to a ban from the bot. Your suggestion is sent to my dev server that is heavily guarded by a samurai. My high lords will look into your suggestion as soon as they can and may send you a DM after it's checked.</td>
-            <td></td>
-        </tr>
-    </table>
-    <hr>
-    <h3>
-        Information
-    </h3><br>
-    <table class="table">
-        <tr>
-            <th>Command</th>
-            <th>Arguments (optional) [required]</th>
-            <th>Description</th>
-            <th>Aliases</th>
-        </tr>
-        <tr>
-            <td>s.userid</td>
-            <td>(user mention)</td>
-            <td id="desc">Gives you your user ID or of the user you mentioned.</td>
-            <td>uid</td>
-        </tr>
-        <tr>
-            <td>s.channelid</td>
-            <td>(channel mention)</td>
-            <td id="desc">Gives you the ID of the channel where you used the command in or of the channel you mentioned.</td>
-            <td>cid</td>
-        </tr>
-        <tr>
-            <td>s.serverid</td>
-            <td></td>
-            <td id="desc">Gives you the ID of the server where you used the command in.</td>
-            <td>sid</td>
-        </tr>
-        <tr>
-            <td>s.roleid</td>
-            <td>(role mention or role name)</td>
-            <td id="desc">Gives the ID of the role you mentioned or gave the name of.</td>
-            <td>rid</td>
-        </tr>
-        <tr>
-            <td>s.bot</td>
-            <td></td>
-            <td id="desc">Gives all information about this bot, including dependencies and others.</td>
-            <td>bi | binfo | botinfo</td>
-        </tr>
-        <tr>
-            <td>s.user</td>
-            <td>(user mention or user ID)</td>
-            <td id="desc">Gives information about you or the user you mentioned. You can also use their user ID.</td>
-            <td>ui | uinfo | userinfo</td>
-        </tr>
-        <tr>
-            <td>s.channel</td>
-            <td>(channel mention or channel ID)</td>
-            <td id="desc">Gives information about a channel. To get information about another channel, mention it or use its ID.</td>
-            <td>ci | cinfo | channelinfo</td>
-        </tr>
-        <tr>
-            <td>s.server</td>
-            <td>("icon" or "roles" or "emojis")<br>OR<br>(server ID) ("icon" or "roles" or "emojis")</td>
-            <td id="desc">Gives information about a server.</td>
-            <td>si | sinfo | serverinfo</td>
-        </tr>
-        <tr>
-            <td>s.role</td>
-            <td>(role mention, role ID or role name)</td>
-            <td id="desc">Gives information about a role. You can just use the role's name (case-sensitive), mention the role, or use its ID.</td>
-            <td>ri | rinfo | roleinfo</td>
-        </tr>
-    </table>
-    <hr>
-    <h3>
-        Utility
-    </h3><br>
-    <table class="table">
-        <tr>
-            <th>Command</th>
-            <th>Arguments (optional) [required]</th>
-            <th>Description</th>
-            <th>Aliases</th>
-        </tr>
-        <tr>
-            <td>s.avatar</td>
-            <td>(user mention or user ID)</td>
-            <td id="desc">Shows your avatar or of the user you mentioned in embed form.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.rawavatar</td>
-            <td>(user mention or user ID)</td>
-            <td id="desc">The same as the <b>s.avatar</b> command but doesn't use embeds.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.purge</td>
-            <td>[amount of messages to be deleted]</td>
-            <td id="desc">Deletes a number of messages from the argument. Due to Discord API restrictions, messages older than 14 days cannot be deleted.<br><br>Only users with the Manage Messages permission may use this command.</td>
-            <td>prune</td>
-        </tr>
-        <tr>
-            <td>s.choose</td>
-            <td>[choice 1] | [choice 2] | (other choices)</td>
-            <td id="desc">Chooses between two or more choices. To separate each choice, use <b>|</b>.<br>Ex: <b>s.choose to be | not to be</b></td>
-            <td>pick</td>
-        </tr>
-        <tr>
-            <td>s.ignore</td>
-            <td>(channel mention or channel ID)</td>
-            <td id="desc">Ignores all commands in the channel or the mentioned channel. Use this command again to reenable the commands in the channel or the mentioned channel.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.math</td>
-            <td>[mathematical expression]</td>
-            <td id="desc">Performs mathematical operations. Use <b>s.help math</b> to get a list of possible operations.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.afk</td>
-            <td>(reason)</td>
-            <td id="desc">Sets you as AFK. Supplying a reason is optional.<br><br>If someone mentions you, I will inform them that you are AFK (if you are).</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.timezone</td>
-            <td></td>
-            <td id="desc">Sets your timezone which is GMT by default. The timezone format should be in the <a href="http://bit.ly/2ySrZKP">TZ format</a>.<br><br>All time and date from me (except embed timestamps) will be based from your (if you are the command trigerrer)
-                timezone.
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.rgb</td>
-            <td>[color HEX code]</td>
-            <td id="desc">This command converts your HEX code to its RGB equivalent. The <b>#</b> at the beginning of the HEX code is optional.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.hex</td>
-            <td>[R value], [G value], [B value]</td>
-            <td id="desc">This command converts your RGB value to its HEX code equivalent. Use <b>,</b> in separating each value! Ex. <b>4, 5, 6</b></td>
-            <td></td>
-        </tr>
-    </table>
-    <hr>
-    <h3>
-        Fun
-    </h3><br>
-    <table class="table">
-        <tr>
-            <th>Command</th>
-            <th>Arguments (optional) [required]</th>
-            <th>Description</th>
-            <th>Aliases</th>
-        </tr>
-        <tr>
-            <td>s.hephep</td>
-            <td></td>
-            <td id="desc">Hooray!</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.say</td>
-            <td>[something for the bot to say]</td>
-            <td id="desc">Makes the bot what you want it to say.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.8ball</td>
-            <td>[question or random message]</td>
-            <td id="desc">Gives a possible answer to what you ask or say.</td>
-            <td>eightball</td>
-        </tr>
-        <tr>
-            <td>s.psycho</td>
-            <td>(user mention or user ID)</td>
-            <td id="desc">This command is based from the anime <b>Psycho Pass</b>. A person's Crime Coefficient is a numerical measure of said person's probability/propensity to commit a crime. It is one part of a person's overall <a href="http://bit.ly/2CdrwCL">Psycho-Pass</a>.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.discordtheme</td>
-            <td></td>
-            <td id="desc">Because dark theme > light theme<br><br>The image wasn't made for discrimination nor was it made by my creator. All credits goes to the image artist.</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>s.rate</td>
-            <td>[what you want me to rate]</td>
-            <td id="desc">Rates anything you want from 0-10. Either 10 being the worst or the best -- it's really up to you.</td>
-            <td></td>
-        </tr>
-    </table>
-    <br>
-    <div class="footer">
-        Bot coded, designed and published by: Dwigoric#8931
-    </div>
+	<h2>And much more! <a href="https://bit.ly/Stalwartle">Invite Stalwartle</a> to your server now!</h2>
+	<br>
+	<div class="footer">Bot coded, designed and published by: Dwigoric#8931</div>
+</div>
 </body>
-
 </html>
