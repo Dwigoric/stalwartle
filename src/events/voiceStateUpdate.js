@@ -4,6 +4,7 @@ module.exports = class extends Event {
 
 	run(oldState, newState) {
 		if (!this.client.player) return null;
+		if (newState.guild.settings.get('donation') >= 8) return null;
 		if (!newState.guild.player.channel) return null;
 		if (newState.channel && newState.channel.id !== newState.guild.player.channel) return null;
 		if (oldState.channel && oldState.channel.id !== newState.guild.player.channel) return null;

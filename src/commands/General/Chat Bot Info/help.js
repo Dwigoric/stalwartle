@@ -45,11 +45,15 @@ module.exports = class extends Command {
 					this.client.application.botPublic ? [
 						`\nWant to add ${this.client.user.username} to your own server or to a server you manage? If you have **Manage Server** permissions, you can add this bot by using the link:`,
 						`<http://bit.ly/${this.client.user.username.split(' ').join('-')}>`,
-						'\n\nNeed help or has ideas for the bot? Just want somewhere to hang out? Be with us here:',
+						'\nNeed help or has ideas for the bot? Just want somewhere to hang out? Be with us here:',
 						`**${this.client.guilds.get('502895390807293963').name}** (<https://discord.gg/EH7jKFH>)`,
 						`\nUse the command \`${this.client.options.prefix}bug\` to report a bug and \`${this.client.options.prefix}suggest\` if you have suggestions.`,
-						`\nBot developed by **${this.client.application.owner.tag}**`
+						'\n__**DONATION PERKS**__',
+						'$3 ⇒ Removal of Music Queue limit of 250.',
+						'$5 ⇒ Removal of 5-hour limit for each track in music.',
+						'$8 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel.'
 					].join('\n') : '',
+					`\nBot developed by **${this.client.application.owner.tag}**`,
 					`💡 **ProTip #1**: By mentioning "${this.client.user}", I will give the server's current prefix.`,
 					"💡 **ProTip #2**: By using `s.help (command)`, you can get the command's additional information!",
 					'💡 **ProTip #3**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!',

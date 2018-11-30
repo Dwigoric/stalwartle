@@ -47,6 +47,7 @@ class Stalwartle extends Client {
 			.add('logging', 'boolean', { default: true })
 			.add('modlogShowContent', 'boolean', { default: true })
 			.add('ignored', 'channel', { array: true })
+			.add('donation', 'integer', { default: 0, configurable: false })
 			.add('autorole', autorole => autorole
 				.add('user', 'role')
 				.add('bot', 'role'))
