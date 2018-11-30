@@ -2,7 +2,7 @@ const { Command } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
 const fetch = require('node-fetch');
 
-const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
+const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
 	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i'),
 	BANDCAMP_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+).', 'i');
 
