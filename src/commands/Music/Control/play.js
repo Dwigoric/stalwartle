@@ -144,7 +144,7 @@ module.exports = class extends Command {
 				this.client.player.leave(msg.guild.id);
 			}
 		});
-		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${song.info.author}`);
+		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
 
 	async init() {
