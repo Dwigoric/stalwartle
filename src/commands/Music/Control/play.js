@@ -45,6 +45,7 @@ module.exports = class extends Command {
 	}
 
 	join(msg) {
+		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
 		this.client.player.leave(msg.guild.id);
 		this.client.player.join({
 			host: this.client.options.nodes[0].host,
