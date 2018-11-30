@@ -122,7 +122,7 @@ class Stalwartle extends Client {
 		if (ctxAPIkey) {
 			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
 				method: 'POST',
-				body: JSON.stringify({ key: ctxAPIkey, server_count: this.guildCount() }), // eslint-disable-line camelcase
+				body: JSON.stringify({ key: ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
 				headers: { 'Content-Type': 'application/json' }
 			});
 		}
