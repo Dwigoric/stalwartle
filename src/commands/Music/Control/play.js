@@ -17,7 +17,7 @@ module.exports = class extends Command {
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
 				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit`.',
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
-				'\nTo play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
+				'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
 				'To play an online radio (`.m3u`, `.pls`, `.xspf`), simply supply the radio link.'
 			],
 			usage: '[YouTubeOrSoundCloud:url|Query:string]'
