@@ -5,6 +5,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			aliases: ['tz'],
 			description: 'Sets your timezone which is GMT by default.',
 			extendedHelp: [
 				'The timezone format should be in the [TZ format](http://bit.ly/2ySrZKP).',
