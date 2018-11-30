@@ -111,7 +111,7 @@ module.exports = class extends Command {
 				queue.push(track);
 				songCount++;
 			}
-			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? '' : 's'} been added to the queue.${msg.guild.settings.get('donation') < 5 && songCount < song.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
+			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue.${msg.guild.settings.get('donation') < 5 && songCount < song.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
 		} else if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			queue.splice(1, 0, song);
 			msg.channel.send(`🎶  ::  Forcibly played **${song.info.title}**.`);
