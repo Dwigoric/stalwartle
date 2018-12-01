@@ -28,10 +28,10 @@ module.exports = class extends Command {
 		try {
 			msg.send(`🔢  ::  Your expression evaluates to \`${math.eval(expr)}\`.`);
 		} catch (err) {
-			msg.send([
+			throw [
 				`<:error:508595005481549846>  ::  I would love to evaluate **${mExp}** but my magical calculator says it gave an error:`,
 				`\`\`\`js\n${err.name}: ${err.message}\n\`\`\``
-			].join('\n'));
+			].join('\n');
 		}
 	}
 
