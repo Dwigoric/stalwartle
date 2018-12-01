@@ -41,7 +41,7 @@ module.exports = class extends Argument {
 			if (USER_REGEXP.test(query)) return this.client.users.fetch(USER_REGEXP.exec(query)[1]).catch(() => null);
 			if (guild && /\w{1,32}#\d{4}/.test(query)) {
 				const res = guild.members.find(member => member.user.tag === query);
-				return res ? res.user : null;
+				return res ? this.client.users.fetch(res.id) : null;
 			}
 		}
 		return null;
