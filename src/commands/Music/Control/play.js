@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (msg.member.queue.length) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id) || [];
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!query) {
 			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guild.settings.get('prefix')}play\``;
 			if (!msg.guild.player.channel) this.join(msg);
@@ -103,7 +103,7 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id) || [];
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (Array.isArray(song)) {
 			if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 			let songCount = 0;
