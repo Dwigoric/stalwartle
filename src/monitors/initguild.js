@@ -11,8 +11,8 @@ module.exports = class extends Monitor {
 
 	async run(msg) {
 		if (!msg.guild) return;
-		this.checkTable(msg.guild.id, 'modlogs');
-		this.checkTable(msg.guild.id, 'music');
+		if (this.client.commands.filter(cmd => cmd.category === 'Moderation').has(msg.command.name)) this.checkTable(msg.guild.id, 'modlogs');
+		if (this.client.commands.filter(cmd => cmd.category === 'Music').has(msg.command.name)) this.checkTable(msg.guild.id, 'music');
 	}
 
 	async checkTable(guild, table) {
