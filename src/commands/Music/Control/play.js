@@ -104,8 +104,8 @@ module.exports = class extends Command {
 
 	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 		if (Array.isArray(song)) {
-			if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 			let songCount = 0;
 			for (const track of song) {
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
@@ -117,7 +117,6 @@ module.exports = class extends Command {
 			queue.splice(1, 0, song);
 			msg.channel.send(`🎶  ::  Forcibly played **${song.info.title}**.`);
 		} else {
-			if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 			queue.push(song);
 			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
 		}
