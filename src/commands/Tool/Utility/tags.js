@@ -17,7 +17,7 @@ module.exports = class extends Command {
 				if (['list'].includes(action)) return undefined;
 				if (!arg && !action) throw '<:error:508595005481549846>  ::  Whoops! Please use at least one subcommand or give the tag. e.g. `s.tag tagnamehere`';
 				if (['create', 'remove', 'edit'].includes(action) && !arg) throw '<:error:508595005481549846>  ::  Please provide the tag name.';
-				if (arg.length > 15) throw '<:error:508595005481549846>  ::  It seems your tag is longer than 15 characters. Tag names must be shorter than or equal to 15 characters.';
+				if (arg.length > 50) throw '<:error:508595005481549846>  ::  It seems your tag is longer than 50 characters. Tag names must be shorter than or equal to 50 characters.';
 				return arg;
 			})
 			.createCustomResolver('contents', (arg, possible, msg, [action]) => {
