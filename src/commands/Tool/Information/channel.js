@@ -25,20 +25,22 @@ module.exports = class extends Command {
 			.setAuthor(`Channel information for #${chan.name}`)
 			.addField('ID', chan.id, true)
 			.addField('Type', toTitleCase(chan.type), true)
+			.addField('Category', chan.parent ? chan.parent.name : 'No Category', true)
 			.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 			.setTimestamp();
 		if (chan.type === 'text') {
-			let nsfwstatus;
-			if (chan.nsfw) nsfwstatus = 'Enabled';
-			else nsfwstatus = 'Disabled';
-			embed = embed.addField('NSFW', nsfwstatus, true);
+			embed = embed
+				.addField('Topic', chan.topic)
+				.addField('Position', chan.position, true)
+				.addField('NSFW', chan.nsfw ? 'Enabled' : 'Disabled', true)
+				.addField('Ratelimit', chan.rateLimitPerUser ? `1 msg/${chan.rateLimitPerUser} second${chan.rateLimitPerUser === 1 ? '' : 's'}` : 'Disabled', true);
 		} else if (chan.type === 'voice') {
 			embed = embed
 				.addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
 				.addField('User Limit', chan.userLimit, true);
 		}
 		embed = embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`);
-		return msg.send({ embed: embed });
+		return msg.send({ embed });
 	}
 
 	async id(msg, [chan = msg.channel]) {
