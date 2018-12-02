@@ -6,6 +6,8 @@ const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|b
 	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i'),
 	BANDCAMP_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+).', 'i');
 
+const prompts = {};
+
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -27,7 +29,7 @@ module.exports = class extends Command {
 	async run(msg, [query]) {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
-		if (msg.member.queue.length) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
+		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!query) {
 			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guild.settings.get('prefix')}play\``;
@@ -36,7 +38,7 @@ module.exports = class extends Command {
 			else return this.play(msg, queue[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
-		msg.member.clearPrompt();
+		delete prompts[msg.member.id];
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`; // eslint-disable-line max-len
 		if (!msg.guild.player.channel) this.join(msg);
 		await this.addToQueue(msg, song);
@@ -66,11 +68,11 @@ module.exports = class extends Command {
 			else if (results.length === 1) return results[0];
 
 			const finds = results.slice(0, 5);
-			msg.member.addPrompt(finds);
+			prompts[msg.member.id] = finds;
 			let limit = 0, choice;
 			do {
 				if (limit >= 5) {
-					msg.member.clearPrompt();
+					delete prompts[msg.member.id];
 					throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
 				}
 				limit++;
@@ -78,12 +80,12 @@ module.exports = class extends Command {
 					`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
 					finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
 				].join('\n')).catch(() => ({ content: 'cancel' }));
-			} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > msg.member.queue.length);
+			} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > prompts[msg.member.id].length);
 			if (choice.content === 'cancel') {
-				msg.member.clearPrompt();
+				delete prompts[msg.member.id];
 				throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
 			}
-			return msg.member.queue[parseInt(choice.content) - 1];
+			return prompts[msg.member.id][parseInt(choice.content) - 1];
 		}
 	}
 
