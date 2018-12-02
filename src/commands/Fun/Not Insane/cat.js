@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { file } = await fetch('http://aws.random.cat/meow').then(res => res.json());
+		const { file } = await fetch('http://aws.random.cat/meow').then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  Something went wrong. Please try again.'; });
 		return msg.channel.sendFile(file, `cat.${file.slice(file.lastIndexOf('.'), file.length)}`);
 	}
 
