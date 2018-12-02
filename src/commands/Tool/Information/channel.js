@@ -30,7 +30,7 @@ module.exports = class extends Command {
 			.setTimestamp();
 		if (chan.type === 'text') {
 			embed = embed
-				.addField('Topic', chan.topic || 'No topic set.')
+				.setDescription(chan.topic || 'No topic set.')
 				.addField('Position', chan.position, true)
 				.addField('NSFW', chan.nsfw ? 'Enabled' : 'Disabled', true)
 				.addField('Ratelimit', chan.rateLimitPerUser ? `1 msg/${chan.rateLimitPerUser} second${chan.rateLimitPerUser === 1 ? '' : 's'}` : 'Disabled', true);
