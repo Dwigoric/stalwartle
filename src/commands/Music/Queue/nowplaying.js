@@ -1,6 +1,12 @@
 const { Command, Timestamp, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 
+const symbols = {
+	song: '🔂',
+	queue: '🔁',
+	none: '➡'
+};
+
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -32,7 +38,7 @@ module.exports = class extends Command {
 				.setDescription(`${progress.join('')} ${queue[0].info.isStream ? 'N/A' : `${parseInt((position / length) * 100)}%`}`)
 				.addField('Time', queue[0].info.isStream ? 'N/A - Online Stream' : `\`${timestamp.display(position)} / ${timestamp.display(length)}\``, true)
 				.addField('Volume', `${msg.guild.player.state.volume}%`, true)
-				.addField('Repeat', toTitleCase(msg.guild.settings.get('music.repeat')), true)
+				.addField('Repeat', `${symbols[msg.guild.settings.get('music.repeat')]} ${toTitleCase(msg.guild.settings.get('music.repeat'))}`, true)
 				.setTimestamp()
 		});
 	}
