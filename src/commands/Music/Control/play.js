@@ -4,7 +4,8 @@ const fetch = require('node-fetch');
 
 const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
 	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i'),
-	BANDCAMP_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+).', 'i');
+	SOUNDCLOUD_SET_REGEX = new RegExp('/([a-z0-9-_]+)/sets/([a-z0-9-_]+)', 'i'),
+	BANDCAMP_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+)', 'i');
 
 const prompts = {};
 
@@ -60,7 +61,7 @@ module.exports = class extends Command {
 		if (URL_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
 			const linkRes = await this.getSongs(query, query.includes('soundcloud.com'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid stream or URL.';
-			if (YOUTUBE_PLAYLIST_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query)) return linkRes;
+			if (YOUTUBE_PLAYLIST_REGEX.test(query) || SOUNDCLOUD_SET_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query)) return linkRes;
 			else return linkRes[0];
 		} else {
 			const results = await this.getSongs(query, Boolean(msg.flags.soundcloud));
