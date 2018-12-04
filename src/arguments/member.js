@@ -14,7 +14,7 @@ module.exports = class extends Argument {
 		const reg = new RegExp(regExpEsc(arg), 'i');
 		for (const member of msg.guild.members.values()) {
 			if (reg.test(member.user.username)) results.push(member);
-			if (new RegExp(arg, 'i').test(member.nickname) && !results.includes(member)) results.push(member);
+			if (new RegExp(arg, 'i').test(member.displayName) && !results.includes(member)) results.push(member);
 		}
 
 		let querySearch;
