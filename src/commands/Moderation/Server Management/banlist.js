@@ -48,7 +48,7 @@ module.exports = class extends Command {
 				if (options.url) return msg.sendMessage(`<:check:508594899117932544>  ::  Sent the ban list to hastebin: ${options.url}`);
 				options.hastebinUnavailable = true;
 				await this.getTypeOutput(msg, options);
-				return this.handleMessage(msg, options);
+				return this.handleMessage(msg, options, result);
 			}
 			case 'none':
 				return null;
