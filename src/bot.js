@@ -103,7 +103,7 @@ class Stalwartle extends Client {
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
 		Stalwartle.defaultPermissionLevels
-			.add(5, ({ guild, member }) => guild && guild.settings.get('music.dj').some(role => member.roles.keyArray().includes(role)))
+			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.keyArray().includes(role))))
 			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
 			.add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
 			.add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
