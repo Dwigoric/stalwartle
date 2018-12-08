@@ -55,6 +55,7 @@ module.exports = class extends Command {
 			guild: msg.guild.id,
 			channel: msg.member.voice.channel.id
 		}, { selfdeaf: true });
+		msg.guild.player.on('error', error => this.client.emit('wtf', error));
 	}
 
 	async resolveQuery(msg, query) {
@@ -133,7 +134,6 @@ module.exports = class extends Command {
 		msg.guild.player.pause(false);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.clearVoteskips();
-		msg.guild.player.once('error', error => this.client.emit('wtf', error));
 		msg.guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return;
 			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
