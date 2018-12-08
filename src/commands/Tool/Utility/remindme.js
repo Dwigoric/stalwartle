@@ -5,7 +5,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			aliases: ['remind', 'reminder'],
+			aliases: ['rem', 'remind', 'reminder'],
 			description: 'Schedules a reminder for you.',
 			usage: '[list|remove] (DurationUntilReminder:time) [Reminder:string] [...]',
 			extendedHelp: [
