@@ -113,8 +113,7 @@ module.exports = class extends Command {
 			const songs = Array.isArray(song) ? song : [song];
 			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
 			else queue.splice(0, 1, ...songs);
-		}
-		if (Array.isArray(song)) {
+		} else if (Array.isArray(song)) {
 			let songCount = 0;
 			for (const track of song) {
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
