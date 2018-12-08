@@ -1,5 +1,5 @@
 const { Event } = require('klasa');
-const { WebhookClient, MessageEmbed } = require('discord.js');
+const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Event {
 
@@ -14,7 +14,7 @@ module.exports = class extends Event {
 			.setColor(0x2ECC71)
 			.setAuthor("I've been added to a new server!", guild.owner.user.displayAvatarURL())
 			.setThumbnail(guild.iconURL({ format: 'png' }))
-			.setTitle(`${guild.name}  |  ${guild.id}`)
+			.setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
 			.addField('Guild Owner', `${guild.owner.user.tag} (${guild.owner.user})`)
 			.addField('Large Guild', guild.large ? '✅' : '❌', true)
 			.addField('Guild Members', guild.memberCount, true)
