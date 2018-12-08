@@ -2,7 +2,7 @@ const { Client } = require('klasa');
 const { Collection } = require('discord.js');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
-const { blsAPIkey, bodAPIkey, dblAPIkey, dpwAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
+const { blsAPIkey, bodAPIkey, dblAPIkey, dcbAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
 const fetch = require('node-fetch');
 const idiotic = require('idiotic-api');
 
@@ -133,11 +133,11 @@ class Stalwartle extends Client {
 				headers: { Authorization: dblAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
-		if (dpwAPIkey) {
-			fetch(`https://bots.discord.pw/api/bots/${this.user.id}/stats`, {
+		if (dcbAPIkey) {
+			fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
 				method: 'POST',
-				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
-				headers: { Authorization: dpwAPIkey, 'Content-Type': 'application/json' }
+				body: JSON.stringify({ guildCount: await this.guildCount() }),
+				headers: { Authorization: dcbAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
 		if (blsAPIkey) {
