@@ -31,7 +31,7 @@ module.exports = class extends Event {
 		this.client._initplayer();
 		this.client.setGuildCount();
 		this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
-			setInterval(() => {
+			this.client.setInterval(() => {
 				const status = statuses[Math.floor(Math.random() * statuses.length)];
 				this.client.user.setActivity(`${status.name} | ${this.client.options.prefix}help`, { type: status.type });
 			}, 60000);
