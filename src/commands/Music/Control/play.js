@@ -109,6 +109,11 @@ module.exports = class extends Command {
 	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
+		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
+			const songs = Array.isArray(song) ? song : [song];
+			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
+			else queue.splice(0, 1, ...songs);
+		}
 		if (Array.isArray(song)) {
 			let songCount = 0;
 			for (const track of song) {
@@ -117,10 +122,6 @@ module.exports = class extends Command {
 				songCount++;
 			}
 			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue.${msg.guild.settings.get('donation') < 5 && songCount < song.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
-		} else if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
-			if (msg.guild.player.playing) queue.splice(1, 0, song);
-			else queue.splice(0, 1, song);
-			msg.channel.send(`🎶  ::  Forcibly played **${song.info.title}**.`);
 		} else {
 			queue.push(song);
 			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
