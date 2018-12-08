@@ -43,8 +43,8 @@ module.exports = class extends Command {
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`; // eslint-disable-line max-len
 		if (!msg.guild.player.channel) this.join(msg);
 		await this.addToQueue(msg, song);
-		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
-		return this.play(msg, queue.length ? queue[0] : Array.isArray(song) ? song[0] : song);
+		if (msg.flags.force && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
+		return this.play(msg, queue.length && !msg.flags.force ? queue[0] : Array.isArray(song) ? song[0] : song);
 	}
 
 	join(msg) {
