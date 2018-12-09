@@ -13,8 +13,7 @@ module.exports = class extends Command {
 
 	async run(msg, [modlogRef, ...reason]) {
 		reason = reason.join(this.usageDelim);
-		const channel = msg.guild.channels.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
-		modlogRef = await channel.messages.fetch(modlogRef.toString()) ? modlogRef.toString() : modlogRef;
+		modlogRef = Object.keys(msg.guild.settings.get('modlogs')).some(async chan => await msg.guild.channels.get(chan).messages.fetch(modlogRef)) ? modlogRef.toString() : modlogRef;
 		const modlogs = await this.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs);
 		const modlog = typeof modlogRef === 'number' ? modlogs[modlogRef - 1] : modlogs.filter(log => log.message === modlogRef)[0];
 		if (!modlog) throw '<:error:508595005481549846>  ::  You provided an invalid modlog ID or message ID.';
@@ -22,6 +21,7 @@ module.exports = class extends Command {
 		modlogs.splice(Number(modlog.id) - 1, 1, modlog);
 		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
 
+		const channel = msg.guild.channels.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
 		if ((modlog.message || typeof modlogRef === 'string') && channel) {
 			const message = await channel.messages.fetch(modlog.message || modlogRef);
 			const embed = message.embeds[0];
