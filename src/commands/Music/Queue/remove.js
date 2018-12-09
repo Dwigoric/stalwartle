@@ -19,6 +19,7 @@ module.exports = class extends Command {
 	async run(msg, [songs]) {
 		songs = songs.split('-').slice(0, 2);
 		songs = [parseInt(songs[0]), parseInt(songs[1])];
+		if (isNaN(songs[0])) throw `<:error:508595005481549846>  ::  Invalid queue entry given. Refer to \`${msg.guild.settings.get('prefix')}help remove\` for more information.`;
 		if (!songs[1]) songs = songs[0]; // eslint-disable-line prefer-destructuring
 		if (songs === 0 || songs[0] === 0) throw '<:error:508595005481549846>  ::  The current song playing cannot be removed from the queue.';
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
