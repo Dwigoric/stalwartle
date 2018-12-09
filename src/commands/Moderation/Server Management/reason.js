@@ -21,8 +21,8 @@ module.exports = class extends Command {
 		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
 
 		const channel = msg.guild.channels.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
-		if (modlog.message && channel) {
-			const message = await channel.messages.fetch(modlog.message);
+		if ((modlog.message || typeof modlogRef === 'string') && channel) {
+			const message = await channel.messages.fetch(modlog.message || modlogRef);
 			const embed = message.embeds[0];
 			const index = embed.fields.findIndex(field => field.name === 'Reason');
 			embed.fields.splice(index >= 0 ? index : 2, index >= 0 ? 1 : 0, { inline: true, name: 'Reason', value: reason });
