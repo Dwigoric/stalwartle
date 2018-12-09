@@ -12,6 +12,7 @@ module.exports = class extends Event {
 			member.guild.owner.user.send(`⚠  ::  The goodbye channel for ${member.guild.name} has been deleted. This setting has been reset.`).catch(() => null);
 			return member.guild.settings.reset('goodbye');
 		}
+		if (!chan.postable) return member.guild.owner.user.send(`⚠  ::  I can't post to <#${chan.id}>, the goodbye channel for ${member.guild.name}.`).catch(() => null);
 		const params = [];
 		for (const [key, value] of Object.entries({
 			type: 'goodbye',
