@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		const channel = msg.guild.channels.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
 		let message;
 		if (channel) message = await channel.messages.fetch(modlog.message);
-		if (message) {
+		if (modlog.message) {
 			const embed = message.embeds[0];
 			const index = embed.fields.findIndex(field => field.name === 'Reason');
 			embed.fields.splice(index >= 0 ? index : 2, index >= 0 ? 1 : 0, { inline: true, name: 'Reason', value: reason });
