@@ -32,8 +32,7 @@ module.exports = class extends Command {
 			msg.guild.settings.update('muteRole', role[0].id, msg.guild);
 			return msg.send(`<:check:508594899117932544>  ::  Successfully set this server's mute role to **${role[0].name}**.`);
 		}
-		const regex = new RegExp(role.join(this.usageDelim), 'i');
-		const newRole = msg.guild.roles.some(_role => regex.test(_role.name)) ? msg.guild.roles.find(_role => regex.test(_role.name)) : await msg.guild.roles.create({
+		const newRole = await msg.guild.roles.create({
 			data: {
 				name: role.join(this.usageDelim),
 				color: 'DARKER_GREY',
