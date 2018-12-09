@@ -20,7 +20,9 @@ module.exports = class extends Command {
 			.then(body => body.categories[0]);
 		if (!search || !search.items || !search.items.length) throw '<:error:508595005481549846>  ::  Anime series not found!';
 
-		const $ = cheerio.load(await fetch(search.items[0].url).then(res => res.text())); // eslint-disable-line id-length
+		const url = search.items[0].url.split('/');
+		url.splice(-1, 1, encodeURIComponent(url.slice(-1)));
+		const $ = cheerio.load(await fetch(url.join('/')).then(res => res.text())); // eslint-disable-line id-length
 		const anime = {
 			url: search.items[0].url,
 			title: $('h1').text().trim(),
