@@ -55,6 +55,12 @@ class Stalwartle extends Client {
 			.add('moderators', moderators => moderators
 				.add('users', 'user', { array: true })
 				.add('roles', 'role', { array: true }))
+			.add('welcome', welcome => welcome
+				.add('version', 'string', { default: 'gearz', configurable: false })
+				.add('channel', 'textchannel'))
+			.add('goodbye', goodbye => goodbye
+				.add('version', 'string', { default: 'gearz', configurable: false })
+				.add('channel', 'textchannel'))
 			.add('music', music => music
 				.add('dj', 'role', { array: true })
 				.add('repeat', 'string', { default: 'none', configurable: false })
