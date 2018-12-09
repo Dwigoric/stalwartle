@@ -51,7 +51,7 @@ module.exports = class extends Command {
 		return display
 			.setFooterPrefix('Page ')
 			.setFooterSuffix(` [${selfroles.length} Selfrole${selfroles.length === 1 ? '' : 's'}]`)
-			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music queue...'), { filter: (reaction, author) => author === msg.author });
+			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the selfrole list'), { filter: (reaction, author) => author === msg.author });
 	}
 
 };
