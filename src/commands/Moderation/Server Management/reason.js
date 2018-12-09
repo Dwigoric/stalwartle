@@ -5,7 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			description: 'Change/update reason for a specific modlog given its ID or message ID.',
+			description: 'Change/update reason for a specific modlog given its ID.',
 			usage: '<ModlogID:integer> <Reason:string> [...]',
 			usageDelim: ' '
 		});
