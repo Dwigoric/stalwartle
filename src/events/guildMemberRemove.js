@@ -27,7 +27,7 @@ module.exports = class extends Event {
 		})) params.push(`${key}=${value}`);
 		return chan.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/greetings/unified?${params.join('&')}`, { headers: { Authorization: idioticAPIkey } })
 			.then(res => res.json())
-			.then(buffer => buffer.data)), 'goodbye.png');
+			.then(buffer => buffer.data)), 'goodbye.png', `👋  ::  ${member.user.tag} has left the server.`);
 	}
 
 };
