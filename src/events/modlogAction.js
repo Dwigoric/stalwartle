@@ -22,41 +22,44 @@ module.exports = class extends Event {
 			});
 		const moderator = message.author ? message.author.equals(user) ? this.client.user : message.author : this.client.user;
 		const { modlogs } = await this.client.providers.default.get('modlogs', message.guild.id);
-		modlogs.push({
-			id: (modlogs.length + 1).toString(),
-			timestamp: Date.now(),
-			type: message.command.name,
-			moderator: moderator.id,
-			user: user.id,
-			reason
-		});
-		this.client.providers.default.update('modlogs', message.guild.id, { modlogs });
-
 		const channel = message.guild.channels.get(message.guild.settings.get(`modlogs.${message.command.name}`));
 		if (!channel && message.guild.settings.get('logging') && message.author) {
 			return message.send([
 				`⚠ It seems that the modlog channel for ${message.command.name}s is not yet set.`,
-				'If you want to continue without logging in the future without this warning, you can use `s.conf set logging false`.',
-				'This does not mean that I will stop the logs. You can always view them at `s.modlogs`.'
+				`If you want to continue without logging in the future without this warning, you can use \`${message.guild.settings.get('prefix')}conf set logging false\`.`,
+				`This does not mean that I will stop the logs. You can always view them at \`${message.guild.settings.get('prefix')}modlogs\`.`
 			].join(' '));
 		}
-		if (!message.guild.settings.get('logging')) return true;
-		if (!channel) return true;
-		if (!channel.postable) return message.send(`<:error:508595005481549846>  ::  It seems that I cannot send messages in ${channel}.`);
-		const embed = new MessageEmbed()
-			.setColor(configs[message.command.name][0])
-			.setTitle(`Case #${modlogs.length}: ${toTitleCase(message.command.name)} ${configs[message.command.name][1]}`)
-			.setFooter(`User ID: ${user.id}`)
-			.setTimestamp()
-			.addField('Moderator', moderator, true)
-			.addField(user.bot ? 'Bot' : 'User', user, true);
-		if (reason) embed.addField('Reason', reason, true);
-		if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
-		if (message.content) {
-			embed.addField('Channel', message.channel, true);
-			if (message.guild.settings.get('modlogShowContent')) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
+
+		let logMessage = { id: null };
+		if (message.guild.settings.get('logging') && channel) {
+			if (!channel.postable) return message.send(`<:error:508595005481549846>  ::  It seems that I cannot send messages in ${channel}.`);
+			const embed = new MessageEmbed()
+				.setColor(configs[message.command.name][0])
+				.setTitle(`Case #${modlogs.length + 1}: ${toTitleCase(message.command.name)} ${configs[message.command.name][1]}`)
+				.setFooter(`User ID: ${user.id}`)
+				.setTimestamp()
+				.addField('Moderator', moderator, true)
+				.addField(user.bot ? 'Bot' : 'User', user, true);
+			if (reason) embed.addField('Reason', reason, true);
+			if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
+			if (message.content) {
+				embed.addField('Channel', message.channel, true);
+				if (message.guild.settings.get('modlogShowContent')) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
+			}
+			logMessage = await channel.send(embed);
 		}
-		return channel.send(embed);
+
+		modlogs.push({
+			id: (modlogs.length + 1).toString(),
+			message: logMessage.id,
+			moderator: moderator.id,
+			reason,
+			timestamp: Date.now(),
+			type: message.command.name,
+			user: user.id
+		});
+		return this.client.providers.default.update('modlogs', message.guild.id, { modlogs });
 	}
 
 	async checkAutomodQuota(message, member) {
