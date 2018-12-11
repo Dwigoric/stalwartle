@@ -37,7 +37,7 @@ module.exports = class extends Command {
 				.addField('Users', this.client.guilds.reduce((a, b) => a + b.memberCount, 0).toLocaleString(), true)
 				.addField('Servers', (await this.client.guildCount()).toLocaleString(), true)
 				//  .addField("Channels", await this.client.shard.broadcastEval('this.channels.size').then(results => results.reduce((prev, val) => prev + val, 0)).toLocaleString(), true)
-				.addField('Channels', this.client.channels.size.toLocaleString(), true)
+				.addField('Text Channels', this.client.channels.filter(chan => chan.type === 'text').size.toLocaleString(), true)
 				.addField('Uptime', `${upDays}d ${upHours}h ${upMins}m ${upSecs}s`, true)
 				.addField('Discord.js Version', require('discord.js').version, true)
 				.addField('Node.js Version', process.version, true)

@@ -44,7 +44,8 @@ module.exports = class extends Command {
 			.addField('🤖 General Information', [
 				`**Users**: ${this.client.guilds.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}`,
 				`**Servers**: ${this.client.guilds.size.toLocaleString()}`,
-				`**Channels**: ${this.client.channels.size.toLocaleString()}`,
+				`**Text Channels**: ${this.client.channels.filter(chan => chan.type === 'text').size.toLocaleString()}`,
+				`**Voice Connections**: ${this.client.voiceConnections.size}`,
 				`**Discord.js**: v${version}`,
 				`**Node JS**: ${process.version}`
 			], true)
