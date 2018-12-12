@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id)));
 
 		if (typeof user === 'number') {
-			const modlog = await this.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs[user - 1]);
+			const modlog = list[user - 1];
 			if (!modlog) throw `<:error:508595005481549846>  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
 			const _user = await this.client.users.fetch(modlog.user).catch(() => null);
 			const moderator = await this.client.users.fetch(modlog.moderator).catch(() => null);
@@ -40,6 +40,7 @@ module.exports = class extends Command {
 						`Type: ${toTitleCase(modlog.type)}`,
 						`Moderator: ${moderator} (\`${modlog.moderator}\`)`,
 						`User: ${_user} (\`${modlog.user}\`)`,
+						`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS z')} (${moment(modlog.timestamp).fromNow()})`,
 						`Reason: ${modlog.reason || 'Not specified.'}`
 					].join('\n'))
 					.setTimestamp(new Date(modlog.timestamp))
@@ -54,7 +55,7 @@ module.exports = class extends Command {
 			.setColor('RANDOM')
 			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? toTitleCase(msg.flags.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
 
-		Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
+		await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
 			const _user = this.client.users.get(modlog.user) || await this.client.users.fetch(modlog.user).catch(() => null);
 			const moderator = this.client.users.get(modlog.moderator) || await this.client.users.fetch(modlog.moderator).catch(() => null);
 			return [
