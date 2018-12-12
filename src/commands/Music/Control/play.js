@@ -55,7 +55,7 @@ module.exports = class extends Command {
 			guild: msg.guild.id,
 			channel: msg.member.voice.channel.id
 		}, { selfdeaf: true });
-		msg.guild.player.on('error', error => this.client.emit('wtf', error));
+		msg.guild.player.on('error', error => { throw `<:error:508595005481549846>  ::  ${error.error}`; });
 	}
 
 	async resolveQuery(msg, query) {
