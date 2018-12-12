@@ -30,17 +30,17 @@ module.exports = class extends Command {
 		queue.shift();
 		// if (!queue.length) return msg.channel.send(`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)}`);
 		let duration = np.info.length;
-		(queue.length ? chunk(queue, 10) : [np]).forEach((music10, tenPower) => display.addPage(template => template.setDescription([`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)} \`${new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'hh:' : ''}mm:ss`).display(np.info.length)}\`\n`] // eslint-disable-line max-len
+		(queue.length ? chunk(queue, 10) : [np]).forEach((music10, tenPower) => display.addPage(template => template.setDescription([`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)} \`${new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.info.length)}\`\n`] // eslint-disable-line max-len
 			.concat(queue.length ? music10.map((music, onePower) => {
 				const currentPos = (tenPower * 10) + (onePower + 1);
 				const { length } = music.info;
 				duration += length;
-				return `\`${currentPos}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'hh:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
+				return `\`${currentPos}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
 			}) : 'No upcoming tracks.'))));
 
 		return display
 			.setFooterPrefix('Page ')
-			.setFooterSuffix(` [${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}] - Queue Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'hh[h]' : ''}mm[m]ss[s]`).display(duration)}`) // eslint-disable-line max-len
+			.setFooterSuffix(` [${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}] - Queue Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`) // eslint-disable-line max-len
 			.run(message, { filter: (reaction, author) => author === msg.author });
 	}
 

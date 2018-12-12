@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		if (!queue.length || !msg.guild.player.channel || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 		const { length } = queue[0].info;
 		const { position } = msg.guild.player.state;
-		const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'hh:' : ''}mm:ss`);
+		const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`);
 
 		const progress = '▬'.repeat(25).split('');
 		progress.splice(Math.ceil(((position / length) || 0.01) * progress.length) - 1, 1, '🔘');
