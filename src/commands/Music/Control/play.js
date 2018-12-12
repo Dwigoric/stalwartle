@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, Timestamp } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
 const fetch = require('node-fetch');
 
@@ -80,7 +80,10 @@ module.exports = class extends Command {
 				limit++;
 				choice = await msg.prompt([
 					`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
-					finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)}`).join('\n')
+					finds.map((result, index) => {
+						const { length } = result.info;
+						return `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'hh:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
+					}).join('\n')
 				].join('\n')).catch(() => ({ content: 'cancel' }));
 			} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > prompts[msg.member.id].length);
 			if (choice.content === 'cancel') {
