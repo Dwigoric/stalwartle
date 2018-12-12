@@ -20,14 +20,12 @@ module.exports = class extends Command {
 	async run(msg, [player = msg.author]) {
 		const timezone = msg.author.settings.get('timezone');
 		const guildMember = await msg.guild.members.fetch(player.id).catch(() => null);
-		let nick, joined, roles, roleNum;
-
-		if (!guildMember) {
-			nick = 'Not a member of this server';
-			joined = 'Not a member of this server';
-			roles = 'Not a member of this server';
+		let nick = 'Not a member of this server',
+			joined = 'Not a member of this server',
+			roles = 'Not a member of this server',
 			roleNum = '';
-		} else {
+
+		if (guildMember) {
 			nick = guildMember.nickname || 'None';
 			joined = `${moment(guildMember.joinedAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guildMember.joinedAt).fromNow()}`;
 			roleNum = guildMember.roles.size ? `[${guildMember.roles.size}]` : '';

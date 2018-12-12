@@ -54,12 +54,9 @@ module.exports = class extends Command {
 
 		const roleCount = dGuild.roles.size > 1 ? dGuild.roles.size : 'None';
 
-		let emojis;
-		let emojiCount;
-		if (dGuild.emojis.size === 0) {
-			emojis = 'None';
-			emojiCount = '';
-		} else {
+		let emojis = 'None';
+		let emojiCount = '';
+		if (dGuild.emojis.size !== 0) {
 			emojiCount = `[${dGuild.emojis.size}]`;
 			if (dGuild.emojis.size <= 10) emojis = dGuild.emojis.array().join(' ');
 			else emojis = `${dGuild.emojis.first(10).join(' ')} **+ ${dGuild.emojis.size - 10} other emoji${dGuild.emojis.size - 10 === 1 ? '' : 's'}**`;
@@ -106,37 +103,29 @@ module.exports = class extends Command {
 
 	async emojis(msg, [dGuild = msg.guild]) {
 		if (!dGuild.emojis.size) return msg.send(`**${dGuild.name}** does not have any emoji yet.`);
-		const stat = [],
-			anim = [];
-
-		dGuild.emojis.forEach(emoji => {
-			if (/^<?a:/.test(emoji.toString())) anim.push(emoji);
-			else stat.push(emoji);
-		});
-
-		const statCount = stat.length,
-			animCount = anim.length;
+		const stat = dGuild.emojis.filter(emoji => !emoji.animated).array(),
+			anim = dGuild.emojis.filter(emoji => emoji.animated).array();
 
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle(`${dGuild.name}'s Emojis [${dGuild.emojis.size}]`);
-		const statEmojis = statCount ? stat.join('') : 'None';
-		const animEmojis = animCount ? anim.join('') : 'None';
+		const statEmojis = stat.length ? stat.join('') : 'None';
+		const animEmojis = anim.length ? anim.join('') : 'None';
 
 		if (statEmojis.length > 1024) {
 			const stats = [];
 			while (stat.length) stats.push(stat.splice(0, 25));
-			stats.forEach((part, partNum) => embed.addField(`Static Emojis (Part ${partNum + 1} - ${part.length}/${statCount})`, part.join('')));
+			stats.forEach((part, partNum) => embed.addField(`Static Emojis (Part ${partNum + 1} - ${part.length}/${stat.length})`, part.join('')));
 		} else {
-			embed.addField(`Static Emojis ${statCount ? `[${statCount}]` : ''}`, statEmojis);
+			embed.addField(`Static Emojis ${stat.length ? `[${stat.length}]` : ''}`, statEmojis);
 		}
 
 		if (animEmojis.length > 1024) {
 			const anims = [];
 			while (anim.length) anims.push(anim.splice(0, 25));
-			anims.forEach((part, partNum) => embed.addField(`Animated Emojis (Part ${partNum + 1} - ${part.length}/${animCount})`, part.join('')));
+			anims.forEach((part, partNum) => embed.addField(`Animated Emojis (Part ${partNum + 1} - ${part.length}/${anim.length})`, part.join('')));
 		} else {
-			embed.addField(`Animated Emojis ${animCount ? `[${animCount}]` : ''}`, animEmojis);
+			embed.addField(`Animated Emojis ${anim.length ? `[${anim.length}]` : ''}`, animEmojis);
 		}
 
 		return msg.send(embed);
