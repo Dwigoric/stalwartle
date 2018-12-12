@@ -48,6 +48,7 @@ module.exports = class extends Command {
 			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
 		if (!msg.flags.global && msg.guild) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
+		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...');
 		list = chunk(list, 10);
 
 		const display = new RichDisplay(new MessageEmbed()
@@ -66,7 +67,7 @@ module.exports = class extends Command {
 
 		return display
 			.setFooterSuffix(` | Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${msg.author.settings.get('cookies')} stalkie${msg.author.settings.get('cookies') === 1 ? '' : 's'}.`)
-			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...'), { filter: (reaction, user) => msg.author.equals(user) });
+			.run(message, { filter: (reaction, user) => msg.author.equals(user) });
 	}
 
 };

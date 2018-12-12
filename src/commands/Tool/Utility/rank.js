@@ -37,6 +37,7 @@ module.exports = class extends Command {
 	async list(msg) {
 		const selfroles = msg.guild.settings.get('selfroles');
 		if (!selfroles.length) throw '<:error:508595005481549846>  ::  Selfrole is not yet implemented in this server.';
+		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the selfrole list');
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(`Selfroles for ${msg.guild.name}`, msg.guild.iconURL())
@@ -51,7 +52,7 @@ module.exports = class extends Command {
 		return display
 			.setFooterPrefix('Page ')
 			.setFooterSuffix(` [${selfroles.length} Selfrole${selfroles.length === 1 ? '' : 's'}]`)
-			.run(await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the selfrole list'), { filter: (reaction, author) => author === msg.author });
+			.run(message, { filter: (reaction, author) => author === msg.author });
 	}
 
 };
