@@ -34,8 +34,6 @@ module.exports = class extends Command {
 			'Very High (Needs a verified\nphone number)'
 		];
 
-		const verif = verifLevel[dGuild.verificationLevel];
-
 		const gregion = {
 			'eu-central': 'Central Europe',
 			'eu-west': 'Western Europe',
@@ -45,6 +43,12 @@ module.exports = class extends Command {
 			'us-south': 'Southern US',
 			'us-central': 'Central US'
 		};
+
+		const filter = [
+			'Don\'t scan any messages.',
+			'Scan messages from\nmembers without a role',
+			'Scan messages sent by\nall members.'
+		];
 
 		const regionArr = dGuild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
@@ -70,8 +74,10 @@ module.exports = class extends Command {
 				.setThumbnail(dGuild.iconURL({ format: 'png' }))
 				.addField('ID', dGuild.id, true)
 				.addField('Owner', dGuild.owner ? `${dGuild.owner.user.tag}\n(${dGuild.owner.user})` : 'N/A', true)
-				.addField('Verification Level', verif, true)
 				.addField('Server Region', region, true)
+				.addField('Verification Level', verifLevel[dGuild.verificationLevel], true)
+				.addField('Two-Factor Requirement', dGuild.mfaLevel ? 'Enabled' : 'Disabled', true)
+				.addField('Explicit Content Filter', filter[dGuild.explicitContentFilter], true)
 				.addField('Member Count (active/total)', `${dGuild.presences.size}/${dGuild.memberCount}`, true)
 				.addField('Role Count', roleCount, true)
 				.addField('Text Channel Count', tchanCount, true)
