@@ -21,6 +21,7 @@ module.exports = class extends Command {
 		msg.sendMessage(new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(`${this.client.user.tag}'s Statistics 📟`, this.client.user.displayAvatarURL())
+			.setFooter(`Shard ${((msg.guild ? msg.guild.shard.id : msg.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}`)
 			.setTimestamp()
 			.addField('🤖 General Information', [
 				`**Users**: ${this.client.guilds.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}`,
