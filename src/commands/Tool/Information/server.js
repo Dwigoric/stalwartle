@@ -69,7 +69,7 @@ module.exports = class extends Command {
 				.setAuthor(dGuild.name, dGuild.iconURL({ format: 'png' }))
 				.setThumbnail(dGuild.iconURL({ format: 'png' }))
 				.addField('ID', dGuild.id, true)
-				.addField('Owner', `${dGuild.owner.user.tag}\n(${dGuild.owner.user})`, true)
+				.addField('Owner', dGuild.owner ? `${dGuild.owner.user.tag}\n(${dGuild.owner.user})` : 'N/A', true)
 				.addField('Verification Level', verif, true)
 				.addField('Server Region', region, true)
 				.addField('Member Count (active/total)', `${dGuild.presences.size}/${dGuild.memberCount}`, true)
