@@ -8,6 +8,10 @@ exports.config = {
 	language: 'en-US',
 	// The default configurable prefix for each guild
 	prefix: 's.',
+	// Whether to accept unprefixed commands in DMs
+	noPrefixDM: true,
+	// If the bot will be insensitive to the prefix case
+	prefixCaseInsensitive: true,
 	// If custom configs should be preserved when a guild removes your bot
 	preserveSettings: true,
 	// Whether d.js should queue your rest request in 'sequential' or 'burst' mode

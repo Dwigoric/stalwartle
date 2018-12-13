@@ -57,10 +57,11 @@ module.exports = class extends Command {
 					].join('\n') : '',
 					`\nBot developed by **${this.client.application.owner.tag}**`,
 					`💡 **ProTip #1**: By mentioning "${this.client.user}", I will give the server's current prefix.`,
-					"💡 **ProTip #2**: By using `s.help (command)`, you can get the command's additional information!",
-					'💡 **ProTip #3**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!',
-					'💡 **ProTip #4**: You do not want to use some commands in your server? Just use `s.conf set disabledCommands <command>`!',
-					'💡 **ProTip #5**: Having fun with the `s.conf` command? To access folders in e.g. `show` subcommand, use `s.conf show <folder>`. To access items inside the folder, use `s.conf show <folder>.<item>`.' // eslint-disable-line max-len
+					'💡 **ProTip #2**: Prefixes are **case-insensitive**, and **unprefixed commands** are supported **in DMs**.',
+					"💡 **ProTip #3**: By using `s.help (command)`, you can get the command's additional information!",
+					'💡 **ProTip #4**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!',
+					'💡 **ProTip #5**: You do not want to use some commands in your server? Just use `s.conf set disabledCommands <command>`!',
+					'💡 **ProTip #6**: Having fun with the `s.conf` command? To access folders in e.g. `show` subcommand, use `s.conf show <folder>`. To access items inside the folder, use `s.conf show <folder>.<item>`.' // eslint-disable-line max-len
 				].join('\n'));
 			}
 		}
