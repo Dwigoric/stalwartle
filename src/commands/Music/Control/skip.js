@@ -26,7 +26,7 @@ module.exports = class extends Command {
 		const { members } = msg.guild.channels.get(msg.guild.player.channel);
 		msg.guild.addVoteskip(msg.author.id, members);
 		const requiredVotes = members.filter(mb => !mb.user.bot).size / 2;
-		if (msg.guild.voteskips.length <= requiredVotes) return msg.send(`<:check:508594899117932544>  ::  Successfully added your vote to skip the current song! Current votes: \`${msg.guild.voteskips.length}\`/\`${Math.ceil(requiredVotes)}\`. Bots are not counted. To forcibly skip the song, use \`${msg.guild.settings.get('prefix')}skip --force\`.`); // eslint-disable-line max-len
+		if (msg.guild.voteskips.length <= requiredVotes) return msg.send(`<:check:508594899117932544>  ::  Successfully added your vote to skip the current song! Current votes: \`${msg.guild.voteskips.length}\`/\`${Math.floor(requiredVotes + 1)}\`. Bots are not counted. To forcibly skip the song, use \`${msg.guild.settings.get('prefix')}skip --force\`.`); // eslint-disable-line max-len
 		msg.guild.clearVoteskips();
 		msg.guild.player.stop();
 		return msg.send('<:check:508594899117932544>  ::  Successfully skipped the music for this server.');
