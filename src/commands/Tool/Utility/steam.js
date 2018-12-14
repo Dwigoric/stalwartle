@@ -1,7 +1,6 @@
 const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
-const { steamAPIkey } = require('../../../auth');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
@@ -16,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [game]) {
-		const steam = new SteamAPI(steamAPIkey),
+		const steam = new SteamAPI(this.client.auth.steamAPIkey),
 			embed = new MessageEmbed(),
 			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.text()).catch(() => null);
 

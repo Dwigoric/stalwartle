@@ -2,11 +2,6 @@ const { Command, Timestamp } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
-/**
- * https://dev.twitch.tv/docs/v5/guides/authentication/
- */
-const { twitchAPIkey } = require('../../../auth');
-
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -19,7 +14,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [twitchName]) {
-		const channel = await fetch(`https://api.twitch.tv/kraken/channels/${twitchName}?client_id=${twitchAPIkey}`)
+		const channel = await fetch(`https://api.twitch.tv/kraken/channels/${twitchName}?client_id=${this.client.auth.twitchAPIkey}`)
 			.then(res => res.json())
 			.then(res => {
 				if (res.error) throw `<:error:508595005481549846>  ::  ${res.message}.`;

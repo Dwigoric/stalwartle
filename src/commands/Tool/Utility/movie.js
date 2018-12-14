@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
-const { tmdbAPIkey } = require('../../../auth');
 const moment = require('moment-timezone');
 
 module.exports = class extends Command {
@@ -21,10 +20,10 @@ module.exports = class extends Command {
 		const timezone = msg.author.settings.get('timezone');
 		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
-		const { results } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${tmdbAPIkey}&query=${encodeURIComponent(query)}`).then(res => res.json());
+		const { results } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${this.client.auth.tmdbAPIkey}&query=${encodeURIComponent(query)}`).then(res => res.json());
 		const short = results[page - 1];
 		if (!short) throw `<:error:508595005481549846>  ::  I couldn't find a movie with title **${query}** in page ${page}.`;
-		const tmdb = await fetch(`https://api.themoviedb.org/3/movie/${short.id}?api_key=${tmdbAPIkey}`).then(res => res.json());
+		const tmdb = await fetch(`https://api.themoviedb.org/3/movie/${short.id}?api_key=${this.client.auth.tmdbAPIkey}`).then(res => res.json());
 
 		const poster = `https://image.tmdb.org/t/p/original${tmdb.poster_path}`;
 		const url = tmdb.homepage || `https://www.themoviedb.org/movie/${tmdb.id}`;

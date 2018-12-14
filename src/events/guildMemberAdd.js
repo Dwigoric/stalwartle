@@ -1,6 +1,5 @@
 const { Event } = require('klasa');
 const fetch = require('node-fetch');
-const { idioticAPIkey } = require('../auth');
 
 module.exports = class extends Event {
 
@@ -33,7 +32,7 @@ module.exports = class extends Event {
 			guildName: encodeURIComponent(member.guild.name),
 			memberCount: member.guild.memberCount
 		})) params.push(`${key}=${value}`);
-		return chan.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/greetings/unified?${params.join('&')}`, { headers: { Authorization: idioticAPIkey } })
+		return chan.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/greetings/unified?${params.join('&')}`, { headers: { Authorization: this.client.auth.idioticAPIkey } })
 			.then(res => res.json())
 			.then(buffer => buffer.data)), 'welcome.png', `<:blueHeart:399433440035995651>  ::  Welcome, ${member}, to ${member.guild.name}!`);
 	}

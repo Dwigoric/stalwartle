@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
-const { giphyAPIkey } = require('../../../auth');
 
 module.exports = class extends Command {
 
@@ -16,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [person]) {
-		const { data } = await fetch(`http://api.giphy.com/v1/gifs/search?api_key=${giphyAPIkey}&q=${encodeURIComponent('anime hug')}`)
+		const { data } = await fetch(`http://api.giphy.com/v1/gifs/search?api_key=${this.client.auth.giphyAPIkey}&q=${encodeURIComponent('anime hug')}`)
 			.then(res => res.json());
 		const gifPage = Math.floor(Math.random() * data.length);
 		const embed = new MessageEmbed()

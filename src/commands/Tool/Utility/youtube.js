@@ -1,6 +1,5 @@
 const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
-const { googleAPIkey } = require('../../../auth');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
 
@@ -34,7 +33,7 @@ module.exports = class extends Command {
 		const queries = [];
 
 		for (const [key, value] of Object.entries({
-			key: googleAPIkey,
+			key: this.client.auth.googleAPIkey,
 			part: 'snippet',
 			maxResults: 1,
 			q: encodeURIComponent(query.join(this.usageDelim)), // eslint-disable-line id-length
@@ -55,7 +54,7 @@ module.exports = class extends Command {
 		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
 		if (type !== 'channel') {
 			embed
-				.setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?key=${googleAPIkey}&part=snippet&maxResults=1&id=${request.snippet.channelId}`)
+				.setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?key=${this.client.auth.googleAPIkey}&part=snippet&maxResults=1&id=${request.snippet.channelId}`)
 					.then(result => result.json())
 					.then(result => result.items.length ? result.items[0].snippet.thumbnails.high.url : undefined))
 				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);

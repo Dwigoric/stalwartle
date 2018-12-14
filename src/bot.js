@@ -118,6 +118,8 @@ class Stalwartle extends Client {
 			.add(10, ({ author }) => config.ownerID === author.id);
 	}
 
+	get auth() { return require('./auth'); }
+
 	get voiceConnections() {
 		const connections = new Collection();
 		for (const gd of this.guilds.filter(guild => guild.channels.filter(ch => ch.type === 'voice' && ch.members.has(this.user.id)).size).values()) connections.set(gd.id, gd.player);

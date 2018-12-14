@@ -1,6 +1,5 @@
 const { Command } = require('klasa');
 const fetch = require('node-fetch');
-const { idioticAPIkey } = require('../../../auth');
 
 module.exports = class extends Command {
 
@@ -20,7 +19,7 @@ module.exports = class extends Command {
 		msg.channel.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/generators/zerotwopicture?avatar=${love.displayAvatarURL({
 			format: 'png',
 			size: 128
-		})}`, { headers: { Authorization: idioticAPIkey } })
+		})}`, { headers: { Authorization: this.client.auth.idioticAPIkey } })
 			.then(res => res.json())
 			.then(res => res.data)), 'zerotwo.png');
 	}

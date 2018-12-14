@@ -2,7 +2,6 @@ const { Command, util: { toTitleCase } } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
-const { osuAPIkey } = require('../../../auth');
 
 const MODS = Object.freeze({
 	None: 0,
@@ -92,7 +91,7 @@ module.exports = class extends Command {
 
 		const queries = [];
 		for (const [key, value] of Object.entries({
-			k: osuAPIkey, // eslint-disable-line id-length
+			k: this.client.auth.osuAPIkey, // eslint-disable-line id-length
 			m: mode, // eslint-disable-line id-length
 			u: encodeURIComponent(username.join(this.usageDelim)), // eslint-disable-line id-length
 			type: 'string'
@@ -142,7 +141,7 @@ module.exports = class extends Command {
 		else if (msg.flags.taiko) mode = 1;
 		else mode = 0;
 
-		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
+		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${this.client.auth.osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
 		if (!request.length) throw '<:error:508595005481549846>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
 
 		const beatmap = request[0];
@@ -201,11 +200,11 @@ module.exports = class extends Command {
 			best: user => `**${user.username}** doesn't have best plays on **osu!${osumode[mode]}** mode yet.`
 		};
 
-		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?k=${osuAPIkey}&u=${encodeURIComponent(username)}&type=string`).then(res => res.json());
+		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?k=${this.client.auth.osuAPIkey}&u=${encodeURIComponent(username)}&type=string`).then(res => res.json());
 		if (!userReq.length) throw '<:error:508595005481549846>  ::  Whoops! You supplied an invalid osu! username.';
 		const user = userReq[0];
 
-		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?k=${osuAPIkey}&u=${user.user_id}&type=id&m=${mode}&limit=5`).then(res => res.json());
+		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?k=${this.client.auth.osuAPIkey}&u=${user.user_id}&type=id&m=${mode}&limit=5`).then(res => res.json());
 		if (!request.length) throw `<:error:508595005481549846>  ::  Whoops! ${errString[type](user)}`;
 
 		const top = await Promise.all(request.map(async list => {
@@ -234,7 +233,7 @@ module.exports = class extends Command {
 			if (mods.includes('NC') && mods.includes('DT')) mods.splice(mods.indexOf('DT'), 1);
 			if (mods.includes('PF') && mods.includes('SD')) mods.splice(mods.indexOf('SD'), 1);
 
-			const beatmap = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${osuAPIkey}&b=${list.beatmap_id}`)
+			const beatmap = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${this.client.auth.osuAPIkey}&b=${list.beatmap_id}`)
 				.then(res => res.json())
 				.then(b => b[0]);
 			const requests = Object.values(request).map(body => body.date);

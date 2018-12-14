@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const { geniusAPIkey } = require('../../../auth');
 
 module.exports = class extends Command {
 
@@ -13,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		const { hits } = await fetch(`https://api.genius.com/search?access_token=${geniusAPIkey}&q=${encodeURIComponent(query)}`)
+		const { hits } = await fetch(`https://api.genius.com/search?access_token=${this.client.auth.geniusAPIkey}&q=${encodeURIComponent(query)}`)
 			.then(res => res.json())
 			.then(body => body.response);
 		if (!hits.length) throw '<:error:508595005481549846>  ::  No song lyrics found.';
