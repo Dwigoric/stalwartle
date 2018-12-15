@@ -1,5 +1,5 @@
 const { Command, Duration } = require('klasa');
-const { version, MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const { uptime, loadavg } = require('os');
 
 module.exports = class extends Command {
@@ -27,9 +27,7 @@ module.exports = class extends Command {
 				`**Users**: ${this.client.guilds.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}`,
 				`**Servers**: ${this.client.guilds.size.toLocaleString()}`,
 				`**Text Channels**: ${this.client.channels.filter(chan => chan.type === 'text').size.toLocaleString()}`,
-				`**Voice Connections**: ${this.client.voiceConnections.size}`,
-				`**Discord.js**: v${version}`,
-				`**Node JS**: ${process.version}`
+				`**Voice Connections**: ${this.client.voiceConnections.size}`
 			], true)
 			.addField('⏱ Uptime', [
 				`**Host**: ${Duration.toNow(now - (uptime() * 1000))}`,
