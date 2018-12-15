@@ -14,16 +14,16 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			description: 'Plays music in the server. Accepts YouTube, YouTube playlists, SoundCloud, and online radios.',
+			description: 'Plays music in the server. Accepts YouTube, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
-				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit`.',
+				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
 				'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
 				'To play an online radio (`.m3u`, `.pls`, `.xspf`), simply supply the radio link.'
 			],
-			usage: '[YouTubeOrSoundCloud:url|Query:string]'
+			usage: '[TracksURL:url|Query:string]'
 		});
 	}
 
