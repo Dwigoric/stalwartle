@@ -139,7 +139,6 @@ module.exports = class extends Command {
 
 	async getWeatherData(location, type) {
 		const { data } = await fetch(`https://api.ksoft.si/kumo/weather/${type}?q=${encodeURIComponent(location)}&units=si`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
-		console.log(data);
 		if (!data) throw '<:error:508595005481549846>  ::  I could not find that location.';
 		return data;
 	}
