@@ -116,7 +116,7 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
-		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song : [song];
@@ -134,22 +134,24 @@ module.exports = class extends Command {
 			queue.push(song);
 			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
 		}
-		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
+		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		return queue;
 	}
 
 	async play(msg, song) {
+		const music = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.player.playing) return null;
 		msg.guild.player.play(song.track);
 		msg.guild.player.pause(false);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.clearVoteskips();
+		music.history.push(song);
 		msg.guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return;
-			const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
-			this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
+			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 			if (queue.length) {
 				this.play(msg, queue[0]);
 			} else {
@@ -157,6 +159,8 @@ module.exports = class extends Command {
 				this.client.player.leave(msg.guild.id);
 			}
 		});
+		this.client.schedule.create('shiftHistory', Date.now() + (1000 * 60 * 60 * 24), { data: { guild: msg.guild.id } });
+		this.client.providers.default.update('music', msg.guild.id, { queue: music.queue, playlist: music.playlist, history: music.history });
 		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
 

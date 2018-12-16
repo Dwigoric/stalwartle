@@ -80,7 +80,7 @@ module.exports = class extends Command {
 		if (!items[1]) items = items[0] - 1; // eslint-disable-line prefer-destructuring
 		else items = [items[0] - 1, items[1] - 1];
 		if (items === -1 || items[0] === -1) throw '<:error:508595005481549846>  ::  All lists start at 1...';
-		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no items in the playlist. Add one using \`${msg.guild.settings.get('prefix')}play\``;
 		if (Array.isArray(items)) {
 			if (items[0] > items[1]) throw '<:error:508595005481549846>  ::  Invalid playlist range. The first number must be less than the second.';
@@ -92,13 +92,13 @@ module.exports = class extends Command {
 			playlist.splice(items, 1);
 			msg.send(`<:check:508594899117932544>  ::  Successfully removed song \`#${items + 1}\` from the playlist.`);
 		}
-		return this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
+		return this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 	}
 
 	async clear(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can configure the playlist!';
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		this.client.providers.default.update('music', msg.guild.id, { playlist: [], queue });
+		const { queue, history } = await this.client.providers.default.get('music', msg.guild.id);
+		this.client.providers.default.update('music', msg.guild.id, { playlist: [], queue, history });
 		msg.send('<:check:508594899117932544>  ::  Successfully cleared the music playlist for this server.');
 	}
 
@@ -112,7 +112,7 @@ module.exports = class extends Command {
 		switch (choice.content) {
 			case 'file': {
 				if (!msg.channel.attachable) throw '<:error:508595005481549846>  ::  I do not have the permissions to attach files to this channel.';
-				return msg.channel.sendFile(Buffer.from(playlist.map(track => track.info.uri).join('\r\n')), 'output.txt', '<:check:508594899117932544>  ::  Exported the queue as file.'); // eslint-disable-line max-len
+				return msg.channel.sendFile(Buffer.from(playlist.map(track => track.info.uri).join('\r\n')), 'output.txt', '<:check:508594899117932544>  ::  Exported the playlist as file.'); // eslint-disable-line max-len
 			}
 			case 'haste':
 			case 'hastebin': {
@@ -128,7 +128,7 @@ module.exports = class extends Command {
 
 	async move(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can configure the playlist!';
-		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (playlist.length < 2) throw '<:error:508595005481549846>  ::  There is no playlist item to move.';
 		let entry;
 		do entry = await msg.prompt('<a:loading:430269209415516160>  ::  Which playlist item do you want to move? Reply with its playlist number.');
@@ -141,17 +141,18 @@ module.exports = class extends Command {
 		if (entry > playlist.length - 1 || position > playlist.length - 1) throw `<:error:508595005481549846>  ::  The playlist only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`;
 		if (entry === position) throw '<:error:508595005481549846>  ::  What\'s the point of moving a playlist to the same position?';
 		playlist.splice(position, 0, playlist.splice(entry, 1)[0]);
-		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
+		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		return msg.send(`<:check:508594899117932544>  ::  Successfully moved item \`#${entry + 1}\` to position \`#${position + 1}\`.`);
 	}
 
 	async shuffle(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can configure the playlist!';
-		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the playlist. Add one with \`${msg.guild.settings.get('prefix')}playlist add\``;
 		if (playlist.length === 1) throw '<:error:508595005481549846>  ::  There is only one playlist item... I have nothing to shuffle!';
 		this.client.providers.default.update('music', msg.guild.id, {
 			queue,
+			history,
 			playlist: (() => {
 				for (let current = playlist.length - 1; current > 0; current--) {
 					const random = Math.floor(Math.random() * (current + 1));
@@ -166,7 +167,7 @@ module.exports = class extends Command {
 	}
 
 	async addToPlaylist(msg, items) {
-		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.settings.get('donation') < 3 && playlist.length >= 250) throw `<:error:508595005481549846>  ::  The music playlist for **${msg.guild.name}** has reached the limit of 250 songs; currently ${playlist.length}.`; // eslint-disable-line max-len
 		if (Array.isArray(items)) {
 			let songCount = 0;
@@ -180,7 +181,7 @@ module.exports = class extends Command {
 			playlist.push(items);
 			msg.channel.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
-		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
+		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		return playlist;
 	}
 
