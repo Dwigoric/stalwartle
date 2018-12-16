@@ -1,4 +1,4 @@
-const { Command, RichDisplay, Timestamp, util: { chunk } } = require('klasa');
+const { Command, RichDisplay, Timestamp, util: { chunk, mergeObjects } } = require('klasa');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -173,12 +173,12 @@ module.exports = class extends Command {
 			let songCount = 0;
 			for (const track of items) {
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
-				playlist.push(track);
+				playlist.push(mergeObjects(track, { requester: msg.author.id, incognito: false }));
 				songCount++;
 			}
 			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the playlist.${msg.guild.settings.get('donation') < 5 && songCount < items.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
 		} else {
-			playlist.push(items);
+			playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
 			msg.channel.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
