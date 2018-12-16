@@ -4,14 +4,6 @@ const fetch = require('node-fetch');
 module.exports = class extends Event {
 
 	async run(member) {
-		const autorole = member.guild.settings.get('autorole');
-		if (autorole.bot || autorole.user) {
-			if (member.guild.me.permissions.has('MANAGE_ROLES')) {
-				if (member.user.bot && autorole.bot) await this.giveRole(member, 'bot');
-				if (!member.user.bot && autorole.user) await this.giveRole(member, 'user');
-			} else { return member.guild.owner.send(`⚠ I don't have **Manage Roles** permission on ${member.guild.name}, so I couldn't give ${member.user.tag} the autorole.`); } // eslint-disable-line max-len
-		}
-
 		const welcome = member.guild.settings.get('welcome');
 		if (!welcome.channel) return null;
 		const chan = member.guild.channels.get(welcome.channel);
@@ -35,17 +27,6 @@ module.exports = class extends Event {
 		return chan.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/greetings/unified?${params.join('&')}`, { headers: { Authorization: this.client.auth.idioticAPIkey } })
 			.then(res => res.json())
 			.then(buffer => buffer.data)), 'welcome.png', `<:blueHeart:399433440035995651>  ::  Welcome, ${member}, to ${member.guild.name}!`);
-	}
-
-	async giveRole(member, type) {
-		const role = member.guild.roles.get(member.guild.settings.get(`autorole.${type}`));
-		if (!role) {
-			member.guild.owner.send(`The role **${member.guild.settings.get(`autorole.${type}`)}** doesn't exist anymore. Autorole aborted.`).catch(() => null);
-			return member.guild.settings.reset(`autorole.${type}`);
-		}
-		if (role.position >= member.guild.me.roles.highest.position) return member.guild.owner.user.send(`⚠ **${role.name}**'s position was higher than my highest role, therefore I couldn't assign that autorole to anyone.`).catch(() => null); // eslint-disable-line max-len
-		if (member.permissions.bitfield > member.guild.me.permissions.bitfield) return member.guild.owner.user.send(`⚠ **${member.tag}**'s permissions were higher than mine, so I couldn't give them **${role.name}**.`).catch(() => null); // eslint-disable-line max-len
-		return member.roles.add(role, 'Autorole on join');
 	}
 
 };
