@@ -139,7 +139,6 @@ module.exports = class extends Command {
 	}
 
 	async play(msg, song) {
-		const music = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.player.playing) return null;
 		msg.guild.player.play(song.track);
 		msg.guild.player.pause(false);
@@ -150,7 +149,7 @@ module.exports = class extends Command {
 			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
-			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
+			await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 			if (queue.length) {
 				this.play(msg, queue[0]);
 			} else {
@@ -159,10 +158,11 @@ module.exports = class extends Command {
 			}
 		});
 		if (!song.incognito) {
-			music.history.push(song);
+			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
+			history.push(song);
 			this.client.schedule.create('shiftHistory', Date.now() + (1000 * 60 * 60 * 24), { data: { guild: msg.guild.id } });
+			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		}
-		this.client.providers.default.update('music', msg.guild.id, { queue: music.queue, playlist: music.playlist, history: music.history });
 		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
 
