@@ -28,7 +28,6 @@ module.exports = class extends Command {
 			.setTimestamp());
 
 		queue.shift();
-		// if (!queue.length) return msg.channel.send(`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)}`);
 		let duration = np.info.isStream ? 0 : np.info.length;
 		(queue.length ? chunk(queue, 10) : [np]).forEach((music10, tenPower) => display.addPage(template => template.setDescription([`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)} \`${np.info.isStream ? 'Livestream' : new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.info.length)}\`\n`] // eslint-disable-line max-len
 			.concat(queue.length ? music10.map((music, onePower) => {
