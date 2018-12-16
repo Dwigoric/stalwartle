@@ -14,8 +14,8 @@ module.exports = class extends Inhibitor {
 		if (await this.client.providers.default.get(table, guild)) return;
 		await defProvider.create(table, guild);
 		const obj = {
-			music: { queue: [], playlist: [] },
-			modlogs: { modlogs: [] }
+			modlogs: { modlogs: [] },
+			music: { history: [], playlist: [], queue: [] }
 		};
 		await defProvider.update(table, guild, obj[table]);
 	}
