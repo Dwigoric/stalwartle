@@ -1,4 +1,4 @@
-const { Command, Timestamp, RichDisplay, util: { chunk } } = require('klasa');
+const { Command, Duration, Timestamp, RichDisplay, util: { chunk } } = require('klasa');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -33,7 +33,7 @@ module.exports = class extends Command {
 			const currentPos = (tenPower * 10) + (onePower + 1);
 			const { length } = music.info;
 			duration += music.info.isStream ? 0 : length;
-			return `\`${currentPos}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
+			return `\`${currentPos}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` (${Duration.toNow(music.timestamp)} ago)`; // eslint-disable-line max-len
 		}))));
 
 		return display
