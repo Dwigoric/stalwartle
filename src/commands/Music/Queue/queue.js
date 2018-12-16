@@ -29,13 +29,13 @@ module.exports = class extends Command {
 
 		queue.shift();
 		let duration = np.info.isStream ? 0 : np.info.length;
-		(queue.length ? chunk(queue, 10) : [np]).forEach((music10, tenPower) => display.addPage(template => template.setDescription([`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)} \`${np.info.isStream ? 'Livestream' : new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.info.length)}\`\n`] // eslint-disable-line max-len
-			.concat(queue.length ? music10.map((music, onePower) => {
-				const currentPos = (tenPower * 10) + (onePower + 1);
-				const { length } = music.info;
-				duration += music.info.isStream ? 0 : length;
-				return `\`${currentPos}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
-			}) : 'No upcoming tracks.'))));
+
+		await Promise.all((queue.length ? chunk(queue, 10) : [np]).map(async (music10, tenPower) => [`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)} \`${np.info.isStream ? 'Livestream' : new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.info.length)}\` (Requested by ${await this.client.users.fetch(np.requester).then(usr => usr.tag)})\n`].concat(queue.length ? await Promise.all(music10.map(async (music, onePower) => { // eslint-disable-line max-len
+			const currentPos = (tenPower * 10) + (onePower + 1);
+			const { length } = music.info;
+			duration += music.info.isStream ? 0 : length;
+			return `\`${currentPos}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` (Requested by ${await this.client.users.fetch(music.requester).then(usr => usr.tag)})`; // eslint-disable-line max-len
+		})) : 'No upcoming tracks.'))).then(musicList => musicList.forEach(queue10 => display.addPage(template => template.setDescription(queue10.join('\n')))));
 
 		return display
 			.setFooterPrefix('Page ')
