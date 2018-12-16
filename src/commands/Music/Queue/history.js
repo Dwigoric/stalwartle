@@ -9,7 +9,10 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Shows the queue for the server.',
-			extendedHelp: 'Export the history by using `s.history export`, clear it with `s.history clear`',
+			extendedHelp: [
+				'Export the history by using `s.history export`, clear it with `s.history clear`',
+				'To play songs on incognito, simply add the `--incognito` flag **when using the `s.play` command**.'
+			],
 			usage: '[export|clear]',
 			subcommands: true
 		});

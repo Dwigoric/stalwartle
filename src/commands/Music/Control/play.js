@@ -1,4 +1,4 @@
-const { Command, Timestamp } = require('klasa');
+const { Command, Timestamp, util: { mergeObjects } } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
 const fetch = require('node-fetch');
 
@@ -119,19 +119,19 @@ module.exports = class extends Command {
 		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
-			const songs = Array.isArray(song) ? song : [song];
+			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })]; // eslint-disable-line max-len
 			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
 			else queue.splice(0, 1, ...songs);
 		} else if (Array.isArray(song)) {
 			let songCount = 0;
 			for (const track of song) {
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
-				queue.push(track);
+				queue.push(mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
 				songCount++;
 			}
 			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue.${msg.guild.settings.get('donation') < 5 && songCount < song.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
 		} else {
-			queue.push(song);
+			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
 			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
@@ -145,7 +145,6 @@ module.exports = class extends Command {
 		msg.guild.player.pause(false);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
 		msg.guild.clearVoteskips();
-		music.history.push(song);
 		msg.guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return;
 			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
@@ -159,7 +158,10 @@ module.exports = class extends Command {
 				this.client.player.leave(msg.guild.id);
 			}
 		});
-		this.client.schedule.create('shiftHistory', Date.now() + (1000 * 60 * 60 * 24), { data: { guild: msg.guild.id } });
+		if (!song.incognito) {
+			music.history.push(song);
+			this.client.schedule.create('shiftHistory', Date.now() + (1000 * 60 * 60 * 24), { data: { guild: msg.guild.id } });
+		}
 		this.client.providers.default.update('music', msg.guild.id, { queue: music.queue, playlist: music.playlist, history: music.history });
 		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
