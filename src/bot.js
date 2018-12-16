@@ -49,6 +49,7 @@ class Stalwartle extends Client {
 			.add('ignored', 'channel', { array: true })
 			.add('donation', 'integer', { default: 0, configurable: false })
 			.add('selfroles', 'role', { array: true })
+			.add('globalBans', 'boolean ', { default: false })
 			.add('autorole', autorole => autorole
 				.add('user', 'role')
 				.add('bot', 'role'))
