@@ -31,12 +31,18 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!query) {
-			if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one using \`${msg.guild.settings.get('prefix')}play\``;
-			if (!msg.guild.player.channel) this.join(msg);
 			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
-			else return this.play(msg, queue[0]);
+			if (queue.length) {
+				this.join(msg);
+				return this.play(msg, queue[0]);
+			}
+			if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. You can use the playlist feathre or add one using \`${msg.guild.settings.get('prefix')}play\``;
+			this.join(msg);
+			msg.send('<:check:508594899117932544>  ::  Queue is empty. The playlist has been added to the queue.');
+			await this.addToQueue(msg, playlist);
+			return this.play(msg, playlist[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
 		delete prompts[msg.member.id];
@@ -59,7 +65,7 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		if (URL_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
+		if (URL_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
 			const linkRes = await this.getSongs(query, query.includes('soundcloud.com'));
 			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid stream or URL.';
 			if (YOUTUBE_PLAYLIST_REGEX.test(query) || SOUNDCLOUD_SET_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query)) return linkRes;
@@ -110,7 +116,7 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song : [song];
@@ -128,7 +134,7 @@ module.exports = class extends Command {
 			queue.push(song);
 			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue.`);
 		}
-		await this.client.providers.default.update('music', msg.guild.id, { queue });
+		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
 		return queue;
 	}
 
@@ -140,10 +146,10 @@ module.exports = class extends Command {
 		msg.guild.clearVoteskips();
 		msg.guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return;
-			const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+			const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
 			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
-			this.client.providers.default.update('music', msg.guild.id, { queue });
+			this.client.providers.default.update('music', msg.guild.id, { queue, playlist });
 			if (queue.length) {
 				this.play(msg, queue[0]);
 			} else {
