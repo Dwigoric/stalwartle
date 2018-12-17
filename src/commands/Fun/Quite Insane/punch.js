@@ -5,7 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			aliases: ['superpunch'],
+			aliases: ['superpunch', 'smack'],
 			requiredPermissions: ['ATTACH_FILES'],
 			description: 'Punches someone! (Or makes someone punch someone)',
 			extendedHelp: [
