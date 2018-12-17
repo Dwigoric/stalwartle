@@ -25,13 +25,19 @@ module.exports = class MemorySweeper extends Task {
 		this.header = new Colors({ text: 'lightblue' }).format('[CACHE CLEANUP]');
 	}
 
+	/* eslint complexity: ['warn', 25] */
 	async run() {
 		const OLD_SNOWFLAKE = binaryToID(((Date.now() - THRESHOLD) - EPOCH).toString(2).padStart(42, '0') + EMPTY);
 		let guildMembers = 0,
 			// presences = 0,
 			// emojis = 0,
 			lastMessages = 0,
+			modlogs = 0,
+			music = 0,
 			users = 0;
+
+		// Running garbage collection of Node.js
+		if (global.gc) global.gc();
 
 		// Per-Guild sweeper
 		for (const guild of this.client.guilds.values()) {
@@ -72,6 +78,22 @@ module.exports = class MemorySweeper extends Task {
 			users++;
 		}
 
+		// Modlog database sweeper
+		for (const modlogDB of await this.client.providers.default.getAll('modlogs')) {
+			if (modlogDB.modlogs.length) continue;
+			this.client.providers.default.delete('modlogs', modlogDB.id);
+			modlogs++;
+		}
+
+		// Music database sweeper
+		for (const musicDB of await this.client.providers.default.getAll('music')) {
+			if (musicDB.history.length) continue;
+			if (musicDB.playlist.length) continue;
+			if (musicDB.queue.length) continue;
+			this.client.providers.default.delete('music', musicDB.id);
+			music++;
+		}
+
 		// Emit a log
 		this.client.emit('log', [
 			this.header,
@@ -79,7 +101,9 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(guildMembers)} [GuildMember]s`,
 			`${this.setColor(users)} [User]s`,
 			// `${this.setColor(emojis)} [Emoji]s`,
-			`${this.setColor(lastMessages)} [Last Message]s`
+			`${this.setColor(lastMessages)} [Last Message]s`,
+			`${this.setColor(modlogs)} [ModlogDB]s`,
+			`${this.setColor(music)} [MusicDB]s`
 		].join('\n'));
 
 		// Create a schedule to make this task work
