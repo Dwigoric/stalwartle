@@ -22,7 +22,7 @@ module.exports = class MemorySweeper extends Task {
 		};
 
 		// The header with the console colors
-		this.header = new Colors({ text: 'lightblue' }).format('[CACHE CLEANUP]');
+		this.header = new Colors({ text: 'lightblue' }).format('[CACHE AND DATABASE CLEANUP]');
 	}
 
 	/* eslint complexity: ['warn', 25] */
