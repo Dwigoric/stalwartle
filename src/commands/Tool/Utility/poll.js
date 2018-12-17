@@ -25,6 +25,8 @@ module.exports = class extends Command {
 		choices = choices.splice(0, 10);
 		const emojis = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟'].splice(0, choices.length);
 		choices = choices.map((choice, index) => `${emojis[index]} ${choice}`);
+		emojis.push('❓', '❌', '💯');
+		choices.push('❓ What?', '❌ None of the choices', '💯 All of the choices');
 
 		const poll = await chan.send({
 			embed: new MessageEmbed()
@@ -35,7 +37,6 @@ module.exports = class extends Command {
 				.setTimestamp()
 		});
 		let i = 0;
-		emojis.push('❓', '❌', '💯');
 		const loop = () => {
 			setTimeout(() => {
 				poll.react(emojis[i]);
