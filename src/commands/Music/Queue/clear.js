@@ -18,7 +18,7 @@ module.exports = class extends Command {
 			history,
 			queue: (msg.guild.player.playing ? queue.slice(0, 1) : []).concat(user ? queue.filter((track, index) => index && track.requester !== user.id) : [])
 		});
-		msg.send(`<:check:508594899117932544>  ::  Successfully cleared the music queue for this server${user ? ` of ${user.tag}'s requests` : ''}.`);
+		msg.send(`<:check:508594899117932544>  ::  Successfully cleared the music queue for this server${user ? ` of ${user.tag}'s requests` : ''}. Check the new queue with \`${msg.guild.settings.get('prefix')}queue\`.`); // eslint-disable-line max-len
 	}
 
 };

@@ -28,7 +28,7 @@ module.exports = class extends Command {
 				return upNext;
 			})())
 		});
-		msg.send(`<:check:508594899117932544>  ::  Successfully shuffled the queue. Check it out with \`${msg.guild.settings.get('prefix')}queue\``);
+		msg.send(`<:check:508594899117932544>  ::  Successfully shuffled the queue. Check it out with \`${msg.guild.settings.get('prefix')}queue\`.`);
 	}
 
 };
