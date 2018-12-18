@@ -12,7 +12,7 @@ module.exports = class extends Event {
 			.setColor('#C62A29')
 			.setAuthor('Thank you for having me!', guild.owner.user.displayAvatarURL())
 			.setTitle(guild.name)
-			.setFooter(`${this.client.user.username} Added!`, this.client.user.displayAvatarURL())
+			.setFooter(`By **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`, this.client.user.displayAvatarURL())
 			.setThumbnail(guild.iconURL({ size: 2048 }))
 			.setTimestamp()
 			.setDescription([
