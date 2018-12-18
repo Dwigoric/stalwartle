@@ -35,7 +35,7 @@ module.exports = class extends Command {
 		if (!query) {
 			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
 			if (queue.length) {
-				msg.send('🎶  ::  No search query provided, but I found tracks in the queue.');
+				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				this.join(msg);
 				return this.play(msg, queue[0]);
 			}
