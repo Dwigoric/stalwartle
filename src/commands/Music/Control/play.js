@@ -132,7 +132,7 @@ module.exports = class extends Command {
 			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue.${msg.guild.settings.get('donation') < 5 && songCount < song.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
 		} else {
 			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
-			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`#${queue.length - 1}\`.`);
+			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`.`);
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		return queue;
