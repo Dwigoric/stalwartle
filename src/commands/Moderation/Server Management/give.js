@@ -15,8 +15,7 @@ module.exports = class extends Command {
 
 	async run(msg, [member, role]) {
 		if (!role) throw `<:error:508595005481549846>  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
-		if (member.permissions.bitfield >= msg.guild.me.permissions.bitfield) throw `<:error:508595005481549846>  ::  Sorry! I can't edit ${member}'s roles.`;
-		if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw `<:error:508595005481549846>  ::  It seems you cannot edit ${member}'s roles...`;
+		if (role.position >= msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  ${role.name} is higher than or equal to me!`;
 		if (member.roles.has(role.id)) throw `<:error:508595005481549846>  ::  ${member} already has **${role.name}**! I mean, what's the point of giving someone something they already have?`; // eslint-disable-line max-len
 		await member.roles.add(role, `Given using ${this.client.user.username}'s Give Role feature`);
 		return msg.send(`<:check:508594899117932544>  ::  Successfully given ${member} the role **${role.name}**.`);
