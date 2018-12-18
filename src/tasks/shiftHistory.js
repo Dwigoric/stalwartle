@@ -12,10 +12,11 @@ module.exports = class extends Task {
 		}
 
 		// Create a schedule to make this task work
-		while (this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').length !== 1) {
+		if (this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').length === 1) return;
+		do {
 			this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').forEach(tk => this.client.schedule.delete(tk.id));
 			await this.client.schedule.create('shiftHistory', '*/7 * * * *');
-		}
+		} while (this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').length !== 1);
 	}
 
 	async init() {
