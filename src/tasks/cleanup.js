@@ -32,8 +32,8 @@ module.exports = class MemorySweeper extends Task {
 			// presences = 0,
 			// emojis = 0,
 			lastMessages = 0,
-			modlogs = 0,
-			music = 0,
+			modlogDBs = 0,
+			musicDBs = 0,
 			users = 0;
 
 		// Running garbage collection of Node.js
@@ -79,19 +79,19 @@ module.exports = class MemorySweeper extends Task {
 		}
 
 		// Modlog database sweeper
-		for (const modlogDB of await this.client.providers.default.getAll('modlogs')) {
-			if (modlogDB.modlogs.length) continue;
-			this.client.providers.default.delete('modlogs', modlogDB.id);
-			modlogs++;
+		for (const { id, modlogs } of await this.client.providers.default.getAll('modlogs')) {
+			if (modlogs.length) continue;
+			this.client.providers.default.delete('modlogs', id);
+			modlogDBs++;
 		}
 
 		// Music database sweeper
-		for (const musicDB of await this.client.providers.default.getAll('music')) {
-			if (musicDB.history.length) continue;
-			if (musicDB.playlist.length) continue;
-			if (musicDB.queue.length) continue;
-			this.client.providers.default.delete('music', musicDB.id);
-			music++;
+		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
+			if (history.length) continue;
+			if (playlist.length) continue;
+			if (queue.length) continue;
+			this.client.providers.default.delete('music', id);
+			musicDBs++;
 		}
 
 		// Emit a log
@@ -102,8 +102,8 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(users)} [User]s`,
 			// `${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(lastMessages)} [Last Message]s`,
-			`${this.setColor(modlogs)} [ModlogDB]s`,
-			`${this.setColor(music)} [MusicDB]s`
+			`${this.setColor(modlogDBs)} [ModlogDB]s`,
+			`${this.setColor(musicDBs)} [MusicDB]s`
 		].join('\n'));
 
 		// Create a schedule to make this task work

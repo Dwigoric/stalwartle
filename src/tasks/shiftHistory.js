@@ -3,8 +3,7 @@ const { Task } = require('klasa');
 module.exports = class extends Task {
 
 	async run() {
-		for (const { id } of await this.client.providers.default.getAll('music')) {
-			const { queue, playlist, history } = await this.client.providers.default.get('music', id);
+		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
 			this.client.providers.default.update('music', id, {
 				queue,
 				playlist,
