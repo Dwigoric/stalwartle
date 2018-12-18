@@ -160,7 +160,6 @@ module.exports = class extends Command {
 		if (!song.incognito) {
 			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
-			this.client.schedule.create('shiftHistory', Date.now() + (1000 * 60 * 60 * 24), { data: { guild: msg.guild.id } });
 			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		}
 		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
