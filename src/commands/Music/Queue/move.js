@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		if (entry === position) throw '<:error:508595005481549846>  ::  What\'s the point of moving a queue entry to the same position?';
 		queue.splice(position, 0, queue.splice(entry, 1)[0]);
 		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
-		return msg.send(`<:check:508594899117932544>  ::  Successfully moved entry \`#${entry}\` to position \`#${position}\`.`);
+		return msg.send(`<:check:508594899117932544>  ::  Successfully moved entry \`#${entry}\` to position \`#${position}\`. New queue at \`${msg.guild.settings.get('prefix')}queue\`.`);
 	}
 
 };
