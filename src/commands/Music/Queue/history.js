@@ -7,7 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			requiredPermissions: ['EMBED_LINKS'],
+			requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
 			description: 'Shows the songs played in the server within 24 hours.',
 			extendedHelp: [
 				'Export the history by using `s.history export`, clear it with `s.history clear`',

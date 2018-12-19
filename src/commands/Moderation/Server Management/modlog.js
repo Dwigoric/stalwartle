@@ -9,7 +9,7 @@ module.exports = class extends Command {
 			permissionLevel: 6,
 			runIn: ['text'],
 			aliases: ['modlogs', 'log', 'logs'],
-			requiredPermissions: ['EMBED_LINKS'],
+			requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
 			description: 'Gives the modlogs for a certain person or the server, or the details of a specific case number.',
 			extendedHelp: [
 				'If you want to get the modlogs for the server and not for a user, simple do not provide a user.',

@@ -12,6 +12,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
+			requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
 			description: 'Configures server playlist, which plays when queue is empty. More at `s.help playlist`',
 			extendedHelp: [
 				'***Prompts are not supported when adding tracks to the playlist.***',

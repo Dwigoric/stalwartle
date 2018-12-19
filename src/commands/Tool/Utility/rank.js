@@ -35,6 +35,7 @@ module.exports = class extends Command {
 	}
 
 	async list(msg) {
+		if (!msg.channel.permissionsFor(msg.guild.me).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw '<:error:508595005481549846>  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).'; // eslint-disable-line max-len
 		const selfroles = msg.guild.settings.get('selfroles');
 		if (!selfroles.length) throw '<:error:508595005481549846>  ::  Selfrole is not yet implemented in this server.';
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the selfrole list');

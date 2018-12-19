@@ -6,7 +6,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			requiredPermissions: ['EMBED_LINKS'],
+			requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
 			description: 'Shows the queue for the server.'
 		});
 	}
