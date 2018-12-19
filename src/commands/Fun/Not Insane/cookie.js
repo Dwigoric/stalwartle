@@ -47,14 +47,14 @@ module.exports = class extends Command {
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
 			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
-		if (!msg.flags.global && msg.guild) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
+		if (!msg.flags.global) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...');
 		list = chunk(list, 10);
 
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`🍪 ${msg.flags.global || !msg.guild ? 'Global ' : ''}Stalkie Leaderboard`)
+			.setTitle(`🍪 ${msg.flags.global ? 'Global ' : ''}Stalkie Leaderboard`)
 		);
 
 		let authorPos;
