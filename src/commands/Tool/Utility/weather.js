@@ -44,7 +44,7 @@ module.exports = class extends Command {
 	}
 
 	async minutely(msg, [location]) {
-		if (!msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
+		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
 		const data = await this.getWeatherData(location, 'minutely');
 		if (!data.by_minute || !data.by_minute.length) throw `<:error:508595005481549846>  ::  No by-minute data available for **${data.location.address}**.`;
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the weather reports...');
@@ -68,7 +68,7 @@ module.exports = class extends Command {
 	}
 
 	async hourly(msg, [location]) {
-		if (!msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
+		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
 		const data = await this.getWeatherData(location, 'hourly');
 		if (!data.by_hour || !data.by_hour.length) throw `<:error:508595005481549846>  ::  No by-hour data available for **${data.location.address}**.`;
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the weather reports...');
@@ -103,7 +103,7 @@ module.exports = class extends Command {
 	}
 
 	async daily(msg, [location]) {
-		if (!msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
+		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
 		const data = await this.getWeatherData(location, 'daily');
 		if (!data.by_day || !data.by_day.length) throw `<:error:508595005481549846>  ::  No by-day data available for **${data.location.address}**.`;
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the weather reports...');
