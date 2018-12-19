@@ -39,7 +39,7 @@ module.exports = class extends Command {
 				this.join(msg);
 				return this.play(msg, queue[0]);
 			}
-			if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. You can use the playlist feathre or add one using \`${msg.guild.settings.get('prefix')}play\``;
+			if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
 			this.join(msg);
 			msg.send('<:check:508594899117932544>  ::  Queue is empty. The playlist has been added to the queue.');
 			await this.addToQueue(msg, playlist);
