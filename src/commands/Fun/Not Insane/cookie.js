@@ -6,6 +6,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			cooldown: 10,
+			runIn: ['text'],
 			aliases: ['cookies', 'stalkie', 'stalkies'],
 			description: 'Gives a person a cookie!',
 			extendedHelp: [
@@ -41,7 +42,7 @@ module.exports = class extends Command {
 	}
 
 	async lb(msg) {
-		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw '<:error:508595005481549846>  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).'; // eslint-disable-line max-len
+		if (!msg.channel.permissionsFor(msg.guild.me).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw '<:error:508595005481549846>  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).'; // eslint-disable-line max-len
 		let list = await Promise.all(await this.client.providers.default.getAll('users').then(usr => usr
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
