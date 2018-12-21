@@ -85,7 +85,7 @@ module.exports = class extends Event {
 				case 'softban': return this.client.commands.get('softban').run(message, [member.user, null, ['Reached automod quota']]).catch(err => message.send(err));
 			}
 		}
-		return member.actions.length >= 3;
+		return member.actions.length >= limit;
 	}
 
 };
