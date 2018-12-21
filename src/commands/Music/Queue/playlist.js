@@ -176,11 +176,11 @@ module.exports = class extends Command {
 				playlist.push(mergeObjects(track, { requester: msg.author.id, incognito: false }));
 				songCount++;
 			}
-			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the playlist.${msg.guild.settings.get('donation') < 5 && songCount < items.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
+			msg.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the playlist.${msg.guild.settings.get('donation') < 5 && songCount < items.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
 		} else {
 			if (playlist.length >= msg.guild.settings.get('music.maxPlaylist')) throw `<:error:508595005481549846>  ::  The music playlist for **${msg.guild.name}** has reached the limit of ${msg.guild.settings.get('music.maxPlaylist')} songs; currently ${playlist.length}.`; // eslint-disable-line max-len
 			playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
-			msg.channel.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
+			msg.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		return playlist;
