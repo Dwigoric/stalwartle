@@ -65,6 +65,7 @@ class Stalwartle extends Client {
 			.add('music', music => music
 				.add('announceSongs', 'boolean', { default: true })
 				.add('dj', 'role', { array: true })
+				.add('maxPlaylist', 'integer', { default: 250 })
 				.add('maxQueue', 'integer', { default: 250 })
 				.add('maxUserRequests', 'integer', { default: Infinity })
 				.add('noDuplicates', 'boolean', { default: false })

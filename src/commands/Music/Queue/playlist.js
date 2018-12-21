@@ -63,6 +63,7 @@ module.exports = class extends Command {
 	}
 
 	async add(msg, [tracks]) {
+		if (msg.guild.settings.get('donation') < 3) throw '<:error:508595005481549846>  ::  Sorry! This feature is limited to servers which have donated $3 or more.';
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can configure the playlist!';
 		if (!URL_REGEX.test(tracks) && !['.m3u', '.pls', 'xspf'].includes(tracks.slice(-4))) throw '<:error:508595005481549846>  ::  Unsupported URL.';
 		const songs = await this.store.get('play').getSongs(tracks, tracks.includes('soundcloud.com'));
@@ -168,7 +169,6 @@ module.exports = class extends Command {
 
 	async addToPlaylist(msg, items) {
 		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
-		if (msg.guild.settings.get('donation') < 3 && playlist.length >= 250) throw `<:error:508595005481549846>  ::  The music playlist for **${msg.guild.name}** has reached the limit of 250 songs; currently ${playlist.length}.`; // eslint-disable-line max-len
 		if (Array.isArray(items)) {
 			let songCount = 0;
 			for (const track of items) {
@@ -178,6 +178,7 @@ module.exports = class extends Command {
 			}
 			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the playlist.${msg.guild.settings.get('donation') < 5 && songCount < items.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
 		} else {
+			if (playlist.length >= msg.guild.settings.get('maxPlaylist')) throw `<:error:508595005481549846>  ::  The music playlist for **${msg.guild.name}** has reached the limit of ${msg.guild.settings.get('maxPlaylist')} songs; currently ${playlist.length}.`; // eslint-disable-line max-len
 			playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
 			msg.channel.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
