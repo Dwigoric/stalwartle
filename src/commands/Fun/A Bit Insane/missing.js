@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [missing = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.missing(missing.displayAvatarURL(), missing.tag), 'missing.png');
+		msg.channel.sendFile(await this.client.idiot.missing(missing.displayAvatarURL(), missing.tag).catch(() => { throw '<:error:508595005481549846>  ::  Something went wrong. Please try again.'; }), 'missing.png'); // eslint-disable-line max-len
 	}
 
 };
