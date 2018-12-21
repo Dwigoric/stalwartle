@@ -47,7 +47,7 @@ class Stalwartle extends Client {
 			.add('logging', 'boolean', { default: true })
 			.add('modlogShowContent', 'boolean', { default: true })
 			.add('ignored', 'channel', { array: true })
-			.add('donation', 'integer', { default: 0, configurable: false })
+			.add('donation', 'number', { default: 0, configurable: false })
 			.add('selfroles', 'role', { array: true })
 			.add('globalBans', 'boolean', { default: false })
 			.add('autorole', autorole => autorole
