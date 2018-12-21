@@ -70,7 +70,7 @@ class Stalwartle extends Client {
 				.add('maxUserRequests', 'integer', { default: 50 })
 				.add('noDuplicates', 'boolean', { default: false })
 				.add('repeat', 'string', { default: 'none', configurable: false })
-				.add('volume', 'integer', { default: 100, min: 1, max: 300 }))
+				.add('volume', 'integer', { default: 100, min: 1, max: 300, configurable: false }))
 			.add('modlogs', modlogs => modlogs
 				.add('ban', 'channel')
 				.add('kick', 'channel')
