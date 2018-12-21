@@ -116,9 +116,9 @@ module.exports = class extends Command {
 		return data.tracks;
 	}
 
+	/* eslint-disable complexity */
 	async addToQueue(msg, song) {
 		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
-		if (msg.guild.settings.get('donation') < 3 && queue.length >= 250) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of 250 songs; currently ${queue.length}.`; // eslint-disable-line max-len
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })]; // eslint-disable-line max-len
 			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
@@ -126,21 +126,28 @@ module.exports = class extends Command {
 		} else if (Array.isArray(song)) {
 			let songCount = 0;
 			for (const track of song) {
+				if (queue.length >= msg.guild.settings.get('maxQueue')) break;
+				if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('maxUserRequests')) break;
+				if (msg.guild.settings.get('noDuplicates') && queue.filter(request => request.track === track.track).length) continue;
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
 				queue.push(mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
 				songCount++;
 			}
-			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue.${msg.guild.settings.get('donation') < 5 && songCount < song.length ? ' All songs longer than 5 hours weren\'t added.' : ''}`); // eslint-disable-line max-len
+			msg.channel.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue.${songCount < song.length ? ` Possibilities: (1) You've reached the queue limit of ${msg.guild.settings.get('maxQueue')} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, or (4) you've reached the limit of ${msg.guild.settings.get('maxUserRequests')} song requests per user.` : ''}`); // eslint-disable-line max-len
 		} else {
+			if (queue.length >= msg.guild.settings.get('maxQueue')) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of ${msg.guild.settings.get('maxQueue')} songs; currently ${queue.length}.`; // eslint-disable-line max-len
+			if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('maxUserRequests')) throw `<:error:508595005481549846>  ::  You've reached the maximum request per user limit of ${msg.guild.settings.get('maxUserRequests')} requests.`; // eslint-disable-line max-len
+			if (msg.guild.settings.get('noDuplicates') && queue.filter(request => request.track === song.track).length) throw `<:error:508595005481549846>  ::  This song is already in the queue, and duplicates are disabled in this server.`; // eslint-disable-line max-len
 			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
-			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`.${msg.guild.settings.get('music.dj').length ? '' : ` To limit those who control music, use \`${msg.guild.settings.get('prefix')}conf set music.dj <DJ Role>\`.`}`); // eslint-disable-line max-len
+			msg.channel.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		return queue;
 	}
+	/* eslint-enable complexity */
 
 	async play(msg, song) {
-		if (msg.guild.player.playing) return null;
+		if (msg.guild.player.playing) return;
 		msg.guild.player.play(song.track);
 		msg.guild.player.pause(false);
 		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
@@ -163,7 +170,7 @@ module.exports = class extends Command {
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
 		}
-		return msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
+		if (msg.guild.settings.get('announceSongs')) msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
 
 	async init() {

@@ -63,7 +63,11 @@ class Stalwartle extends Client {
 				.add('version', 'string', { default: 'gearz', configurable: false })
 				.add('channel', 'textchannel'))
 			.add('music', music => music
+				.add('announceSongs', 'boolean', { default: true })
 				.add('dj', 'role', { array: true })
+				.add('maxQueue', 'integer', { default: 250 })
+				.add('maxUserRequests', 'integer', { default: Infinity })
+				.add('noDuplicates', 'boolean', { default: false })
 				.add('repeat', 'string', { default: 'none', configurable: false })
 				.add('volume', 'integer', { default: 100, min: 1, max: 300 }))
 			.add('modlogs', modlogs => modlogs
