@@ -65,12 +65,12 @@ class Stalwartle extends Client {
 			.add('music', music => music
 				.add('announceSongs', 'boolean', { default: true })
 				.add('dj', 'role', { array: true })
-				.add('maxPlaylist', 'integer', { default: 250 })
-				.add('maxQueue', 'integer', { default: 250 })
-				.add('maxUserRequests', 'integer', { default: 50 })
+				.add('maxPlaylist', 'integer', { min: 1, max: 1000, default: 250 })
+				.add('maxQueue', 'integer', { min: 1, max: 1000, default: 250 })
+				.add('maxUserRequests', 'integer', { min: 1, max: 100, default: 10 })
 				.add('noDuplicates', 'boolean', { default: false })
 				.add('repeat', 'string', { default: 'none', configurable: false })
-				.add('volume', 'integer', { default: 100, min: 1, max: 300, configurable: false }))
+				.add('volume', 'integer', { min: 1, max: 300, default: 100, configurable: false }))
 			.add('modlogs', modlogs => modlogs
 				.add('ban', 'channel')
 				.add('kick', 'channel')
