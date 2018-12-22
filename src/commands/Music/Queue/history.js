@@ -19,6 +19,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
+		if (msg.guild.settings.get('donation') < 3) throw '<:error:508595005481549846>  ::  Sorry! This feature is limited to servers which have donated $3 or more.';
 		const { history } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!history.length) throw '<:error:508595005481549846>  ::  There are no songs in the history yet! Songs you play are stored in the history within a day.';
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music history...');
