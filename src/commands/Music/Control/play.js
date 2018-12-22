@@ -166,7 +166,7 @@ module.exports = class extends Command {
 				this.client.player.leave(msg.guild.id);
 			}
 		});
-		if (!song.incognito) {
+		if (msg.guild.settings.get('donation') >= 3 && !song.incognito) {
 			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });

@@ -49,7 +49,7 @@ module.exports = class extends Command {
 						`**${this.client.guilds.get('502895390807293963').name}** (<https://discord.gg/EH7jKFH>)`,
 						`\nUse the command \`${this.client.options.prefix}bug\` to report a bug and \`${this.client.options.prefix}suggest\` if you have suggestions.`,
 						'\n__**DONATION PERKS**__',
-						'$3 ⇒ Enable the playlist feature.',
+						'$3 ⇒ Enable the history and playlist features.',
 						'$5 ⇒ Removal of 5-hour limit for each track in music. ($3 perk is included)',
 						'$8 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel. ($3 and $5 perks are included)',
 						'*Please pay at <https://paypal.me/Dwigoric>. Make sure to use **USD**.*',
