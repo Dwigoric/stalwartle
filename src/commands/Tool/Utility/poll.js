@@ -40,8 +40,7 @@ module.exports = class extends Command {
 		const loop = () => {
 			setTimeout(() => {
 				poll.react(emojis[i]);
-				i++;
-				if (i < emojis.length) loop();
+				if (++i < emojis.length) loop();
 			}, 1000);
 		};
 		loop();

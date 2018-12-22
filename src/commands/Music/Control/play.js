@@ -80,11 +80,10 @@ module.exports = class extends Command {
 			prompts[msg.member.id] = finds;
 			let limit = 0, choice;
 			do {
-				if (limit >= 5) {
+				if (limit++ >= 5) {
 					delete prompts[msg.member.id];
 					throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
 				}
-				limit++;
 				choice = await msg.prompt([
 					`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
 					finds.map((result, index) => {
