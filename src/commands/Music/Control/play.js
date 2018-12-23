@@ -2,12 +2,9 @@ const { Command, Timestamp, util: { mergeObjects } } = require('klasa');
 const { escapeMarkdown } = require('discord.js').Util;
 const fetch = require('node-fetch');
 
-const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
-	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i'),
-	SOUNDCLOUD_SET_REGEX = new RegExp('/([a-z0-9-_]+)/sets/([a-z0-9-_]+)', 'i'),
-	BANDCAMP_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+)', 'i');
-
 const prompts = {};
+const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
+	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
 
 module.exports = class extends Command {
 
@@ -66,38 +63,34 @@ module.exports = class extends Command {
 	}
 
 	async resolveQuery(msg, query) {
-		if (URL_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
-			const linkRes = await this.getSongs(query, query.includes('soundcloud.com'));
-			if (!linkRes.length) throw '<:error:508595005481549846>  ::  You provided an invalid stream or URL.';
-			if (YOUTUBE_PLAYLIST_REGEX.test(query) || SOUNDCLOUD_SET_REGEX.test(query) || BANDCAMP_ALBUM_REGEX.test(query)) return linkRes;
-			else return linkRes[0];
-		} else {
-			const results = await this.getSongs(query, Boolean(msg.flags.soundcloud));
-			if (!results.length) throw `<:error:508595005481549846>  ::  No result found for **${query}**.`;
-			else if (results.length === 1) return results[0];
+		const { loadType, tracks } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flags.soundcloud));
+		if (loadType === 'LOAD_FAILED') throw '<:error:508595005481549846>  ::  Something went wrong when loading your search. Sorry \'bout that! Please try again.';
+		else if (loadType === 'NO_MATCHES') throw '<:error:508595005481549846>  ::  No track found for your query.';
+		else if (loadType === 'TRACK_LOADED') return tracks[0];
+		else if (loadType === 'PLAYLIST_LOADED') return tracks;
 
-			const finds = results.slice(0, 5);
-			prompts[msg.member.id] = finds;
-			let limit = 0, choice;
-			do {
-				if (limit++ >= 5) {
-					delete prompts[msg.member.id];
-					throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
-				}
-				choice = await msg.prompt([
-					`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
-					finds.map((result, index) => {
-						const { length } = result.info;
-						return `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
-					}).join('\n')
-				].join('\n')).catch(() => ({ content: 'cancel' }));
-			} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > prompts[msg.member.id].length);
-			if (choice.content === 'cancel') {
+		// From here on out, loadType === 'SEARCH_RESULT' : true
+		const finds = tracks.slice(0, 5);
+		prompts[msg.member.id] = finds;
+		let limit = 0, choice;
+		do {
+			if (limit++ >= 5) {
 				delete prompts[msg.member.id];
-				throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
+				throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
 			}
-			return prompts[msg.member.id][parseInt(choice.content) - 1];
+			choice = await msg.prompt([
+				`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
+				finds.map((result, index) => {
+					const { length } = result.info;
+					return `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
+				}).join('\n')
+			].join('\n')).catch(() => ({ content: 'cancel' }));
+		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > prompts[msg.member.id].length);
+		if (choice.content === 'cancel') {
+			delete prompts[msg.member.id];
+			throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
 		}
+		return prompts[msg.member.id][parseInt(choice.content) - 1];
 	}
 
 	async getSongs(query, soundcloud) {
@@ -106,13 +99,12 @@ module.exports = class extends Command {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
-		const data = await fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.nodes[0].password } }) // eslint-disable-line max-len
+		return fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.nodes[0].password } }) // eslint-disable-line max-len
 			.then(res => res.json())
 			.catch(err => {
 				this.client.emit('wtf', err);
 				throw '<:error:508595005481549846>  ::  There was an error, please try again.';
 			});
-		return data.tracks;
 	}
 
 	/* eslint-disable complexity */
