@@ -145,16 +145,19 @@ module.exports = class extends Command {
 		guild.player.volume(guild.settings.get('music.volume'));
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
-			if (data.reason === 'REPLACED') return;
+			if (data.reason === 'REPLACED') return null;
 			const { queue, playlist, history } = await this.client.providers.default.get('music', guild.id);
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
 			await this.client.providers.default.update('music', guild.id, { queue, playlist, history });
-			if (queue.length) {
-				this.play({ guild, channel }, queue[0]);
-			} else {
+			if (this.client.guilds.get(guild.id)) {
+				if (queue.length) return this.play({ guild, channel }, queue[0]);
 				channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-				if (this.client.guilds.get(guild.id)) this.client.player.leave(guild.id);
+				return this.client.player.leave(guild.id);
+			} else {
+				guild.player.removeAllListeners();
+				guild.player.destroy();
+				return this.client.player.delete(guild.id);
 			}
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
