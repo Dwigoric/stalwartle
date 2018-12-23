@@ -54,15 +54,15 @@ module.exports = class extends Command {
 		return this.play(msg, queue.length && !msg.flags.force ? queue[0] : Array.isArray(song) ? song[0] : song);
 	}
 
-	join(msg) {
-		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
-		this.client.player.leave(msg.guild.id);
+	join({ guild, channel, member }) {
+		if (!member.voice.channel) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
+		this.client.player.leave(guild.id);
 		this.client.player.join({
 			host: this.client.options.nodes[0].host,
-			guild: msg.guild.id,
-			channel: msg.member.voice.channel.id
+			guild: guild.id,
+			channel: member.voice.channel.id
 		}, { selfdeaf: true });
-		msg.guild.player.on('error', error => msg.channel.send(`<:error:508595005481549846>  ::  ${error.error}`));
+		guild.player.on('error', error => channel.send(`<:error:508595005481549846>  ::  ${error.error}`));
 	}
 
 	async resolveQuery(msg, query) {
@@ -146,31 +146,31 @@ module.exports = class extends Command {
 	}
 	/* eslint-enable complexity */
 
-	async play(msg, song) {
-		if (msg.guild.player.playing) return;
-		msg.guild.player.play(song.track);
-		msg.guild.player.pause(false);
-		msg.guild.player.volume(msg.guild.settings.get('music.volume'));
-		msg.guild.clearVoteskips();
-		msg.guild.player.once('end', async data => {
+	async play({ guild, channel }, song) {
+		if (guild.player.playing) return;
+		guild.player.play(song.track);
+		guild.player.pause(false);
+		guild.player.volume(guild.settings.get('music.volume'));
+		guild.clearVoteskips();
+		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return;
-			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
-			if (msg.guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
-			if (msg.guild.settings.get('music.repeat') !== 'song') queue.shift();
-			await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
+			const { queue, playlist, history } = await this.client.providers.default.get('music', guild.id);
+			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
+			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
+			await this.client.providers.default.update('music', guild.id, { queue, playlist, history });
 			if (queue.length) {
-				this.play(msg, queue[0]);
+				this.play({ guild, channel }, queue[0]);
 			} else {
-				msg.channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-				this.client.player.leave(msg.guild.id);
+				channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
+				this.client.player.leave(guild.id);
 			}
 		});
-		if (msg.guild.settings.get('donation') >= 3 && !song.incognito) {
-			const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
+		if (guild.settings.get('donation') >= 3 && !song.incognito) {
+			const { queue, playlist, history } = await this.client.providers.default.get('music', guild.id);
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
-			this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
+			this.client.providers.default.update('music', guild.id, { queue, playlist, history });
 		}
-		if (msg.guild.settings.get('music.announceSongs')) msg.channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
+		if (guild.settings.get('music.announceSongs')) channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
 
 	async init() {
