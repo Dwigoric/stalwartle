@@ -154,7 +154,7 @@ module.exports = class extends Command {
 				this.play({ guild, channel }, queue[0]);
 			} else {
 				channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-				this.client.player.leave(guild.id);
+				if (this.client.guilds.get(guild.id)) this.client.player.leave(guild.id);
 			}
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
