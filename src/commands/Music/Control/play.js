@@ -119,7 +119,7 @@ module.exports = class extends Command {
 			for (const track of song) {
 				if (queue.length >= msg.guild.settings.get('music.maxQueue')) break;
 				if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('music.maxUserRequests')) break;
-				if (msg.guild.settings.get('music.noDuplicates') && queue.filter(request => request.track === track.track).length) continue;
+				if (msg.guild.settings.get('music.noDuplicates') && queue.some(request => request.track === track.track)) continue;
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
 				queue.push(mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
 				songCount++;
