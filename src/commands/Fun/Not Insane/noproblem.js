@@ -5,13 +5,13 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['yw', 'noprob', 'yourewelcome'],
-			description: "Sends a YouTube video link of Maui's \"You're Welcome\" from Moana.",
+			description: "Sends a GIF of Maui's \"You're Welcome\" from Moana.",
 			extendedHelp: 'You can use this if you want to say "You\'re welcome" in a fashionable way.'
 		});
 	}
 
 	async run(msg) {
-		msg.send('https://youtu.be/79DijItQXMM');
+		msg.send('https://giphy.com/gifs/hqg-tXTqLBYNf0N7W');
 	}
 
 };
