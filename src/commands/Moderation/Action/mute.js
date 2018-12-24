@@ -15,17 +15,12 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [member, duration = Infinity, ...reason], force) {
+		reason = reason.length ? reason.join(this.usageDelim) : null;
 		if (!msg.guild.settings.get('muteRole')) throw `<:error:508595005481549846>  ::  The mute role has not yet been set up for this server. You can do so by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`; // eslint-disable-line max-len
 		if (!force && member.user.equals(msg.author)) throw 'Why would you mute yourself?';
 		if (!force && member.user.equals(this.client.user)) throw 'Have I done something wrong?';
 
 		const user = await this.client.users.fetch(member.id).catch(() => null);
-		if (member && !force) {
-			if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:error:508595005481549846>  ::  You cannot mute this user.';
-			if (member.permissions.bitfield >= msg.guild.me.permissions.bitfield) throw '<:error:508595005481549846>  ::  I cannot mute this user.';
-		}
-
-		reason = reason.length ? reason.join(this.usageDelim) : null;
 		const muteRole = msg.guild.roles.get(msg.guild.settings.get('muteRole'));
 		if (!muteRole) throw `<:error:508595005481549846>  ::  Whoops! The mute role has been deleted. Please reconfigure this server's mute role by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`; // eslint-disable-line max-len
 		if (muteRole.position >= msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  The mute role **${muteRole.name}** is higher than me, so I can't give ${user.tag} the mute role.`; // eslint-disable-line max-len

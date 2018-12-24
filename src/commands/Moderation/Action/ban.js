@@ -20,10 +20,11 @@ module.exports = class extends Command {
 	async run(msg, [user, days = 0, duration = Infinity, ...reason], force) {
 		if (!force && user.equals(msg.author)) throw 'Why would you ban yourself?';
 		if (!force && user.equals(this.client.user)) throw 'Have I done something wrong?';
+		if (user.equals(msg.guild.owner.user)) throw 'Pretty sure the server owner cannot be banned...';
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
-		if (!force && member) {
-			if (member.permissions.bitfield >= msg.member.permissions.bitfield) throw '<:error:508595005481549846>  ::  You cannot ban this user.';
+		if (!force) {
+			if (msg.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) throw '<:error:508595005481549846>  ::  You cannot ban this user.';
 			if (!member.bannable) throw '<:error:508595005481549846>  ::  I cannot ban this user.';
 		}
 
