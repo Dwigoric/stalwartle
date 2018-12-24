@@ -4,7 +4,7 @@
 	"version": "2.7.1b",
 	"main": "bot.js",
 	"scripts": {
-		"start": "pm2 start src/bot.js --name Stalwartle --node-args=\"--expose_gc --always-compact\""
+		"start": "pm2 start src/bot.js --name Stalwartle --node-args=\"--expose_gc --always-compact --trace-warnings\""
 	},
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
