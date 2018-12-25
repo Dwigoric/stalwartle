@@ -17,7 +17,7 @@ module.exports = class extends Event {
 			.setTimestamp()
 			.setDescription([
 				`Hey there ${guild.owner}! Thank you for having me in **${guild.name}**. It is an honor to serve you.`,
-				`\nTo begin using me, please use \`${guild.settings.get('prefix')}help\` here or on any text channel. You will be given a list of commands.`,
+				`\nTo get started, please use \`${guild.settings.get('prefix')}help\` here or on any text channel. You will be given a list of commands.`,
 				`Please feel free to look at the command list. If you want me to serve more Discord users, just use the \`${guild.settings.get('prefix')}invite\` command!`,
 				'\nI can play music, moderate users, send memes, manipulate user avatars, and more!',
 				`\nBy **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`
