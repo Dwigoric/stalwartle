@@ -20,6 +20,9 @@ module.exports = class extends Event {
 
 	async run(guild) {
 		this.client.setGuildCount();
+		guild.player.removeAllListeners();
+		guild.player.destroy();
+		this.client.player.delete(guild.id);
 
 		const regionArr = guild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
