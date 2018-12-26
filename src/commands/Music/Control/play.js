@@ -86,7 +86,7 @@ module.exports = class extends Command {
 				}).join('\n')
 			].join('\n')).catch(() => ({ content: 'cancel' }));
 		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > prompts[msg.member.id].length);
-		if (msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES')) choice.delete();
+		if (msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content === 'cancel') {
 			delete prompts[msg.member.id];
 			throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
