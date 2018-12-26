@@ -109,7 +109,7 @@ module.exports = class extends Command {
 
 	/* eslint-disable complexity */
 	async addToQueue(msg, song) {
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id) || [];
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })]; // eslint-disable-line max-len
 			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
