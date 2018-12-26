@@ -5,15 +5,15 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['pick'],
-			description: 'Chooses between two or more choices.',
-			extendedHelp: "To separate each choice, use ` | ` (that one's got two spaces in it!).",
+			description: 'Chooses between two or more choices. Use ` | ` (two spaces, mind you!) to separate each choice.',
 			usage: '<Choices:string> [...]',
 			usageDelim: ' | '
 		});
 	}
 
 	async run(msg, [...choices]) {
-		msg.send(choices.length === 1 ? "🤔  ::  I don't think there's a sense in having only one choice..." : `🤔  ::  I choose... **${choices[Math.floor(Math.random() * choices.length)]}**!`);
+		if (choices.length === 1) throw '🤔  ::  I don\'t think there\'s a sense in having only one choice...';
+		msg.send(`🤔  ::  I choose... **${choices[Math.floor(Math.random() * choices.length)]}**!`);
 	}
 
 };
