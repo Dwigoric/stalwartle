@@ -1,5 +1,4 @@
 const { Command } = require('klasa');
-const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
@@ -8,13 +7,12 @@ module.exports = class extends Command {
 			cooldown: 10,
 			aliases: ['randomcat', 'meow'],
 			requiredPermissions: ['ATTACH_FILES'],
-			description: 'Grabs a random cat image from random.cat.'
+			description: 'Grabs a random cat. Use the `--gif` flag to get a GIF.'
 		});
 	}
 
 	async run(msg) {
-		const { file } = await fetch('http://aws.random.cat/meow').then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  Something went wrong. Please try again.'; });
-		return msg.channel.sendFile(file, `cat.${file.slice(file.lastIndexOf('.'), file.length)}`);
+		return msg.channel.sendFile(`https://cataas.com/cat${msg.flags.gif ? '/gif' : ''}`, `cat.${msg.flags.gif ? 'gif' : 'png'}`);
 	}
 
 };
