@@ -109,7 +109,7 @@ module.exports = class extends Command {
 
 	/* eslint-disable complexity */
 	async addToQueue(msg, song) {
-		const { queue, playlist, history } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id) || [];
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })]; // eslint-disable-line max-len
 			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
@@ -133,7 +133,7 @@ module.exports = class extends Command {
 			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
 			msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 		}
-		await this.client.providers.default.update('music', msg.guild.id, { queue, playlist, history });
+		await this.client.providers.default.update('music', msg.guild.id, { queue });
 		return queue;
 	}
 	/* eslint-enable complexity */
@@ -146,18 +146,18 @@ module.exports = class extends Command {
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
-			const { queue, playlist, history } = await this.client.providers.default.get('music', guild.id);
+			const { queue } = await this.client.providers.default.get('music', guild.id);
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
-			await this.client.providers.default.update('music', guild.id, { queue, playlist, history });
+			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 			channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
 			return this.client.player.leave(guild.id);
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
-			const { queue, playlist, history } = await this.client.providers.default.get('music', guild.id);
+			const { history } = await this.client.providers.default.get('music', guild.id);
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
-			this.client.providers.default.update('music', guild.id, { queue, playlist, history });
+			this.client.providers.default.update('music', guild.id, { history });
 		}
 		if (guild.settings.get('music.announceSongs')) channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)}`);
 	}
