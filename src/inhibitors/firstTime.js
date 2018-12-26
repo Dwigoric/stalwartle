@@ -4,8 +4,8 @@ module.exports = class extends Inhibitor {
 
 	async run(msg, command) {
 		if (!msg.guild) return null;
-		if (command.category === 'Moderation') return await this.checkTable(msg.guild.id, 'modlogs');
-		if (command.category === 'Music') return await this.checkTable(msg.guild.id, 'music');
+		if (command.category === 'Moderation') await this.checkTable(msg.guild.id, 'modlogs');
+		if (command.category === 'Music') await this.checkTable(msg.guild.id, 'music');
 		return null;
 	}
 
@@ -17,7 +17,7 @@ module.exports = class extends Inhibitor {
 			modlogs: { modlogs: [] },
 			music: { history: [], playlist: [], queue: [] }
 		};
-		return await defProvider.update(table, guild, obj[table]);
+		return defProvider.update(table, guild, obj[table]);
 	}
 
 };
