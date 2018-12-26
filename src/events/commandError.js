@@ -18,7 +18,7 @@ module.exports = class extends Event {
 		} else {
 			return msg.sendMessage(error).catch(err => this.client.emit('wtf', err));
 		}
-		if (error.stack) {
+		if (error.stack && this.client.application.botPublic) {
 			return this.hook.send(`${this.client.application.owner}, an error occured with **${this.client.user.tag}**!`, new MessageEmbed()
 				.setColor(0xE74C3C)
 				.setTitle(`Details of Error ID \`${errorID}\``)
