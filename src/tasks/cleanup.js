@@ -97,11 +97,11 @@ module.exports = class MemorySweeper extends Task {
 		// Emit a log
 		this.client.emit('log', [
 			this.header,
-			// `${this.setColor(presences)} [Presence]s`,
 			`${this.setColor(guildMembers)} [GuildMember]s`,
 			`${this.setColor(users)} [User]s`,
-			// `${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(lastMessages)} [Last Message]s`,
+			// `${this.setColor(presences)} [Presence]s`,
+			// `${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(musicDBs)} [MusicDB]s`,
 			`${this.setColor(modlogDBs)} [ModlogDB]s`
 		].join('\n'));
