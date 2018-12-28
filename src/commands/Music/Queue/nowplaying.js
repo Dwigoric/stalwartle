@@ -27,7 +27,7 @@ module.exports = class extends Command {
 
 		const progress = '░'.repeat(30).split('');
 		const count = Math.ceil(((position / length)) * progress.length);
-		progress.splice(0, count, '█'.repeat(count));
+		progress.splice(0, count, '▓'.repeat(count));
 
 		return msg.send({
 			embed: new MessageEmbed()
