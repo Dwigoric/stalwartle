@@ -25,7 +25,7 @@ module.exports = class extends Command {
 		const { position } = msg.guild.player.state;
 		const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`);
 
-		const progress = '░'.repeat(30).split('');
+		const progress = '░'.repeat(35).split('');
 		const count = Math.ceil(((position / length)) * progress.length);
 		progress.splice(0, count, '▓'.repeat(count));
 
