@@ -78,13 +78,6 @@ module.exports = class MemorySweeper extends Task {
 			users++;
 		}
 
-		// Modlog database sweeper
-		for (const { id, modlogs } of await this.client.providers.default.getAll('modlogs')) {
-			if (modlogs.length) continue;
-			this.client.providers.default.delete('modlogs', id);
-			modlogDBs++;
-		}
-
 		// Music database sweeper
 		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
 			if (history.length) continue;
@@ -92,6 +85,13 @@ module.exports = class MemorySweeper extends Task {
 			if (queue.length) continue;
 			this.client.providers.default.delete('music', id);
 			musicDBs++;
+		}
+
+		// Modlog database sweeper
+		for (const { id, modlogs } of await this.client.providers.default.getAll('modlogs')) {
+			if (modlogs.length) continue;
+			this.client.providers.default.delete('modlogs', id);
+			modlogDBs++;
 		}
 
 		// Emit a log
@@ -102,8 +102,8 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(users)} [User]s`,
 			// `${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(lastMessages)} [Last Message]s`,
-			`${this.setColor(modlogDBs)} [ModlogDB]s`,
-			`${this.setColor(musicDBs)} [MusicDB]s`
+			`${this.setColor(musicDBs)} [MusicDB]s`,
+			`${this.setColor(modlogDBs)} [ModlogDB]s`
 		].join('\n'));
 
 		// Create a schedule to make this task work
