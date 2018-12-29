@@ -10,6 +10,7 @@
 		"discord.js": "github:discordjs/discord.js",
 		"discord.js-lavalink": "git+https://github.com/vilP1l/discord.js-lavalink.git",
 		"klasa": "github:dirigeants/klasa",
+		"klasa-member-gateway": "github:dirigeants/klasa-member-gateway",
 		"moment-timezone": "^0.5.23",
 		"rethinkdbdash": "^2.3.31"
 	},

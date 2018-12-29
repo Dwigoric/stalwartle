@@ -32,6 +32,8 @@ module.exports = class extends Command {
 			else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
 		}
 		await member.roles.add(muteRole, 'Muted');
+		member.settings.update('muted', true);
+		this.client.gateways.members.sync();
 		if (duration && duration !== Infinity) {
 			this.client.schedule.create('unmute', duration, {
 				data: {

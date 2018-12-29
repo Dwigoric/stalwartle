@@ -3,8 +3,11 @@ const { Collection } = require('discord.js');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
 const { blsAPIkey, bodAPIkey, dblAPIkey, dcbAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
+const memberGateway = require('klasa-member-gateway');
 const fetch = require('node-fetch');
 const idiotic = require('idiotic-api');
+
+Client.use(memberGateway);
 
 class Stalwartle extends Client {
 
@@ -41,6 +44,9 @@ class Stalwartle extends Client {
 			.add('timezone', 'string', { default: 'GMT', configurable: false })
 			.add('afkIgnore', 'channel', { array: true })
 			.add('osu', 'string', { max: 20 });
+
+		Stalwartle.defaultMemberSchema
+			.add('muted', 'boolean', { default: false });
 
 		Stalwartle.defaultGuildSchema
 			.add('muteRole', 'role')

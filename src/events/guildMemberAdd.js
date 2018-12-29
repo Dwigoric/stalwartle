@@ -5,7 +5,8 @@ module.exports = class extends Event {
 
 	async run(member) {
 		// Check if the member is muted
-		if (this.client.schedule.tasks.filter(tk => tk.taskName === 'unmute' && tk.data.user === member.id).length) {
+		await this.client.gateways.members.sync();
+		if (member.settings.get('muted')) {
 			const muteRole = member.guild.roles.get(member.guild.settings.get('muteRole'));
 			if (!muteRole) {
 				member.guild.owner.user.send('⚠  ::  Whoops! The mute role has been deleted. The muterole setting has been reset.').catch(() => null);

@@ -26,6 +26,8 @@ module.exports = class extends Command {
 		if (!member.roles.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} wasn't muted already!`;
 
 		await member.roles.remove(muteRole, 'Unmuted');
+		member.settings.reset('muted');
+		this.client.gateways.members.sync();
 		const task = this.client.schedule.tasks.filter(tk => tk.data.user === user.id)[0];
 		if (task) this.client.schedule.delete(task.id);
 
