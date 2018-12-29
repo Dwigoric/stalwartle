@@ -4,6 +4,24 @@ const fetch = require('node-fetch');
 module.exports = class extends Event {
 
 	async run(member) {
+		// Check if the member is muted
+		if (this.client.schedule.tasks.filter(tk => tk.taskName === 'unmute' && tk.data.user === member.id).length) {
+			const muteRole = member.guild.roles.get(member.guild.settings.get('muteRole'));
+			if (!muteRole) {
+				member.guild.owner.user.send('⚠  ::  Whoops! The mute role has been deleted. The muterole setting has been reset.').catch(() => null);
+				member.guild.settings.reset('muteRole');
+			} else if (muteRole.position >= member.guild.me.roles.highest.position) {
+				member.guild.owner.user.send(`⚠  ::  The mute role **${muteRole.name}** is higher than me, so I couldn't give ${member.user.tag} the mute role.`);
+			} else {
+				await member.roles.add(muteRole, 'Muted');
+				for (const channel of member.guild.channels.values()) {
+					if (channel.type === 'text') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
+					else if (channel.type === 'voice') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
+					else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
+				}
+			}
+		}
+
 		const welcome = member.guild.settings.get('welcome');
 		if (!welcome.channel) return null;
 		const chan = member.guild.channels.get(welcome.channel);
