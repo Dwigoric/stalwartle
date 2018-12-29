@@ -1,8 +1,8 @@
 {
 	"name": "stalwartle",
-	"description": "A scrumptious project that does quirky things",
+	"description": "A Discord Bot for Discordians' basic needs",
 	"version": "2.7.1b",
-	"main": "bot.js",
+	"main": "src/bot.js",
 	"scripts": {
 		"start": "pm2 start src/bot.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
 	},
