@@ -27,7 +27,7 @@ module.exports = class extends Command {
 
 		await member.roles.remove(muteRole, 'Unmuted');
 		member.settings.reset('muted');
-		this.client.gateways.members.sync();
+		member.settings.sync();
 		const task = this.client.schedule.tasks.filter(tk => tk.data.user === user.id)[0];
 		if (task) this.client.schedule.delete(task.id);
 

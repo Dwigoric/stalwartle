@@ -33,7 +33,7 @@ module.exports = class extends Command {
 		}
 		await member.roles.add(muteRole, 'Muted');
 		member.settings.update('muted', true);
-		this.client.gateways.members.sync();
+		member.settings.sync();
 		if (duration && duration !== Infinity) {
 			this.client.schedule.create('unmute', duration, {
 				data: {
