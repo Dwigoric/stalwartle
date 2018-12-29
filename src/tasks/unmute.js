@@ -12,7 +12,7 @@ module.exports = class extends Task {
 			guild: _guild
 		}, member.user, 'Auto Unmute');
 		member.roles.remove(_role, 'Auto Unmute');
-		member.settings.update('muted', true);
+		member.settings.reset('muted');
 		this.client.gateways.members.sync();
 	}
 
