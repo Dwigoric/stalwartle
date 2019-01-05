@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		const { data } = await fetch(`https://api.ksoft.si/lyrics/search?q=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json());
+		const { data } = await fetch(`https://api.ksoft.si/lyrics/search?q=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  An error occured. Please try again. Sorry \'bout that!'; }); // eslint-disable-line max-len
 		if (!data.length) throw '<:error:508595005481549846>  ::  No song lyrics found.';
 		const fullLyrics = [
 			`__***${data[0].name}** by ${data[0].artist}*${data[0].album ? ` on ${data[0].album}` : ''}__`,
