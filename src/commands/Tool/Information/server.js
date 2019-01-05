@@ -73,7 +73,7 @@ module.exports = class extends Command {
 				.setAuthor(dGuild.name, dGuild.iconURL({ format: 'png' }))
 				.setThumbnail(dGuild.iconURL({ format: 'png' }))
 				.addField('ID', dGuild.id, true)
-				.addField('Owner', dGuild.owner ? `${dGuild.owner.user.tag}\n(${dGuild.owner.user})` : 'N/A', true)
+				.addField('Owner', await dGuild.members.fetch(dGuild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
 				.addField('Server Region', region, true)
 				.addField('Verification Level', verifLevel[dGuild.verificationLevel], true)
 				.addField('Two-Factor Requirement', dGuild.mfaLevel ? 'Enabled' : 'Disabled', true)
