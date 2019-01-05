@@ -17,7 +17,7 @@ module.exports = class extends Command {
 			[
 				`*__**${data[0].name}**__`,
 				`by **${data[0].artist}**`,
-				`${data[0].album ? `on ${data[0].album}` : 'Single Track'}*`
+				`${data[0].album ? `on ${data[0].album}` : 'Single Track'}*\n`
 			].join('\n'),
 			data[0].lyrics,
 			'\n__*Powered by KSoft.Si API*__ '
