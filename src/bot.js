@@ -73,7 +73,7 @@ class Stalwartle extends Client {
 				.add('dj', 'role', { array: true })
 				.add('maxPlaylist', 'integer', { min: 1, max: 1000, default: 250 })
 				.add('maxQueue', 'integer', { min: 1, max: 1000, default: 250 })
-				.add('maxUserRequests', 'integer', { min: 1, max: 100, default: 10 })
+				.add('maxUserRequests', 'integer', { min: 1, max: 100, default: 50 })
 				.add('noDuplicates', 'boolean', { default: false })
 				.add('repeat', 'string', { default: 'none', configurable: false })
 				.add('volume', 'integer', { min: 1, max: 300, default: 100, configurable: false }))
