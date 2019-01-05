@@ -138,25 +138,25 @@ module.exports = class extends Command {
 		const { commands, categories, longest, stopwatch } = await this.buildCommands('plaintext', msg);
 		const plaintext = [];
 
-		plaintext.push(`${this.username}\n`);
-		plaintext.push(`Invite Link: ${this.invite}\n`);
-		plaintext.push(`Commands\n`);
+		plaintext.push(`${this.username}\r\n`);
+		plaintext.push(`Invite Link: ${this.invite}\r\n`);
+		plaintext.push(`Commands\r\n`);
 
 		for (let cat = 0; cat < categories.length; cat++) {
 			const categoryName = categories[cat];
 			const subCategories = Object.keys(commands[categories[cat]]);
-			if (commands[categories[cat]].General) plaintext.push(`${categoryName} / ${commands[categories[cat]].General.length} Commands\n`);
+			if (commands[categories[cat]].General) plaintext.push(`${categoryName} / ${commands[categories[cat]].General.length} Commands\r\n`);
 
 			for (let subCat = 0; subCat < subCategories.length; subCat++) {
-				if (subCategories.length > 1) plaintext.push(`${subCategories[subCat]}\n`);
+				if (subCategories.length > 1) plaintext.push(`${subCategories[subCat]}\r\n`);
 				plaintext.push(
-					`${commands[categories[cat]][subCategories[subCat]].map(cmd => `${this.prefix + cmd.name.padEnd(longest)}: ${cmd.description}`).join('\n')}`
+					`${commands[categories[cat]][subCategories[subCat]].map(cmd => `${this.prefix + cmd.name.padEnd(longest)}: ${cmd.description}`).join('\r\n')}`
 				);
-				plaintext.push('\n');
+				plaintext.push('\r\n');
 			}
 		}
 
-		this.finish(plaintext.join('\n'), stopwatch, 'txt');
+		this.finish(plaintext.join('\r\n'), stopwatch, 'txt');
 	}
 
 	async json(msg) {
