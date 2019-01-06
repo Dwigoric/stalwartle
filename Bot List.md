@@ -1,6 +1,6 @@
 # Unique Features
 ### Music (w/ history & playlist)
-With sound equalizer, you can play your favorite online radio, SoundCloud tracks, YouTube playlists, or your favorite meme song! More information on `s.help Music`
+With sound equalizer, you can play your favorite online radio (`.m3u`, `.pls`), SoundCloud tracks, YouTube playlists, or your favorite meme song! More information on `s.help Music`
 
 Supported ways to play music:
 * YouTube
