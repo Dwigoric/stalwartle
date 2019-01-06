@@ -62,7 +62,7 @@ module.exports = class extends Command {
 	async add(msg, [songs]) {
 		if (msg.guild.settings.get('donation') < 3) throw '<:error:508595005481549846>  ::  Sorry! This feature is limited to servers which have donated $3 or more.';
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can configure the playlist!';
-		if (!URL_REGEX.test(songs) && !['.m3u', '.pls', 'xspf'].includes(songs.slice(-4))) throw '<:error:508595005481549846>  ::  Unsupported URL.';
+		if (!URL_REGEX.test(songs) && !['.m3u', '.pls'].includes(songs.slice(-4))) throw '<:error:508595005481549846>  ::  Unsupported URL.';
 		const { loadType, tracks } = await this.store.get('play').getSongs(songs, songs.includes('soundcloud.com'));
 		if (loadType === 'LOAD_FAILED') throw '<:error:508595005481549846>  ::  Something went wrong when loading your tracks. Sorry \'bout that! Please try again.';
 		if (loadType === 'NO_MATCHES') throw '<:error:508595005481549846>  ::  You provided an invalid stream or URL.';
