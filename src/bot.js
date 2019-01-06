@@ -161,7 +161,7 @@ class Stalwartle extends Client {
 			});
 		}
 		if (this.auth.blsAPIkey) {
-			fetch(`https://botlist.space/api/bots/${this.user.id}`, {
+			fetch(`https://api.botlist.space/v1/bots/${this.user.id}`, {
 				method: 'POST',
 				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
 				headers: { Authorization: this.auth.blsAPIkey, 'Content-Type': 'application/json' }
