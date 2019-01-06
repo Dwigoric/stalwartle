@@ -2,7 +2,6 @@ const { Client } = require('klasa');
 const { Collection } = require('discord.js');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
-const { blsAPIkey, bodAPIkey, dblAPIkey, dcbAPIkey, ctxAPIkey, idioticAPIkey } = require('./auth');
 const memberGateway = require('klasa-member-gateway');
 const fetch = require('node-fetch');
 const idiotic = require('idiotic-api');
@@ -15,8 +14,8 @@ class Stalwartle extends Client {
 		super(...args);
 
 		this.player = null;
-		if (idioticAPIkey) {
-			this.idiot = new idiotic.Client(idioticAPIkey, { dev: true });
+		if (this.auth.idioticAPIkey) {
+			this.idiot = new idiotic.Client(this.auth.idioticAPIkey, { dev: true });
 			Object.defineProperty(this.idiot, 'token', { value: this.idiot.token, enumerable: false });
 		}
 
@@ -140,39 +139,39 @@ class Stalwartle extends Client {
 
 	async setGuildCount() {
 		if (!this.application.botPublic) return;
-		if (ctxAPIkey) {
+		if (this.auth.ctxAPIkey) {
 			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
 				method: 'POST',
-				body: JSON.stringify({ key: ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				body: JSON.stringify({ key: this.auth.ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
 				headers: { 'Content-Type': 'application/json' }
 			});
 		}
-		if (dblAPIkey) {
+		if (this.auth.dblAPIkey) {
 			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats`, {
 				method: 'POST',
 				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
-				headers: { Authorization: dblAPIkey, 'Content-Type': 'application/json' }
+				headers: { Authorization: this.auth.dblAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
-		if (dcbAPIkey) {
+		if (this.auth.dcbAPIkey) {
 			fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
 				method: 'POST',
 				body: JSON.stringify({ guildCount: await this.guildCount() }),
-				headers: { Authorization: dcbAPIkey, 'Content-Type': 'application/json' }
+				headers: { Authorization: this.auth.dcbAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
-		if (blsAPIkey) {
+		if (this.auth.blsAPIkey) {
 			fetch(`https://botlist.space/api/bots/${this.user.id}`, {
 				method: 'POST',
 				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
-				headers: { Authorization: blsAPIkey, 'Content-Type': 'application/json' }
+				headers: { Authorization: this.auth.blsAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
-		if (bodAPIkey) {
+		if (this.auth.bodAPIkey) {
 			fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
 				method: 'POST',
 				body: JSON.stringify({ guildCount: await this.guildCount() }),
-				headers: { Authorization: bodAPIkey, 'Content-Type': 'application/json' }
+				headers: { Authorization: this.auth.bodAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
 	}
