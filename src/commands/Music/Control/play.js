@@ -96,7 +96,7 @@ module.exports = class extends Command {
 
 	async getSongs(query, soundcloud) {
 		let searchString;
-		if (URL_REGEX.test(query) || ['.m3u', '.pls', 'xspf'].includes(query.slice(-4))) {
+		if (URL_REGEX.test(query) || ['.m3u', '.pls', '.xspf'].some(format => query.includes(format))) {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
