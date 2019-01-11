@@ -42,12 +42,8 @@ module.exports = class extends Command {
 		const presences = await this.client.users.fetch(player.id).then(us => us.presence);
 		const gameplay = presences.activity;
 
-		const guildCount = this.client.guilds.filter(gd => gd.members.has(player.id)).size;
-
-		let presenceStatus;
-		if (!guildCount) {
-			presenceStatus = "I wouldn't know since we\nhave no mutual servers 😢";
-		} else if (gameplay && gameplay.type === 'STREAMING') {
+		let presenceStatus = 'I wouldn\'t know since we\nhave no mutual servers 😢';
+		if (gameplay && gameplay.type === 'STREAMING') {
 			presenceStatus = 'Streaming';
 		} else {
 			switch (presences.status) {
@@ -77,8 +73,7 @@ module.exports = class extends Command {
 			.setThumbnail(avatarURL)
 			.addField('ID', player.id, true)
 			.addField('Server Nickname', nick, true)
-			.addField('Status', `${guildCount ? statusEmoji[presenceStatus] : ''} ${presenceStatus}`, true)
-			.addField('Mutual Server Count', guildCount, true);
+			.addField('Status', `${statusEmoji[presenceStatus]} ${presenceStatus}`, true);
 		if (!player.bot) embed.addField('User\'s Timezone', player.settings.get('timezone'), true);
 		embed.addField('Joined Server', joined)
 			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
