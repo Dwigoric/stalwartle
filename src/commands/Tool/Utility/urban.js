@@ -38,7 +38,7 @@ module.exports = class extends Command {
 		return [
 			`**Word:** [${result.word}](${result.permalink})`,
 			`\n**Definition:** ${index + 1} out of ${body.list.length}\n_${wdef}_`,
-			`\n**Example:**\n${result.example.split('\n').splice(0, 3).join('\n')}`,
+			`\n**Example:**\n${result.example.split('\n')[0]}`,
 			`\n**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`,
 			`\n*By ${result.author}*`
 		].join('\n');
