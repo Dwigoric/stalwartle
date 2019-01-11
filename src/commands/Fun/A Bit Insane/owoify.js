@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['owo'],
 			description: 'OwO-ifies a t-text you pwovide. x3',
-			usage: '<OwO:string>'
+			usage: '<OwO:string{1,1250}>'
 		});
 	}
 
