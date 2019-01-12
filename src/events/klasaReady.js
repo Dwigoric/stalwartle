@@ -29,7 +29,7 @@ module.exports = class extends Event {
 
 	async run() {
 		this.client._initplayer();
-		this.client.setGuildCount();
+		this.client.setGuildCount().then(() => this.client.setInterval(() => this.client.setGuildCount(), 1000 * 60 * 5));
 		this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
 			this.client.setInterval(() => {
 				const status = statuses[Math.floor(Math.random() * statuses.length)];

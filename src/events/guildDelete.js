@@ -19,7 +19,6 @@ module.exports = class extends Event {
 	}
 
 	async run(guild) {
-		this.client.setGuildCount();
 		guild.player.removeAllListeners();
 		guild.player.destroy();
 		this.client.player.delete(guild.id);
