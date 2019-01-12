@@ -14,15 +14,11 @@ const gregion = {
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args);
+		super(...args, { event: 'guildCreate' });
 		this.hook = null;
 	}
 
 	async run(guild) {
-		guild.player.removeAllListeners();
-		guild.player.destroy();
-		this.client.player.delete(guild.id);
-
 		const regionArr = guild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
 		const rawRegion = regionArr.join('-');
@@ -30,8 +26,8 @@ module.exports = class extends Event {
 		if (guild.region.includes('vip')) region += ' [Partnered]';
 
 		this.hook.send(new MessageEmbed()
-			.setColor(0xE74C3C)
-			.setAuthor("I've been removed from a server", guild.owner.user.displayAvatarURL())
+			.setColor(0x2ECC71)
+			.setAuthor("I've been added to a new server!", guild.owner.user.displayAvatarURL())
 			.setThumbnail(guild.iconURL({ format: 'png' }))
 			.setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
 			.addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
