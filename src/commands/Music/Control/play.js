@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
-		const { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id);
+		let { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id); // eslint-disable-line prefer-const
 		if (!query) {
 			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
 			if (queue.length) {
@@ -46,9 +46,9 @@ module.exports = class extends Command {
 		delete prompts[msg.member.id];
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`; // eslint-disable-line max-len
 		if (!msg.guild.player.channel) this.join(msg);
-		await this.addToQueue(msg, song);
+		queue = await this.addToQueue(msg, song);
 		if (msg.flags.force && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
-		return this.play(msg, queue.length && !msg.flags.force ? queue[0] : Array.isArray(song) ? song[0] : song);
+		return this.play(msg, queue[0]);
 	}
 
 	join({ guild, channel, member }) {
