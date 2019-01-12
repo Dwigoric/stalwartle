@@ -44,7 +44,7 @@ module.exports = class extends Command {
 		}
 		const song = await this.resolveQuery(msg, query);
 		delete prompts[msg.member.id];
-		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours.`; // eslint-disable-line max-len
+		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.player.channel) this.join(msg);
 		queue = await this.addToQueue(msg, song);
 		if (msg.flags.force && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
