@@ -48,9 +48,11 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `<:error:508595005481549846>  ::  \`${name}\` is a required argument. Run \`s.help\` for more information.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `<:error:508595005481549846>  ::  A required option is missing. Run \`s.help <command>\` for more info: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `<:error:508595005481549846>  ::  Your option didn't match any of the possibilities: (${possibles})`,
-			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time) => `${tag} | **${error}** | You have **${time}** seconds to respond to this prompt with a valid argument. Type **"ABORT"** to abort this prompt.`, // eslint-disable-line max-len
-			MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT: (tag, name, time) => `${tag} | **${name}** is a repeating argument | You have **${time}** seconds to respond to this prompt with additional valid arguments. Type **"CANCEL"** to cancel this prompt.`, // eslint-disable-line max-len
-			MONITOR_COMMAND_HANDLER_ABORTED: 'Aborted',
+			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time, abortOptions) => `${tag} | **${error}** | You have **${time}** seconds to respond to this prompt with a valid argument. Type **${abortOptions.join('**, **')}** to abort this prompt.`, // eslint-disable-line max-len
+			MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT: (tag, name, time, cancelOptions) => `${tag} | **${name}** is a repeating argument | You have **${time}** seconds to respond to this prompt with additional valid arguments. Type **${cancelOptions.join('**, **')}** to cancel this prompt.`, // eslint-disable-line max-len
+			MONITOR_COMMAND_HANDLER_ABORTED: '<:check:508594899117932544>  ::  Aborted',
+			MONITOR_COMMAND_HANDLER_POSSIBILITIES: ['abort', 'stop'],
+			MONITOR_COMMAND_HANDLER_REPEATING_POSSIBILITIES: ['cancel'],
 			INHIBITOR_COOLDOWN: (remaining) => `<:error:508595005481549846>  ::  Please wait ${remaining} second${remaining === 1 ? '' : 's'} before reusing this command.`,
 			INHIBITOR_DISABLED_GUILD: '<:error:508595005481549846>  ::  This command has been disabled by an admin in this server.',
 			INHIBITOR_DISABLED_GLOBAL: '<:error:508595005481549846>  ::  This command has been globally disabled by a bot owner.',
