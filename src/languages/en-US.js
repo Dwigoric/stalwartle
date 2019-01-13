@@ -52,10 +52,11 @@ module.exports = class extends Language {
 			MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT: (tag, name, time) => `${tag} | **${name}** is a repeating argument | You have **${time}** seconds to respond to this prompt with additional valid arguments. Type **"CANCEL"** to cancel this prompt.`, // eslint-disable-line max-len
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Aborted',
 			INHIBITOR_COOLDOWN: (remaining) => `<:error:508595005481549846>  ::  Please wait ${remaining} second${remaining === 1 ? '' : 's'} before reusing this command.`,
-			INHIBITOR_DISABLED: `<:error:508595005481549846>  ::  This command is currently disabled.`,
+			INHIBITOR_DISABLED_GUILD: '<:error:508595005481549846>  ::  This command has been disabled by an admin in this server.',
+			INHIBITOR_DISABLED_GLOBAL: '<:error:508595005481549846>  ::  This command has been globally disabled by a bot owner.',
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `<:error:508595005481549846>  ::  Insufficient permissions. Missing: **${missing}**`,
-			INHIBITOR_NSFW: `<:error:508595005481549846>  ::  You can only use NSFW commands in NSFW channels.`,
-			INHIBITOR_PERMISSIONS: `<:error:508595005481549846>  ::  You do not have permission to use this command.`,
+			INHIBITOR_NSFW: '<:error:508595005481549846>  ::  You can only use NSFW commands in NSFW channels.',
+			INHIBITOR_PERMISSIONS: '<:error:508595005481549846>  ::  You do not have permission to use this command.',
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `<:error:508595005481549846>  ::  The guild is missing the **${settings.join(', ')}** guild setting${settings.length !== 1 ? 's' : ''} and thus the command cannot run.`, // eslint-disable-line max-len
 			INHIBITOR_RUNIN: (types) => `<:error:508595005481549846>  ::  This command is only available in ${types} channels.`,
 			INHIBITOR_RUNIN_NONE: (name) => `<:error:508595005481549846>  ::  The \`${name}\` command is not configured to run in any channel.`,
