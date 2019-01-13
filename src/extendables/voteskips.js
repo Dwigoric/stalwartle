@@ -1,23 +1,25 @@
 const { Extendable, KlasaGuild } = require('klasa');
 
-module.exports = class VoteSkips extends Extendable {
+module.exports = class extends Extendable {
 
 	constructor(...args) {
 		super(...args, { appliesTo: [KlasaGuild] });
+		this._voteskips = null;
 	}
 
 	get voteskips() {
-		if (!VoteSkips[this.id]) VoteSkips[this.id] = [];
-		return VoteSkips[this.id];
+		if (!this._voteskips) return [];
+		return this._voteskips;
 	}
 
 	addVoteskip(vote, members) {
-		VoteSkips[this.id].push(vote);
-		VoteSkips[this.id] = VoteSkips[this.id].filter(voter => members.has(voter));
+		if (!this._voteskips) this._voteskips = [];
+		this._voteskips.push(vote);
+		this._voteskips = this._voteskips.filter(voter => members.has(voter));
 	}
 
 	clearVoteskips() {
-		VoteSkips[this.id] = [];
+		this._voteskips = null;
 	}
 
 };

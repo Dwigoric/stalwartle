@@ -1,25 +1,29 @@
 const { Extendable } = require('klasa');
 const { GuildMember } = require('discord.js');
 
-module.exports = class Actions extends Extendable {
+module.exports = class extends Extendable {
 
 	constructor(...args) {
 		super(...args, { appliesTo: [GuildMember] });
+		this._actions = null;
 	}
 
 	get actions() {
-		if (!Actions[this.id]) Actions[this.id] = [];
-		return Actions[this.id];
+		if (!this._actions) return [];
+		return this._actions;
 	}
 
 	async addAction(action) {
-		if (!Actions[this.id]) Actions[this.id] = [];
-		Actions[this.id].push(action);
-		this.client.setTimeout(() => Actions[this.id].shift(), this.guild.settings.get('automod.options.quota.within') * 60000);
+		if (!this._actions) this._actions = [];
+		this._actions.push(action);
+		this.client.setTimeout(() => {
+			this._actions.shift();
+			if (!this._actions.length) this.resetActions();
+		}, this.guild.settings.get('automod.options.quota.within') * 60000);
 	}
 
 	async resetActions() {
-		Actions[this.id] = [];
+		this._actions = null;
 	}
 
 };

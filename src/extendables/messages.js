@@ -1,23 +1,24 @@
 const { Extendable } = require('klasa');
 const { GuildMember } = require('discord.js');
 
-module.exports = class Messages extends Extendable {
+module.exports = class extends Extendable {
 
 	constructor(...args) {
 		super(...args, { appliesTo: [GuildMember] });
+		this._messages = null;
 	}
 
 	get messages() {
-		if (!Messages[this.id]) Messages[this.id] = [];
-		return Messages[this.id];
+		if (!this._messages) return [];
+		return this._messages;
 	}
 
 	async addMessage(message) {
-		if (!Messages[this.id]) Messages[this.id] = [];
-		Messages[this.id].push(message);
+		if (!this._messages) this._messages = [];
+		this._messages.push(message);
 		this.client.setTimeout(() => {
-			Messages[this.id].shift();
-			if (!Messages[this.id].length) delete Messages[this.id];
+			this._messages.shift();
+			if (!this._messages.length) this._messages = null;
 		}, this.guild.settings.get('automod.options.antiSpam.within') * 1000);
 	}
 
