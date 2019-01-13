@@ -18,7 +18,7 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_KEY_NOT_ARRAY: (key) => `<:error:508595005481549846>  ::  The key ${key} is not an Array.`,
 			SETTING_GATEWAY_KEY_NOEXT: (key) => `<:error:508595005481549846>  ::  The key ${key} does not exist in the current data schema.`,
 			SETTING_GATEWAY_INVALID_TYPE: `The type parameter must be either add or remove.`,
-			RESOLVER_MULTI_TOO_FEW: (name, min = 1) => `<:error:508595005481549846>  ::  Provided too few ${name}s. Atleast ${min} ${min === 1 ? 'is' : 'are'} required.`,
+			RESOLVER_MULTI_TOO_FEW: (name, min = 1) => `<:error:508595005481549846>  ::  Provided too few ${name}s. At least ${min} ${min === 1 ? 'is' : 'are'} required.`,
 			RESOLVER_INVALID_CUSTOM: (name, type) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid ${type}.`,
 			RESOLVER_INVALID_PIECE: (name, piece) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid ${piece} name.`,
 			RESOLVER_INVALID_MESSAGE: (name) => `<:error:508595005481549846>  ::  \`${name}\` must be a valid message ID.`,
