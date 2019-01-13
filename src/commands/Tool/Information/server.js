@@ -21,10 +21,10 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [dGuild = msg.guild]) {
+	async run(msg, [guild = msg.guild]) {
 		const timezone = msg.author.settings.get('timezone');
-		const tchanCount = dGuild.channels.filter(ch => ch.type === 'text').size;
-		const vchanCount = dGuild.channels.filter(ch => ch.type === 'voice').size;
+		const tchanCount = guild.channels.filter(ch => ch.type === 'text').size;
+		const vchanCount = guild.channels.filter(ch => ch.type === 'voice').size;
 
 		const verifLevel = [
 			'None (Unrestricted)',
@@ -50,71 +50,71 @@ module.exports = class extends Command {
 			'Scan messages sent by\nall members.'
 		];
 
-		const regionArr = dGuild.region.split('-');
+		const regionArr = guild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
 		const rawRegion = regionArr.join('-');
 		let region = gregion[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
-		if (dGuild.region.includes('vip')) region += ' [Partnered]';
+		if (guild.region.includes('vip')) region += ' [Partnered]';
 
-		const roleCount = dGuild.roles.size > 1 ? dGuild.roles.size : 'None';
+		const roleCount = guild.roles.size > 1 ? guild.roles.size : 'None';
 
 		let emojis = 'None';
 		let emojiCount = '';
-		if (dGuild.emojis.size !== 0) {
-			emojiCount = `[${dGuild.emojis.size}]`;
-			if (dGuild.emojis.size <= 10) emojis = dGuild.emojis.array().join(' ');
-			else emojis = `${dGuild.emojis.first(10).join(' ')} **+ ${dGuild.emojis.size - 10} other emoji${dGuild.emojis.size - 10 === 1 ? '' : 's'}**`;
+		if (guild.emojis.size !== 0) {
+			emojiCount = `[${guild.emojis.size}]`;
+			if (guild.emojis.size <= 10) emojis = guild.emojis.array().join(' ');
+			else emojis = `${guild.emojis.first(10).join(' ')} **+ ${guild.emojis.size - 10} other emoji${guild.emojis.size - 10 === 1 ? '' : 's'}**`;
 		}
 
 		const avatarURL = msg.author.displayAvatarURL();
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setAuthor(dGuild.name, dGuild.iconURL({ format: 'png' }))
-				.setThumbnail(dGuild.iconURL({ format: 'png' }))
-				.addField('ID', dGuild.id, true)
-				.addField('Owner', await dGuild.members.fetch(dGuild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
+				.setAuthor(guild.name, guild.iconURL({ format: 'png' }))
+				.setThumbnail(guild.iconURL({ format: 'png' }))
+				.addField('ID', guild.id, true)
+				.addField('Owner', await guild.members.fetch(guild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
 				.addField('Server Region', region, true)
-				.addField('Verification Level', verifLevel[dGuild.verificationLevel], true)
-				.addField('Two-Factor Requirement', dGuild.mfaLevel ? 'Enabled' : 'Disabled', true)
-				.addField('Explicit Content Filter', filter[dGuild.explicitContentFilter], true)
-				.addField('Member Count (active/total)', `${dGuild.presences.size}/${dGuild.memberCount}`, true)
+				.addField('Verification Level', verifLevel[guild.verificationLevel], true)
+				.addField('Two-Factor Requirement', guild.mfaLevel ? 'Enabled' : 'Disabled', true)
+				.addField('Explicit Content Filter', filter[guild.explicitContentFilter], true)
+				.addField('Member Count (active/total)', `${guild.presences.size}/${guild.memberCount}`, true)
 				.addField('Role Count', roleCount, true)
 				.addField('Text Channel Count', tchanCount, true)
 				.addField('Voice Channel Count', vchanCount, true)
-				.addField('Created', `${moment(dGuild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(dGuild.createdAt).fromNow()}`)
+				.addField('Created', `${moment(guild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guild.createdAt).fromNow()}`)
 				.addField(`Custom Emojis ${emojiCount}`, emojis)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 				.setTimestamp()
 		});
 	}
 
-	async icon(msg, [dGuild = msg.guild]) {
+	async icon(msg, [guild = msg.guild]) {
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setImage(dGuild.iconURL({ format: 'png', size: 2048 }))
+				.setImage(guild.iconURL({ format: 'png', size: 2048 }))
 		});
 	}
 
-	async roles(msg, [dGuild = msg.guild]) {
-		if (dGuild.roles.size === 1) return msg.send("This server doesn't have any role yet!");
+	async roles(msg, [guild = msg.guild]) {
+		if (guild.roles.size === 1) return msg.send("This server doesn't have any role yet!");
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setTitle(`${dGuild.name}'s Roles [${dGuild.roles.size}]`)
-				.setDescription(dGuild.roles.sort((a, b) => b.position - a.position).array().join(' | '))
+				.setTitle(`${guild.name}'s Roles [${guild.roles.size}]`)
+				.setDescription(guild.roles.sort((a, b) => b.position - a.position).array().join(' | '))
 		});
 	}
 
-	async emojis(msg, [dGuild = msg.guild]) {
-		if (!dGuild.emojis.size) return msg.send(`**${dGuild.name}** does not have any emoji yet.`);
-		const stat = dGuild.emojis.filter(emoji => !emoji.animated).array(),
-			anim = dGuild.emojis.filter(emoji => emoji.animated).array();
+	async emojis(msg, [guild = msg.guild]) {
+		if (!guild.emojis.size) return msg.send(`**${guild.name}** does not have any emoji yet.`);
+		const stat = guild.emojis.filter(emoji => !emoji.animated).array(),
+			anim = guild.emojis.filter(emoji => emoji.animated).array();
 
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`${dGuild.name}'s Emojis [${dGuild.emojis.size}]`);
+			.setTitle(`${guild.name}'s Emojis [${guild.emojis.size}]`);
 		const statEmojis = stat.length ? stat.join('') : 'None';
 		const animEmojis = anim.length ? anim.join('') : 'None';
 
