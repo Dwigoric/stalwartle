@@ -54,7 +54,7 @@ module.exports = class extends Language {
 			INHIBITOR_COOLDOWN: (remaining) => `<:error:508595005481549846>  ::  Please wait ${remaining} second${remaining === 1 ? '' : 's'} before reusing this command.`,
 			INHIBITOR_DISABLED: `<:error:508595005481549846>  ::  This command is currently disabled.`,
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `<:error:508595005481549846>  ::  Insufficient permissions. Missing: **${missing}**`,
-			INHIBITOR_NSFW: `<:error:508595005481549846>  ::  You may not use NSFW commands in this channel.`,
+			INHIBITOR_NSFW: `<:error:508595005481549846>  ::  You can only use NSFW commands in NSFW channels.`,
 			INHIBITOR_PERMISSIONS: `<:error:508595005481549846>  ::  You do not have permission to use this command.`,
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `<:error:508595005481549846>  ::  The guild is missing the **${settings.join(', ')}** guild setting${settings.length !== 1 ? 's' : ''} and thus the command cannot run.`, // eslint-disable-line max-len
 			INHIBITOR_RUNIN: (types) => `<:error:508595005481549846>  ::  This command is only available in ${types} channels.`,
