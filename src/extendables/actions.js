@@ -3,10 +3,7 @@ const { GuildMember } = require('discord.js');
 
 module.exports = class extends Extendable {
 
-	constructor(...args) {
-		super(...args, { appliesTo: [GuildMember] });
-		this._actions = null;
-	}
+	constructor(...args) { super(...args, { appliesTo: [GuildMember] }); }
 
 	get actions() {
 		if (!this._actions) return [];
@@ -14,7 +11,7 @@ module.exports = class extends Extendable {
 	}
 
 	async addAction(action) {
-		if (!this._actions) this._actions = [];
+		if (!this._actions) Object.defineProperty(this, '_actions', { value: [] });
 		this._actions.push(action);
 		this.client.setTimeout(() => {
 			this._actions.shift();
@@ -23,7 +20,7 @@ module.exports = class extends Extendable {
 	}
 
 	async resetActions() {
-		this._actions = null;
+		return delete this._actions;
 	}
 
 };

@@ -3,10 +3,7 @@ const { GuildMember } = require('discord.js');
 
 module.exports = class extends Extendable {
 
-	constructor(...args) {
-		super(...args, { appliesTo: [GuildMember] });
-		this._messages = null;
-	}
+	constructor(...args) { super(...args, { appliesTo: [GuildMember] }); }
 
 	get messages() {
 		if (!this._messages) return [];
@@ -14,11 +11,11 @@ module.exports = class extends Extendable {
 	}
 
 	async addMessage(message) {
-		if (!this._messages) this._messages = [];
+		if (!this._messages) Object.defineProperty(this, '_messages', { value: [] });
 		this._messages.push(message);
 		this.client.setTimeout(() => {
 			this._messages.shift();
-			if (!this._messages.length) this._messages = null;
+			if (!this._messages.length) delete this._messages;
 		}, this.guild.settings.get('automod.options.antiSpam.within') * 1000);
 	}
 
