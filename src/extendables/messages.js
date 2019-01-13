@@ -11,7 +11,7 @@ module.exports = class extends Extendable {
 	}
 
 	async addMessage(message) {
-		if (!this._messages) Object.defineProperty(this, '_messages', { value: [] });
+		if (!this._messages) this._messages = [];
 		this._messages.push(message);
 		this.client.setTimeout(() => {
 			this._messages.shift();

@@ -11,7 +11,7 @@ module.exports = class extends Extendable {
 	}
 
 	async addAction(action) {
-		if (!this._actions) Object.defineProperty(this, '_actions', { value: [] });
+		if (!this._actions) this._actions = [];
 		this._actions.push(action);
 		this.client.setTimeout(() => {
 			this._actions.shift();
