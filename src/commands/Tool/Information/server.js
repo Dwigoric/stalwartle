@@ -34,26 +34,23 @@ module.exports = class extends Command {
 			'Very High (Needs a verified\nphone number)'
 		];
 
-		const gregion = {
-			'eu-central': 'Central Europe',
-			'eu-west': 'Western Europe',
-			hongkong: 'Hong Kong',
-			'us-west': 'Western US',
-			'us-east': 'Eastern US',
-			'us-south': 'Southern US',
-			'us-central': 'Central US'
-		};
-
 		const filter = [
 			'Don\'t scan any messages.',
 			'Scan messages from\nmembers without a role',
 			'Scan messages sent by\nall members.'
 		];
 
-		const regionArr = guild.region.split('-');
-		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
-		const rawRegion = regionArr.join('-');
-		let region = gregion[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
+		const rawRegion = guild.region.split('-').slice(guild.region.includes('vip') ? 1 : 0).join('-');
+		let region = {
+			'eu-central': 'Central Europe',
+			'eu-west': 'Western Europe',
+			hongkong: 'Hong Kong',
+			southafrica: 'South Africa',
+			'us-west': 'Western US',
+			'us-east': 'Eastern US',
+			'us-south': 'Southern US',
+			'us-central': 'Central US'
+		}[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
 		if (guild.region.includes('vip')) region += ' [Partnered]';
 
 		const roleCount = guild.roles.size > 1 ? guild.roles.size : 'None';
