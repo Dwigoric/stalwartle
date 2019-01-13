@@ -23,22 +23,6 @@ module.exports = class extends Command {
 
 	async run(msg, [guild = msg.guild]) {
 		const timezone = msg.author.settings.get('timezone');
-		const tchanCount = guild.channels.filter(ch => ch.type === 'text').size;
-		const vchanCount = guild.channels.filter(ch => ch.type === 'voice').size;
-
-		const verifLevel = [
-			'None (Unrestricted)',
-			'Low (Requires a verified email)',
-			"Medium (5 mins must've\nelapsed since registry)",
-			"High (10 mins must've\nelapsed since user join)",
-			'Very High (Needs a verified\nphone number)'
-		];
-
-		const filter = [
-			'Don\'t scan any messages.',
-			'Scan messages from\nmembers without a role',
-			'Scan messages sent by\nall members.'
-		];
 
 		const rawRegion = guild.region.split('-').slice(guild.region.includes('vip') ? 1 : 0).join('-');
 		let region = {
@@ -53,10 +37,8 @@ module.exports = class extends Command {
 		}[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
 		if (guild.region.includes('vip')) region += ' [Partnered]';
 
-		const roleCount = guild.roles.size > 1 ? guild.roles.size : 'None';
-
-		let emojis = 'None';
-		let emojiCount = '';
+		let emojis = 'None',
+			emojiCount = '';
 		if (guild.emojis.size !== 0) {
 			emojiCount = `[${guild.emojis.size}]`;
 			if (guild.emojis.size <= 10) emojis = guild.emojis.array().join(' ');
@@ -72,13 +54,23 @@ module.exports = class extends Command {
 				.addField('ID', guild.id, true)
 				.addField('Owner', await guild.members.fetch(guild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
 				.addField('Server Region', region, true)
-				.addField('Verification Level', verifLevel[guild.verificationLevel], true)
+				.addField('Verification Level', [
+					'None (Unrestricted)',
+					'Low (Requires a verified email)',
+					"Medium (5 mins must've\nelapsed since registry)",
+					"High (10 mins must've\nelapsed since user join)",
+					'Very High (Needs a verified\nphone number)'
+				][guild.verificationLevel], true)
 				.addField('Two-Factor Requirement', guild.mfaLevel ? 'Enabled' : 'Disabled', true)
-				.addField('Explicit Content Filter', filter[guild.explicitContentFilter], true)
+				.addField('Explicit Content Filter', [
+					'Don\'t scan any messages.',
+					'Scan messages from\nmembers without a role.',
+					'Scan messages sent by\nall members.'
+				][guild.explicitContentFilter], true)
 				.addField('Member Count (active/total)', `${guild.presences.size}/${guild.memberCount}`, true)
-				.addField('Role Count', roleCount, true)
-				.addField('Text Channel Count', tchanCount, true)
-				.addField('Voice Channel Count', vchanCount, true)
+				.addField('Role Count', guild.roles.size > 1 ? guild.roles.size : 'None', true)
+				.addField('Text Channel Count', guild.channels.filter(ch => ch.type === 'text').size, true)
+				.addField('Voice Channel Count', guild.channels.filter(ch => ch.type === 'voice').size, true)
 				.addField('Created', `${moment(guild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guild.createdAt).fromNow()}`)
 				.addField(`Custom Emojis ${emojiCount}`, emojis)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
@@ -95,7 +87,7 @@ module.exports = class extends Command {
 	}
 
 	async roles(msg, [guild = msg.guild]) {
-		if (guild.roles.size === 1) return msg.send("This server doesn't have any role yet!");
+		if (guild.roles.size === 1) throw 'This server doesn\'t have any role yet!';
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
@@ -105,15 +97,15 @@ module.exports = class extends Command {
 	}
 
 	async emojis(msg, [guild = msg.guild]) {
-		if (!guild.emojis.size) return msg.send(`**${guild.name}** does not have any emoji yet.`);
+		if (!guild.emojis.size) throw `**${guild.name}** does not have any emoji yet.`;
 		const stat = guild.emojis.filter(emoji => !emoji.animated).array(),
 			anim = guild.emojis.filter(emoji => emoji.animated).array();
 
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle(`${guild.name}'s Emojis [${guild.emojis.size}]`);
-		const statEmojis = stat.length ? stat.join('') : 'None';
-		const animEmojis = anim.length ? anim.join('') : 'None';
+		const statEmojis = stat.length ? stat.join('') : 'None',
+			animEmojis = anim.length ? anim.join('') : 'None';
 
 		if (statEmojis.length > 1024) {
 			const stats = [];
