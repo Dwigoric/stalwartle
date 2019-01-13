@@ -6,8 +6,7 @@ module.exports = class extends Extendable {
 	constructor(...args) { super(...args, { appliesTo: [GuildMember] }); }
 
 	get messages() {
-		if (!this._messages) return [];
-		return this._messages;
+		return this._messages || [];
 	}
 
 	async addMessage(message) {

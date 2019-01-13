@@ -6,8 +6,7 @@ module.exports = class extends Extendable {
 	constructor(...args) { super(...args, { appliesTo: [GuildMember] }); }
 
 	get actions() {
-		if (!this._actions) return [];
-		return this._actions;
+		return this.actions || [];
 	}
 
 	async addAction(action) {
