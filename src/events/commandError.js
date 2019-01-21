@@ -1,5 +1,5 @@
 const { Event, util: { codeBlock } } = require('klasa');
-const { WebhookClient, MessageEmbed } = require('discord.js');
+const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Event {
 
@@ -25,9 +25,9 @@ module.exports = class extends Event {
 				.setDescription([
 					`**Shard ID**: ${this.client.shard ? this.client.shard.id : 'N/A'}`,
 					`**Trigerrer**: ${msg.author} (${msg.author.id})`,
-					`**Guild**: ${msg.guild ? `${msg.guild.name} (${msg.guild.id})` : '[Direct Messages]'}`,
-					`**Channel**: ${msg.guild ? `#${msg.channel.name}` : '[Direct Messages]'} (${msg.channel.id})`,
-					`**Command**: \`${msg.content}\``,
+					`**Guild**: ${msg.guild ? `${escapeMarkdown(msg.guild.name)} (${msg.guild.id})` : '[Direct Messages]'}`,
+					`**Channel**: ${msg.guild ? `#${escapeMarkdown(msg.channel.name)}` : '[Direct Messages]'} (${msg.channel.id})`,
+					`**Command**: \`${escapeMarkdown(msg.content)}\``,
 					codeBlock('js', error.message),
 					codeBlock('xl', error.stack)
 				])
