@@ -39,14 +39,14 @@ module.exports = class extends Command {
 			if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
 			this.join(msg);
 			msg.send('<:check:508594899117932544>  ::  Queue is empty. The playlist has been added to the queue.');
-			await this.addToQueue(msg, playlist);
+			await this.addToQueue(msg, playlist).catch(() => { throw '<:error:508595005481549846>  ::  There was an error loading your playlist to the queue. Please try again.'; });
 			return this.play(msg, playlist[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
 		delete prompts[msg.member.id];
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.player.channel) this.join(msg);
-		queue = await this.addToQueue(msg, song);
+		queue = await this.addToQueue(msg, song).catch(() => { throw '<:error:508595005481549846>  ::  There was an error adding your song to the queue. Please try again.'; });
 		if (msg.flags.force && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
 		return this.play(msg, queue[0]);
 	}
