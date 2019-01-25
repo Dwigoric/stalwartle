@@ -43,7 +43,7 @@ module.exports = class extends Event {
 				.setColor(0x40E0D0)
 				.setTitle('Bot has successfully restarted!')
 				.setThumbnail(this.client.user.displayAvatarURL())
-				.setDescription(`**Creeping through Discord...**\nand doing some magic!\n\nCurrently running on **${this.client.guilds.size}** guilds with **${this.client.guilds.reduce((a, b) => a + b.memberCount, 1)}** users.`) // eslint-disable-line max-len
+				.setDescription(`**Creeping through Discord...**\nand doing some magic!\n\nCurrently running on **${this.client.guilds.size}** guilds with **${await this.userCount()}** users.`) // eslint-disable-line max-len
 				.setFooter(`Reboot duration: ${+`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`}s`)
 				.setTimestamp()
 		});

@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			.setFooter(`Shard ${((msg.guild ? msg.guild.shard.id : msg.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}`)
 			.setTimestamp()
 			.addField('🤖 General Information', [
-				`**Users**: ${this.client.guilds.reduce((a, b) => a + b.memberCount, 0).toLocaleString()}`,
+				`**Users**: ${(await this.client.userCount()).toLocaleString()}`,
 				`**Servers**: ${this.client.guilds.size.toLocaleString()}`,
 				`**Text Channels**: ${this.client.channels.filter(chan => chan.type === 'text').size.toLocaleString()}`,
 				`**Voice Connections**: ${this.client.voiceConnections.size}`
