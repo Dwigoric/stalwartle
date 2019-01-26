@@ -137,7 +137,7 @@ class Stalwartle extends Client {
 		return connections;
 	}
 
-	async setGuildCount() {
+	async postStats() {
 		if (this.auth.ctxAPIkey) {
 			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
 				method: 'POST',
