@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		if (user.equals(msg.guild.owner.user)) throw 'Pretty sure the server owner cannot be banned...';
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
-		if (!force) {
+		if (member && !force) {
 			if (msg.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) throw '<:error:508595005481549846>  ::  You cannot ban this user.';
 			if (!member.bannable) throw '<:error:508595005481549846>  ::  I cannot ban this user.';
 		}
