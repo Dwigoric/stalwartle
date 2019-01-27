@@ -82,7 +82,7 @@ module.exports = class MemorySweeper extends Task {
 		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
 			if (history.length) continue;
 			if (playlist.length) continue;
-			if (queue.length) continue;
+			if (this.client.guilds.has(id) && queue.length) continue;
 			this.client.providers.default.delete('music', id);
 			musicDBs++;
 		}
