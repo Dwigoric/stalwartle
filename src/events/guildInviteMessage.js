@@ -22,7 +22,7 @@ module.exports = class extends Event {
 				'\nI can play music, moderate users, send memes, manipulate user avatars, and more!',
 				`\nBy **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`
 			].join('\n'));
-		const postableChannel = guild.channels.filter(ch => ch.type === 'text' && ch.postable).first();
+		const postableChannel = guild.channels.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
 		if (!postableChannel) return guild.owner.user.sendEmbed(message, guild.owner).catch(() => null);
 		return postableChannel.sendEmbed(message, guild.owner);
 	}
