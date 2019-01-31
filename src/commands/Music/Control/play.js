@@ -67,7 +67,8 @@ module.exports = class extends Command {
 		if (loadType === 'LOAD_FAILED') throw '<:error:508595005481549846>  ::  Something went wrong when loading your search. Sorry \'bout that! Please try again.';
 		else if (loadType === 'NO_MATCHES') throw '<:error:508595005481549846>  ::  No track found for your query.';
 		else if (loadType === 'TRACK_LOADED') return tracks[0];
-		else if (loadType === 'PLAYLIST_LOADED') return tracks;
+		else if (loadType === 'PLAYLIST_LOADED' && tracks.length) return tracks;
+		else if (loadType === 'PLAYLIST_LOADED' && !tracks.length) throw '<:error:508595005481549846>  ::  It seems the playlist is composed of livestreams. Please try adding them individually. Thanks!';
 
 		// From here on out, loadType === 'SEARCH_RESULT' : true
 		const finds = tracks.slice(0, 5);
