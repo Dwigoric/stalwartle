@@ -161,7 +161,7 @@ module.exports = class extends Command {
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', guild.id, { history });
 		}
-		if (guild.settings.get('music.announceSongs')) channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName))}**)`); // eslint-disable-line max-len
+		if (guild.settings.get('music.announceSongs')) channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len
 	}
 
 	async init() {
