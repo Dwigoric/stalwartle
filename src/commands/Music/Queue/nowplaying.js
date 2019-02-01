@@ -35,7 +35,7 @@ module.exports = class extends Command {
 				.setURL(queue[0].info.uri)
 				.setColor('RANDOM')
 				.setAuthor(`🎶 Now Playing on ${msg.guild.name}`)
-				.setFooter(`Requested by ${await msg.guild.members.fetch(queue[0].requester).then(mb => `${mb.displayName} (${mb.user.tag})`)}`)
+				.setFooter(`Requested by ${await msg.guild.members.fetch(queue[0].requester).then(mb => `${mb.displayName} (${mb.user.tag})`).catch(() => this.client.users.fetch(queue[0].requester).then(user => user.tag))}`) // eslint-disable-line max-len
 				.setDescription(`by ${queue[0].info.author}\n\n\`${progress.join('')}\` ${queue[0].info.isStream ? 'N/A' : `${parseInt((position / length) * 100)}%`}`)
 				.addField('Time', queue[0].info.isStream ? 'N/A - Online Stream' : `\`${timestamp.display(position)} / ${timestamp.display(length)}\``, true)
 				.addField('Volume', `${msg.guild.player.state.volume}%`, true)
