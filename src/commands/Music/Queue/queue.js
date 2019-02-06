@@ -33,7 +33,7 @@ module.exports = class extends Command {
 		await Promise.all((queue.length ? chunk(queue, 10) : [np]).map(async (music10, tenPower) => [`${npStatus} **${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)} \`${np.info.isStream ? 'Livestream' : new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.info.length)}\` - ${await this.client.users.fetch(np.requester).then(usr => usr.tag)}\n`].concat(queue.length ? await Promise.all(music10.map(async (music, onePower) => { // eslint-disable-line max-len
 			const { length } = music.info;
 			duration += music.info.isStream ? 0 : length;
-			return `\`${(tenPower * 10) + (onePower + 1)}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` - ${await this.client.users.fetch(music.requester).then(usr => usr.tag)}`; // eslint-disable-line max-len
+			return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)}](${music.info.uri}) \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` - ${await this.client.users.fetch(music.requester).then(usr => usr.tag)}`; // eslint-disable-line max-len
 		})) : 'No upcoming tracks.'))).then(musicList => musicList.forEach(queue10 => display.addPage(template => template.setDescription(queue10.join('\n')))));
 
 		return display
