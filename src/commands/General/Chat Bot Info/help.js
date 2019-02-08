@@ -89,7 +89,7 @@ module.exports = class extends Command {
 		}
 
 		await Promise.all(cmds.map(async command => {
-			if (!await msg.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && command.subCategory === 'Bot Owner') return null;
+			if (!await msg.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && ['General', 'Bot Owner'].includes(command.subCategory)) return null;
 			const cat = category || command.category;
 			const subCat = subcategory || command.subCategory;
 			if (!help.hasOwnProperty(cat)) help[cat] = {};
