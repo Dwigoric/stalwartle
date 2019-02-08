@@ -20,10 +20,10 @@ module.exports = class extends Monitor {
 		const afkUsers = await this.client.providers.default.getKeys('afk');
 		const afkUser = msg.mentions.users.filter(us => afkUsers.includes(us.id)).first();
 		if (!afkUser) return;
-		const afk = await this.client.providers.default.get('afk', afkUser.id);
+		const { reason, timestamp } = await this.client.providers.default.get('afk', afkUser.id);
 		msg.send([
-			`<:blobping:449750900098203649>  ::  ${msg.author}, **${afkUser.username}** is currently AFK. [Last seen ${Duration.toNow(afk.timestamp)} ago]`,
-			afk.reason ? `**Reason**: ${afk.reason}` : ''
+			`<:blobping:449750900098203649>  ::  ${msg.author}, **${await msg.guild.members.fetch(afkUser.id).then(mb => mb.displayName).catch(() => afkUser.username)}** is currently AFK. [Last seen ${Duration.toNow(timestamp)} ago]`, // eslint-disable-line max-len
+			reason ? `**Reason**: ${reason}` : ''
 		].join('\n'));
 	}
 
