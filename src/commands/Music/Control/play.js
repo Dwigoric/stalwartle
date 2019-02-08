@@ -136,7 +136,7 @@ module.exports = class extends Command {
 			if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
 				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 			} else {
-				const { title, length, uri, author } = queue[0].info;
+				const { title, length, uri, author } = queue[queue.length - 1].info;
 				const duration = queue.reduce((prev, current) => prev + current.info.length, 0) - queue[queue.length - 1].info.length - (msg.guild.player.playing ? msg.guild.player.state.position : 0);
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
