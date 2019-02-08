@@ -140,11 +140,12 @@ module.exports = class extends Command {
 				const duration = queue.reduce((prev, current) => prev + current.info.length, 0) - (msg.guild.player.playing ? msg.guild.player.state.position : 0);
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
-					.setAuthor(`Requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
+					.setAuthor(`Enqueued by ${msg.author.tag}`, msg.author.displayAvatarURL())
 					.setDescription(`[**${title}** by ${author}](${uri})`)
 					.addField('Duration', new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length), true)
 					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)
-					.addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1), true);
+					.addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1, true),
+				`ℹ  ::  For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`);
 			}
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue });
