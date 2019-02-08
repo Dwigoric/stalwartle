@@ -140,7 +140,7 @@ module.exports = class extends Command {
 				const duration = queue.reduce((prev, current) => prev + current.info.length, 0) - queue[queue.length - 1].info.length - (msg.guild.player.playing ? msg.guild.player.state.position : 0);
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
-					.setAuthor(`Enqueued by ${msg.author.tag}`, msg.author.displayAvatarURL())
+					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL())
 					.setDescription(`[**${title}** by ${author}](${uri})`)
 					.addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1, true)
 					.addField('Duration', new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length), true)
