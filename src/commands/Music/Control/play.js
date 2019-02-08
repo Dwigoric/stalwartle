@@ -1,5 +1,5 @@
 const { Command, Timestamp, util: { mergeObjects } } = require('klasa');
-const { escapeMarkdown } = require('discord.js').Util;
+const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 
 const prompts = {};
@@ -133,7 +133,19 @@ module.exports = class extends Command {
 			if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('music.maxUserRequests')) throw `<:error:508595005481549846>  ::  You've reached the maximum request per user limit of ${msg.guild.settings.get('music.maxUserRequests')} requests. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxUserRequests <new limit>\`.`; // eslint-disable-line max-len
 			if (msg.guild.settings.get('music.noDuplicates') && queue.filter(request => request.track === song.track).length) throw `<:error:508595005481549846>  ::  This song is already in the queue, and duplicates are disabled in this server. Disable via \`${msg.guild.settings.get('prefix')}conf set music.noDuplicates false\`.`; // eslint-disable-line max-len
 			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) }));
-			msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
+			if (!msg.channel.permissionsFor(msg.guild.me).has('EMBED_LINKS')) {
+				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
+			} else {
+				const { title, length, uri, author } = queue[0].info;
+				const duration = queue.reduce((prev, current) => prev.info.length + current.info.length, 0) - (msg.guild.player.playing ? msg.guild.player.state.position : 0);
+				msg.sendEmbed(new MessageEmbed()
+					.setColor('RANDOM')
+					.setAuthor(`Requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
+					.setDescription(`[**${title}** by ${author}](${uri})`)
+					.addField('Duration', new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length), true)
+					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration))
+					.addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1), true);
+			}
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue });
 		return queue;
