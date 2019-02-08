@@ -1,4 +1,5 @@
 const { Command } = require('klasa');
+const { Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
 
@@ -31,8 +32,8 @@ module.exports = class extends Command {
 			msg.send(`<:check:508594899117932544>  ::  Successfully removed songs \`#${songs[0]}\` to \`#${songs[1]}\` from the queue.`);
 		} else {
 			if (songs > queue.length - 1) throw `<:error:508595005481549846>  ::  There are only ${queue.length - 1} songs in the queue.`;
-			queue.splice(songs, 1);
-			msg.send(`<:check:508594899117932544>  ::  Successfully removed song \`#${songs}\` from the queue.`);
+			const [song] = queue.splice(songs, 1);
+			msg.send(`<:check:508594899117932544>  ::  Successfully removed **${escapeMarkdown(song.info.title)}** from the queue.`);
 		}
 		return this.client.providers.default.update('music', msg.guild.id, { queue });
 	}
