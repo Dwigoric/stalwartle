@@ -31,6 +31,7 @@ module.exports = class extends Event {
 					codeBlock('js', error.message),
 					codeBlock('xl', error.stack)
 				])
+				.setTimestamp()
 			);
 		}
 		return error.stack;
