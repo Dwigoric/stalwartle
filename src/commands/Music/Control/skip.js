@@ -24,6 +24,7 @@ module.exports = class extends Command {
 		}
 		if (msg.guild.voteskips.includes(msg.author.id)) throw '<:error:508595005481549846>  ::  You\'ve already voted to skip the current song.';
 		const { members } = msg.guild.channels.get(msg.guild.player.channel);
+		if (!members.has(msg.author.id)) throw '<:error:508595005481549846>  ::  You are not connected to the voice channel I\'m playing on.';
 		msg.guild.addVoteskip(msg.author.id, members);
 		const requiredVotes = members.filter(mb => !mb.user.bot).size / 2;
 		if (msg.guild.voteskips.length <= requiredVotes) return msg.send(`<:check:508594899117932544>  ::  Successfully added your vote to skip the current song! Current votes: \`${msg.guild.voteskips.length}\`/\`${Math.floor(requiredVotes + 1)}\`. Bots are not counted. To forcibly skip the song, use \`${msg.guild.settings.get('prefix')}skip --force\`.`); // eslint-disable-line max-len
