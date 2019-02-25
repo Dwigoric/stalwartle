@@ -15,6 +15,7 @@ module.exports = class extends Command {
 			description: 'Plays music in the server. Accepts YouTube, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
+				'To choose which channel I will announce songs, use `s.conf set music.announceChannel <channel>`.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
 				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
@@ -175,7 +176,8 @@ module.exports = class extends Command {
 			history.push(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', guild.id, { history });
 		}
-		if (guild.settings.get('music.announceSongs')) channel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len
+		const announceChannel = guild.channels.get(guild.settings.get('music.announceChannel')) || channel;
+		if (guild.settings.get('music.announceSongs')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len
 	}
 
 	async init() {
