@@ -1,4 +1,4 @@
-const { Event } = require('../Modules/Index.js');
+const { Event } = require('klasa');
 
 const roles = {
 	// Subscriber
