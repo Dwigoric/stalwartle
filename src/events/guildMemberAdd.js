@@ -30,7 +30,10 @@ module.exports = class extends Event {
 			member.guild.owner.user.send(`⚠  ::  The welcome channel for ${member.guild.name} has been deleted. This setting has been reset.`).catch(() => null);
 			return member.guild.settings.reset('welcome');
 		}
-		if (!chan.postable) return member.guild.owner.user.send(`⚠  ::  I can't post to <#${chan.id}>, the welcome channel for ${member.guild.name}.`).catch(() => null);
+		if (!chan.postable) {
+			member.guild.owner.user.send(`⚠  ::  I can't post to <#${chan.id}>, the welcome channel for ${member.guild.name}. This setting has been reset.`).catch(() => null);
+			return member.guild.settings.reset('welcome');
+		}
 		const params = [];
 		for (const [key, value] of Object.entries({
 			type: 'welcome',
