@@ -144,10 +144,10 @@ module.exports = class extends Command {
 					.setColor('RANDOM')
 					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL())
 					.setDescription(`[**${title}** by ${author}](${uri})`)
+					.setFooter(`For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`)
 					.addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1, true)
 					.addField('Duration', livestream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length), true)
-					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true),
-				`ℹ  ::  For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`);
+					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true));
 			}
 		}
 		await this.client.providers.default.update('music', msg.guild.id, { queue });
