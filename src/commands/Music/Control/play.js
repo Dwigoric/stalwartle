@@ -88,7 +88,7 @@ module.exports = class extends Command {
 					return `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
 				}).join('\n')
 			].join('\n')).catch(() => ({ content: 'cancel' }));
-		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || parseInt(choice.content) > prompts[msg.member.id].length);
+		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts[msg.member.id] && parseInt(choice.content) > prompts[msg.member.id].length));
 		if (msg.channel.permissionsFor(msg.guild.me).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content === 'cancel') {
 			delete prompts[msg.member.id];
