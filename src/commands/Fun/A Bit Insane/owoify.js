@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [text]) {
-		msg.send(`😶  ::  ${await this.client.idiot.owoify(text).catch(() => { throw '<:error:508595005481549846>  ::  An error has occurred! Please try again.'; })}`);
+		msg.send(`😶  ::  ${await this.client.idiot.owoify(text)}`);
 	}
 
 };
