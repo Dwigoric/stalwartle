@@ -30,7 +30,12 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
-		let { queue, playlist } = await this.client.providers.default.get('music', msg.guild.id); // eslint-disable-line prefer-const
+		let queue, playlist;
+		try {
+			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
+		} catch (err) {
+			throw '<:error:508595005481549846>  ::  An unknown error occured. Please try again.';
+		}
 		if (!query) {
 			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
 			if (queue.length) {
