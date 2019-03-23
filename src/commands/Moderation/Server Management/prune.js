@@ -9,7 +9,7 @@ module.exports = class extends Command {
 			requiredPermissions: ['MANAGE_MESSAGES'],
 			runIn: ['text'],
 			description: 'Prunes a certain amount of messages w/o filter.',
-			usage: '[Limit:integer] [link|invite|bots|you|me|upload|user:user]',
+			usage: '[Limit:integer{,500}] [link|invite|bots|you|me|upload|user:user]',
 			usageDelim: ' ',
 			cooldown: 60
 		});
