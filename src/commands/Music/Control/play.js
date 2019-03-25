@@ -37,7 +37,7 @@ module.exports = class extends Command {
 			throw '<:error:508595005481549846>  ::  An unknown error occured. Please try again.';
 		}
 		if (!query) {
-			if (msg.guild.player.playing) throw '<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song.';
+			if (msg.guild.player.playing) throw `<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				this.join(msg);
