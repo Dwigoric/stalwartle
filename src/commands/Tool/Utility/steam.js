@@ -25,7 +25,7 @@ module.exports = class extends Command {
 			if (!hrefData) throw '<:error:508595005481549846>  ::  Steam game not found!';
 
 			const gameID = hrefData.split('/')[4],
-				steamData = await steam.getGameDetails(gameID);
+				steamData = await steam.getGameDetails(gameID).catch(() => { throw '<:error:508595005481549846>  ::  Sorry! I could not find that game in Steam.'; });
 
 			const genres = [],
 				platforms = [];
