@@ -50,7 +50,7 @@ module.exports = class extends Command {
 		chunk(playlist, 10).forEach((music10, tenPower) => display.addPage(template => template.setDescription(music10.map((music, onePower) => {
 			const { length } = music.info;
 			duration += music.info.isStream ? 0 : length;
-			return `\`${(tenPower * 10) + (onePower + 1)}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
+			return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)}](${music.info.uri}) \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
 		}))));
 
 		return display

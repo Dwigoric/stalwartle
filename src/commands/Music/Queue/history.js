@@ -33,7 +33,7 @@ module.exports = class extends Command {
 		await Promise.all(chunk(history, 10).map(async (music10, tenPower) => await Promise.all(music10.map(async (music, onePower) => {
 			const { length } = music.info;
 			duration += music.info.isStream ? 0 : length;
-			return `\`${(tenPower * 10) + (onePower + 1)}\`. **${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)} \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` - ${await this.client.users.fetch(music.requester).then(usr => usr.tag)} (${Duration.toNow(music.timestamp)} ago)`; // eslint-disable-line max-len
+			return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)}](${music.info.uri}) \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` - ${await this.client.users.fetch(music.requester).then(usr => usr.tag)} (${Duration.toNow(music.timestamp)} ago)`; // eslint-disable-line max-len
 		})))).then(hist => hist.forEach(hist10 => display.addPage(template => template.setDescription(hist10.join('\n')))));
 
 		return display
