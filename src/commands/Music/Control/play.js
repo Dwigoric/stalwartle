@@ -20,7 +20,8 @@ module.exports = class extends Command {
 				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
 				'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
-				'To play an online radio (`.m3u`, `.pls`), simply supply the radio link.'
+				'To play an online radio (`.m3u`, `.pls`), simply supply the radio link.',
+				'To enable autoplay, use `s.conf set music.autoplay true`. This is only applicable for $10+ donators.'
 			],
 			usage: '[TracksURL:url|Query:string]'
 		});
@@ -169,8 +170,10 @@ module.exports = class extends Command {
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
 			const { queue } = await this.client.providers.default.get('music', guild.id);
+			const relatedVideo = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${queue[0].info.identifier}&type=video&key=${this.client.auth.googleAPIkey}`).then(res => res.json()).then(res => res.items[0]).catch(() => null); // eslint-disable-line max-len
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
-			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
+			else if (guild.settings.get('music.repeat') !== 'song') queue.shift();
+			if (guild.settings.get('donation') >= 10 && guild.settings.get('music.autoplay') && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: true })); // eslint-disable-line max-len
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 			channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
