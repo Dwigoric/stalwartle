@@ -173,7 +173,7 @@ module.exports = class extends Command {
 			const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${queue[0].info.identifier}&type=video&key=${this.client.auth.googleAPIkey}`).then(res => res.json()); // eslint-disable-line max-len
 			const relatedVideo = items[Math.floor(Math.random() * items.length)];
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
-			else if (guild.settings.get('music.repeat') !== 'song') queue.shift();
+			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
 			if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: true })); // eslint-disable-line max-len
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
