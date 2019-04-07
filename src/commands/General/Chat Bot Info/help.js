@@ -133,6 +133,7 @@ module.exports = class extends Command {
 			display.addPage(new MessageEmbed()
 				.setTitle(`${category} Commands`)
 				.setColor(color)
+				.setFooter('To know more about Donation Perks and ProTips from our developers, say `help` in DMs with Stalwartle and look at the bottom of the list!')
 				.setDescription(list.map(this.formatCommand.bind(this, message, prefix, true)).join('\n'))
 			);
 		}
