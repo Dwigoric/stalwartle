@@ -142,7 +142,7 @@ module.exports = class extends Language {
 			COMMAND_INFO_DESCRIPTION: 'Provides some information about this bot.',
 			COMMAND_HELP_DESCRIPTION: 'Display help for a command.',
 			COMMAND_HELP_NO_EXTENDED: 'No extended help available.',
-			COMMAND_HELP_DM: '📬  ::  The list of commands you have access to has been sent to your DMs.',
+			COMMAND_HELP_DM: '📬  ::  The bot does not have **Embed**, **Manage Messages** and/or **Add Reactions** Permissions, but the list of commands you have access to has been sent to your DMs.',
 			COMMAND_HELP_NODM: `<:error:508595005481549846>  ::  You have DMs disabled, I couldn't send you the commands in DMs.`,
 			COMMAND_HELP_USAGE: (usage) => `Usage :: ${usage}`,
 			COMMAND_HELP_EXTENDED: 'Extended Help ::',

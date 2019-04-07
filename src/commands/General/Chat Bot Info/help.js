@@ -1,5 +1,8 @@
-const { Command, util: { isFunction, toTitleCase } } = require('klasa');
-const { MessageEmbed } = require('discord.js');
+const { Command, RichDisplay, util: { isFunction, toTitleCase } } = require('klasa');
+const { MessageEmbed, Permissions } = require('discord.js');
+
+const PERMISSIONS_RICHDISPLAY = new Permissions([Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.EMBED_LINKS]);
+const time = 1000 * 60 * 3;
 
 module.exports = class extends Command {
 
@@ -7,7 +10,6 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands', 'cmds'],
 			guarded: true,
-			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Sends the command list to our DMs. Make sure I can send you one!',
 			extendedHelp: [
 				'If you want to get more information about a command, use `s.help <command>`.',
@@ -17,10 +19,14 @@ module.exports = class extends Command {
 			usage: '[Command:command|Category:string] [Subcategory:string]',
 			usageDelim: ', '
 		});
+
+		// Cache the handlers
+		this.handlers = new Map();
 	}
 
 	async run(msg, [category, subcategory]) {
 		if (category instanceof Command) {
+			if (!msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) throw '<:error:508595005481549846>  ::  Sorry! I need **Embed Links** permission to display command information.';
 			return msg.send({
 				embed: new MessageEmbed()
 					.setTitle(`The \`${this.client.options.prefix}${category.name}\` command`)
@@ -32,6 +38,21 @@ module.exports = class extends Command {
 			});
 		}
 
+		if (!('all' in msg.flags) && msg.guild && msg.channel.permissionsFor(this.client.user).has(PERMISSIONS_RICHDISPLAY)) {
+			// Finish the previous handler
+			const previousHandler = this.handlers.get(msg.author.id);
+			if (previousHandler) previousHandler.stop();
+
+			const handler = await (await this.buildDisplay(msg)).run(await msg.send('<a:loading:430269209415516160>  ::  Loading commands...'), {
+				filter: (reaction, user) => user.id === msg.author.id,
+				time
+			});
+			handler.on('end', () => this.handlers.delete(msg.author.id));
+			this.handlers.set(msg.author.id, handler);
+			return handler;
+		}
+
+		await msg.send('<a:loading:430269209415516160>  ::  Loading commands...');
 		const method = this.client.user.bot ? 'author' : 'channel';
 		const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
 		const categories = Object.keys(help);
@@ -101,6 +122,44 @@ module.exports = class extends Command {
 
 		if (!Object.keys(help).length) throw `<:error:508595005481549846>  ::  It would seem that **${subcategory}** is not under **${category}**.`;
 		return help;
+	}
+
+	async buildDisplay(message) {
+		const commands = await this._fetchCommands(message);
+		const { prefix } = message.guildSettings;
+		const display = new RichDisplay();
+		const color = message.member.displayColor;
+		for (const [category, list] of commands) {
+			display.addPage(new MessageEmbed()
+				.setTitle(`${category} Commands`)
+				.setColor(color)
+				.setDescription(list.map(this.formatCommand.bind(this, message, prefix, true)).join('\n'))
+			);
+		}
+
+		return display;
+	}
+
+	formatCommand(message, prefix, richDisplay, command) {
+		const description = isFunction(command.description) ? command.description(message.language) : command.description;
+		return richDisplay ? `• ${prefix}${command.name} → ${description}` : `• **${prefix}${command.name}** → ${description}`;
+	}
+
+	async _fetchCommands(message) {
+		const run = this.client.inhibitors.run.bind(this.client.inhibitors, message);
+		const commands = new Map();
+		await Promise.all(this.client.commands.map(command => run(command, true)
+			.then(async () => {
+				if (!await message.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && ['General', 'Bot Owner'].includes(command.subCategory)) return null;
+				const category = commands.get(`${command.category} - ${command.subCategory}`);
+				if (category) return category.push(command);
+				else return commands.set(`${command.category} - ${command.subCategory}`, [command]);
+			}).catch(() => {
+				// noop
+			})
+		));
+
+		return commands;
 	}
 
 };
