@@ -130,12 +130,12 @@ module.exports = class extends Command {
 		const display = new RichDisplay();
 		const color = message.member.displayColor;
 		for (const [category, list] of commands) {
-			display.addPage(new MessageEmbed()
-				.setTitle(`${category} Commands`)
-				.setColor(color)
-				.setFooter('To know more about Donation Perks and ProTips from our developers, say `help` in DMs with Stalwartle and look at the bottom of the list!')
-				.setDescription(list.map(this.formatCommand.bind(this, message, prefix, true)).join('\n'))
-			);
+			display
+				.addPage(new MessageEmbed()
+					.setTitle(`${category} Commands`)
+					.setColor(color)
+					.setDescription(list.map(this.formatCommand.bind(this, message, prefix, true)).join('\n')))
+				.setFooterSuffix(' | To know more about Donation Perks and ProTips from our developers, say `help` in DMs with Stalwartle!');
 		}
 
 		return display;
