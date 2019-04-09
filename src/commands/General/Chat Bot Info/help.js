@@ -26,7 +26,7 @@ module.exports = class extends Command {
 
 	async run(msg, [category, subcategory]) {
 		if (category instanceof Command) {
-			if (!msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) throw '<:error:508595005481549846>  ::  Sorry! I need **Embed Links** permission to display command information.';
+			if (msg.guild && !msg.guild.me.permissions.has('EMBED_LINKS')) throw '<:error:508595005481549846>  ::  Sorry! I need **Embed Links** permission to display command information.';
 			return msg.send({
 				embed: new MessageEmbed()
 					.setTitle(`The \`${this.client.options.prefix}${category.name}\` command`)
