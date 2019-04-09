@@ -21,7 +21,7 @@ module.exports = class extends Command {
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
 				'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
 				'To play an online radio (`.m3u`, `.pls`), simply supply the radio link.',
-				'To enable autoplay, use `s.conf set music.autoplay true`. This is only applicable for $10+ donators.'
+				'To enable autoplay, use `s.conf set music.autoplay true`. This is only applicable for $8+ donators.'
 			],
 			usage: '[TracksURL:url|Query:string]'
 		});
