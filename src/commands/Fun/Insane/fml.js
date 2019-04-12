@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading story...');
+		await msg.send('<a:loading:430269209415516160>  ::  Loading story...');
 		const $ = cheerio.load(await fetch('http://www.fmylife.com/random').then(res => res.text())); // eslint-disable-line id-length
 
 		const embed = new MessageEmbed()
@@ -22,7 +22,7 @@ module.exports = class extends Command {
 			.setColor('RANDOM')
 			.setTimestamp()
 			.setDescription(`_${$('.block a').eq(0).text().trim()}\n\n_`)
-			.addField('I agree, your life sucks', $('.vote-up').eq(0).text() || 'N/A', true)
+			.addField('I agree, your life sucks:', $('.vote-up').eq(0).text() || 'N/A', true)
 			.addField('You deserved it:', $('.vote-down').eq(0).text() || 'N/A', true);
 
 		if ($('.block a').length < 5) {
@@ -30,7 +30,6 @@ module.exports = class extends Command {
 		}
 
 		await msg.send({ embed });
-		message.delete();
 	}
 
 };
