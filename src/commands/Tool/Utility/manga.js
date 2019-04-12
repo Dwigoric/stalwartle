@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		const search = await fetch(`https://myanimelist.net/search/prefix.json?type=manga&keyword=${encodeURIComponent(keyword)}`)
 			.then(res => res.json())
 			.then(body => body.categories[0]);
-		if (!search || !search.length) throw '<:error:508595005481549846>  ::  Manga not found!';
+		if (!search || (Array.isArray(search) && !search.length)) throw '<:error:508595005481549846>  ::  Manga not found!';
 
 		const url = search.items[0].url.split('/');
 		url.splice(-1, 1, encodeURIComponent(url.slice(-1)));
