@@ -20,6 +20,7 @@ module.exports = class extends Command {
 		const timezone = msg.author.settings.get('timezone');
 		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
+		await msg.send('<a:loading:430269209415516160>  ::  Loading movie...');
 		const { results } = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${this.client.auth.tmdbAPIkey}&query=${encodeURIComponent(query)}`).then(res => res.json());
 		const short = results[page - 1];
 		if (!short) throw `<:error:508595005481549846>  ::  I couldn't find a movie with title **${query}** in page ${page}.`;

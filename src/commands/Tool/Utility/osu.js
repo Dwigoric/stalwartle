@@ -83,6 +83,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [...username]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading user information...');
+
 		let mode;
 		if (msg.flags.mania) mode = 3;
 		else if (msg.flags.catch) mode = 2;
@@ -141,6 +143,7 @@ module.exports = class extends Command {
 		else if (msg.flags.taiko) mode = 1;
 		else mode = 0;
 
+		await msg.send('<a:loading:430269209415516160>  ::  Loading beatmap...');
 		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${this.client.auth.osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
 		if (!request.length) throw '<:error:508595005481549846>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
 
@@ -186,6 +189,8 @@ module.exports = class extends Command {
 	}
 
 	async top(msg, username, type) {
+		await msg.send(`<a:loading:430269209415516160>  ::  Loading ${type} plays...`);
+
 		const timezone = msg.author.settings.get('timezone');
 
 		let mode;

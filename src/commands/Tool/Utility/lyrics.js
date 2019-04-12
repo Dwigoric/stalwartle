@@ -11,6 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading lyrics...');
 		const { data } = await fetch(`https://api.ksoft.si/lyrics/search?q=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  An error occured. Please try again. Sorry \'bout that!'; }); // eslint-disable-line max-len
 		if (!data.length) throw '<:error:508595005481549846>  ::  No song lyrics found.';
 		const fullLyrics = [
@@ -43,7 +44,8 @@ module.exports = class extends Command {
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw '<:error:508595005481549846>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
 
-		return msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
+		await msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
+		message.delete();
 	}
 
 };

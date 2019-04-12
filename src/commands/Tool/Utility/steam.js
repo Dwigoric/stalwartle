@@ -15,6 +15,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [game]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading game from Steam...');
+
 		const steam = new SteamAPI(this.client.auth.steamAPIkey),
 			embed = new MessageEmbed(),
 			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.text()).catch(() => null);

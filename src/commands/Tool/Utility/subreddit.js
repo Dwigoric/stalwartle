@@ -14,6 +14,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [subredditName]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading subreddit...');
+
 		let subreddit = await fetch(`https://www.reddit.com/r/${subredditName}/about.json`)
 			.then(res => res.json())
 			.catch(() => { throw "There was an error. Reddit may be down, or the subreddit doesn't exist."; });

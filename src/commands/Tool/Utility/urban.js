@@ -15,6 +15,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [search, index = 1]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading Urban definition...');
+
 		const body = await fetch(`http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(search)}`).then(res => res.json());
 
 		const result = body.list[index];

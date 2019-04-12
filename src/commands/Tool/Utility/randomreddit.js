@@ -12,6 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [subreddit]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading reddit post...');
 		const { data } = await fetch(`https://www.reddit.com/r/${subreddit}/random.json`)
 			.then(res => res.json())
 			.then(res => {

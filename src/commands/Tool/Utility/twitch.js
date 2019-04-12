@@ -14,6 +14,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [twitchName]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading Twitch channel...');
+
 		const channel = await fetch(`https://api.twitch.tv/kraken/channels/${twitchName}?client_id=${this.client.auth.twitchAPIkey}`)
 			.then(res => res.json())
 			.then(res => {

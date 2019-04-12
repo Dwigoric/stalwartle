@@ -29,6 +29,8 @@ module.exports = class extends Command {
 	}
 
 	async query(msg, query, type, url) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading YouTube information...');
+
 		const timezone = msg.author.settings.get('timezone');
 		const queries = [];
 

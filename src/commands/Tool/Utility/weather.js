@@ -17,6 +17,8 @@ module.exports = class extends Command {
 	}
 
 	async currently(msg, [location]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading current weather information...');
+
 		const data = await this.getWeatherData(location, 'currently');
 		msg.send({
 			embed: new MessageEmbed()

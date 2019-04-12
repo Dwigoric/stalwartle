@@ -15,6 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [keyword]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading manga...');
 		const search = await fetch(`https://myanimelist.net/search/prefix.json?type=manga&keyword=${encodeURIComponent(keyword)}`)
 			.then(res => res.json())
 			.then(body => body.categories[0]);

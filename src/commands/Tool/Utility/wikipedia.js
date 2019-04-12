@@ -14,6 +14,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading Wikipedia article...');
+
 		const article = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`).then(res => res.json());
 		if (!article.content_urls) throw `<:error:508595005481549846>  ::  I couldn't find a wikipedia article with title **${query}**.`;
 
