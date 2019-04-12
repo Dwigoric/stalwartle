@@ -15,6 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [person]) {
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading GIF...');
 		const { data } = await fetch(`http://api.giphy.com/v1/gifs/search?api_key=${this.client.auth.giphyAPIkey}&q=${encodeURIComponent('anime hug')}`)
 			.then(res => res.json());
 		const gifPage = Math.floor(Math.random() * data.length);
@@ -22,7 +23,8 @@ module.exports = class extends Command {
 			.setColor('RANDOM')
 			.setImage(data[gifPage].images.original.url)
 			.setFooter('Powered by GIPHY', 'https://78.media.tumblr.com/b508813ce2f04b27f1a6597ded1de623/tumblr_mrsdao4gWV1s5e5bko1_500.gif');
-		msg.send(`🤗  ::  **${msg.member.displayName}** wants to hug ${person}!`, { embed });
+		await msg.send(`🤗  ::  **${msg.member.displayName}** wants to hug ${person}!`, { embed });
+		message.delete();
 	}
 
 };

@@ -11,6 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [text]) {
+		await msg.send('<a:loading:430269209415516160>  ::  Converting text...');
 		msg.send(await this.client.idiot.vapor(text));
 	}
 

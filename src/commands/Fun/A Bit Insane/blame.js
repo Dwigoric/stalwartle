@@ -20,7 +20,9 @@ module.exports = class extends Command {
 		} else {
 			blamed = blame;
 		}
-		msg.channel.sendFile(await this.client.idiot.blame(blamed), 'blame.png');
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.blame(blamed), 'blame.png');
+		message.delete();
 	}
 
 };

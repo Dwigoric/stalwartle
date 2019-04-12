@@ -16,7 +16,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [stepped = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.stepped(stepped.displayAvatarURL()), 'stepped.png');
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.stepped(stepped.displayAvatarURL()), 'stepped.png');
+		message.delete();
 	}
 
 };

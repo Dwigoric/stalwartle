@@ -15,6 +15,7 @@ module.exports = class extends Command {
 		let type = 'tiny';
 		if (msg.flags.superscript) type = 'superscript';
 		if (msg.flags.subscript) type = 'subscript';
+		await msg.send('<a:loading:430269209415516160>  ::  Converting text...');
 		msg.send(await this.client.idiot.tiny(text, type));
 	}
 

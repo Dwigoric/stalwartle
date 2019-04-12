@@ -23,6 +23,7 @@ module.exports = class extends Command {
 			`\t\t\tServer: ${server}`,
 			`\`\`\`${suggestion}\`\`\``
 		].join('\n'), { files: msg.attachments.map(a => a.url) });
+		await msg.send('<a:loading:430269209415516160>  ::  Sending suggestion...');
 		const messageOptions = msg.guild ? msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES') ?
 			{ files: [{ attachment: await this.client.idiot.suggestion(msg.author.displayAvatarURL(), suggestion), name: 'suggestion.png' }] } :
 			{} : { files: [{ attachment: await this.client.idiot.suggestion(msg.author.displayAvatarURL(), suggestion), name: 'suggestion.png' }] };

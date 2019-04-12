@@ -12,7 +12,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [beautiful = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.beautiful(beautiful.displayAvatarURL()), 'beautiful.png');
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.beautiful(beautiful.displayAvatarURL()), 'beautiful.png');
+		message.delete();
 	}
 
 };

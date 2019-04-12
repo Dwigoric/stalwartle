@@ -16,12 +16,14 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [love = msg.author]) {
-		msg.channel.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/generators/zerotwopicture?avatar=${love.displayAvatarURL({
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(Buffer.from(await fetch(`https://dev.anidiots.guide/generators/zerotwopicture?avatar=${love.displayAvatarURL({
 			format: 'png',
 			size: 128
 		})}`, { headers: { Authorization: this.client.auth.idioticAPIkey } })
 			.then(res => res.json())
 			.then(res => res.data)), 'zerotwo.png');
+		message.delete();
 	}
 
 };

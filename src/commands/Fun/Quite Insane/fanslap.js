@@ -17,7 +17,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [slapped, slapper = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.fanSlap(slapper.displayAvatarURL(), slapped.displayAvatarURL()), 'fanslap.png');
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.fanSlap(slapper.displayAvatarURL(), slapped.displayAvatarURL()), 'fanslap.png');
+		message.delete();
 	}
 
 };

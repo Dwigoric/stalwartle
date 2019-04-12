@@ -13,8 +13,10 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
+		const _message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
 		const { message } = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
-		return msg.channel.sendFile(message);
+		await msg.channel.sendFile(message);
+		_message.delete();
 	}
 
 };

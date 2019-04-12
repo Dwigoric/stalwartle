@@ -9,8 +9,8 @@ module.exports = class extends Command {
 			description: 'Let me tell you a mysterious cat fact.'
 		});
 	}
-
 	async run(msg) {
+		await msg.send('<a:loading:430269209415516160>  ::  Loading catfact...');
 		const { fact } = await fetch('https://catfact.ninja/fact').then(res => res.json());
 		return msg.send(`🐱  ::  **Catfact:** *${fact}*`);
 	}

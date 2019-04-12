@@ -19,7 +19,9 @@ module.exports = class extends Command {
 
 	async run(msg, [achiever = msg.author, ...achievement]) {
 		const trim = (str, max) => str.length > max ? str.slice(0, max) : str;
-		msg.channel.sendFile(await this.client.idiot.achievement(achiever.displayAvatarURL(), trim(achievement.join(this.usageDelim), 22)), 'achievement.png');
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.achievement(achiever.displayAvatarURL(), trim(achievement.join(this.usageDelim), 22)), 'achievement.png');
+		message.delete();
 	}
 
 };

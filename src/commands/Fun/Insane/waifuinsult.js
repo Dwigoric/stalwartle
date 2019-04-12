@@ -15,7 +15,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [insulted = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.waifuInsult(insulted.displayAvatarURL()), 'insult.png');
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.waifuInsult(insulted.displayAvatarURL()), 'insult.png');
+		message.delete();
 	}
 
 };

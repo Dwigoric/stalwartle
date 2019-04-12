@@ -13,6 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading story...');
 		const $ = cheerio.load(await fetch('http://www.fmylife.com/random').then(res => res.text())); // eslint-disable-line id-length
 
 		const embed = new MessageEmbed()
@@ -28,7 +29,8 @@ module.exports = class extends Command {
 			throw '<:akcry:333597917342466048>  ::  Today, something went wrong, so you will have to try again in a few moments. FML again.';
 		}
 
-		msg.send({ embed });
+		await msg.send({ embed });
+		message.delete();
 	}
 
 };

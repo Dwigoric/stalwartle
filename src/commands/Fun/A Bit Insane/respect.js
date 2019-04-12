@@ -13,8 +13,10 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [respected = msg.author]) {
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
 		msg.channel.sendFile(await this.client.idiot.respect(respected.displayAvatarURL()), 'respect.png', 'Press 🇫 to Pay Respects')
 			.then(sent => {
+				message.delete();
 				if (sent.channel.type !== 'text') return null;
 				if (sent.guild && !sent.channel.permissionsFor(this.client.user).has('ADD_REACTIONS')) return false;
 				return sent.react('🇫');

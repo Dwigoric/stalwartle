@@ -13,7 +13,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user = msg.author]) {
-		msg.channel.sendFile(await this.client.idiot.rejected(user.displayAvatarURL({ format: 'png', size: 2048 })), 'rejected.png', user.equals(msg.author) ? '' : `${user} has been rejected!`);
+		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		await msg.channel.sendFile(await this.client.idiot.rejected(user.displayAvatarURL({ format: 'png', size: 2048 })), 'rejected.png', user.equals(msg.author) ? '' : `${user} has been rejected!`);
+		message.delete();
 	}
 
 };

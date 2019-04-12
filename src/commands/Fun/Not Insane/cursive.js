@@ -13,6 +13,7 @@ module.exports = class extends Command {
 	async run(msg, [text]) {
 		let type = 'normal';
 		if (msg.flags.bold) type = 'bold';
+		await msg.send('<a:loading:430269209415516160>  ::  Converting text...');
 		msg.send(await this.client.idiot.cursive(text, type));
 	}
 
