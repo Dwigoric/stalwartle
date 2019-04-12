@@ -17,31 +17,24 @@ module.exports = class extends Command {
 	async run(msg, [search, index = 1]) {
 		const body = await fetch(`http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(search)}`).then(res => res.json());
 
-		const definition = this.getDefinition(search, body, --index);
-		return msg.send({
-			embed: new MessageEmbed()
-				.setColor('RANDOM')
-				.setAuthor('Urban Dictionary')
-				.setDescription(definition)
-				.setTimestamp()
-		});
-	}
-
-	getDefinition(search, body, index) {
 		const result = body.list[index];
 		if (!result) throw `<:error:508595005481549846>  ::  No entry found for **${search}**.`;
 
-		const wdef = result.definition.length > 1000 ?
+		const definition = result.definition.length > 1000 ?
 			`${this.splitText(result.definition, 1000)}...` :
 			result.definition;
 
-		return [
-			`**Word:** [${result.word}](${result.permalink})`,
-			`\n**Definition:** ${index + 1} out of ${body.list.length}\n_${wdef}_`,
-			`\n**Example:**\n${result.example.split('\n')[0]}`,
-			`\n**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`,
-			`\n*By ${result.author}*`
-		].join('\n');
+		return msg.send({
+			embed: new MessageEmbed()
+				.setColor('RANDOM')
+				.setTitle(`'${result.word}' as defined by ${result.author}`)
+				.setURL(result.permalink)
+				.setDescription(definition)
+				.addField('Example', result.example.split('\n')[0])
+				.addField('Rating', `**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`)
+				.setFooter('Definition from Urban Dictionary')
+				.setTimestamp()
+		});
 	}
 
 	splitText(string, length, endBy = ' ') {
