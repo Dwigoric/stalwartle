@@ -1,6 +1,7 @@
 const { Command, Timestamp, util: { mergeObjects } } = require('klasa');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
+const { parse } = require('url');
 
 const prompts = {};
 const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
@@ -20,7 +21,7 @@ module.exports = class extends Command {
 				'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
 				'\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
 				'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
-				'To play an online radio (`.m3u`, `.pls`), simply supply the radio link.',
+				'To play an online radio, simply supply the radio link.',
 				'To enable autoplay, use `s.conf set music.autoplay true`. This is only applicable for $8+ donators.'
 			],
 			usage: '[TracksURL:url|Query:string]'
@@ -105,7 +106,7 @@ module.exports = class extends Command {
 
 	async getSongs(query, soundcloud) {
 		let searchString;
-		if (URL_REGEX.test(query) || ['.m3u', '.pls'].some(format => query.includes(format))) {
+		if (URL_REGEX.test(query) || (parse(query).protocol && parse(query).hostname)) {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
