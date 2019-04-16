@@ -3,7 +3,7 @@ const { Task } = require('klasa');
 module.exports = class extends Task {
 
 	async run() {
-		this.client.channels.get('566764359691534342').send('@here **Pay will be given in a moment and after this, payban period will start! Please stay in base for at least 1 hour after claiming pay in order to not be put on payban.**'); // eslint-disable-line max-len
+		this.client.channels.get('566764359691534342').send('@here **Payban period has ended!** Feel free to go now, but it\'s much appreciated if you stay!'); // eslint-disable-line max-len
 	}
 
 	async init() {
