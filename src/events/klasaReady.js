@@ -15,25 +15,20 @@ const statuses = [
 	{ name: 'with a rubber duck', type: 'PLAYING' },
 	{ name: 'your movements', type: 'WATCHING' },
 	{ name: 'Stranger Things', type: 'WATCHING' },
-	{ name: 'Steven Universe', type: 'WATCHING' },
+	{ name: 'Gravity Fall', type: 'WATCHING' },
 	{ name: 'anime', type: 'WATCHING' },
 	{ name: 'Spotify', type: 'LISTENING' },
 	{ name: 'Pop Rock', type: 'LISTENING' },
 	{ name: 'P!ATD', type: 'LISTENING' },
 	{ name: 'Fall Out Boy', type: 'LISTENING' },
 	{ name: 'Ariana Grande', type: 'LISTENING' },
-	{ name: 'Little Mix', type: 'LISTENING' }
+	{ name: 'Ultimates', type: 'WATCHING' }
 ];
 
 module.exports = class extends Event {
 
 	async run() {
 		this.client._initplayer();
-		this.client.voiceConnections.forEach(vc => {
-			vc.removeAllListeners();
-			vc.destroy();
-			this.client.player.delete(vc.id);
-		});
 
 		if (this.client.application.botPublic) this.client.postStats().then(() => this.client.setInterval(() => this.client.postStats(), 1000 * 60 * 5));
 		this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
