@@ -15,7 +15,7 @@ const statuses = [
 	{ name: 'with a rubber duck', type: 'PLAYING' },
 	{ name: 'your movements', type: 'WATCHING' },
 	{ name: 'Stranger Things', type: 'WATCHING' },
-	{ name: 'Gravity Fall', type: 'WATCHING' },
+	{ name: 'Gravity Falls', type: 'WATCHING' },
 	{ name: 'anime', type: 'WATCHING' },
 	{ name: 'Spotify', type: 'LISTENING' },
 	{ name: 'Pop Rock', type: 'LISTENING' },
