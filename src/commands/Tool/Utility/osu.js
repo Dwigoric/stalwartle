@@ -175,7 +175,7 @@ module.exports = class extends Command {
 			.addField('Genre', genres[Number(beatmap.genre_id)], true)
 			.addField('Language', languages[Number(beatmap.language_id)], true);
 		if (beatmap.tags.length) embed.addField('Tags', beatmap.tags.split(' ').join(', '), true);
-		embed.addField('Approved', moment(beatmap.approved_date).subtract(8, 'hours').tz(timezone).format('dddd, LL | LTS'), true);
+		embed.addField('Approved', moment(beatmap.approved_date).tz(timezone).format('dddd, LL | LTS'), true);
 
 		msg.send(embed);
 	}
@@ -248,7 +248,7 @@ module.exports = class extends Command {
 				`\`${requests.indexOf(list.date) + 1}\`: **[${beatmap.title}${beatmap.version ? ` [${beatmap.version}]` : ''}](https://osu.ppy.sh/b/${beatmap.beatmap_id})**${mods.length ? ` **${mods.map(mod => `+${mod}`).join(' ')}**` : ''} [${+`${`${Math.round(`${`${Number(beatmap.difficultyrating)}e+2`}`)}e-2`}`}⭐]`, // eslint-disable-line max-len
 				`${[`Mapper: [${beatmap.creator}](https://osu.ppy.sh/users/${encodeURIComponent(beatmap.creator)})`, `Artist: ${beatmap.artist}`, `Beatmap ID: ${list.beatmap_id}`].join(' | ')}`,
 				`[  **${stats.join('**  |  **')}**  ]`,
-				`Date: ${moment(list.date).subtract(8, 'hours').tz(timezone).format('dddd, LL | LTS z')}`
+				`Date: ${moment(list.date).tz(timezone).format('dddd, LL | LTS z')}`
 			].join('\n\t');
 		}));
 
