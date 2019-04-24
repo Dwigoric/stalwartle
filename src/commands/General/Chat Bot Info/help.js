@@ -64,8 +64,8 @@ module.exports = class extends Command {
 		for (let cat = 0; cat < categories.length; cat++) {
 			helpMessage.push(`**↞――――― __${categories[cat]} Commands__ ―――――↠**\n`);
 			const subCategories = Object.keys(help[categories[cat]]);
-			if (!msg.flags.all || category || subcategory) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇒ ${subCategories[subCat]}`, '\u200b');
-			else for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
+			if (msg.flags.all || subcategory || category) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
+			else for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇒ ${subCategories[subCat]}`, '\u200b');
 			if (cat === categories.length - 1) {
 				if (!msg.flags.all) {
 					helpMessage.push(
