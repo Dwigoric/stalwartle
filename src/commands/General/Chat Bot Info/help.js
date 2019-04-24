@@ -68,7 +68,8 @@ module.exports = class extends Command {
 						`\n**${'\\*'.repeat(75)}**`,
 						'***Say `s.help <category>` (e.g. `s.help Music`) to get the commands for that category.***',
 						'***Say `s.help <category> <subcategory>` (e.g. `s.help Music Control`) to get the commands of a specific subcategory.***',
-						`**${'\\*'.repeat(75)}**`
+						`**${'\\*'.repeat(75)}**`,
+						'\u200b'
 					);
 				}
 				helpMessage.push([
