@@ -60,8 +60,17 @@ module.exports = class extends Command {
 		for (let cat = 0; cat < categories.length; cat++) {
 			helpMessage.push(`**↞――――― __${categories[cat]} Commands__ ―――――↠**\n`);
 			const subCategories = Object.keys(help[categories[cat]]);
-			for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
+			if (msg.flags.all) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
+			else for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇒ ${subCategories[subCat]}`);
 			if (cat === categories.length - 1) {
+				if (!msg.flags.all) {
+					helpMessage.push(
+						`\n**${'\\*'.repeat(75)}**`,
+						'***Say `s.help <category>` (e.g. `s.help Music`) to get the commands for that category.***',
+						'***Say `s.help <category> <subcategory>` (e.g. `s.help Music Control`) to get the commands of a specific subcategory.***',
+						`**${'\\*'.repeat(75)}**`
+					);
+				}
 				helpMessage.push([
 					this.client.application.botPublic ? [
 						`\nWant to add ${this.client.user.username} to your own server or to a server you manage? If you have **Manage Server** permissions, you can add this bot by using the link:`,
