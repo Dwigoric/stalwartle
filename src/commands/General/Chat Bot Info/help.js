@@ -52,6 +52,10 @@ module.exports = class extends Command {
 			return handler;
 		}
 
+		return this.originalHelp(msg, [category, subcategory]);
+	}
+
+	async originalHelp(msg, [category, subcategory]) {
 		await msg.send('<a:loading:430269209415516160>  ::  Loading commands...');
 		const method = this.client.user.bot ? 'author' : 'channel';
 		const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
@@ -60,14 +64,14 @@ module.exports = class extends Command {
 		for (let cat = 0; cat < categories.length; cat++) {
 			helpMessage.push(`**↞――――― __${categories[cat]} Commands__ ―――――↠**\n`);
 			const subCategories = Object.keys(help[categories[cat]]);
-			if (msg.flags.all) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
+			if (msg.flags.all || !category || !subcategory) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
 			else for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇒ ${subCategories[subCat]}`, '\u200b');
 			if (cat === categories.length - 1) {
 				if (!msg.flags.all) {
 					helpMessage.push(
 						`\n**${'\\*'.repeat(75)}**`,
 						'***Say `s.help <category>` (e.g. `s.help Music`) to get the commands for that category.***',
-						'***Say `s.help <category> <subcategory>` (e.g. `s.help Music Control`) to get the commands of a specific subcategory.***',
+						'***Say `s.help <category>, <subcategory>` (e.g. `s.help Music, Control`) to get the commands of a specific subcategory.***',
 						`**${'\\*'.repeat(75)}**`,
 						'\u200b'
 					);
