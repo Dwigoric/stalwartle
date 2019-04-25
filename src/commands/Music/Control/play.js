@@ -30,7 +30,7 @@ module.exports = class extends Command {
 
 	async run(msg, [query]) {
 		if (!msg.member.voice.channelID) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
-		if (!msg.guild.channels.get(msg.member.voice.channelID).permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.guild.channels.get(msg.member.voice.channel).name}**.`; // eslint-disable-line max-len
+		if (!this.client.channels.get(msg.member.voice.channelID).permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${this.client.channels.get(msg.member.voice.channel).name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
 		let queue, playlist;
 		try {
