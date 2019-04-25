@@ -29,8 +29,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
-		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
+		if (!msg.member.voice.channelID) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
+		if (!msg.guild.channels.get(msg.member.voice.channelID).permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.guild.channels.get(msg.member.voice.channel).name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
 		let queue, playlist;
 		try {
@@ -61,12 +61,12 @@ module.exports = class extends Command {
 	}
 
 	join({ guild, channel, member }) {
-		if (!member.voice.channel) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
+		if (!member.voice.channelID) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
 		this.client.player.leave(guild.id);
 		this.client.player.join({
 			host: this.client.options.nodes[0].host,
 			guild: guild.id,
-			channel: member.voice.channel.id
+			channel: member.voice.channelID
 		}, { selfdeaf: true });
 		guild.player.on('error', error => channel.send(`<:error:508595005481549846>  ::  ${error.error}`));
 	}
