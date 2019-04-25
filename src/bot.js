@@ -1,5 +1,4 @@
 const { Client } = require('klasa');
-const { Collection } = require('discord.js');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
 const memberGateway = require('klasa-member-gateway');
@@ -132,12 +131,6 @@ class Stalwartle extends Client {
 	}
 
 	get auth() { return require('./auth'); }
-
-	get voiceConnections() {
-		const connections = new Collection();
-		for (const gd of this.guilds.filter(guild => guild.channels.filter(ch => ch.type === 'voice' && ch.members.has(this.user.id)).size).values()) connections.set(gd.id, gd.player);
-		return connections;
-	}
 
 	async postStats() {
 		if (this.auth.ctxAPIkey) {
