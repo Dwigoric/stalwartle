@@ -32,7 +32,7 @@ exports.config = {
 	slowmodeAggressive: false,
 
 	ownerID: '295391820744228867',
-	owners: ['295391820744228867', '296862433136476160', '296256174209105920', '147891648628654082', '184837412629774336'],
+	owners: ['295391820744228867', '296862433136476160', '296256174209105920'],
 
 	nodes: [{ host: 'localhost', port: 80, region: 'us', password: '' }],
 	/**
@@ -43,7 +43,7 @@ exports.config = {
 	messageCacheLifetime: 900,
 	commandMessageLifetime: 900,
 	// The above 2 options are ignored while the interval is 0
-	messageSweepInterval: 300,
+	messageSweepInterval: 0,
 
 	/**
      * Sharding Options
