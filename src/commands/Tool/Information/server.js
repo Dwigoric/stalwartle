@@ -10,7 +10,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives information about a server.',
-			usage: '[icon|roles|emojis|id] (Server:guild)',
+			usage: '[icon|roles|id] (Server:guild)',
 			usageDelim: ' ',
 			subcommands: true
 		});
@@ -64,7 +64,6 @@ module.exports = class extends Command {
 				.addField('Text Channel Count', guild.channels.filter(ch => ch.type === 'text').size, true)
 				.addField('Voice Channel Count', guild.channels.filter(ch => ch.type === 'voice').size, true)
 				.addField('Created', `${moment(guild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guild.createdAt).fromNow()}`)
-				.addField(`Custom Emojis ${emojiCount}`, emojis)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 				.setTimestamp()
 		});
