@@ -37,14 +37,6 @@ module.exports = class extends Command {
 		}[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
 		if (guild.region.includes('vip')) region += ' [Partnered]';
 
-		let emojis = 'None',
-			emojiCount = '';
-		if (guild.emojis.size !== 0) {
-			emojiCount = `[${guild.emojis.size}]`;
-			if (guild.emojis.size <= 10) emojis = guild.emojis.array().join(' ');
-			else emojis = `${guild.emojis.first(10).join(' ')} **+ ${guild.emojis.size - 10} other emoji${guild.emojis.size - 10 === 1 ? '' : 's'}**`;
-		}
-
 		const avatarURL = msg.author.displayAvatarURL();
 		return msg.send({
 			embed: new MessageEmbed()
@@ -94,36 +86,6 @@ module.exports = class extends Command {
 				.setTitle(`${guild.name}'s Roles [${guild.roles.size}]`)
 				.setDescription(guild.roles.sort((a, b) => b.position - a.position).array().join(' | '))
 		});
-	}
-
-	async emojis(msg, [guild = msg.guild]) {
-		if (!guild.emojis.size) throw `**${guild.name}** does not have any emoji yet.`;
-		const stat = guild.emojis.filter(emoji => !emoji.animated).array(),
-			anim = guild.emojis.filter(emoji => emoji.animated).array();
-
-		const embed = new MessageEmbed()
-			.setColor('RANDOM')
-			.setTitle(`${guild.name}'s Emojis [${guild.emojis.size}]`);
-		const statEmojis = stat.length ? stat.join('') : 'None',
-			animEmojis = anim.length ? anim.join('') : 'None';
-
-		if (statEmojis.length > 1024) {
-			const stats = [];
-			while (stat.length) stats.push(stat.splice(0, 25));
-			stats.forEach((part, partNum) => embed.addField(`Static Emojis (Part ${partNum + 1} - ${part.length}/${stat.length})`, part.join('')));
-		} else {
-			embed.addField(`Static Emojis ${stat.length ? `[${stat.length}]` : ''}`, statEmojis);
-		}
-
-		if (animEmojis.length > 1024) {
-			const anims = [];
-			while (anim.length) anims.push(anim.splice(0, 25));
-			anims.forEach((part, partNum) => embed.addField(`Animated Emojis (Part ${partNum + 1} - ${part.length}/${anim.length})`, part.join('')));
-		} else {
-			embed.addField(`Animated Emojis ${anim.length ? `[${anim.length}]` : ''}`, animEmojis);
-		}
-
-		return msg.send(embed);
 	}
 
 	async id(msg) {

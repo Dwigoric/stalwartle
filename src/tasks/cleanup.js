@@ -30,7 +30,7 @@ module.exports = class MemorySweeper extends Task {
 		const OLD_SNOWFLAKE = binaryToID(((Date.now() - THRESHOLD) - EPOCH).toString(2).padStart(42, '0') + EMPTY);
 		let guildMembers = 0,
 			// presences = 0,
-			// emojis = 0,
+			emojis = 0,
 			lastMessages = 0,
 			modlogDBs = 0,
 			musicDBs = 0,
@@ -58,8 +58,8 @@ module.exports = class MemorySweeper extends Task {
 			}
 
 			// Clear emojis
-			// emojis += guild.emojis.size;
-			// guild.emojis.clear();
+			emojis += guild.emojis.size;
+			guild.emojis.clear();
 		}
 
 		// Per-Channel sweeper
@@ -101,7 +101,7 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(users)} [User]s`,
 			`${this.setColor(lastMessages)} [Last Message]s`,
 			// `${this.setColor(presences)} [Presence]s`,
-			// `${this.setColor(emojis)} [Emoji]s`,
+			`${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(musicDBs)} [MusicDB]s`,
 			`${this.setColor(modlogDBs)} [ModlogDB]s`
 		].join('\n'));
