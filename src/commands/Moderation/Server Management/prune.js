@@ -28,11 +28,13 @@ module.exports = class extends Command {
 			messages = messages.filter(this.getFilter(msg, type, user));
 		}
 		let deleted = 0;
-		messages.forEach(message => {
-			message.delete().catch(() => deleted--);
-			deleted++;
-		});
-		return msg.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`);
+		const loadingMessage = await msg.channel.send('<a:loading:430269209415516160>  ::  Deleting messages...');
+		await Promise.all(messages.map(async message => {
+			await message.delete().catch(() => deleted--);
+			return deleted++;
+		}));
+		loadingMessage.delete();
+		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`);
 	}
 
 	getFilter(msg, filter, user) {
