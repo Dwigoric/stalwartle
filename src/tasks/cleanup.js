@@ -29,9 +29,9 @@ module.exports = class MemorySweeper extends Task {
 	async run() {
 		const OLD_SNOWFLAKE = binaryToID(((Date.now() - THRESHOLD) - EPOCH).toString(2).padStart(42, '0') + EMPTY);
 		let guildMembers = 0,
-			// presences = 0,
+			presences = 0,
 			emojis = 0,
-			lastMessages = 0,
+			// lastMessages = 0,
 			modlogDBs = 0,
 			musicDBs = 0,
 			users = 0;
@@ -42,8 +42,8 @@ module.exports = class MemorySweeper extends Task {
 		// Per-Guild sweeper
 		for (const guild of this.client.guilds.values()) {
 			// Clear presences
-			// presences += guild.presences.size;
-			// guild.presences.clear();
+			presences += guild.presences.size;
+			guild.presences.clear();
 
 			// Clear members that haven't send a message in the last 30 minutes
 			const { me } = guild;
@@ -63,11 +63,11 @@ module.exports = class MemorySweeper extends Task {
 		}
 
 		// Per-Channel sweeper
-		for (const channel of this.client.channels.values()) {
+		/* for (const channel of this.client.channels.values()) {
 			if (!channel.lastMessageID) continue;
 			channel.lastMessageID = null;
 			lastMessages++;
-		}
+		} */
 
 		// Per-User sweeper
 		for (const user of this.client.users.values()) {
@@ -99,8 +99,8 @@ module.exports = class MemorySweeper extends Task {
 			this.header,
 			`${this.setColor(guildMembers)} [GuildMember]s`,
 			`${this.setColor(users)} [User]s`,
-			`${this.setColor(lastMessages)} [Last Message]s`,
-			// `${this.setColor(presences)} [Presence]s`,
+			// `${this.setColor(lastMessages)} [Last Message]s`,
+			`${this.setColor(presences)} [Presence]s`,
 			`${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(musicDBs)} [MusicDB]s`,
 			`${this.setColor(modlogDBs)} [ModlogDB]s`

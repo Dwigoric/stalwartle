@@ -59,7 +59,7 @@ module.exports = class extends Command {
 					'Scan messages from\nmembers without a role.',
 					'Scan messages sent by\nall members.'
 				][guild.explicitContentFilter], true)
-				.addField('Member Count (active/total)', `${guild.presences.size}/${guild.memberCount}`, true)
+				.addField('Member Count', guild.memberCount, true)
 				.addField('Role Count', guild.roles.size > 1 ? guild.roles.size : 'None', true)
 				.addField('Text Channel Count', guild.channels.filter(ch => ch.type === 'text').size, true)
 				.addField('Voice Channel Count', guild.channels.filter(ch => ch.type === 'voice').size, true)
