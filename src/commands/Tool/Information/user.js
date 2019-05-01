@@ -39,38 +39,19 @@ module.exports = class extends Command {
 			}
 		}
 
-		const { activity, status } = await this.client.users.fetch(player.id).then(us => us.presence);
-		const presenceStatus = activity && activity.type === 'STREAMING' ? 'Streaming' :
-			status === 'dnd' ? 'Do Not Disturb' : status.replace(/^./, i => i.toUpperCase());
-
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(player.tag, player.displayAvatarURL())
 			.setThumbnail(player.displayAvatarURL())
 			.addField('ID', player.id, true)
-			.addField('Server Nickname', nick, true)
-			.addField('Status', `${{
-				Online: '<:online:415894324652277762>',
-				Idle: '<:idle:415894324610596865>',
-				'Do Not Disturb': '<:dnd:415894324522254338>',
-				Streaming: '<:streaming:415894325075902474>',
-				Offline: '<:offline:415894324966981632>',
-				Invisible: '<:invisible:415894324899872768>'
-			}[presenceStatus]} ${presenceStatus}`, true);
+			.addField('Server Nickname', nick, true);
 		if (!player.bot) embed.addField('User\'s Timezone', player.settings.get('timezone'), true);
 		embed.addField('Joined Server', joined)
 			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
 			.addField(`Roles ${roleNum}`, roles)
 			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
 			.setTimestamp();
-
-		let description = player.bot ? '<:bot:415894324589363211> ' : '';
-		if (activity) {
-			description += `${activity && activity.type === 'LISTENING' ?
-				'Listening to' :
-				activity.type.replace(/\B[a-zA-Z0-9]+/, str => str.toLowerCase())} **${activity.name}**${activity.details ? ' <:richpresence:504544678364971008>' : ''}`;
-		}
-		return msg.sendEmbed(embed.setDescription(description));
+		return msg.sendEmbed(embed);
 	}
 
 	async roles(msg, [user = msg.author]) {
