@@ -2,6 +2,14 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
+	constructor(...args) {
+		super(...args);
+		this.tables = {
+			modlogs: { modlogs: [] },
+			music: { history: [], playlist: [], queue: [] }
+		};
+	}
+
 	async run(msg, command) {
 		if (!msg.guild) return null;
 		if (command.category === 'Moderation') await this.checkTable(msg.guild.id, 'modlogs');
@@ -13,11 +21,7 @@ module.exports = class extends Inhibitor {
 		const defProvider = this.client.providers.default;
 		if (await this.client.providers.default.get(table, guild)) return null;
 		await defProvider.create(table, guild);
-		const obj = {
-			modlogs: { modlogs: [] },
-			music: { history: [], playlist: [], queue: [] }
-		};
-		return defProvider.update(table, guild, obj[table]);
+		return defProvider.update(table, guild, this.tables[table]);
 	}
 
 };
