@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!queue.length || !msg.guild.player.channel || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
+		if (!queue.length || !msg.guild.me.voice.channelID || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 		const { length } = queue[0].info;
 		const { position } = msg.guild.player.state;
 		const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`);

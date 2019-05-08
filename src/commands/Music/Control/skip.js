@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [entry]) {
-		if (!msg.guild.player.channel || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
+		if (!msg.guild.me.voice.channelID || !msg.guild.player.playing) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 		if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.guild.clearVoteskips();
@@ -23,7 +23,7 @@ module.exports = class extends Command {
 			return msg.send('<:check:508594899117932544>  ::  Successfully forcibly skipped the music for this server.');
 		}
 		if (msg.guild.voteskips.includes(msg.author.id)) throw '<:error:508595005481549846>  ::  You\'ve already voted to skip the current song.';
-		const { members } = msg.guild.channels.get(msg.guild.player.channel);
+		const { members } = msg.guild.me.voice.channel;
 		if (!members.has(msg.author.id)) throw '<:error:508595005481549846>  ::  You are not connected to the voice channel I\'m playing on.';
 		msg.guild.addVoteskip(msg.author.id, members);
 		const requiredVotes = members.filter(mb => !mb.user.bot).size / 2;
