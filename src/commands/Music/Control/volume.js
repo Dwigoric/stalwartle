@@ -5,7 +5,6 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['vol'],
-			permissionLevel: 5,
 			runIn: ['text'],
 			description: 'Changes the volume for music sessions in the server.',
 			usage: '[Volume:integer{1,300}]'

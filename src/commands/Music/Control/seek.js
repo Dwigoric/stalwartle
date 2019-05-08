@@ -5,7 +5,6 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
-			permissionLevel: 5,
 			description: 'Seeks the current song to the specified time.',
 			extendedHelp: 'To use this command use e.g. `22m 29s` or `1h 24m 42s`',
 			usage: '<SeekTime:time>'
