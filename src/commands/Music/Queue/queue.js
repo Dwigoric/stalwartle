@@ -16,10 +16,10 @@ module.exports = class extends Command {
 		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue yet! Add one with \`${msg.guild.settings.get('prefix')}play\``;
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music queue...');
 		const np = queue[0];
-		const npStatus = msg.guild.player.playing ?
-			!msg.guild.player.paused ?
-				'▶' :
+		const npStatus = msg.guild.me.voice.channelID ?
+			msg.guild.player.paused ?
 				'⏸' :
+				'▶' :
 			'⤴ Up Next:';
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')

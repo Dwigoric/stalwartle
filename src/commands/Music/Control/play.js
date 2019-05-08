@@ -28,7 +28,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		if (!msg.member.voice.channel) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
+		if (!msg.member.voice.channelID) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(msg.guild.me.id).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
 		let queue, playlist;
@@ -38,7 +38,7 @@ module.exports = class extends Command {
 			throw '<:error:508595005481549846>  ::  An unknown error occured. Please try again.';
 		}
 		if (!query) {
-			if (msg.guild.player.playing) throw `<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
+			if (msg.guild.me.voice.channelID) throw `<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				this.join(msg);
@@ -55,12 +55,12 @@ module.exports = class extends Command {
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.me.voice.channelID) this.join(msg);
 		queue = await this.addToQueue(msg, song).catch(() => { throw '<:error:508595005481549846>  ::  There was an error adding your song to the queue. Please try again.'; });
-		if (msg.flags.force && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
+		if (msg.flags.force && msg.guild.me.voice.channelID && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
 		return this.play(msg, queue[0]);
 	}
 
 	join({ guild, channel, member }) {
-		if (!member.voice.channel) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
+		if (!member.voice.channelID) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
 		this.client.player.leave(guild.id);
 		this.client.player.join({
 			host: this.client.options.nodes[0].host,
@@ -122,7 +122,7 @@ module.exports = class extends Command {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flags.incognito) })]; // eslint-disable-line max-len
-			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
+			if (msg.guild.me.voice.channelID) queue.splice(1, 0, ...songs);
 			else queue.splice(0, 1, ...songs);
 		} else if (Array.isArray(song)) {
 			let songCount = 0;
@@ -145,7 +145,7 @@ module.exports = class extends Command {
 				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 			} else {
 				const { title, length, uri, author, isStream } = queue[queue.length - 1].info;
-				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
+				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.me.voice.channelID && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
 					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL())
@@ -162,7 +162,7 @@ module.exports = class extends Command {
 	/* eslint-enable complexity */
 
 	async play({ guild, channel }, song) {
-		if (guild.player.playing) return;
+		if (guild.me.voice.channelID) return;
 		guild.player.play(song.track);
 		guild.player.pause(false);
 		guild.player.volume(guild.settings.get('music.volume'));
