@@ -162,7 +162,7 @@ module.exports = class extends Command {
 	/* eslint-enable complexity */
 
 	async play({ guild, channel }, song) {
-		if (guild.me.voice.channelID) return;
+		if (!guild.me.voice.channelID) return;
 		guild.player.play(song.track);
 		guild.player.pause(false);
 		guild.player.volume(guild.settings.get('music.volume'));
