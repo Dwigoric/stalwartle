@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			permissionLevel: 5,
 			runIn: ['text'],
 			aliases: ['eq'],
 			description: 'Equalizes the song player using bands and gains.',

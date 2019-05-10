@@ -127,7 +127,7 @@ class Stalwartle extends Client {
 			.add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
 			.add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
 			.add(9, ({ author }) => config.owners.includes(author.id))
-			.add(10, ({ author }) => config.ownerID === author.id);
+			.add(10, ({ author }) => config.ownerID === author.id, { break: true });
 	}
 
 	get auth() { return require('./auth'); }

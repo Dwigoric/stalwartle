@@ -11,6 +11,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			permissionLevel: 5,
 			runIn: ['text'],
 			description: 'Plays music in the server. Accepts YouTube, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
 			extendedHelp: [

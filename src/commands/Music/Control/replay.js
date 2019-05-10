@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			permissionLevel: 5,
 			runIn: ['text'],
 			description: 'Replays the current playing song.'
 		});
