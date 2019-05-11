@@ -1,4 +1,5 @@
 const { Command } = require('klasa');
+const { Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
@@ -16,9 +17,9 @@ module.exports = class extends Command {
 		if (!data.length) throw '<:error:508595005481549846>  ::  No song lyrics found.';
 		const fullLyrics = [
 			[
-				`*__**${data[0].name}**__`,
-				`by **${data[0].artist}**`,
-				`${data[0].album ? `on ${data[0].album}` : 'Single Track'}*\n`
+				`*__**${escapeMarkdown(data[0].name)}**__`,
+				`by **${escapeMarkdown(data[0].artist)}**`,
+				`${data[0].album ? `on ${escapeMarkdown(data[0].album)}` : 'Single Track'}*\n`
 			].join('\n'),
 			data[0].lyrics,
 			'\n__*Powered by KSoft.Si API*__ '
@@ -44,7 +45,7 @@ module.exports = class extends Command {
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw '<:error:508595005481549846>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
 
-		await msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
+		await msg.channel.send(escapeMarkdown(fullLyrics), { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
 		message.delete();
 	}
 
