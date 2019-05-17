@@ -58,8 +58,8 @@ module.exports = class extends Command {
 				.addField('Controller Support', steamData.controller_support ? toTitleCase(steamData.controller_support) : 'None', true)
 				.addField('Age Limit', steamData.required_age !== 0 ? steamData.required_age : 'Everyone', true)
 				.addField(`Genre${genres.length === 1 ? '' : 's'}`, genres.join(', '))
-				.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers, true)
-				.addField(`Publisher${steamData.publishers.length === 1 ? '' : 's'}`, steamData.publishers, true);
+				.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers.length ? steamData.developers : 'N/A', true)
+				.addField(`Publisher${steamData.publishers.length === 1 ? '' : 's'}`, steamData.publishers.length ? steamData.publishers : 'N/A', true);
 			if (steamData.release_date.date) embed.addField('Date Released', steamData.release_date.date, true);
 
 			msg.send(embed);
