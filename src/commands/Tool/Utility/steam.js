@@ -61,7 +61,6 @@ module.exports = class extends Command {
 				.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers.join('\n').length ? steamData.developers : 'N/A', true)
 				.addField(`Publisher${steamData.publishers.length === 1 ? '' : 's'}`, steamData.publishers.join('\n').length ? steamData.publishers : 'N/A', true);
 			if (steamData.release_date.date) embed.addField('Date Released', steamData.release_date.date, true);
-
 			msg.send(embed);
 		}
 	}
