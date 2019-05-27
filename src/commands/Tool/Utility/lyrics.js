@@ -17,9 +17,9 @@ module.exports = class extends Command {
 		if (!data.length) throw '<:error:508595005481549846>  ::  No song lyrics found.';
 		const fullLyrics = [
 			[
-				`*__**${escapeMarkdown(data[0].name)}**__`,
+				`___**${escapeMarkdown(data[0].name)}**__`,
 				`by **${escapeMarkdown(data[0].artist)}**`,
-				`${data[0].album ? `on ${escapeMarkdown(data[0].album)}` : 'Single Track'}*\n`
+				`${data[0].album ? `on ${escapeMarkdown(data[0].album)}` : 'Single Track'}_\n`
 			].join('\n'),
 			escapeMarkdown(data[0].lyrics),
 			'\n__*Powered by KSoft.Si API*__ '
