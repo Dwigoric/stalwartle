@@ -36,8 +36,8 @@ module.exports = class extends Command {
 			], true)
 			.addField('💾 Usage', [
 				`**CPU Load**: ${Math.round(loadavg()[0] * 1000) / 100}%`,
-				`**RAM Used**: ${Math.round(100 * (process.memoryUsage().heapUsed / 1048576)) / 100}MB`
-				// `**Total RAM**: ${Math.round(100 * (process.memoryUsage().heapTotal / 1048576)) / 100}MB`
+				`**RAM Used**: ${Math.round(100 * (process.memoryUsage().heapUsed / 1048576)) / 100}MB`,
+				`**Node.js**: ${Math.round(100 * (process.memoryUsage().heapTotal / 1048576)) / 100}MB`
 			], true));
 	}
 
