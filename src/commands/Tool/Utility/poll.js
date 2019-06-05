@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
 	async run(msg, [chan = msg.channel, question, ...choices]) {
 		if (!chan.postable) throw `<:error:508595005481549846>  ::  Sorry! I cannot send messages in that channel.`;
-		if (!chan.permissionsFor(msg.guild.me).has('EMBED_LINKS')) throw '<:error:508595005481549846>  ::  Please allow me to send embeds in that channel.';
+		if (!chan.permissionsFor(this.client.user).has('EMBED_LINKS')) throw '<:error:508595005481549846>  ::  Please allow me to send embeds in that channel.';
 		if (!chan.permissionsFor(msg.author).has('VIEW_CHANNEL', true)) throw `<:error:508595005481549846>  ::  It seems you cannot send messages in that channel...`; // eslint-disable-line max-len
 		if (choices.length < 2) throw '<:error:508595005481549846>  ::  Your poll must have at least two (2) choices!';
 		if (choices.length > 10) throw '<:error:508595005481549846>  ::  Sorry! You can only have a maximum of ten (10) choices.';
