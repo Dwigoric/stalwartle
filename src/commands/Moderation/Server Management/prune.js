@@ -1,5 +1,7 @@
 const { Command } = require('klasa');
 
+const pruning = {};
+
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -17,6 +19,9 @@ module.exports = class extends Command {
 
 	async run(msg, [msgLimit = 50, filter = null]) {
 		let messages = await msg.channel.messages.fetch({ limit: 1 });
+		if (!messages.size) throw '<:error:508595005481549846>  ::  The channel does not have any messages.';
+		if (pruning[msg.channel.id]) throw '<:error:508595005481549846>  ::  I am currently pruning messages from this channel. Please wait until the process is done.';
+		pruning[msg.channel.id] = true;
 		while (msgLimit > 0) {
 			const limit = msgLimit % 100 || 100;
 			messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
@@ -33,6 +38,7 @@ module.exports = class extends Command {
 			await message.delete().catch(() => deleted--);
 			return deleted++;
 		}));
+		delete pruning[msg.channel.id];
 		loadingMessage.delete();
 		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`);
 	}
