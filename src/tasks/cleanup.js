@@ -34,6 +34,7 @@ module.exports = class MemorySweeper extends Task {
 			// lastMessages = 0,
 			modlogDBs = 0,
 			musicDBs = 0,
+			players = 0,
 			users = 0;
 
 		// Running garbage collection of Node.js
@@ -48,8 +49,7 @@ module.exports = class MemorySweeper extends Task {
 			// Clear members that haven't send a message in the last 30 minutes
 			const { me } = guild;
 			for (const [id, member] of guild.members) {
-				if (member === me) continue;
-				if (member === guild.owner) continue;
+				if ([me, guild.owner].includes(member)) continue;
 				if (member.voice.channelID) continue;
 				if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
 				if (member.user.settings.get('cookies')) continue;
@@ -80,11 +80,18 @@ module.exports = class MemorySweeper extends Task {
 
 		// Music database sweeper
 		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
-			if (history.length) continue;
-			if (playlist.length) continue;
+			if (history.length || playlist.length) continue;
 			if (this.client.guilds.has(id) && queue.length) continue;
 			this.client.providers.default.delete('music', id);
 			musicDBs++;
+		}
+
+		// Empty music player sweeper
+		for (const player of this.client.player.array()) {
+			if (this.client.guilds.get(player.id).settings.get('donation') >= 10) continue;
+			if (this.client.channels.get(player.channel).members.filter(member => !member.user.bot).size) continue;
+			this.client.player.leave(player.id);
+			players++;
 		}
 
 		// Modlog database sweeper
@@ -103,6 +110,7 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(presences)} [Presence]s`,
 			`${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(musicDBs)} [MusicDB]s`,
+			`${this.setColor(players)} [Player]s`,
 			`${this.setColor(modlogDBs)} [ModlogDB]s`
 		].join('\n'));
 
