@@ -25,7 +25,7 @@ module.exports = class MemorySweeper extends Task {
 		this.header = new Colors({ text: 'lightblue' }).format('[CACHE AND DATABASE CLEANUP]');
 	}
 
-	/* eslint complexity: ['warn', 25] */
+	/* eslint complexity: ['warn', 30] */
 	async run() {
 		const OLD_SNOWFLAKE = binaryToID(((Date.now() - THRESHOLD) - EPOCH).toString(2).padStart(42, '0') + EMPTY);
 		let guildMembers = 0,
