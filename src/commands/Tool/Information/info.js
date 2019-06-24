@@ -24,7 +24,7 @@ module.exports = class extends Command {
 				.setAuthor(`Information about ${this.client.user.username}`, avatarURL)
 				.setThumbnail(avatarURL)
 				.addField('Owners', owners, true)
-				.addField('Support Server', `${this.client.guilds.get('502895390807293963').name}\n(<https://discord.gg/EH7jKFH>)`, true)
+				.addField('Support Server', `${this.client.guilds.get('502895390807293963').name}\n(<https://discord.gg/KDWGvV8>)`, true)
 				.addField('Discord.js Version', `v${version}`, true)
 				.addField('Node.js Version', process.version, true)
 				.addField('Bot Creator', this.client.application.owner.tag, true)
