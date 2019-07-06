@@ -5,7 +5,7 @@
         "es6": true
     },
     "parserOptions": {
-        "ecmaVersion": 2017,
+        "ecmaVersion": 2019,
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true
         }
@@ -41,7 +41,6 @@
                 "error": "Error"
             }
         }],
-
         "accessor-pairs": "warn",
         "array-callback-return": "error",
         "complexity": "warn",
@@ -73,18 +72,16 @@
         "no-warning-comments": "warn",
         "wrap-iife": "error",
         "yoda": "error",
-
         "no-label-var": "error",
         "no-shadow": "error",
         "no-undef-init": "error",
-
         "callback-return": "error",
         "handle-callback-err": "error",
+        "require-atomic-updates": "off",
         "no-mixed-requires": "error",
         "no-new-require": "error",
         "no-path-concat": "error",
         "no-process-env": "error",
-
         "array-bracket-spacing": "error",
         "block-spacing": "error",
         "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
@@ -141,7 +138,6 @@
         "space-unary-ops": "error",
         "spaced-comment": "error",
         "unicode-bom": "error",
-
         "arrow-body-style": "error",
         "arrow-spacing": "error",
         "no-duplicate-imports": "error",
