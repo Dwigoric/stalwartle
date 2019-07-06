@@ -48,8 +48,8 @@ module.exports = class extends Command {
 						return commands.push(cmd);
 					}
 
-					if (!commands.hasOwnProperty(cmd.category)) commands[cmd.category] = {};
-					if (!commands[cmd.category].hasOwnProperty(cmd.subCategory)) {
+					if (!Object.prototype.hasOwnProperty.call(commands, cmd.category)) commands[cmd.category] = {};
+					if (!Object.prototype.hasOwnProperty.call(commands[cmd.category], cmd.subCategory)) {
 						commands[cmd.category][cmd.subCategory] = [];
 					}
 					const description = typeof cmd.description === 'function' ?

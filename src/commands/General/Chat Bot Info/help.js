@@ -128,8 +128,8 @@ module.exports = class extends Command {
 			if (!await msg.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && ['General', 'Bot Owner'].includes(command.subCategory)) return null;
 			const cat = category || command.category;
 			const subCat = subcategory || command.subCategory;
-			if (!help.hasOwnProperty(cat)) help[cat] = {};
-			if (!help[cat].hasOwnProperty(subCat)) help[cat][subCat] = [];
+			if (!Object.prototype.hasOwnProperty.call(help, cat)) help[cat] = {};
+			if (!Object.prototype.hasOwnProperty.call(help[cat], subCat)) help[cat][subCat] = [];
 			const description = typeof command.description === 'function' ? command.description(msg.language) : command.description;
 			return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
 		}));
