@@ -4,8 +4,7 @@ const fetch = require('node-fetch');
 const { parse } = require('url');
 
 const prompts = {};
-const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/,
-	YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
+const YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
 
 module.exports = class extends Command {
 
@@ -106,7 +105,7 @@ module.exports = class extends Command {
 
 	async getSongs(query, soundcloud) {
 		let searchString;
-		if (URL_REGEX.test(query) || (parse(query).protocol && parse(query).hostname)) {
+		if (parse(query).protocol && parse(query).hostname) {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
