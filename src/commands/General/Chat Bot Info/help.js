@@ -1,7 +1,6 @@
 const { Command, RichDisplay, util: { isFunction, toTitleCase } } = require('klasa');
-const { MessageEmbed, Permissions } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
-const PERMISSIONS_RICHDISPLAY = new Permissions([Permissions.FLAGS.MANAGE_MESSAGES, Permissions.FLAGS.ADD_REACTIONS, Permissions.FLAGS.EMBED_LINKS]);
 const time = 1000 * 60 * 3;
 
 module.exports = class extends Command {
@@ -38,7 +37,7 @@ module.exports = class extends Command {
 			});
 		}
 
-		if (!('all' in msg.flags) && msg.guild && msg.channel.permissionsFor(this.client.user).has(PERMISSIONS_RICHDISPLAY)) {
+		if (!('all' in msg.flags) && msg.guild && msg.channel.permissionsFor(this.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
 			// Finish the previous handler
 			const previousHandler = this.handlers.get(msg.author.id);
 			if (previousHandler) previousHandler.stop();
