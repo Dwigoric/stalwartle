@@ -17,7 +17,7 @@ module.exports = class extends Command {
 				'If you want to get the details of a specific case number, simply run `s.modlog <case number here>`.',
 				'To get the modlogs of a certain type, you can use the `--type` flag, e.g. `--type=warn`, `--type=kick`, `ban`, etc.'
 			].join('\n'),
-			usage: '[reset|showcontent] [CaseNumber:integer|User:user]',
+			usage: '[reset|showcontent] [User:user|CaseNumber:integer]',
 			usageDelim: ' ',
 			subcommands: true
 		});
