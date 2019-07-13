@@ -33,7 +33,7 @@ module.exports = class extends Command {
 			.setURL(`https://www.reddit.com${data.permalink}`)
 			.setImage(data.url)
 			.setFooter(data.subreddit_name_prefixed)
-			.setTimestamp(Date.now() - data.created));
+			.setTimestamp(Date(Date.now() - data.created)));
 	}
 
 };
