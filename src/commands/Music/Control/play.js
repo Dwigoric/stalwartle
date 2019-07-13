@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	async run(msg, [query]) {
 		if (!msg.member.voice.channelID) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
-		if (prompts[msg.member.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
+		if (prompts[msg.author.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
 		let queue, playlist;
 		try {
 			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
@@ -51,7 +51,7 @@ module.exports = class extends Command {
 			return this.play(msg, playlist[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
-		delete prompts[msg.member.id];
+		delete prompts[msg.author.id];
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.me.voice.channelID) this.join(msg);
 		queue = await this.addToQueue(msg, song).catch(() => { throw '<:error:508595005481549846>  ::  There was an error adding your song to the queue. Please try again.'; });
@@ -80,11 +80,11 @@ module.exports = class extends Command {
 
 		// From here on out, loadType === 'SEARCH_RESULT' : true
 		const finds = tracks.slice(0, 5);
-		prompts[msg.member.id] = finds;
+		prompts[msg.author.id] = finds;
 		let limit = 0, choice;
 		do {
 			if (limit++ >= 5) {
-				delete prompts[msg.member.id];
+				delete prompts[msg.author.id];
 				throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
 			}
 			choice = await msg.prompt([
@@ -94,13 +94,13 @@ module.exports = class extends Command {
 					return `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
 				}).join('\n')
 			].join('\n')).catch(() => ({ content: 'cancel' }));
-		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts[msg.member.id] && parseInt(choice.content) > prompts[msg.member.id].length));
+		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts[msg.author.id] && parseInt(choice.content) > prompts[msg.author.id].length));
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content === 'cancel') {
-			delete prompts[msg.member.id];
+			delete prompts[msg.author.id];
 			throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
 		}
-		return prompts[msg.member.id][parseInt(choice.content) - 1];
+		return prompts[msg.author.id][parseInt(choice.content) - 1];
 	}
 
 	async getSongs(query, soundcloud) {
