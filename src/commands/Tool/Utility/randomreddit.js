@@ -28,12 +28,11 @@ module.exports = class extends Command {
 
 		return msg.sendEmbed(new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(`u/${data.author}`, null, `https://www.reddit.com/u/${data.author}`)
-			.setTitle(data.title)
-			.setURL(`https://www.reddit.com${data.permalink}`)
+			.setAuthor(data.title, null, `https://www.reddit.com${data.permalink}`)
+			.setTitle(`u/${data.author}`)
+			.setURL(`https://www.reddit.com/u/${data.author}`)
 			.setImage(data.url)
-			.setFooter(data.subreddit_name_prefixed)
-			.setTimestamp(Date.now() - data.created_utc));
+			.setFooter(data.subreddit_name_prefixed));
 	}
 
 };
