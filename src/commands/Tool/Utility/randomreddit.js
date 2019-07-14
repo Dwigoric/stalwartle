@@ -31,6 +31,7 @@ module.exports = class extends Command {
 			.setAuthor(data.title, null, `https://www.reddit.com${data.permalink}`)
 			.setTitle(`u/${data.author}`)
 			.setURL(`https://www.reddit.com/u/${data.author}`)
+			.setDescription(data.selftext)
 			.setImage(data.url)
 			.setFooter(data.subreddit_name_prefixed));
 	}
