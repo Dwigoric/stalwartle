@@ -114,15 +114,15 @@ module.exports = class extends Command {
 			.setColor(0xF462A3)
 			.setThumbnail(thumbnails[mode])
 			.setAuthor('User Information', 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png')
-			.setTitle(`${user.username} (PP Rank #${user.pp_rank})`)
+			.setTitle(`${user.username} (PP Rank #${Number(user.pp_rank).toLocaleString()})`)
 			.setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
-			.addField(`Country Rank (${user.country})`, user.pp_country_rank, true)
-			.addField(`Level ${parseInt(user.level)}`, `${+`${`${Math.round(`${`${(Number(user.level) - parseInt(user.level)) * 100}e+2`}`)}e-2`}`}% gained to level ${parseInt(user.level) + 1}`, true)
-			.addField('Hits', [`300s: ${user.count300}`, `100s: ${user.count100}`, `50s: ${user.count50}`], true)
+			.addField(`Country Rank (${user.country})`, Number(user.pp_country_rank).toLocaleString(), true)
+			.addField(`Level ${parseInt(user.level)}`, `${+`${`${Math.round(`${`${(user.level - parseInt(user.level)) * 100}e+2`}`)}e-2`}`}% gained to level ${parseInt(user.level) + 1}`, true)
+			.addField('Hits', [`300s: ${Number(user.count300).toLocaleString()}`, `100s: ${Number(user.count100).toLocaleString()}`, `50s: ${user.count50.toLocaleString()}`], true)
 			.addField('Accuracy', accuracy, true)
-			.addField('Playcount', user.playcount, true)
-			.addField('Ranked Score', user.ranked_score, true)
-			.addField('Total Score', user.total_score, true)
+			.addField('Playcount', Number(user.playcount).toLocaleString(), true)
+			.addField('Ranked Score', Number(user.ranked_score).toLocaleString(), true)
+			.addField('Total Score', Number(user.total_score).toLocaleString(), true)
 			.addField('Map Rank Counts', [
 				`SS+ → ${user.count_rank_ssh}`,
 				`SS → ${user.count_rank_ss}`,
@@ -166,12 +166,12 @@ module.exports = class extends Command {
 			.setDescription(`${beatmap.title}\nby ${beatmap.artist}`)
 			.setFooter('Click "Mapped by" at the top to download the beatmap')
 			.addField('Difficulty', beatmap.version, true)
-			.addField('Beats per minute', `${beatmap.bpm}bpm`, true)
+			.addField('Tempo', `${Number(beatmap.bpm).toLocaleString()}bpm`, true)
 			.addField('Stars', `${+`${`${Math.round(`${`${Number(beatmap.difficultyrating)}e+2`}`)}e-2`}`}⭐`, true)
-			.addField('Hit Length', `${beatmap.hit_length} seconds from first to\nlast note including breaks`, true)
-			.addField('Total Length', `${beatmap.total_length} seconds from first to\nlast note without breaks`, true)
-			.addField('Max Combo', beatmap.max_combo, true)
-			.addField('Playcount', beatmap.playcount, true)
+			.addField('Hit Length', `${beatmap.hit_length} seconds from first to\nlast note without breaks`, true)
+			.addField('Total Length', `${beatmap.total_length} seconds from first to\nlast note including breaks`, true)
+			.addField('Max Combo', Number(beatmap.max_combo).toLocaleString(), true)
+			.addField('Playcount', Number(beatmap.playcount).toLocaleString(), true)
 			.addField('Genre', genres[Number(beatmap.genre_id)], true)
 			.addField('Language', languages[Number(beatmap.language_id)], true);
 		if (beatmap.tags.length) embed.addField('Tags', beatmap.tags.split(' ').join(', '), true);
@@ -242,7 +242,7 @@ module.exports = class extends Command {
 				.then(res => res.json())
 				.then(b => b[0]);
 			const requests = Object.values(request).map(body => body.date);
-			const stats = [`Rank ${urank}`, `Score: ${list.score}`, `Combo: ${list.maxcombo}${beatmap.max_combo ? `/${beatmap.max_combo}` : ''}`];
+			const stats = [`Rank ${urank}`, `Score: ${Number(list.score).toLocaleString()}`, `Combo: ${Number(list.maxcombo).toLocaleString()}${beatmap.max_combo ? `/${Number(beatmap.max_combo).toLocaleString()}` : ''}`]; // eslint-disable-line max-len
 			if (list.pp) stats.splice(2, 0, `${list.pp}pp`);
 			return [
 				`\`${requests.indexOf(list.date) + 1}\`: **[${beatmap.title}${beatmap.version ? ` [${beatmap.version}]` : ''}](https://osu.ppy.sh/b/${beatmap.beatmap_id})**${mods.length ? ` **${mods.map(mod => `+${mod}`).join(' ')}**` : ''} [${+`${`${Math.round(`${`${Number(beatmap.difficultyrating)}e+2`}`)}e-2`}`}⭐]`, // eslint-disable-line max-len
