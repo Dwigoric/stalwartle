@@ -43,13 +43,13 @@ module.exports = class extends Command {
 
 	async lb(msg) {
 		if (!msg.channel.permissionsFor(this.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw '<:error:508595005481549846>  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).'; // eslint-disable-line max-len
+		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...');
 		let list = await Promise.all(await this.client.providers.default.getAll('users').then(usr => usr
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
 			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
 		if (!msg.flags.global) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...');
 		list = chunk(list, 10);
 
 		const display = new RichDisplay(new MessageEmbed()
