@@ -175,7 +175,7 @@ module.exports = class extends Command {
 			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
 			if (items && items.length) {
 				const relatedVideo = items[Math.floor(Math.random() * items.length)];
-				if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: true })); // eslint-disable-line max-len
+				if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: false })); // eslint-disable-line max-len
 			}
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
