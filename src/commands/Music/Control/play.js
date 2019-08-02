@@ -191,7 +191,7 @@ module.exports = class extends Command {
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
 			const { history } = await this.client.providers.default.get('music', guild.id);
-			history.push(mergeObjects(song, { timestamp: Date.now() }));
+			history.unshift(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', guild.id, { history });
 		}
 		const announceChannel = guild.channels.get(guild.settings.get('music.announceChannel')) || channel;
