@@ -11,7 +11,7 @@ module.exports = class extends Command {
 			requiredPermissions: ['MANAGE_MESSAGES'],
 			runIn: ['text'],
 			description: 'Prunes a certain amount of messages w/o filter.',
-			usage: '[Limit:integer{,500}] [link|invite|bots|you|me|upload|user:user]',
+			usage: '[Limit:integer{,500}] [link|invite|bots|you|me|pinsonly|upload|user:user]',
 			usageDelim: ' ',
 			cooldown: 60
 		});
@@ -55,6 +55,8 @@ module.exports = class extends Command {
 				return mes => mes.author.id === this.client.user.id;
 			case 'me':
 				return mes => mes.author.id === msg.author.id;
+			case 'pinsonly':
+				return mes => !mes.pinned;
 			case 'upload':
 				return mes => mes.attachments.size > 0;
 			case 'user':
