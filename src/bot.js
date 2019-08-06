@@ -38,7 +38,9 @@ class Stalwartle extends Client {
 
 		Stalwartle.defaultUserSchema
 			.add('cookies', 'integer', { default: 0, configurable: false })
+			.add('hpBoost', 'integer', { default: 0, configurable: false })
 			.add('afktoggle', 'boolean', { default: false })
+			.add('acceptFights', 'boolean', { default: true })
 			.add('timezone', 'string', { default: 'GMT', configurable: false })
 			.add('afkIgnore', 'channel', { array: true })
 			.add('osu', 'string', { max: 20 });
