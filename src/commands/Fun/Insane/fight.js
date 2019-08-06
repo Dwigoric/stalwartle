@@ -216,8 +216,8 @@ module.exports = class extends Command {
 			.setColor('RANDOM')
 			.setTitle(`${challengerData.health === opponentData.health ? 'Draw' : challengerData.health > opponentData.health ? `${challenger.tag} won` : `${opponent.tag} won`}!`)
 			.setDescription([
-				'__[ Match Statistics ]__',
-				`Rounds Taken: **${parseInt((i + 1) / 2)}**`,
+				'⚔ Match Statistics ⚔',
+				`Rounds Taken: **${parseInt((i + 1) / 2)}**\n`,
 				`__**${challenger.tag}**__`,
 				`Health: ${challengerData.health}`,
 				`Stamina: ${challengerData.stamina}`,
