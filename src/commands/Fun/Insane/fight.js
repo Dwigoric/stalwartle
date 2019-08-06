@@ -32,8 +32,8 @@ module.exports = class extends Command {
 			},
 			wrestle: {
 				description: 'Pin down your opponent on the ground! Costs 8 stamina, deals 20-25 damage.',
-				minDmg: 15,
-				maxDmg: 20,
+				minDmg: 20,
+				maxDmg: 25,
 				stamina: 8
 			},
 			pummel: {
@@ -205,9 +205,9 @@ module.exports = class extends Command {
 			moveResults.unshift('```diff');
 			moveResults.push('```');
 			channel.send(moveResults.join('\n'));
-			if (currentFights[channel.id].challenger.health <= 0 || currentFights[channel.id].opponent.health <= 0) {
+			if (challengerData.health <= 0 || opponentData.health <= 0) {
 				finishingMove = move;
-				currentFights[channel.id][currentFights[channel.id].challenger.health <= 0 ? 'challenger' : 'opponent'].health = 0;
+				currentFights[channel.id][challengerData.health <= 0 ? 'challenger' : 'opponent'].health = 0;
 				break;
 			}
 		}
