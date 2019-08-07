@@ -43,7 +43,7 @@ module.exports = class extends Command {
 				stamina: 6
 			},
 			bandage: {
-				description: 'Regain 10 HP and reduce 50%-75% damage for 1 round for 2 stamina.',
+				description: 'Regain 10 HP and reduce 25% to 50% damage for next damage received for 2 stamina.',
 				hp: 10,
 				stamina: 2
 			},
@@ -186,7 +186,7 @@ module.exports = class extends Command {
 			let moveResults;
 			switch (move) {
 				case 'bandage': moveResults = [
-					`+ ${(i % 2 ? challenger : opponent).tag} bandaged themselves.`,
+					`+ ${(i % 2 ? challenger : opponent).tag} bandaged themselves. The next damage they receive will lessen by 25% to 50%.`,
 					`+ ${(i % 2 ? challenger : opponent).tag} received ${this.moves[move].hp} HP.`,
 					`- ${(i % 2 ? challenger : opponent).tag} lost ${this.moves[move].stamina} stamina.`
 				];
