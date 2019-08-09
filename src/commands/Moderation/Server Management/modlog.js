@@ -93,4 +93,9 @@ module.exports = class extends Command {
 		}
 	}
 
+	async init() {
+		const defProvider = this.client.providers.default;
+		if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
+	}
+
 };
