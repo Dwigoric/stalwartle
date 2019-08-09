@@ -4,4 +4,4 @@ node_modules
 config.js
 auth.json
 /.vscode
-/src/providers/rethinkdb.js
+providers/rethinkdb.js
