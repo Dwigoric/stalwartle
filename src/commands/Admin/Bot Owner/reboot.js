@@ -1,4 +1,4 @@
-const { Command, util: { exec } } = require('klasa');
+const { Command } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -14,7 +14,7 @@ module.exports = class extends Command {
 		await this.client.settings.update([['restart.channel', msg.channel.id], ['restart.timestamp', msg.createdTimestamp]]);
 		await msg.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		await this.client.destroy();
-		exec('pm2 restart Stalwartle --node-args="--expose_gc --always_compact"').catch(() => process.exit());
+		process.exit();
 	}
 
 };
