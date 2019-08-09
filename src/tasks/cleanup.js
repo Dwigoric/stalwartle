@@ -87,12 +87,14 @@ module.exports = class MemorySweeper extends Task {
 		}
 
 		// Empty music player sweeper
-		for (const player of this.client.player.array()) {
-			const { members } = this.client.channels.get(player.channel);
-			if (members.has(this.client.user.id) && this.client.guilds.get(player.id).settings.get('donation') >= 10) continue;
-			if (members.filter(member => !member.user.bot).size) continue;
-			this.client.player.leave(player.id);
-			players++;
+		if (this.client.player) {
+			for (const player of this.client.player.array()) {
+				const { members } = this.client.channels.get(player.channel);
+				if (members.has(this.client.user.id) && this.client.guilds.get(player.id).settings.get('donation') >= 10) continue;
+				if (members.filter(member => !member.user.bot).size) continue;
+				this.client.player.leave(player.id);
+				players++;
+			}
 		}
 
 		// Modlog database sweeper
