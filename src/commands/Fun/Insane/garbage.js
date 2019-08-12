@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
 	async run(msg, [garbage = msg.author]) {
 		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
-		await msg.channel.sendFile(await this.client.idiot.garbage(garbage.displayAvatarURL()), 'garbage.png');
+		await msg.channel.sendFile(await this.client.idiot.garbage(garbage.displayAvatarURL({ format: 'png', size: 2048 })), 'garbage.png');
 		message.delete();
 	}
 

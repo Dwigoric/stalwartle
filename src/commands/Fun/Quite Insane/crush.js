@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
 	async run(msg, [crush, crusher = msg.author]) {
 		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
-		await msg.channel.sendFile(await this.client.idiot.crush(crush.displayAvatarURL(), crusher.displayAvatarURL()), 'crush.png');
+		await msg.channel.sendFile(await this.client.idiot.crush(crush.displayAvatarURL({ format: 'png' }), crusher.displayAvatarURL({ format: 'png', size: 2048 })), 'crush.png');
 		message.delete();
 	}
 

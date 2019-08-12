@@ -18,7 +18,7 @@ module.exports = class extends Command {
 
 	async run(msg, [slapped, slapper = msg.author]) {
 		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
-		await msg.channel.sendFile(await this.client.idiot.batSlap(slapper.displayAvatarURL(), slapped.displayAvatarURL()), 'batslap.png');
+		await msg.channel.sendFile(await this.client.idiot.batSlap(slapper.displayAvatarURL({ format: 'png', size: 2048 }), slapped.displayAvatarURL({ format: 'png', size: 2048 })), 'batslap.png');
 		message.delete();
 	}
 

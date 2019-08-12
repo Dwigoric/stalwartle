@@ -14,7 +14,7 @@ module.exports = class extends Command {
 
 	async run(msg, [respected = msg.author]) {
 		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
-		msg.channel.sendFile(await this.client.idiot.respect(respected.displayAvatarURL()), 'respect.png', 'Press 🇫 to Pay Respects')
+		msg.channel.sendFile(await this.client.idiot.respect(respected.displayAvatarURL({ format: 'png', size: 2048 })), 'respect.png', 'Press 🇫 to Pay Respects')
 			.then(sent => {
 				message.delete();
 				if (sent.channel.type !== 'text') return null;

@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
 	async run(msg, [missing = msg.author]) {
 		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
-		await msg.channel.sendFile(await this.client.idiot.triggered(missing.displayAvatarURL({ format: 'png' })), 'triggered.gif');
+		await msg.channel.sendFile(await this.client.idiot.triggered(missing.displayAvatarURL({ format: 'png', size: 2048 })), 'triggered.gif');
 		message.delete();
 	}
 
