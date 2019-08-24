@@ -2,6 +2,12 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
+	constructor(...args) {
+		super(...args, {
+			event: 'voiceStateUpdate'
+		});
+	}
+
 	async run(oldState, newState) {
 		if (!this.client.player) return null;
 		if (!newState.guild.me.voice.channelID) return null;
