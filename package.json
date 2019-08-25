@@ -12,7 +12,7 @@
 		"klasa": "github:dirigeants/klasa",
 		"klasa-member-gateway": "github:dirigeants/klasa-member-gateway",
 		"moment-timezone": "^0.5.26",
-		"rethinkdbdash": "^2.3.31"
+		"rethinkdb-ts": "^2.4.0-rc.16"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
