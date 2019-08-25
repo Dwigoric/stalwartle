@@ -40,7 +40,9 @@ module.exports = class extends Command {
 		}));
 		delete pruning[msg.channel.id];
 		loadingMessage.delete();
-		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`);
+		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`).then(pruneMsg => {
+			setTimeout(() => pruneMsg.delete(), 5000);
+		});
 	}
 
 	getFilter(msg, filter, user) {
