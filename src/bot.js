@@ -56,7 +56,7 @@ class Stalwartle extends Client {
 			.add('donation', 'number', { default: 0, configurable: false })
 			.add('selfroles', 'role', { array: true })
 			.add('globalBans', 'boolean', { default: false })
-			.add('afkChannelOnAfk', 'boolean', { default: true })
+			.add('afkChannelOnAfk', 'boolean', { default: false })
 			.add('autorole', autorole => autorole
 				.add('user', 'role')
 				.add('bot', 'role'))
