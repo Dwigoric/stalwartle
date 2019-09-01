@@ -21,7 +21,7 @@ module.exports = class extends Event {
 		return this.client.setTimeout(guild => {
 			if (guild.me.voice.channelID && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
 			this.client.player.leave(guild.id);
-			if (queue[0].requester.id === this.client.user.id) this.client.providers.default.update('music', newState.guild.id, { queue: [] });
+			if (queue[0].requester === this.client.user.id) this.client.providers.default.update('music', newState.guild.id, { queue: [] });
 			return null;
 		}, 30000, newState.guild);
 	}
