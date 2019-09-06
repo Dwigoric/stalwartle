@@ -25,7 +25,7 @@ module.exports = class extends Command {
 			.setTimestamp()
 			.addField('🤖 General Information', [
 				`**Users**: ${(await this.client.userCount()).toLocaleString()}`,
-				`**Servers**: ${this.client.guilds.size.toLocaleString()}`,
+				`**Servers**: ${(await this.client.guildCount()).toLocaleString()}`,
 				`**Text Channels**: ${this.client.channels.filter(chan => chan.type === 'text').size.toLocaleString()}`,
 				`**Voice Connections**: ${this.client.player.array().filter(player => player.playing).length}`
 			], true)
