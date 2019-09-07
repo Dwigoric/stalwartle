@@ -45,7 +45,7 @@ module.exports = class extends Event {
 	}
 
 	async init() {
-		const { id, token } = this.client.settings.get('guildHook');
+		const { id, token } = (await this.client.settings.resolve('guildHook'))[0];
 		this.hook = new WebhookClient(id, token);
 	}
 

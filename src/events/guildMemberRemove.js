@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 module.exports = class extends Event {
 
 	async run(member) {
-		const goodbye = member.guild.settings.get('goodbye');
+		const goodbye = (await member.guild.settings.resolve('goodbye'))[0];
 		if (!goodbye.channel) return null;
 		const chan = member.guild.channels.get(goodbye.channel);
 		if (!chan) {

@@ -23,7 +23,7 @@ module.exports = class extends Event {
 			}
 		}
 
-		const welcome = member.guild.settings.get('welcome');
+		const welcome = (await member.guild.settings.resolve('welcome'))[0];
 		if (!welcome.channel) return null;
 		const chan = member.guild.channels.get(welcome.channel);
 		if (!chan) {
