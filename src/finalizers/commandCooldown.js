@@ -2,6 +2,11 @@ const { Finalizer, RateLimitManager } = require('klasa');
 
 module.exports = class extends Finalizer {
 
+	constructor(...args) {
+		super(...args);
+		this.cooldowns = new WeakMap();
+	}
+
 	run(message, command) {
 		if (this.client.options.owners.includes(message.author.id)) return;
 		if (command.cooldown <= 0) return;
