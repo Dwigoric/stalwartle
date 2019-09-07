@@ -9,8 +9,8 @@
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
 		"discord.js-lavalink": "^2.2.3",
-		"klasa": "github:dirigeants/klasa",
-		"klasa-member-gateway": "github:dirigeants/klasa-member-gateway",
+		"klasa": "github:dirigeants/klasa#settings",
+		"klasa-member-gateway": "dirigeants/klasa-member-gateway#settings",
 		"moment-timezone": "^0.5.26",
 		"rethinkdb-ts": "^2.4.0-rc.16"
 	},
