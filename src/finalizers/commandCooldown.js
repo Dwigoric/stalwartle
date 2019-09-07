@@ -1,4 +1,4 @@
-const { Finalizer } = require('klasa');
+const { Finalizer, RateLimitManager } = require('klasa');
 
 module.exports = class extends Finalizer {
 
@@ -6,14 +6,20 @@ module.exports = class extends Finalizer {
 		if (this.client.options.owners.includes(message.author.id)) return;
 		if (command.cooldown <= 0) return;
 
-		const id = message.levelID;
-		const rateLimit = command.cooldowns.get(id) || command.cooldowns.create(id);
-
 		try {
-			rateLimit.drip();
+			this.getCooldown(message, command).drip();
 		} catch (err) {
 			this.client.emit('error', `${message.author.username}[${message.author.id}] has exceeded the RateLimit for ${message.command}`);
 		}
+	}
+
+	getCooldown(message, command) {
+		let cooldownManager = this.cooldowns.get(command);
+		if (!cooldownManager) {
+			cooldownManager = new RateLimitManager(command.bucket, command.cooldown * 1000);
+			this.cooldowns.set(command, cooldownManager);
+		}
+		return cooldownManager.acquire(message.guild ? message[command.cooldownLevel].id : message.author.id);
 	}
 
 };
