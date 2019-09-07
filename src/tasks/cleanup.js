@@ -89,10 +89,12 @@ module.exports = class MemorySweeper extends Task {
 		// Empty music player sweeper
 		if (this.client.player) {
 			for (const player of this.client.player.array()) {
-				if (!player.channel) continue;
-				const { members } = this.client.channels.get(player.channel);
-				if (members.has(this.client.user.id) && this.client.guilds.get(player.id).settings.get('donation') >= 10) continue;
-				if (members.filter(member => !member.user.bot).size) continue;
+				const channel = this.client.channels.get(player.channel);
+				if (channel) {
+					const { members } = channel;
+					if (members.has(this.client.user.id) && this.client.guilds.get(player.id).settings.get('donation') >= 10) continue;
+					if (members.filter(member => !member.user.bot).size) continue;
+				}
 				this.client.player.leave(player.id);
 				players++;
 			}
