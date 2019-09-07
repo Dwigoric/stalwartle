@@ -5,7 +5,7 @@ module.exports = class extends Event {
 
 	async run(member) {
 		// Check if the member is muted
-		if (member.guild.settings.get('muteRole')) await this.client.gateways.members.sync([`${member.guild.id}.${member.id}`]);
+		if (member.guild.settings.get('muteRole')) await this.client.gateways.get('members').sync([`${member.guild.id}.${member.id}`]);
 		if (member.settings.get('muted')) {
 			const muteRole = member.guild.roles.get(member.guild.settings.get('muteRole'));
 			if (!muteRole) {

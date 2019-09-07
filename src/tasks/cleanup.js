@@ -74,7 +74,7 @@ module.exports = class MemorySweeper extends Task {
 			if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
 			if (user.settings.get('cookies')) continue;
 			this.client.users.delete(user.id);
-			this.client.gateways.users.cache.delete(user.id);
+			this.client.gateways.get('users').cache.delete(user.id);
 			users++;
 		}
 
