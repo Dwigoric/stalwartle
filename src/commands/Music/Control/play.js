@@ -49,6 +49,7 @@ module.exports = class extends Command {
 			this.join(msg);
 			msg.send('<:check:508594899117932544>  ::  Queue is empty. The playlist has been added to the queue.');
 			await this.addToQueue(msg, playlist).catch(err => {
+				if (typeof err === 'string') throw err;
 				this.client.emit('wtf', err);
 				throw '<:error:508595005481549846>  ::  There was an error loading your playlist to the queue. Please try again.';
 			});
