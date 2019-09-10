@@ -59,6 +59,7 @@ module.exports = class extends Command {
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.me.voice.channelID) this.join(msg);
 		queue = await this.addToQueue(msg, song).catch(err => {
+			if (typeof err === 'string') throw err;
 			this.client.emit('wtf', err);
 			throw `<:error:508595005481549846>  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
