@@ -39,7 +39,6 @@ module.exports = class extends Event {
 		});
 		const { channel, timestamp } = (await this.client.settings.resolve('restart'))[0];
 		if (!channel) return;
-		while (!this.client.channels.get(channel)) continue;
 		this.client.channels.get(channel).send({
 			embed: new MessageEmbed()
 				.setColor(0x40E0D0)
