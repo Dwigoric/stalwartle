@@ -17,7 +17,6 @@
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
 		"figlet": "^1.2.1",
-		"idiotic-api": "^0.2.11",
 		"roll": "^1.2.0",
 		"steamapi": "^2.0.3"
 	},

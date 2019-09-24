@@ -3,7 +3,6 @@ const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
 const memberGateway = require('klasa-member-gateway');
 const fetch = require('node-fetch');
-const idiotic = require('idiotic-api');
 
 Client.use(memberGateway);
 
@@ -13,10 +12,6 @@ class Stalwartle extends Client {
 		super(...args);
 
 		this.player = null;
-		if (this.auth.idioticAPIkey) {
-			this.idiot = new idiotic.Client(this.auth.idioticAPIkey, { dev: true });
-			Object.defineProperty(this.idiot, 'token', { value: this.idiot.token, enumerable: false });
-		}
 
 		Stalwartle.defaultClientSchema
 			.add('changelogs', 'textchannel')
@@ -63,12 +58,6 @@ class Stalwartle extends Client {
 			.add('moderators', moderators => moderators
 				.add('users', 'user', { array: true })
 				.add('roles', 'role', { array: true }))
-			.add('welcome', welcome => welcome
-				.add('version', 'string', { default: 'gearz', configurable: false })
-				.add('channel', 'textchannel'))
-			.add('goodbye', goodbye => goodbye
-				.add('version', 'string', { default: 'gearz', configurable: false })
-				.add('channel', 'textchannel'))
 			.add('music', music => music
 				.add('announceChannel', 'textchannel')
 				.add('announceSongs', 'boolean', { default: true })
