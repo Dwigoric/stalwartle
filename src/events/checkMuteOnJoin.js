@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { enabled: false, event: 'guildMemberAdd' });
+		super(...args, { event: 'guildMemberAdd' });
 	}
 
 	async run(member) {
