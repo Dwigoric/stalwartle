@@ -74,7 +74,7 @@ module.exports = class extends Command {
 
 	async indivSet(msg, modlog, action) {
 		if (modlog === 'reset') msg.guild.settings.reset(`modlogs.${action}`);
-		else msg.guild.settings.update(`modlogs.${action}`, modlog.id, msg.guild);
+		else msg.guild.settings.update(`modlogs.${action}`, modlog.id, { guild: msg.guild });
 		return msg.send(`<:check:508594899117932544>  ::  Successfully updated the modlog channel for member ${action}s to ${modlog}.`);
 	}
 

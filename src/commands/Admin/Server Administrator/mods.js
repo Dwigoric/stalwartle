@@ -1,4 +1,5 @@
 const { Command } = require('klasa');
+const { GuildMember } = require('discord.js');
 
 module.exports = class extends Command {
 
@@ -33,13 +34,13 @@ module.exports = class extends Command {
 		const modRoles = roles.map(rl => {
 			const modRole = msg.guild.roles.get(rl);
 			if (modRole) return modRole.name;
-			else msg.guild.settings.update('moderators.roles', rl, msg.guild, { action: 'remove' });
+			else msg.guild.settings.update('moderators.roles', rl, { arrayAction: 'remove', guild: msg.guild });
 			return null;
 		});
 		const modUsers = await Promise.all(users.map(async us => {
 			const modUser = await msg.guild.members.fetch(us);
 			if (modUser) return modUser.user.tag;
-			else msg.guild.settings.update('moderators.users', us, msg.guild, { action: 'remove' });
+			else msg.guild.settings.update('moderators.users', us, { arrayAction: 'remove', guild: msg.guild });
 			return null;
 		}));
 		[modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));
@@ -54,13 +55,13 @@ module.exports = class extends Command {
 		return this.toggle(msg, mod, 'remove');
 	}
 
-	async toggle(msg, mod, action) {
-		const type = mod.constructor.name === 'GuildMember' ? 'users' : 'roles';
+	async toggle(msg, mod, arrayAction) {
+		const type = mod instanceof GuildMember ? 'users' : 'roles';
 		const guildMods = (await msg.guild.settings.resolve('moderators'))[0];
-		if (action === 'add' && guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already a moderator!';
-		if (action === 'remove' && !guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already not a moderator!';
-		msg.guild.settings.update(`moderators.${type}`, mod.id, msg.guild, { action });
-		msg.send(`<:check:508594899117932544>  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
+		if (arrayAction === 'add' && guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already a moderator!';
+		if (arrayAction === 'remove' && !guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already not a moderator!';
+		msg.guild.settings.update(`moderators.${type}`, mod.id, { arrayAction, guild: msg.guild });
+		msg.send(`<:check:508594899117932544>  ::  Successfully ${arrayAction}${arrayAction.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
 	}
 
 };
