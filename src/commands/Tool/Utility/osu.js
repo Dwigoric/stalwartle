@@ -86,9 +86,9 @@ module.exports = class extends Command {
 		await msg.send('<a:loading:430269209415516160>  ::  Loading user information...');
 
 		let mode;
-		if (msg.flags.mania) mode = 3;
-		else if (msg.flags.catch) mode = 2;
-		else if (msg.flags.taiko) mode = 1;
+		if (msg.flagArgs.mania) mode = 3;
+		else if (msg.flagArgs.catch) mode = 2;
+		else if (msg.flagArgs.taiko) mode = 1;
 		else mode = 0;
 
 		const queries = [];
@@ -138,9 +138,9 @@ module.exports = class extends Command {
 		const timezone = msg.author.settings.get('timezone');
 
 		let mode;
-		if (msg.flags.mania) mode = 3;
-		else if (msg.flags.catch) mode = 2;
-		else if (msg.flags.taiko) mode = 1;
+		if (msg.flagArgs.mania) mode = 3;
+		else if (msg.flagArgs.catch) mode = 2;
+		else if (msg.flagArgs.taiko) mode = 1;
 		else mode = 0;
 
 		await msg.send('<a:loading:430269209415516160>  ::  Loading beatmap...');
@@ -194,9 +194,9 @@ module.exports = class extends Command {
 		const timezone = msg.author.settings.get('timezone');
 
 		let mode;
-		if (msg.flags.mania) mode = 3;
-		else if (msg.flags.catch) mode = 2;
-		else if (msg.flags.taiko) mode = 1;
+		if (msg.flagArgs.mania) mode = 3;
+		else if (msg.flagArgs.catch) mode = 2;
+		else if (msg.flagArgs.taiko) mode = 1;
 		else mode = 0;
 		const osumode = [' Standard', 'taiko', 'catch', 'mania'];
 

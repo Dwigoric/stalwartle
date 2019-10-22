@@ -33,7 +33,7 @@ module.exports = class extends Command {
 		if (person.equals(this.client.user)) throw `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`;
 		if (person.bot) throw '<:error:508595005481549846>  ::  I wonder if bots can eat cookies... 🤔';
 		const cookies = person.settings.get('cookies');
-		if (msg.flags.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
+		if (msg.flagArgs.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
 		const cookieTask = this.client.schedule.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
 		if (cookieTask.length) throw `<:error:508595005481549846>  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
 		await this.client.schedule.create('cookieReset', this.client.arguments.get('time').run('1h', 'time', msg), { data: { user: msg.author.id } });
@@ -48,13 +48,13 @@ module.exports = class extends Command {
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
 			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
-		if (!msg.flags.global) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
+		if (!msg.flagArgs.global) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		list = chunk(list, 10);
 
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`🍪 ${msg.flags.global ? 'Global ' : ''}Stalkie Leaderboard`)
+			.setTitle(`🍪 ${msg.flagArgs.global ? 'Global ' : ''}Stalkie Leaderboard`)
 		);
 
 		let authorPos;

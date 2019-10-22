@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		const results = banlist.map(ban => [ban.user.tag, ban.reason]);
 		return await this.handleMessage(
 			msg, {
-				sendAs: msg.flags.output || 'haste',
+				sendAs: msg.flagArgs.output || 'haste',
 				hastebinUnavailable: false,
 				url: null
 			},

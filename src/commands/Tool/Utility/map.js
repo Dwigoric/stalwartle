@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
 	async run(msg, [location]) {
 		await msg.send('<a:loading:430269209415516160>  ::  Loading map...');
-		const zoom = msg.flags.zoom ? parseInt(msg.flags.zoom) : 12;
+		const zoom = msg.flagArgs.zoom ? parseInt(msg.flagArgs.zoom) : 12;
 		const { data } = await fetch(`https://api.ksoft.si/kumo/gis?q=${encodeURIComponent(location)}&include_map=true&map_zoom=${isNaN(zoom) ? 12 : zoom}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
 		if (!data) throw '<:error:508595005481549846>  ::  I could not find that location.';
 		msg.send({

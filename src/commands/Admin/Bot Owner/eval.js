@@ -19,17 +19,17 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [code]) {
-		const flagTime = 'no-timeout' in msg.flags ? 'wait' in msg.flags ? Number(msg.flags.wait) : this.timeout : Infinity;
-		const language = msg.flags.lang || msg.flags.language || (msg.flags.json ? 'json' : 'js');
+		const flagTime = 'no-timeout' in msg.flagArgs ? 'wait' in msg.flagArgs ? Number(msg.flagArgs.wait) : this.timeout : Infinity;
+		const language = msg.flagArgs.lang || msg.flagArgs.language || (msg.flagArgs.json ? 'json' : 'js');
 		const { success, result, time, type } = await this.timedEval(msg, code, flagTime);
 
-		if (msg.flags.silent) {
+		if (msg.flagArgs.silent) {
 			if (!success && result && result.stack) this.client.emit('error', result.stack);
 			return null;
 		}
 
 		const footer = util.codeBlock('ts', type);
-		const sendAs = msg.flags.output || msg.flags['output-to'] || (msg.flags.log ? 'log' : null);
+		const sendAs = msg.flagArgs.output || msg.flagArgs['output-to'] || (msg.flagArgs.log ? 'log' : null);
 		return this.handleMessage(msg, { sendAs, hastebinUnavailable: false, url: null }, { success, result, time, footer, language });
 	}
 
@@ -98,7 +98,7 @@ module.exports = class extends Command {
 		let thenable = false;
 		let type;
 		try {
-			if (msg.flags.async) code = `(async () => {\n${code}\n})();`;
+			if (msg.flagArgs.async) code = `(async () => {\n${code}\n})();`;
 			result = eval(code);
 			syncTime = stopwatch.toString();
 			type = new Type(result);
@@ -119,9 +119,9 @@ module.exports = class extends Command {
 
 		stopwatch.stop();
 		if (typeof result !== 'string') {
-			result = result instanceof Error ? result.stack : msg.flags.json ? JSON.stringify(result, null, 4) : inspect(result, {
-				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
-				showHidden: Boolean(msg.flags.showHidden)
+			result = result instanceof Error ? result.stack : msg.flagArgs.json ? JSON.stringify(result, null, 4) : inspect(result, {
+				depth: msg.flagArgs.depth ? parseInt(msg.flagArgs.depth) || 0 : 0,
+				showHidden: Boolean(msg.flagArgs.showHidden)
 			});
 		}
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: util.clean(result) };

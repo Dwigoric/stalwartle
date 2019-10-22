@@ -47,13 +47,13 @@ module.exports = class extends Command {
 			});
 		}
 
-		if (msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type)) list = list.filter(ml => ml.type === msg.flags.type); // eslint-disable-line max-len
+		if (msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type)) list = list.filter(ml => ml.type === msg.flagArgs.type); // eslint-disable-line max-len
 		if (user) list = list.filter(ml => ml.user === user.id);
 		if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading moderation logs...');
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flags.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flags.type) ? toTitleCase(msg.flags.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
+			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
 
 		await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
 			const _user = this.client.users.get(modlog.user) || await this.client.users.fetch(modlog.user).catch(() => null);

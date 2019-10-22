@@ -44,7 +44,7 @@ module.exports = class extends Command {
 				channel: msg.channel.id,
 				user: msg.author.id,
 				text: text.join(this.usageDelim),
-				forceChannel: Object.keys(msg.flags).includes('channel')
+				forceChannel: Object.keys(msg.flagArgs).includes('channel')
 			}
 		});
 		msg.send([

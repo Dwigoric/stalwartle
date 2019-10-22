@@ -14,7 +14,7 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
-		const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${Boolean(msg.flags.gif)}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
+		const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${Boolean(msg.flagArgs.gif)}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
 		await msg.channel.sendFile(result.image_url);
 		message.delete();
 	}

@@ -14,7 +14,7 @@ module.exports = class extends Command {
 
 	async run(msg, [input]) {
 		const stopwatch = new Stopwatch().start();
-		const result = await exec(input, { timeout: 'timeout' in msg.flags ? Number(msg.flags.timeout) : 60000 })
+		const result = await exec(input, { timeout: 'timeout' in msg.flagArgs ? Number(msg.flagArgs.timeout) : 60000 })
 			.catch(error => ({ error }));
 		const results = [];
 		if (result.stdout) results.push(`**\`OUTPUT\`**${codeBlock('', result.stdout)}`);

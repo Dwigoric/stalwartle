@@ -17,7 +17,7 @@ module.exports = class extends Command {
 	async run(msg, [entry]) {
 		if (!msg.guild.me.voice.channelID) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 		if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
-		if (msg.flags.force && await msg.hasAtLeastPermissionLevel(5)) {
+		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.guild.clearVoteskips();
 			msg.guild.player.stop();
 			return msg.send('<:check:508594899117932544>  ::  Successfully forcibly skipped the music for this server.');

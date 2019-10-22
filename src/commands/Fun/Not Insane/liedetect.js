@@ -37,7 +37,7 @@ module.exports = class extends Command {
 			truth: ['https://media.giphy.com/media/bGhDz0BM8l3MY/giphy.gif', 0x2ECC71],
 			lie: ['https://media.giphy.com/media/FylwVNvkILyTu/giphy.gif', 0xE74C3C]
 		};
-		const gif = msg.flags.force && ['truth', 'lie'].includes(msg.flags.force) ? gifs[msg.flags.force] : Object.values(gifs)[Math.round(Math.random())];
+		const gif = msg.flagArgs.force && ['truth', 'lie'].includes(msg.flagArgs.force) ? gifs[msg.flagArgs.force] : Object.values(gifs)[Math.round(Math.random())];
 
 		if (member && text.length > 1) text.unshift(member);
 		const embed = new MessageEmbed()
