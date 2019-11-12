@@ -111,7 +111,9 @@ module.exports = class extends Command {
 		return prompts[msg.author.id][parseInt(choice.content) - 1];
 	}
 
-	async getSongs(query, soundcloud) {
+	async getSongs(query, soundcloud = false) {
+		// Due to YouTube banning API requests, the bot will now always use SoundCloud for searches
+		soundcloud = true;
 		let searchString;
 		if (parse(query).protocol && parse(query).hostname) {
 			searchString = query;
