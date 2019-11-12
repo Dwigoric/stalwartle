@@ -39,7 +39,7 @@ module.exports = class extends Event {
 		});
 		const { authority, timestamp } = (await this.client.settings.resolve('restart'))[0];
 		if (!authority) return;
-		(await this.client.users.fetch(authority)).send({
+		authority.send({
 			embed: new MessageEmbed()
 				.setColor(0x40E0D0)
 				.setTitle('Bot has successfully restarted!')
