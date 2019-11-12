@@ -37,9 +37,9 @@ module.exports = class extends Event {
 				this.client.user.setActivity(`${status.name} | ${this.client.options.prefix}help`, { type: status.type });
 			}, 60000);
 		});
-		const { channel, timestamp } = (await this.client.settings.resolve('restart'))[0];
-		if (!channel) return;
-		this.client.channels.get(channel).send({
+		const { authority, timestamp } = (await this.client.settings.resolve('restart'))[0];
+		if (!authority) return;
+		(await this.client.users.fetch(authority)).send({
 			embed: new MessageEmbed()
 				.setColor(0x40E0D0)
 				.setTitle('Bot has successfully restarted!')
@@ -48,7 +48,7 @@ module.exports = class extends Event {
 				.setFooter(`Reboot duration: ${+`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`}s`)
 				.setTimestamp()
 		});
-		this.client.settings.reset(['restart.channel', 'restart.timestamp']);
+		this.client.settings.reset(['restart.authority', 'restart.timestamp']);
 	}
 
 };

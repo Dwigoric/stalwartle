@@ -22,7 +22,7 @@ class Stalwartle extends Client {
 				.add('reports', 'textchannel')
 				.add('processed', 'textchannel'))
 			.add('restart', restart => restart
-				.add('channel', 'textchannel')
+				.add('authority', 'user')
 				.add('timestamp', 'number'))
 			.add('errorHook', errorHook => errorHook
 				.add('id', 'string')

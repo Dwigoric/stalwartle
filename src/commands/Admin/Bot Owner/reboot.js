@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		await this.client.settings.update([['restart.channel', msg.channel.id], ['restart.timestamp', msg.createdTimestamp]]);
+		await this.client.settings.update([['restart.authority', msg.author.id], ['restart.timestamp', msg.createdTimestamp]]);
 		await msg.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		await this.client.destroy();
 		process.exit();
