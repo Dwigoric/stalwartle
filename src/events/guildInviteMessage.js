@@ -21,11 +21,11 @@ module.exports = class extends Event {
 				`Please feel free to look at the command list. If you want me to serve more Discord users, just use the \`${guild.settings.get('prefix')}invite\` command!`,
 				'\nI can play music, moderate users, send memes, manipulate user avatars, and more!',
 				`\nBy **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`,
-				'\nThis message will be automatically deleted in 10 seconds.'
+				'\nThis message will be automatically deleted in 10 seconds (if sent in a server channel).'
 			].join('\n'));
 		const postableChannel = guild.channels.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
-		if (!postableChannel) return guild.owner.user.sendEmbed(message).then(invMessage => setTimeout(() => { invMessage.delete(); }, 10000)).catch(() => null);
-		return postableChannel.sendEmbed(message, guild.owner);
+		if (!postableChannel) return guild.owner.user.sendEmbed(message).catch(() => null);
+		return postableChannel.sendEmbed(message).then(invMessage => setTimeout(() => { invMessage.delete(); }, 10000));
 	}
 
 };
