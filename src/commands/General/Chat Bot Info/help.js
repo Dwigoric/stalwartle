@@ -85,7 +85,7 @@ module.exports = class extends Command {
 						'\n__**DONATION PERKS**__',
 						'$3 ⇒ Enable the history and playlist features.',
 						'$5 ⇒ Removal of 5-hour limit for each track in music. ($3 perk is included)',
-						// '$8 ⇒ Autoplay songs (add related videos when queue is empty). Only applicable for YouTube videos. ($3 and $5 perks are included)',
+						'$8 ⇒ Autoplay songs (add related videos when queue is empty). Only applicable for YouTube videos. ($3 and $5 perks are included)',
 						'$10 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel; unless the bot is rebooted. ($3, $5, and $8 perks are included)',
 						'*Please pay at <https://patreon.com/Dwigoric>.*',
 						`*AFTER donating, contact ${this.client.application.owner.tag} or go to my support server to avail of these perks.*`
