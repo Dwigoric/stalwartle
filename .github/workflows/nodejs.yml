@@ -10,7 +10,7 @@ jobs:
     steps:
     - name: npm install, build, and test
       run: |
-        npm run build --if-present
+        npm ci
         npm install
         npx eslint .
       env:
