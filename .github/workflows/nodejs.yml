@@ -8,9 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: npm install, build, and test
+    - name: npx linting
       run: |
-        npm ci
         npm install
         npx eslint .
       env:
