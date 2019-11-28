@@ -8,8 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v1
     - name: npx linting
       run: |
+        npm ci
+        npm build --if-present
         npm install
         npx eslint .
       env:
