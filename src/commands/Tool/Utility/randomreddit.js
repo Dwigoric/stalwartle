@@ -24,14 +24,15 @@ module.exports = class extends Command {
 
 		if (data.over_18 && !msg.channel.nsfw) throw '<:error:508595005481549846>  ::  The post contains NSFW content and this channel is not marked as NSFW.';
 
-		if (!msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) return msg.sendMessage(`***${data.title}***\n\n${data.url}`);
+		if (Boolean(msg.guild) && !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) return msg.sendMessage(`***${data.title}***\n\n${data.url}`);
 
+		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 		return msg.sendEmbed(new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(data.title, null, `https://www.reddit.com${data.permalink}`)
 			.setTitle(`u/${data.author}`)
 			.setURL(`https://www.reddit.com/u/${data.author}`)
-			.setDescription(data.selftext)
+			.setDescription(trim(data.selftext, 1024))
 			.setImage(data.url)
 			.setFooter(data.subreddit_name_prefixed));
 	}
