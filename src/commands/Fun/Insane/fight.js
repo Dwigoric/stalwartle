@@ -190,14 +190,13 @@ module.exports = class extends Command {
 			}
 			let moveResults;
 			switch (move) {
-				case 'bandage': moveResults = [`- ${(i % 2 ? challenger : opponent).tag} lost ${this.moves[move].stamina} stamina.`].unshift((() => {
-					if (bandageSuccess) {
-						return [
-							`+ ${(i % 2 ? challenger : opponent).tag} bandaged themselves. The next damage they receive will lessen by 25% to 50%.`,
-							`+ ${(i % 2 ? challenger : opponent).tag} received ${addedHp} HP.`
-						].join('\n');
-					} else { return `- ${(i % 2 ? challenger : opponent).tag} bled too much; the bandage did not work.`; }
-				})());
+				case 'bandage': if (bandageSuccess) {
+					moveResults = [
+						`+ ${(i % 2 ? challenger : opponent).tag} bandaged themselves. The next damage they receive will lessen by 25% to 50%.`,
+						`+ ${(i % 2 ? challenger : opponent).tag} received ${addedHp} HP.`
+					];
+				} else { moveResults = [`- ${(i % 2 ? challenger : opponent).tag} bled too much; the bandage did not work.`]; }
+					moveResults.push(`- ${(i % 2 ? challenger : opponent).tag} lost ${this.moves[move].stamina} stamina.`);
 					break;
 				case 'rest': moveResults = [
 					`+ ${(i % 2 ? challenger : opponent).tag} rested.`,
