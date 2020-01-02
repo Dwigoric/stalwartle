@@ -43,8 +43,7 @@ module.exports = class extends Command {
 				stamina: 6
 			},
 			bandage: {
-				description: 'Regain 10 HP and reduce 25% to 50% damage for next damage received for 2 stamina.',
-				hp: 10,
+				description: 'Regain 5-7 HP and reduce 25% to 50% damage for next damage received for 2 stamina. Has a 10% chance of not working if the fighter bled too much..',
 				stamina: 2
 			},
 			rest: {
@@ -163,11 +162,17 @@ module.exports = class extends Command {
 
 			const move = responses.first().content.toLowerCase();
 			let damage;
+			let addedHp;
+			let bandageSuccess;
 			if (move === 'retreat') {
 				break;
 			} else if (move === 'bandage') {
-				if (currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health > 90) currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health = 100;
-				else currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health += this.moves.bandage.hp;
+				if (Math.random() > 0.1) {
+					bandageSuccess = true;
+					addedHp = this.getRandomInt(5, 7);
+					if (currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health > 100 - addedHp) currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health = 100;
+					else currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health += addedHp;
+				} else { bandageSuccess = false; }
 				currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina -= this.moves[move].stamina;
 				currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].bandaged = true;
 			} else if (move === 'rest') {
@@ -185,11 +190,14 @@ module.exports = class extends Command {
 			}
 			let moveResults;
 			switch (move) {
-				case 'bandage': moveResults = [
-					`+ ${(i % 2 ? challenger : opponent).tag} bandaged themselves. The next damage they receive will lessen by 25% to 50%.`,
-					`+ ${(i % 2 ? challenger : opponent).tag} received ${this.moves[move].hp} HP.`,
-					`- ${(i % 2 ? challenger : opponent).tag} lost ${this.moves[move].stamina} stamina.`
-				];
+				case 'bandage': moveResults = [`- ${(i % 2 ? challenger : opponent).tag} lost ${this.moves[move].stamina} stamina.`].unshift((() => {
+					if (bandageSuccess) {
+						return [
+							`+ ${(i % 2 ? challenger : opponent).tag} bandaged themselves. The next damage they receive will lessen by 25% to 50%.`,
+							`+ ${(i % 2 ? challenger : opponent).tag} received ${addedHp} HP.`
+						].join('\n');
+					} else { return `- ${(i % 2 ? challenger : opponent).tag} bled too much; the bandage did not work.`; }
+				})());
 					break;
 				case 'rest': moveResults = [
 					`+ ${(i % 2 ? challenger : opponent).tag} rested.`,
