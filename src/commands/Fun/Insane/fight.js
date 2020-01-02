@@ -241,7 +241,8 @@ module.exports = class extends Command {
 
 	async accept(msg) {
 		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw '<:error:508595005481549846>  ::  You do not have any pending fight requests.';
-		return await this.fight(msg.channel, currentFights[msg.channel.id].challenger, currentFights[msg.channel.id].opponent);
+		await this.fight(msg.channel, currentFights[msg.channel.id].challenger, currentFights[msg.channel.id].opponent);
+		return delete currentFights[msg.channel.id];
 	}
 
 	async deny(msg) {
