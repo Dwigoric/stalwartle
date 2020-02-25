@@ -98,6 +98,7 @@ exports.config = {
 			cooldown: 5,
 			description: '',
 			enabled: true,
+			flagSupport: true,
 			guarded: false,
 			nsfw: false,
 			permissionLevel: 0,
