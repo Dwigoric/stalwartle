@@ -7,9 +7,9 @@
 		"start": "pm2 start src/bot.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
 	},
 	"dependencies": {
-		"discord.js": "github:discordjs/discord.js",
+		"discord.js": "github:discordjs/discord.js#fe7df708e44e0280dfaf0f8e457b154781bb5140",
 		"discord.js-lavalink": "^2.2.3",
-		"klasa": "github:dirigeants/klasa#settings",
+		"klasa": "github:dirigeants/klasa#4fa20eb767a216ef2e938f1f8d65b33c88d2c913",
 		"klasa-member-gateway": "github:dirigeants/klasa-member-gateway#fix-settings",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
