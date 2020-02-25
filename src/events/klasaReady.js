@@ -37,7 +37,7 @@ module.exports = class extends Event {
 				this.client.user.setActivity(`${status.name} | ${this.client.options.prefix}help`, { type: status.type });
 			}, 60000);
 		});
-		const { authority, timestamp } = (await this.client.settings.resolve('restart'))[0];
+		const { authority, timestamp } = await this.client.settings.get('restart');
 		if (!authority) return;
 		authority.send({
 			embed: new MessageEmbed()

@@ -35,7 +35,7 @@ module.exports = class extends Monitor {
 		}
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 
-		const { duration, action } = (await msg.guild.settings.resolve('automod.options.mentionSpam'))[0];
+		const { duration, action } = await msg.guild.settings.get('automod.options.mentionSpam');
 		const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
 		switch (action) {
 			case 'warn': return this.client.emit('modlogAction', {

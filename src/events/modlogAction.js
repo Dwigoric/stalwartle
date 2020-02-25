@@ -66,7 +66,7 @@ module.exports = class extends Event {
 		if (!member) return null;
 		if (!['unban', 'unmute'].includes(message.command.name) && message.author && !message.author.bot) member.addAction(message.command.name);
 
-		const { limit, duration, action, within } = (await message.guild.settings.resolve('automod.options.quota'))[0];
+		const { limit, duration, action, within } = await message.guild.settings.get('automod.options.quota');
 		if (member.actions.length >= limit) {
 			if (message.channel.postable) message.channel.send(`${member.user} made ${limit} actions within ${within} minutes, which is punishable by a ${duration}-minute automated ${action}.`);
 			await member.resetActions();

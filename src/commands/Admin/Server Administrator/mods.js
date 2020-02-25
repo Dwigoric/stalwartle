@@ -30,7 +30,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { roles, users } = (await msg.guild.settings.resolve('moderators'))[0];
+		const { roles, users } = await msg.guild.settings.get('moderators');
 		const modRoles = roles.map(rl => {
 			const modRole = msg.guild.roles.get(rl);
 			if (modRole) return modRole.name;
@@ -57,7 +57,7 @@ module.exports = class extends Command {
 
 	async toggle(msg, mod, arrayAction) {
 		const type = mod instanceof GuildMember ? 'users' : 'roles';
-		const guildMods = (await msg.guild.settings.resolve('moderators'))[0];
+		const guildMods = await msg.guild.settings.get('moderators');
 		if (arrayAction === 'add' && guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already a moderator!';
 		if (arrayAction === 'remove' && !guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already not a moderator!';
 		msg.guild.settings.update(`moderators.${type}`, mod.id, { arrayAction, guild: msg.guild });

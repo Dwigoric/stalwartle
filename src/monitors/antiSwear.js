@@ -43,7 +43,7 @@ module.exports = class extends Monitor {
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
 
-		const { duration, action } = (await msg.guild.settings.resolve('automod.options.antiSwear'))[0];
+		const { duration, action } = await msg.guild.settings.get('automod.options.antiSwear');
 		const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
 		switch (action) {
 			case 'warn': return this.client.emit('modlogAction', {
