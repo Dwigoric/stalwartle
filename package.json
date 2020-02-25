@@ -21,6 +21,6 @@
 		"steamapi": "^2.0.3"
 	},
 	"engines": {
-		"node": "10.x"
+		"node": "13.x"
 	}
 }
