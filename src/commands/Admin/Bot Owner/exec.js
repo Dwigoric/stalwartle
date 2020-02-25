@@ -6,6 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['execute'],
 			description: 'Execute commands in the terminal, use with EXTREME CAUTION.',
+			flagSupport: false,
 			guarded: true,
 			permissionLevel: 10,
 			usage: '<Expression:string>'
