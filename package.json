@@ -12,6 +12,7 @@
 		"klasa": "github:dirigeants/klasa#settings",
 		"klasa-member-gateway": "github:dirigeants/klasa-member-gateway#fix-settings",
 		"moment-timezone": "^0.5.26",
+		"pako": "^1.0.11",
 		"rethinkdb-ts": "^2.4.0-rc.16"
 	},
 	"optionalDependencies": {
