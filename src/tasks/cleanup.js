@@ -1,5 +1,5 @@
 const { Task, Colors } = require('klasa');
-const { util: { binaryToID } } = require('discord.js');
+const { Util: { binaryToID } } = require('discord.js');
 
 // THRESHOLD equals to 30 minutes in milliseconds:
 //     - 1000 milliseconds = 1 second
@@ -74,7 +74,6 @@ module.exports = class MemorySweeper extends Task {
 			if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
 			if (user.settings.get('cookies')) continue;
 			this.client.users.delete(user.id);
-			this.client.gateways.get('users').cache.delete(user.id);
 			users++;
 		}
 

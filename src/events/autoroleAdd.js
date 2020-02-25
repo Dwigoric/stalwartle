@@ -7,7 +7,7 @@ module.exports = class extends Event {
 	}
 
 	async run(member) {
-		const autorole = (await member.guild.settings.resolve('autorole'))[0];
+		const autorole = await member.guild.settings.get('autorole');
 		if (!autorole.bot && !autorole.user) return null;
 		if (!member.guild.me.permissions.has('MANAGE_ROLES')) return member.guild.owner.user.send(`⚠ I don't have **Manage Roles** permission on ${member.guild.name}, so I couldn't give ${member.user.tag} the autorole.`); // eslint-disable-line max-len
 		if (member.user.bot && autorole.bot) return await this.giveRole(member, 'bot');
