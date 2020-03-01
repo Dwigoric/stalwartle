@@ -31,7 +31,7 @@ module.exports = class extends Command {
 		if (!role) throw `<:error:508595005481549846>  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
 		if (role.position >= msg.guild.me.roles.highest.position) throw '<:error:508595005481549846>  ::  Sorry! That role is higher than mine!';
 		if (role.position >= msg.member.roles.highest.position) throw '<:error:508595005481549846>  ::  It seems that role is higher than yours...';
-		msg.guild.settings.update(`autorole.${type}`, role.id, { guild: msg.guild });
+		msg.guild.settings.update(`autorole.${type}`, role.id, msg.guild);
 		return msg.send(`<:check:508594899117932544>  ::  The autorole for ${type}s has been set to **${role.name}**.`);
 	}
 

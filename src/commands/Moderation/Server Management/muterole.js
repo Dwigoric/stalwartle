@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			}
 		}).catch(() => null);
 		if (!newRole) throw '<:error:508595005481549846>  ::  I cannot create the muted role. Please double check my permissions';
-		msg.guild.settings.update('muteRole', newRole.id);
+		msg.guild.settings.update('muteRole', newRole.id, msg.guild);
 		return msg.send(`<:check:508594899117932544>  ::  Successfully set this server's mute role to **${newRole.name}**.`);
 	}
 

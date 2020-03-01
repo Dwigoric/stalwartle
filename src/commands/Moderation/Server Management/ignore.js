@@ -30,7 +30,7 @@ module.exports = class extends Command {
 		channel.forEach(chan => {
 			if (ignored.includes(chan.id)) removed.push(chan);
 			else added.push(chan);
-			msg.guild.settings.update('ignored', chan.id, { guild: msg.guild });
+			msg.guild.settings.update('ignored', chan.id, msg.guild);
 		});
 		return msg.send([
 			`🔇 Ignored  ::  ${added.length ? added.join(', ') : 'None'}`,
@@ -43,7 +43,7 @@ module.exports = class extends Command {
 		if (!ignored.length) throw 'This server currently has no ignored channels.';
 		const channels = ignored.map(ign => {
 			if (msg.guild.channels.cache.has(ign)) return msg.guild.channels.cache.get(ign);
-			else msg.guild.settings.update('ignored', ign, { arrayAction: 'remove', guild: msg.guild });
+			else msg.guild.settings.update('ignored', ign, msg.guild, { arrayAction: 'remove' });
 			return null;
 		});
 		channels.forEach(chan => { if (!chan) channels.splice(channels.indexOf(chan), 1); });

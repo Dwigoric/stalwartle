@@ -34,13 +34,13 @@ module.exports = class extends Command {
 		const modRoles = roles.map(rl => {
 			const modRole = msg.guild.roles.cache.get(rl);
 			if (modRole) return modRole.name;
-			else msg.guild.settings.update('moderators.roles', rl, { arrayAction: 'remove', guild: msg.guild });
+			else msg.guild.settings.update('moderators.roles', rl, msg.guild, { arrayAction: 'remove' });
 			return null;
 		});
 		const modUsers = await Promise.all(users.map(async us => {
 			const modUser = await msg.guild.members.fetch(us);
 			if (modUser) return modUser.user.tag;
-			else msg.guild.settings.update('moderators.users', us, { arrayAction: 'remove', guild: msg.guild });
+			else msg.guild.settings.update('moderators.users', us, msg.guild, { arrayAction: 'remove' });
 			return null;
 		}));
 		[modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));
@@ -60,7 +60,7 @@ module.exports = class extends Command {
 		const guildMods = await msg.guild.settings.get('moderators');
 		if (arrayAction === 'add' && guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already a moderator!';
 		if (arrayAction === 'remove' && !guildMods[type].includes(mod.id)) throw '<:error:508595005481549846>  ::  This role/user is already not a moderator!';
-		msg.guild.settings.update(`moderators.${type}`, mod.id, { arrayAction, guild: msg.guild });
+		msg.guild.settings.update(`moderators.${type}`, mod.id, msg.guild, { arrayAction });
 		msg.send(`<:check:508594899117932544>  ::  Successfully ${arrayAction}${arrayAction.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
 	}
 
