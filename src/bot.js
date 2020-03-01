@@ -45,7 +45,7 @@ class Stalwartle extends Client {
 			.add('logging', 'boolean', { default: true })
 			.add('modlogShowContent', 'boolean', { default: true })
 			.add('muted', 'string', { array: true, configurable: false })
-			.add('muteRole', 'role')
+			.add('muteRole', 'string', { configurable: false })
 			.add('selfroles', 'role', { array: true })
 			.add('autorole', autorole => autorole
 				.add('user', 'role')
