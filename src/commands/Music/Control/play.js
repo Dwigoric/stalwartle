@@ -71,7 +71,7 @@ module.exports = class extends Command {
 		if (!member.voice.channelID) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
 		this.client.player.leave(guild.id);
 		this.client.player.join({
-			host: this.client.options.nodes[0].host,
+			host: this.client.options.lavalinkNodes[0].host,
 			guild: guild.id,
 			channel: member.voice.channelID
 		}, { selfdeaf: true });
@@ -117,7 +117,7 @@ module.exports = class extends Command {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
-		return fetch(`http://${this.client.options.nodes[0].host}:${this.client.options.nodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.nodes[0].password } }) // eslint-disable-line max-len
+		return fetch(`http://${this.client.options.lavalinkNodes[0].host}:${this.client.options.lavalinkNodes[0].port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: this.client.options.lavalinkNodes[0].password } }) // eslint-disable-line max-len
 			.then(res => res.json())
 			.catch(err => {
 				this.client.emit('wtf', err);

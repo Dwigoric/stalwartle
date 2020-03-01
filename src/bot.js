@@ -191,7 +191,7 @@ class Stalwartle extends Client {
 	}
 
 	_initplayer() {
-		this.player = new PlayerManager(this, config.nodes, {
+		this.player = new PlayerManager(this, config.lavalinkNodes, {
 			user: this.user.id,
 			shards: this.options.shardCount
 		});

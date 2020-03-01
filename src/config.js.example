@@ -35,7 +35,7 @@ exports.config = {
 	owners: ['295391820744228867', '296862433136476160', '296256174209105920'],
 	rethinkdbName: 'Stalwartle',
 
-	nodes: [{ host: 'localhost', port: 80, region: 'us', password: '' }],
+	lavalinkNodes: [{ host: 'localhost', port: 80, region: 'us', password: '' }],
 	/**
      * Caching Options
      */
