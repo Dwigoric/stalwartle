@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		modlogs.splice(Number(modlog.id) - 1, 1, modlog);
 		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
 
-		const channel = msg.guild.channels.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
+		const channel = msg.guild.channels.cache.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
 		if (!modlog.message) throw `⚠  ::  I've updated the modlog in \`${msg.guild.settings.get('prefix')}modlogs\`, however the one sent in the modlog channel is not edited.`;
 		let message;
 		if (channel) message = await channel.messages.fetch(modlog.message).catch(() => { throw `⚠  ::  I've updated the modlog in \`${msg.guild.settings.get('prefix')}modlogs\`, however either the message has been deleted or the modlog message is not in ${channel}.`; }); // eslint-disable-line max-len

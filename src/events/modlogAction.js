@@ -22,7 +22,7 @@ module.exports = class extends Event {
 			});
 		const moderator = message.author ? message.author.equals(user) ? this.client.user : message.author : this.client.user;
 		const { modlogs } = await this.client.providers.default.get('modlogs', message.guild.id);
-		const channel = message.guild.channels.get(message.guild.settings.get(`modlogs.${message.command.name}`));
+		const channel = message.guild.channels.cache.get(message.guild.settings.get(`modlogs.${message.command.name}`));
 		if (!channel && message.guild.settings.get('logging') && message.author) {
 			return message.send([
 				`⚠ It seems that the modlog channel for ${message.command.name}s is not yet set.`,

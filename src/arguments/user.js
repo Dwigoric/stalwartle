@@ -12,7 +12,7 @@ module.exports = class extends Argument {
 		const results = [];
 		if (msg.guild) {
 			const reg = new RegExp(regExpEsc(arg), 'i');
-			for (const member of msg.guild.members.values()) {
+			for (const member of msg.guild.members.cache.values()) {
 				if (reg.test(member.user.username)) results.push(member.user);
 				if (new RegExp(arg, 'i').test(member.displayName) && !results.includes(member.user)) results.push(member.user);
 			}
@@ -40,7 +40,7 @@ module.exports = class extends Argument {
 		if (typeof query === 'string') {
 			if (USER_REGEXP.test(query)) return this.client.users.fetch(USER_REGEXP.exec(query)[1]).catch(() => null);
 			if (guild && /\w{1,32}#\d{4}/.test(query)) {
-				const res = guild.members.find(member => member.user.tag === query);
+				const res = guild.members.cache.find(member => member.user.tag === query);
 				return res ? res.user : null;
 			}
 		}

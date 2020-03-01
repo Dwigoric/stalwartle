@@ -56,8 +56,8 @@ module.exports = class extends Command {
 			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
 
 		await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
-			const _user = this.client.users.get(modlog.user) || await this.client.users.fetch(modlog.user).catch(() => null);
-			const moderator = this.client.users.get(modlog.moderator) || await this.client.users.fetch(modlog.moderator).catch(() => null);
+			const _user = this.client.users.cache.get(modlog.user) || await this.client.users.fetch(modlog.user).catch(() => null);
+			const moderator = this.client.users.cache.get(modlog.moderator) || await this.client.users.fetch(modlog.moderator).catch(() => null);
 			return [
 				`__**Case #${modlog.id}**__`,
 				`Type: ${toTitleCase(modlog.type)}`,

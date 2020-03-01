@@ -43,7 +43,7 @@ module.exports = class extends Command {
 				.addField('Managed', `${role.managed}`.replace(/^./, i => i.toUpperCase()), true)
 				.addField('Mentionable', `${role.mentionable}`.replace(/^./, i => i.toUpperCase()), true)
 				.addField('Color', `HEX: ${role.hexColor}\nRGB: ${hexToRgb(role.hexColor).join(', ')}`, true)
-				.addField('Position', `${msg.guild.roles.size - role.position} out of ${msg.guild.roles.size}`, true)
+				.addField('Position', `${msg.guild.roles.cache.size - role.position} out of ${msg.guild.roles.cache.size}`, true)
 				.addField('Created', `${moment(role.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(role.createdAt).fromNow()}`)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 				.setTimestamp()

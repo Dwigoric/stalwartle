@@ -3,7 +3,7 @@ const { Task } = require('klasa');
 module.exports = class extends Task {
 
 	async run({ user, guild }) {
-		const _guild = this.client.guilds.get(guild);
+		const _guild = this.client.guilds.cache.get(guild);
 		if (!await _guild.fetchBans().then(bans => bans.has(user))) return null;
 		const _user = await this.client.users.fetch(user).catch(() => null);
 		this.client.emit('modlogging', {

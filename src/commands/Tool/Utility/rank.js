@@ -22,7 +22,7 @@ module.exports = class extends Command {
 	async run(msg, [sar]) {
 		const selfroles = msg.guild.settings.get('selfroles');
 		if (!selfroles.length) throw '<:error:508595005481549846>  ::  Selfrole is not yet implemented in this server.';
-		const role = selfroles.map(_sar => msg.guild.roles.get(_sar)).find(rl => new RegExp(regExpEsc(sar), 'i').test(rl.name));
+		const role = selfroles.map(_sar => msg.guild.roles.cache.get(_sar)).find(rl => new RegExp(regExpEsc(sar), 'i').test(rl.name));
 		if (!role) throw `<:error:508595005481549846>  ::  Invalid selfrole. Check all available selfroles in this server by using \`${msg.guild.settings.get('prefix')}rank list\`.`;
 		if (role.position > msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  **${escapeMarkdown(role.name)}**'s position is higher than me.`;
 		if (msg.member.roles.has(role.id)) {
@@ -47,7 +47,7 @@ module.exports = class extends Command {
 
 		chunk(selfroles, 10).forEach((selfroleList, tenPower) => display.addPage(template => template.setDescription(selfroleList.map((selfrole, onePower) => {
 			const currentPos = (tenPower * 10) + (onePower + 1);
-			return `\`${currentPos}\`. ${msg.guild.roles.get(selfrole).name}`;
+			return `\`${currentPos}\`. ${msg.guild.roles.cache.get(selfrole).name}`;
 		}).join('\n'))));
 
 		return display

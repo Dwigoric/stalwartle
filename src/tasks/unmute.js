@@ -3,8 +3,8 @@ const { Task } = require('klasa');
 module.exports = class extends Task {
 
 	async run({ user, guild, role }) {
-		const _guild = this.client.guilds.get(guild);
-		const _role = _guild.roles.get(role);
+		const _guild = this.client.guilds.cache.get(guild);
+		const _role = _guild.roles.cache.get(role);
 		const member = await _guild.members.fetch(user).catch(() => null);
 		this.client.emit('modlogAction', {
 			command: this.client.commands.get('unmute'),

@@ -16,7 +16,7 @@ module.exports = class extends Event {
 	}
 
 	async giveRole(member, type) {
-		const role = member.guild.roles.get(member.guild.settings.get(`autorole.${type}`));
+		const role = member.guild.roles.cache.get(member.guild.settings.get(`autorole.${type}`));
 		if (!role) {
 			member.guild.owner.user.send(`The role **${member.guild.settings.get(`autorole.${type}`)}** doesn't exist anymore. Autorole aborted.`).catch(() => null);
 			return member.guild.settings.reset(`autorole.${type}`);

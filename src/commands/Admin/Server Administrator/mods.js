@@ -32,7 +32,7 @@ module.exports = class extends Command {
 	async run(msg) {
 		const { roles, users } = await msg.guild.settings.get('moderators');
 		const modRoles = roles.map(rl => {
-			const modRole = msg.guild.roles.get(rl);
+			const modRole = msg.guild.roles.cache.get(rl);
 			if (modRole) return modRole.name;
 			else msg.guild.settings.update('moderators.roles', rl, { arrayAction: 'remove', guild: msg.guild });
 			return null;

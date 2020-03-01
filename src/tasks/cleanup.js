@@ -41,46 +41,46 @@ module.exports = class MemorySweeper extends Task {
 		if (global.gc) global.gc();
 
 		// Per-Guild sweeper
-		for (const guild of this.client.guilds.values()) {
+		for (const guild of this.client.guilds.cache.values()) {
 			// Clear presences
-			presences += guild.presences.size;
-			guild.presences.clear();
+			presences += guild.presences.cache.size;
+			guild.presences.cache.clear();
 
 			// Clear members that haven't send a message in the last 30 minutes
 			const { me } = guild;
-			for (const [id, member] of guild.members) {
+			for (const [id, member] of guild.members.cache) {
 				if ([me, guild.owner].includes(member)) continue;
 				if (member.voice.channelID) continue;
 				if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
 				if (member.user.settings.get('cookies')) continue;
 				guildMembers++;
-				guild.members.delete(id);
+				guild.members.cache.delete(id);
 			}
 
 			// Clear emojis
-			emojis += guild.emojis.size;
-			guild.emojis.clear();
+			emojis += guild.emojis.cache.size;
+			guild.emojis.cache.clear();
 		}
 
 		// Per-Channel sweeper
-		/* for (const channel of this.client.channels.values()) {
+		/* for (const channel of this.client.channels.cache.values()) {
 			if (!channel.lastMessageID) continue;
 			channel.lastMessageID = null;
 			lastMessages++;
 		} */
 
 		// Per-User sweeper
-		for (const user of this.client.users.values()) {
+		for (const user of this.client.users.cache.values()) {
 			if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
 			if (user.settings.get('cookies')) continue;
-			this.client.users.delete(user.id);
+			this.client.users.cache.delete(user.id);
 			users++;
 		}
 
 		// Music database sweeper
 		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
 			if (history.length || playlist.length) continue;
-			if (this.client.guilds.has(id) && queue.length) continue;
+			if (this.client.guilds.cache.has(id) && queue.length) continue;
 			this.client.providers.default.delete('music', id);
 			musicDBs++;
 		}
@@ -88,10 +88,10 @@ module.exports = class MemorySweeper extends Task {
 		// Empty music player sweeper
 		if (this.client.player) {
 			for (const player of this.client.player.array()) {
-				const channel = this.client.channels.get(player.channel);
+				const channel = this.client.channels.cache.get(player.channel);
 				if (channel) {
 					const { members } = channel;
-					if (members.has(this.client.user.id) && this.client.guilds.get(player.id).settings.get('donation') >= 10) continue;
+					if (members.has(this.client.user.id) && this.client.guilds.cache.get(player.id).settings.get('donation') >= 10) continue;
 					if (members.filter(member => !member.user.bot).size) continue;
 				}
 				this.client.player.leave(player.id);

@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		if (member.user.equals(this.client.user)) throw '*Unmutes self*. Oh, I would not have been able to respond if I were in the first place!';
 
 		const user = await this.client.users.fetch(member.id).catch(() => null);
-		const muteRole = msg.guild.roles.get(msg.guild.settings.get('muteRole'));
+		const muteRole = msg.guild.roles.cache.get(msg.guild.settings.get('muteRole'));
 		if (!muteRole) throw `<:error:508595005481549846>  ::  Whoops! The mute role has been deleted. Please reconfigure this server's mute role by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`; // eslint-disable-line max-len
 		if (muteRole.position >= msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  The mute role **${muteRole.name}** is higher than me, so I can't take from ${user.tag} the mute role.`; // eslint-disable-line max-len
 		if (!member.roles.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} wasn't muted already!`;

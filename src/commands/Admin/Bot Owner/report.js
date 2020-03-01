@@ -33,7 +33,7 @@ module.exports = class extends Command {
 			return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
 		}) : null;
 		if (attachments && attachments.size) embed.setImage(attachments.first().url);
-		if (!msg.flagArgs.deny) this.client.channels.get(reportChans[msg.channel.id]).send(embed).catch();
+		if (!msg.flagArgs.deny) this.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
 		msg.delete();
 		msg.send(`<:check:508594899117932544>  ::  Report sent to **${repUser.tag}**.`).then(sent => {
 			setTimeout(() => {

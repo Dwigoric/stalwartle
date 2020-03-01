@@ -60,9 +60,9 @@ module.exports = class extends Command {
 					'Scan messages sent by\nall members.'
 				][guild.explicitContentFilter], true)
 				.addField('Member Count', guild.memberCount, true)
-				.addField('Role Count', guild.roles.size > 1 ? guild.roles.size : 'None', true)
-				.addField('Text Channel Count', guild.channels.filter(ch => ch.type === 'text').size, true)
-				.addField('Voice Channel Count', guild.channels.filter(ch => ch.type === 'voice').size, true)
+				.addField('Role Count', guild.roles.cache.size > 1 ? guild.roles.cache.size : 'None', true)
+				.addField('Text Channel Count', guild.channels.cache.filter(ch => ch.type === 'text').size, true)
+				.addField('Voice Channel Count', guild.channels.cache.filter(ch => ch.type === 'voice').size, true)
 				.addField('Created', `${moment(guild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guild.createdAt).fromNow()}`)
 				.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
 				.setTimestamp()
@@ -78,12 +78,12 @@ module.exports = class extends Command {
 	}
 
 	async roles(msg, [guild = msg.guild]) {
-		if (guild.roles.size === 1) throw 'This server doesn\'t have any role yet!';
+		if (guild.roles.cache.size === 1) throw 'This server doesn\'t have any role yet!';
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setTitle(`${guild.name}'s Roles [${guild.roles.size}]`)
-				.setDescription(guild.roles.sort((a, b) => b.position - a.position).array().join(' | '))
+				.setTitle(`${guild.name}'s Roles [${guild.roles.cache.size}]`)
+				.setDescription(guild.roles.cache.sort((a, b) => b.position - a.position).array().join(' | '))
 		});
 	}
 

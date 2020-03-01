@@ -23,7 +23,7 @@ module.exports = class extends Event {
 				`\nBy **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`,
 				'\nThis message will be automatically deleted in 10 seconds (if sent in a server channel).'
 			].join('\n'));
-		const postableChannel = guild.channels.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
+		const postableChannel = guild.channels.cache.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
 		if (!postableChannel) return guild.owner.user.sendEmbed(message).catch(() => null);
 		return postableChannel.sendEmbed(message).then(invMessage => setTimeout(() => { invMessage.delete(); }, 10000));
 	}

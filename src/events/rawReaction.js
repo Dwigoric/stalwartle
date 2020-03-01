@@ -15,9 +15,9 @@ module.exports = class extends Event {
 
 		const { d: data } = event; // eslint-disable-line id-length
 		const user = await this.client.users.fetch(data.user_id, false).catch(() => null);
-		const channel = this.client.channels.get(data.channel_id) || await user.createDM();
+		const channel = this.client.channels.cache.get(data.channel_id) || await user.createDM();
 
-		if (channel.messages.has(data.message_id)) return;
+		if (channel.messages.cache.has(data.message_id)) return;
 
 		const message = await channel.messages.fetch(data.message_id).catch(() => null);
 		if (!message) return;

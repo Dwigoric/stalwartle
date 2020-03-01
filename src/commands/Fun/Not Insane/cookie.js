@@ -47,8 +47,8 @@ module.exports = class extends Command {
 		let list = await Promise.all(await this.client.providers.default.getAll('users').then(usr => usr
 			.filter(us => us.cookies)
 			.sort((a, b) => b.cookies > a.cookies ? 1 : -1)
-			.map(async user => this.client.users.get(user.id) || await this.client.users.fetch(user.id))));
-		if (!msg.flagArgs.global) list = list.filter(user => msg.guild.members.has(user.id)); // eslint-disable-line max-len
+			.map(async user => this.client.users.cache.get(user.id) || await this.client.users.fetch(user.id))));
+		if (!msg.flagArgs.global) list = list.filter(user => msg.guild.members.cache.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';
 		list = chunk(list, 10);
 
