@@ -6,7 +6,7 @@ const CHANNEL_REGEXP = Argument.regex.channel;
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) throw `<:error:508595005481549846>  ::  There must be a server to get the channel from.`;
+		if (!msg.guild) return this.store.get('channel').run(arg, possible, msg);
 		const resChannel = this.resolveChannel(arg, msg.guild);
 		if (resChannel) return resChannel;
 

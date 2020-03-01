@@ -6,7 +6,7 @@ const ROLE_REGEXP = Argument.regex.role;
 module.exports = class extends Argument {
 
 	async run(arg, possible, msg) {
-		if (!msg.guild) throw `<:error:508595005481549846>  ::  There must be a server to get the role from.`;
+		if (!msg.guild) return this.store.get('role').run(arg, possible, msg);
 		const resRole = this.resolveRole(arg, msg.guild);
 		if (resRole) return resRole;
 
