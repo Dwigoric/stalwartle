@@ -22,7 +22,7 @@ module.exports = class extends Event {
 		const message = await channel.messages.fetch(data.message_id).catch(() => null);
 		if (!message) return;
 		const emojiKey = data.emoji.id ? `${data.emoji.name}:${data.emoji.id}` : data.emoji.name;
-		const reaction = message.reactions.get(emojiKey);
+		const reaction = message.reactions.cache.get(emojiKey);
 		if (!reaction) return;
 
 		this.client.emit(this.events[event.t], reaction, user);

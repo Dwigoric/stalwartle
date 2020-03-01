@@ -174,7 +174,7 @@ class Stalwartle extends Client {
 			const results = await this.shard.broadcastEval('this.guilds.size');
 			for (const result of results) guilds += result;
 		} else {
-			guilds = this.guilds.size;
+			guilds = this.guilds.cache.size;
 		}
 		return guilds;
 	}
@@ -185,7 +185,7 @@ class Stalwartle extends Client {
 			const results = await this.shard.broadcastEval('this.guilds.reduce((a, b) => a + b.memberCount, 0)');
 			for (const result of results) users += result;
 		} else {
-			users = this.guilds.reduce((a, b) => a + b.memberCount, 0);
+			users = this.guilds.cache.reduce((a, b) => a + b.memberCount, 0);
 		}
 		return users;
 	}
