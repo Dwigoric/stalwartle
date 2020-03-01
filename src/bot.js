@@ -171,7 +171,7 @@ class Stalwartle extends Client {
 	async guildCount() {
 		let guilds = 0;
 		if (this.shard) {
-			const results = await this.shard.broadcastEval('this.guilds.size');
+			const results = await this.shard.broadcastEval('this.guilds.cache.size');
 			for (const result of results) guilds += result;
 		} else {
 			guilds = this.guilds.cache.size;
@@ -182,7 +182,7 @@ class Stalwartle extends Client {
 	async userCount() {
 		let users = 0;
 		if (this.shard) {
-			const results = await this.shard.broadcastEval('this.guilds.reduce((a, b) => a + b.memberCount, 0)');
+			const results = await this.shard.broadcastEval('this.guilds.cache.reduce((a, b) => a + b.memberCount, 0)');
 			for (const result of results) users += result;
 		} else {
 			users = this.guilds.cache.reduce((a, b) => a + b.memberCount, 0);
