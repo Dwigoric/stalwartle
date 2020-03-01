@@ -90,7 +90,7 @@ module.exports = class extends Command {
 						'*Please pay at <https://patreon.com/Dwigoric>.*',
 						`*AFTER donating, contact ${this.client.application.owner.tag} or go to my support server to avail of these perks.*`
 					].join('\n') : '',
-					`\nBot developed by **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`,
+					`\nBot developed by **${this.client.application.owner}**, from 🇵🇭 with ❤`,
 					`💡 **ProTip #1**: By mentioning "${this.client.user}", I will give the server's current prefix.`,
 					'💡 **ProTip #2**: Prefixes are **case-insensitive**, and **unprefixed commands** are supported **in DMs**.',
 					"💡 **ProTip #3**: By using `s.help (command)`, you can get the command's additional information!",
