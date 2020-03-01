@@ -23,11 +23,10 @@ module.exports = class extends Command {
 		const muteRole = msg.guild.roles.cache.get(msg.guild.settings.get('muteRole'));
 		if (!muteRole) throw `<:error:508595005481549846>  ::  Whoops! The mute role has been deleted. Please reconfigure this server's mute role by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`; // eslint-disable-line max-len
 		if (muteRole.position >= msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  The mute role **${muteRole.name}** is higher than me, so I can't take from ${user.tag} the mute role.`; // eslint-disable-line max-len
-		if (!member.roles.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} wasn't muted already!`;
+		if (!member.roles.cache.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} wasn't muted already!`;
 
 		await member.roles.remove(muteRole, 'Unmuted');
-		member.settings.reset('muted');
-		member.settings.sync();
+		await msg.guild.settings.update('muted', member.user.id, { arrayAction: 'remove' });
 		const task = this.client.schedule.tasks.filter(tk => tk.data.user === user.id)[0];
 		if (task) this.client.schedule.delete(task.id);
 

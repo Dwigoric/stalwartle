@@ -28,13 +28,13 @@ module.exports = class extends Command {
 		if (guildMember) {
 			nick = guildMember.nickname || 'None';
 			joined = `${moment(guildMember.joinedAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guildMember.joinedAt).fromNow()}`;
-			roleNum = guildMember.roles.size ? `[${guildMember.roles.size}]` : '';
+			roleNum = guildMember.roles.cache.size ? `[${guildMember.roles.cache.size}]` : '';
 
-			if (!guildMember.roles.size) {
+			if (!guildMember.roles.cache.size) {
 				roles = 'None';
 			} else {
-				roles = guildMember.roles.sort((a, b) => b.position - a.position);
-				if (guildMember.roles.size <= 10) roles = roles.array().join(' | ');
+				roles = guildMember.roles.cache.sort((a, b) => b.position - a.position);
+				if (guildMember.roles.cache.size <= 10) roles = roles.array().join(' | ');
 				else roles = `${roles.first(10).join(' | ')} **+ ${roles.size - 10} other role${roles.size - 10 === 1 ? '' : 's'}**`;
 			}
 		}
@@ -56,12 +56,12 @@ module.exports = class extends Command {
 
 	async roles(msg, [user = msg.author]) {
 		const member = await msg.guild.members.fetch(user.id, { cache: false });
-		if (member.roles.size === 1) throw `**${user.username}** has no roles in this server!`;
+		if (member.roles.cache.size === 1) throw `**${user.username}** has no roles in this server!`;
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setTitle(`${user.username}'s Roles [${member.roles.size}]`)
-				.setDescription(member.roles.sort((a, b) => b.position - a.position).array().join(' | '))
+				.setTitle(`${user.username}'s Roles [${member.roles.cache.size}]`)
+				.setDescription(member.roles.cache.sort((a, b) => b.position - a.position).array().join(' | '))
 		});
 	}
 

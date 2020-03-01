@@ -10,11 +10,10 @@ module.exports = class extends Task {
 			command: this.client.commands.get('unmute'),
 			guild: _guild
 		}, await this.client.users.fetch(user), 'Auto Unmute');
-		if (!member) return this.client.providers.default.update('members', `${guild}.${user}`, { muted: false });
-		if (!member.roles.has(role)) return null;
+		if (!member) return guild.settings.update('guild.muted', user, { muted: false });
+		if (!member.roles.cache.has(role)) return null;
 		member.roles.remove(_role, 'Auto Unmute');
-		member.settings.reset('muted');
-		return member.settings.sync();
+		return member.guild.settings.update('muted', user, { arrayAction: 'remove' });
 	}
 
 };

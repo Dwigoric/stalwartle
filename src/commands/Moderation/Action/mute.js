@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		const muteRole = msg.guild.roles.cache.get(msg.guild.settings.get('muteRole'));
 		if (!muteRole) throw `<:error:508595005481549846>  ::  Whoops! The mute role has been deleted. Please reconfigure this server's mute role by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`; // eslint-disable-line max-len
 		if (muteRole.position >= msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  The mute role **${muteRole.name}** is higher than me, so I can't give ${user.tag} the mute role.`; // eslint-disable-line max-len
-		if (member.roles.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} has been already muted!`;
+		if (member.roles.cache.has(muteRole.id)) throw `<:error:508595005481549846>  ::  ${user.tag} has been already muted!`;
 
 		for (const channel of msg.guild.channels.cache.values()) {
 			if (channel.type === 'text') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
@@ -32,8 +32,7 @@ module.exports = class extends Command {
 			else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
 		}
 		await member.roles.add(muteRole, 'Muted');
-		member.settings.update('muted', true);
-		member.settings.sync();
+		await msg.guild.settings.update('muted', member.user.id, { arrayAction: 'add' });
 		if (duration && duration !== Infinity) {
 			this.client.schedule.create('unmute', duration, {
 				data: {

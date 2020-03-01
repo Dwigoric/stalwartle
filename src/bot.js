@@ -1,10 +1,7 @@
 const { Client } = require('klasa');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
-const memberGateway = require('klasa-member-gateway');
 const fetch = require('node-fetch');
-
-Client.use(memberGateway);
 
 class Stalwartle extends Client {
 
@@ -18,46 +15,52 @@ class Stalwartle extends Client {
 			.add('bugs', bugs => bugs
 				.add('reports', 'textchannel')
 				.add('processed', 'textchannel'))
-			.add('suggestions', suggestions => suggestions
-				.add('reports', 'textchannel')
-				.add('processed', 'textchannel'))
-			.add('restart', restart => restart
-				.add('authority', 'user')
-				.add('timestamp', 'number'))
 			.add('errorHook', errorHook => errorHook
 				.add('id', 'string')
 				.add('token', 'string'))
 			.add('guildHook', guildHook => guildHook
 				.add('id', 'string')
-				.add('token', 'string'));
+				.add('token', 'string'))
+			.add('restart', restart => restart
+				.add('authority', 'user')
+				.add('timestamp', 'number'))
+			.add('suggestions', suggestions => suggestions
+				.add('reports', 'textchannel')
+				.add('processed', 'textchannel'));
 
 		Stalwartle.defaultUserSchema
+			.add('acceptFights', 'boolean', { default: true })
+			.add('afkIgnore', 'channel', { array: true })
+			.add('afktoggle', 'boolean', { default: false })
 			.add('cookies', 'integer', { default: 0, configurable: false })
 			.add('hpBoost', 'integer', { default: 0, configurable: false })
-			.add('afktoggle', 'boolean', { default: false })
-			.add('acceptFights', 'boolean', { default: true })
-			.add('timezone', 'string', { default: 'GMT', configurable: false })
-			.add('afkIgnore', 'channel', { array: true })
-			.add('osu', 'string', { max: 20 });
-
-		Stalwartle.defaultMemberSchema
-			.add('muted', 'boolean', { default: false });
+			.add('osu', 'string', { max: 20 })
+			.add('timezone', 'string', { default: 'GMT', configurable: false });
 
 		Stalwartle.defaultGuildSchema
-			.add('muteRole', 'role')
+			.add('afkChannelOnAfk', 'boolean', { default: false })
+			.add('donation', 'number', { default: 0, configurable: false })
+			.add('globalBans', 'boolean', { default: false })
+			.add('ignored', 'channel', { array: true })
 			.add('logging', 'boolean', { default: true })
 			.add('modlogShowContent', 'boolean', { default: true })
-			.add('ignored', 'channel', { array: true })
-			.add('donation', 'number', { default: 0, configurable: false })
+			.add('muted', 'string', { array: true, configurable: false })
+			.add('muteRole', 'role')
 			.add('selfroles', 'role', { array: true })
-			.add('globalBans', 'boolean', { default: false })
-			.add('afkChannelOnAfk', 'boolean', { default: false })
 			.add('autorole', autorole => autorole
 				.add('user', 'role')
 				.add('bot', 'role'))
 			.add('moderators', moderators => moderators
 				.add('users', 'user', { array: true })
 				.add('roles', 'role', { array: true }))
+			.add('modlogs', modlogs => modlogs
+				.add('ban', 'channel')
+				.add('kick', 'channel')
+				.add('mute', 'channel')
+				.add('softban', 'channel')
+				.add('unban', 'channel')
+				.add('unmute', 'channel')
+				.add('warn', 'channel'))
 			.add('music', music => music
 				.add('announceChannel', 'textchannel')
 				.add('announceSongs', 'boolean', { default: true })
@@ -69,14 +72,6 @@ class Stalwartle extends Client {
 				.add('noDuplicates', 'boolean', { default: false })
 				.add('repeat', 'string', { default: 'none', configurable: false })
 				.add('volume', 'integer', { min: 1, max: 300, default: 100, configurable: false }))
-			.add('modlogs', modlogs => modlogs
-				.add('ban', 'channel')
-				.add('kick', 'channel')
-				.add('mute', 'channel')
-				.add('softban', 'channel')
-				.add('unban', 'channel')
-				.add('unmute', 'channel')
-				.add('warn', 'channel'))
 			.add('automod', automod => automod
 				.add('ignoreBots', 'boolean', { default: false })
 				.add('ignoreMods', 'boolean', { default: false })
@@ -114,8 +109,8 @@ class Stalwartle extends Client {
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
 		Stalwartle.defaultPermissionLevels
-			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.keyArray().includes(role))))
-			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
+			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.cache.keyArray().includes(role))))
+			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.cache.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
 			.add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
 			.add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
 			.add(9, ({ author }) => config.owners.includes(author.id))

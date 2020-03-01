@@ -25,7 +25,7 @@ module.exports = class extends Command {
 		const role = selfroles.map(_sar => msg.guild.roles.cache.get(_sar)).find(rl => new RegExp(regExpEsc(sar), 'i').test(rl.name));
 		if (!role) throw `<:error:508595005481549846>  ::  Invalid selfrole. Check all available selfroles in this server by using \`${msg.guild.settings.get('prefix')}rank list\`.`;
 		if (role.position > msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  **${escapeMarkdown(role.name)}**'s position is higher than me.`;
-		if (msg.member.roles.has(role.id)) {
+		if (msg.member.roles.cache.has(role.id)) {
 			await msg.member.roles.remove(role, `[Selfrole Remove] Selfrole feature of ${this.client.user.username}`);
 			return msg.send(`<:check:508594899117932544>  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.member.displayName)}** via selfrole.`);
 		} else {
