@@ -27,7 +27,7 @@ module.exports = class extends Command {
 				`**Users**: ${(await this.client.userCount()).toLocaleString()}`,
 				`**Servers**: ${(await this.client.guildCount()).toLocaleString()}`,
 				`**Text Channels**: ${this.client.channels.cache.filter(chan => chan.type === 'text').size.toLocaleString()}`,
-				`**Voice Connections**: ${this.client.player.array().filter(player => player.playing).length}`
+				`**Voice Connections**: ${this.client.player.players.array().filter(player => player.playing).length}`
 			], true)
 			.addField('⏱ Uptime', [
 				`**Host**: ${Duration.toNow(now - (uptime() * 1000))}`,

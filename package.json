@@ -8,7 +8,7 @@
 	},
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
-		"discord.js-lavalink": "github:MrJacz/discord.js-lavalink",
+		"discord.js-lavalink": "^3.0.0",
 		"klasa": "github:dirigeants/klasa",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",

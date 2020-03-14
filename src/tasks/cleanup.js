@@ -87,7 +87,7 @@ module.exports = class MemorySweeper extends Task {
 
 		// Empty music player sweeper
 		if (this.client.player) {
-			for (const player of this.client.player.array()) {
+			for (const player of this.client.player.players.array()) {
 				const channel = this.client.channels.cache.get(player.channel);
 				if (channel) {
 					const { members } = channel;

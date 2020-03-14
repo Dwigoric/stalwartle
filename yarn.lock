@@ -68,9 +68,10 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
-"discord.js-lavalink@github:MrJacz/discord.js-lavalink":
+discord.js-lavalink@^3.0.0:
   version "3.0.0"
-  resolved "https://codeload.github.com/MrJacz/discord.js-lavalink/tar.gz/1e55e0519ab183795e8de6316da8a85a80ac4dd9"
+  resolved "https://registry.yarnpkg.com/discord.js-lavalink/-/discord.js-lavalink-3.0.0.tgz#dbadfc54855615fdbcaf7c1584b25dd559a27842"
+  integrity sha512-Yr6U/SXXZosTJGnTY/f+ESGmrhCka5sG6HncSoRIwUL2z7wEg3ApZrUVM0O1szmj66yfC3ouk9FUOAy2LUwd5g==
   dependencies:
     ws "^7.2.1"
 

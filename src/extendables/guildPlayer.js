@@ -1,4 +1,5 @@
 const { Extendable, KlasaGuild } = require('klasa');
+const { Player } = require('discord.js-lavalink');
 
 module.exports = class GuildPlayer extends Extendable {
 
@@ -7,11 +8,21 @@ module.exports = class GuildPlayer extends Extendable {
 	}
 
 	get player() {
-		return this.client.player.spawnPlayer({
+		const data = {
 			guild: this.id,
 			host: this.client.options.lavalinkNodes[0].host,
 			channel: (this.channels.cache.filter(ch => ch.type === 'voice' && ch.members.has(this.me.id)) || { id: null }).id
+		};
+		const exists = this.client.player.players.get(data.guild);
+		if (exists) return exists;
+		const node = this.client.player.nodes.get(data.host);
+		if (!node) throw new Error(`INVALID_HOST: No available node with ${data.host}`);
+		const player = new Player(node, {
+			id: data.guild,
+			channel: data.channel
 		});
+		this.client.player.players.set(data.guild, player);
+		return player;
 	}
 
 };
