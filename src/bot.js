@@ -140,7 +140,7 @@ class Stalwartle extends Client {
 				body: JSON.stringify({
 					guilds: await this.guildCount(),
 					users: await this.userCount(),
-					voice_connections: this.player.array().filter(player => player.playing).length // eslint-disable-line camelcase
+					voice_connections: this.player.players.array().filter(player => player.playing).length // eslint-disable-line camelcase
 				}),
 				headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
 			});
