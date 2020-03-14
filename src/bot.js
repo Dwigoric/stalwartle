@@ -8,7 +8,7 @@ class Stalwartle extends Client {
 	constructor(...args) {
 		super(...args);
 
-		this.player = null;
+		this.playerManager = null;
 
 		Stalwartle.defaultClientSchema
 			.add('changelogs', 'textchannel')
@@ -140,7 +140,7 @@ class Stalwartle extends Client {
 				body: JSON.stringify({
 					guilds: await this.guildCount(),
 					users: await this.userCount(),
-					voice_connections: this.player.players.array().filter(player => player.playing).length // eslint-disable-line camelcase
+					voice_connections: this.playerManager.players.array().filter(player => player.playing).length // eslint-disable-line camelcase
 				}),
 				headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
 			});
@@ -191,7 +191,7 @@ class Stalwartle extends Client {
 	}
 
 	_initplayer() {
-		this.player = new PlayerManager(this, config.lavalinkNodes, {
+		this.playerManager = new PlayerManager(this, config.lavalinkNodes, {
 			user: this.user.id,
 			shards: this.options.shardCount
 		});

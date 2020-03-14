@@ -13,15 +13,15 @@ module.exports = class GuildPlayer extends Extendable {
 			host: this.client.options.lavalinkNodes[0].host,
 			channel: (this.channels.cache.filter(ch => ch.type === 'voice' && ch.members.has(this.me.id)) || { id: null }).id
 		};
-		const exists = this.client.player.players.get(data.guild);
+		const exists = this.client.playerManager.players.get(data.guild);
 		if (exists) return exists;
-		const node = this.client.player.nodes.get(data.host);
+		const node = this.client.playerManager.nodes.get(data.host);
 		if (!node) throw new Error(`INVALID_HOST: No available node with ${data.host}`);
 		const player = new Player(node, {
 			id: data.guild,
 			channel: data.channel
 		});
-		this.client.player.players.set(data.guild, player);
+		this.client.playerManager.players.set(data.guild, player);
 		return player;
 	}
 

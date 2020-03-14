@@ -69,8 +69,8 @@ module.exports = class extends Command {
 
 	join({ guild, channel, member }) {
 		if (!member.voice.channelID) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
-		this.client.player.leave(guild.id);
-		this.client.player.join({
+		this.client.playerManager.leave(guild.id);
+		this.client.playerManager.join({
 			host: this.client.options.lavalinkNodes[0].host,
 			guild: guild.id,
 			channel: member.voice.channelID
@@ -187,7 +187,7 @@ module.exports = class extends Command {
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 			channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-			return this.client.player.leave(guild.id);
+			return this.client.playerManager.leave(guild.id);
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
 			const { history } = await this.client.providers.default.get('music', guild.id);

@@ -21,7 +21,7 @@ module.exports = class extends Event {
 	async run(guild) {
 		guild.player.removeAllListeners();
 		guild.player.destroy();
-		this.client.player.players.delete(guild.id);
+		this.client.playerManager.players.delete(guild.id);
 
 		const regionArr = guild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
