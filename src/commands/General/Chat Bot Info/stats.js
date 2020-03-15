@@ -26,7 +26,6 @@ module.exports = class extends Command {
 			.addField('🤖 General Information', [
 				`**Users**: ${(await this.client.userCount()).toLocaleString()}`,
 				`**Servers**: ${(await this.client.guildCount()).toLocaleString()}`,
-				`**Text Channels**: ${this.client.channels.cache.filter(chan => chan.type === 'text').size.toLocaleString()}`,
 				`**Voice Connections**: ${this.client.playerManager.players.array().filter(player => player.playing).length}`
 			], true)
 			.addField('⏱ Uptime', [
