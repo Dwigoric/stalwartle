@@ -3,6 +3,9 @@ const { PlayerManager } = require('discord.js-lavalink');
 const { config: { lavalinkNodes } } = require('../../config');
 const fetch = require('node-fetch');
 
+require('./StalwartleGuild');
+require('./StalwartleUser');
+
 module.exports = class Stalwartle extends Client {
 
 	constructor(clientOptions) {
