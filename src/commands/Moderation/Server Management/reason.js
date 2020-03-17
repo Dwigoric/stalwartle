@@ -13,12 +13,12 @@ module.exports = class extends Command {
 
 	async run(msg, [modlogID, ...reason]) {
 		reason = reason.join(this.usageDelim);
-		const modlogs = await this.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs);
+		const modlogs = msg.guild.modlogs.get('modlogs');
 		const modlog = modlogs[modlogID - 1];
 		if (!modlog) throw '<:error:508595005481549846>  ::  You provided an invalid modlog ID.';
 		modlog.reason = reason;
 		modlogs.splice(Number(modlog.id) - 1, 1, modlog);
-		this.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
+		msg.guild.modlogs.update('modlogs', modlogs);
 
 		const channel = msg.guild.channels.cache.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
 		if (!modlog.message) throw `⚠  ::  I've updated the modlog in \`${msg.guild.settings.get('prefix')}modlogs\`, however the one sent in the modlog channel is not edited.`;
