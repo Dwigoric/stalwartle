@@ -1,4 +1,4 @@
-const { Client, Schema } = require('klasa');
+const { Client } = require('klasa');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config, token } = require('./config');
 const fetch = require('node-fetch');
@@ -199,26 +199,4 @@ class Stalwartle extends Client {
 
 }
 
-const StalwartleClient = new Stalwartle(config);
-
-StalwartleClient.gateways
-	.register('afk', {
-		provider: StalwartleClient.options.providers.default,
-		schema: new Schema()
-			.add('reason', 'string', { default: null })
-			.add('timestamp', 'number')
-	})
-	.register('modlogs', {
-		provider: StalwartleClient.options.providers.default,
-		schema: new Schema()
-			.add('modlogs', 'any', { array: true })
-	})
-	.register('music', {
-		provider: StalwartleClient.options.providers.default,
-		schema: new Schema()
-			.add('history', 'any', { array: true })
-			.add('playlist', 'any', { array: true })
-			.add('queue', 'any', { array: true })
-	});
-
-StalwartleClient.login(token);
+new Stalwartle(config).login(token);
