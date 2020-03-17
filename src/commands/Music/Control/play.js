@@ -31,8 +31,8 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channelID) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts[msg.author.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
-		let queue = this.client.gateways.music.get(msg.guild.id, true).get('queue');
-		const playlist = this.client.gateways.music.get(msg.guild.id, true).get('playlist');
+		let queue = msg.guild.music.get('queue');
+		const playlist = msg.guild.music.get('playlist');
 		if (!query) {
 			if (msg.guild.me.voice.channelID) throw `<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
@@ -122,7 +122,7 @@ module.exports = class extends Command {
 
 	/* eslint-disable complexity */
 	async addToQueue(msg, song) {
-		const queue = this.client.gateways.music.get(msg.guild.id, true).get('queue');
+		const queue = msg.guild.music.get('queue');
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
 			if (msg.guild.me.voice.channelID) queue.splice(1, 0, ...songs);
@@ -159,7 +159,7 @@ module.exports = class extends Command {
 					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true));
 			}
 		}
-		await this.client.gateways.music.get(msg.guild.id, true).update('queue', queue);
+		await msg.guild.music.update('queue', queue);
 		return queue;
 	}
 	/* eslint-enable complexity */
@@ -171,7 +171,7 @@ module.exports = class extends Command {
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
-			const queue = this.client.gateways.music.get(guild.id, true).get('queue');
+			const queue = guild.music.get('queue');
 			const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${queue[0].info.identifier}&type=video&key=${this.client.auth.googleAPIkey}`).then(res => res.json()); // eslint-disable-line max-len
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
@@ -179,15 +179,15 @@ module.exports = class extends Command {
 				const relatedVideo = items[Math.floor(Math.random() * items.length)];
 				if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: false })); // eslint-disable-line max-len
 			}
-			await this.client.gateways.music.get(guild.id, true).update('queue', queue);
+			await guild.music.update('queue', queue);
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 			channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
 			return this.client.playerManager.leave(guild.id);
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
-			const history = this.client.gateways.music.get(guild.id, true).get('history');
+			const history = guild.music.get('history');
 			history.unshift(mergeObjects(song, { timestamp: Date.now() }));
-			this.client.gateways.music.get(guild.id, true).update('history', history);
+			guild.music.update('history', history);
 		}
 		const announceChannel = guild.channels.cache.get(guild.settings.get('music.announceChannel')) || channel;
 		if (guild.settings.get('music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len

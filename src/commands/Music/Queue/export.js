@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const queue = this.client.gateways.music.get(msg.guild.id, true).get('queue');
+		const queue = msg.guild.music.get('queue');
 		if (!queue.length) throw `<:error:508595005481549846>  ::  The queue is empty. Add one using the \`${msg.guild.settings.get('prefix')}play\` command.`;
 		let choice;
 		do {

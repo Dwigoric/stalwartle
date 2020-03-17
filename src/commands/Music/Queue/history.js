@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		if (msg.guild.settings.get('donation') < 3) throw '<:error:508595005481549846>  ::  Sorry! This feature is limited to servers which have donated $3 or more.';
-		const history = this.client.gateways.music.get(msg.guild.id, true).get('history');
+		const history = msg.guild.music.get('history');
 		if (!history.length) throw '<:error:508595005481549846>  ::  There are no songs in the history yet! Songs you play are stored in the history within a day.';
 		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music history...');
 		const display = new RichDisplay(new MessageEmbed()
@@ -43,7 +43,7 @@ module.exports = class extends Command {
 	}
 
 	async export(msg) {
-		const history = this.client.gateways.music.get(msg.guild.id, true).get('history');
+		const history = msg.guild.music.get('history');
 		if (!history.length) throw '<:error:508595005481549846>  ::  The history is empty. Songs you play are stored in the history within a day.';
 		let choice;
 		do {
@@ -69,7 +69,7 @@ module.exports = class extends Command {
 	async clear(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can clear the history!';
 		this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory' && tk.data.guild === msg.guild.id).forEach(tk => tk.delete());
-		this.client.gateways.music.get(msg.guild.id, true).update('history', []);
+		msg.guild.music.update('history', []);
 		msg.send('<:check:508594899117932544>  ::  Successfully cleared the music history for this server.');
 	}
 

@@ -14,7 +14,7 @@ module.exports = class extends Command {
 
 	async run(msg, [seek]) {
 		seek -= Date.now();
-		const queue = this.client.gateways.music.get(msg.guild.id, true).get('queue');
+		const queue = msg.guild.music.get('queue');
 		if (!queue.length || !msg.guild.me.voice.channelID) throw `<:error:508595005481549846>  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``; // eslint-disable-line max-len
 		if (!queue[0].info.isSeekable) throw '<:error:508595005481549846>  ::  The current track playing cannot be seeked.';
 		if (queue[0].info.length < seek) throw '<:error:508595005481549846>  ::  The time you supplied is longer than the song\'s length.';

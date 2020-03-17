@@ -205,6 +205,7 @@ StalwartleClient.gateways
 	.register('afk', {
 		provider: StalwartleClient.options.providers.default,
 		schema: new Schema()
+			.add('isAfk', 'boolean', { default: false })
 			.add('reason', 'string', { default: null })
 			.add('timestamp', 'number')
 	})

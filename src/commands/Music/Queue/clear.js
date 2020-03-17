@@ -12,8 +12,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user]) {
-		const queue = this.client.gateways.music.get(msg.guild.id, true).get('queue');
-		this.client.gateways.music.get(msg.guild.id, true).update('queue', msg.guild.me.voice.channelID ? queue.slice(0, 1) : []).concat(user ? queue.filter((track, index) => index && track.requester !== user.id) : []); // eslint-disable-line max-len
+		const queue = msg.guild.music.get('queue');
+		msg.guild.music.update('queue', msg.guild.me.voice.channelID ? queue.slice(0, 1) : [].concat(user ? queue.filter((track, index) => index && track.requester !== user.id) : [])); // eslint-disable-line max-len
 		msg.send(`<:check:508594899117932544>  ::  Successfully cleared the music queue for this server${user ? ` of ${user.tag}'s requests` : ''}.`);
 	}
 

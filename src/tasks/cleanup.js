@@ -81,7 +81,7 @@ module.exports = class MemorySweeper extends Task {
 		for (const [id, { history, playlist, queue }] of this.client.gateways.music.cache.values()) {
 			if (history.length || playlist.length) continue;
 			if (this.client.guilds.cache.has(id) && queue.length) continue;
-			this.client.gateways.music.get(id, true).destroy();
+			this.client.gateways.music.get(id).destroy();
 			musicDBs++;
 		}
 
@@ -102,7 +102,7 @@ module.exports = class MemorySweeper extends Task {
 		// Modlog database sweeper
 		for (const [id, { modlogs }] of this.client.gateways.modlogs.cache.values()) {
 			if (modlogs.length) continue;
-			this.client.gateways.modlogs.get(id, true).destroy();
+			this.client.gateways.modlogs.get(id).destroy();
 			modlogDBs++;
 		}
 
