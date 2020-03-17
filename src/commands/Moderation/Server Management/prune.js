@@ -33,7 +33,7 @@ module.exports = class extends Command {
 			const type = typeof filter === 'string' ? filter : 'user';
 			messages = messages.filter(this.getFilter(msg, type, user));
 		}
-		if (!messages.length) {
+		if (!messages.size) {
 			delete pruning[msg.channel.id];
 			throw `<:error:508595005481549846>  ::  No message matches the \`${filter}\` filter from the last \`${messageLimit}\` messages.`;
 		}
