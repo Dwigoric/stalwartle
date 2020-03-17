@@ -14,18 +14,14 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [reason = null]) {
-		if (await this.client.providers.default.has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
-			await this.client.providers.default.delete('afk', msg.author.id);
+		if (this.client.gateways.afk.get(msg.author.id) && msg.author.settings.get('afktoggle')) {
+			this.client.gateways.afk.get(msg.author.id).destroy();
 			return msg.send(`Welcome back, **${msg.author}**! I've removed your AFK status.`);
 		}
 		await this.client.providers.default.create('afk', msg.author.id, { reason, timestamp: Date.now() });
+		await this.client.gateways.afk.sync(msg.author.id);
 		if (msg.guild && msg.guild.me.permissions.has('MOVE_MEMBERS') && msg.member.voice.channelID && msg.guild.settings.get('afkChannelOnAfk') && msg.guild.afkChannelID) msg.member.voice.setChannel(msg.guild.afkChannelID, 'Moved to AFK channel due to AFK status'); // eslint-disable-line max-len
 		return msg.send(`<:check:508594899117932544>  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
-	}
-
-	async init() {
-		const defProvider = this.client.providers.default;
-		if (!await defProvider.hasTable('afk')) defProvider.createTable('afk');
 	}
 
 };

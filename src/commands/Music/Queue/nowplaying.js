@@ -19,7 +19,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		const queue = this.client.gateways.music.get(msg.guild.id, true).get('queue');
 		if (!queue.length || !msg.guild.me.voice.channelID) throw '<:error:508595005481549846>  ::  There is no music playing in this server!';
 		const { length } = queue[0].info;
 		const { position } = msg.guild.player.state;
