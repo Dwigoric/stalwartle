@@ -27,7 +27,7 @@ exports.config = {
 	// A once ready message for your console
 	readyMessage: (client) => `${client.user.tag} has been given birth. Currently playing on ${client.guilds.cache.size} servers with ${client.guilds.cache.reduce((a, b) => a + b.memberCount, 1)} users.`,
 	// Amount of time before the bot will respond to a user's command since the last command that user has run
-	slowmode: 1000,
+	slowmode: 3000,
 	// If the slowmode time should reset if a user spams commands faster than the slowmode allows for
 	slowmodeAggressive: false,
 
