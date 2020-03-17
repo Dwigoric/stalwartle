@@ -1,14 +1,16 @@
 const { Client } = require('klasa');
 const { PlayerManager } = require('discord.js-lavalink');
-const { config, token } = require('./config');
+const { config: { lavalinkNodes } } = require('../../config');
 const fetch = require('node-fetch');
 
-class Stalwartle extends Client {
+module.exports = class Stalwartle extends Client {
 
-	constructor(...args) {
-		super(...args);
+	constructor(clientOptions) {
+		super(clientOptions);
 
 		this.playerManager = null;
+
+		this.once('ready', this._initplayer.bind(this));
 
 		Stalwartle.defaultClientSchema
 			.add('changelogs', 'textchannel')
@@ -113,11 +115,11 @@ class Stalwartle extends Client {
 			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.cache.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
 			.add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
 			.add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
-			.add(9, ({ author }) => config.owners.includes(author.id))
-			.add(10, ({ author }) => config.ownerID === author.id, { break: true });
+			.add(9, ({ author }) => clientOptions.owners.includes(author.id))
+			.add(10, ({ author }) => clientOptions.ownerID === author.id, { break: true });
 	}
 
-	get auth() { return require('./auth'); }
+	get auth() { return require('../../auth'); }
 
 	async postStats() {
 		if (this.auth.ctxAPIkey) {
@@ -191,12 +193,10 @@ class Stalwartle extends Client {
 	}
 
 	_initplayer() {
-		this.playerManager = new PlayerManager(this, config.lavalinkNodes, {
+		this.playerManager = new PlayerManager(this, lavalinkNodes, {
 			user: this.user.id,
 			shards: this.options.shardCount
 		});
 	}
 
-}
-
-new Stalwartle(config).login(token);
+};

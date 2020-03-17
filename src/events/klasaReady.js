@@ -28,8 +28,6 @@ const statuses = [
 module.exports = class extends Event {
 
 	async run() {
-		this.client._initplayer();
-
 		if (this.client.application.botPublic) this.client.postStats().then(() => this.client.setInterval(() => this.client.postStats(), 1000 * 60 * 5));
 		this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
 			this.client.setInterval(() => {

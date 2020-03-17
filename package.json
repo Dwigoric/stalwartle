@@ -1,10 +1,10 @@
 {
 	"name": "stalwartle",
 	"description": "A Discord Bot for Discordians' basic needs",
-	"version": "2.9.1",
-	"main": "src/bot.js",
+	"version": "2.10.0",
+	"main": "src/app.js",
 	"scripts": {
-		"start": "pm2 start src/bot.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
+		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
 	},
 	"dependencies": {
 		"discord.js": "github:discordjs/discord.js",
