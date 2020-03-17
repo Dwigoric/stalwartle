@@ -30,7 +30,7 @@ module.exports = class extends Command {
 		if (filter) {
 			const user = typeof filter !== 'string' ? filter : null;
 			const type = typeof filter === 'string' ? filter : 'user';
-			messages = messages.filter(this.getFilter(msg, type, user));
+			messages = messages.filter(message => this.getFilter(message, type, user));
 		}
 		let deleted = 0;
 		const loadingMessage = await msg.channel.send('<a:loading:430269209415516160>  ::  Deleting messages...');
