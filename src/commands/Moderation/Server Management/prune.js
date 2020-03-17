@@ -33,7 +33,10 @@ module.exports = class extends Command {
 			const type = typeof filter === 'string' ? filter : 'user';
 			messages = messages.filter(this.getFilter(msg, type, user));
 		}
-		if (!messages.length) throw `<:error:508595005481549846>  ::  No message matches the \`${filter}\` filter from the last \`${messageLimit}\` messages.`;
+		if (!messages.length) {
+			delete pruning[msg.channel.id];
+			throw `<:error:508595005481549846>  ::  No message matches the \`${filter}\` filter from the last \`${messageLimit}\` messages.`;
+		}
 		let deleted = 0;
 		const loadingMessage = await msg.channel.send('<a:loading:430269209415516160>  ::  Deleting messages...');
 		await Promise.all(messages.map(async message => {
