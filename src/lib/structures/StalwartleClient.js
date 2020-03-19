@@ -1,4 +1,4 @@
-const { Client } = require('klasa');
+const { Client, Schema } = require('klasa');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config: { lavalinkNodes } } = require('../../config');
 const fetch = require('node-fetch');
@@ -14,6 +14,24 @@ module.exports = class Stalwartle extends Client {
 		this.playerManager = null;
 
 		this.once('ready', this._initplayer.bind(this));
+
+		this.gateways
+			.register('afk', {
+				schema: new Schema()
+					.add('isAfk', 'boolean', { default: false })
+					.add('reason', 'string', { default: null })
+					.add('timestamp', 'number', { default: null })
+			})
+			.register('modlogs', {
+				schema: new Schema()
+					.add('modlogs', 'any', { array: true })
+			})
+			.register('music', {
+				schema: new Schema()
+					.add('history', 'any', { array: true })
+					.add('playlist', 'any', { array: true })
+					.add('queue', 'any', { array: true })
+			});
 
 		Stalwartle.defaultClientSchema
 			.add('changelogs', 'textchannel')
