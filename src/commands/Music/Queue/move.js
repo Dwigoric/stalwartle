@@ -19,6 +19,7 @@ module.exports = class extends Command {
 		if (entry > queue.length - 1 || position > queue.length - 1) throw `<:error:508595005481549846>  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`;
 		if (entry === position) throw '<:error:508595005481549846>  ::  What\'s the point of moving a queue entry to the same position?';
 		queue.splice(position, 0, queue.splice(entry, 1)[0]);
+		await msg.guild.music.sync();
 		await msg.guild.music.update('queue', queue);
 		return msg.send(`<:check:508594899117932544>  ::  Successfully moved **${escapeMarkdown(queue[position].info.title)}** to position \`#${position}\`. New queue at \`${msg.guild.settings.get('prefix')}queue\`.`); // eslint-disable-line max-len
 	}

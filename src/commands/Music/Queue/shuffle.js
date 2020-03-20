@@ -15,6 +15,7 @@ module.exports = class extends Command {
 		const upNext = queue.slice(1);
 		if (!queue.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. Add one with \`${msg.guild.settings.get('prefix')}play\``;
 		if (!upNext.length) throw '<:error:508595005481549846>  ::  There are no up-next songs... I have nothing to shuffle!';
+		await msg.guild.music.sync();
 		msg.guild.music.update('queue', [queue[0]].concat((() => {
 			for (let current = upNext.length - 1; current > 0; current--) {
 				const random = Math.floor(Math.random() * (current + 1));

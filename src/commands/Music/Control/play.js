@@ -159,7 +159,8 @@ module.exports = class extends Command {
 					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true));
 			}
 		}
-		await msg.guild.music.update('queue', queue);
+		await msg.guild.music.sync();
+		await msg.guild.music.update('queue', queue, { arrayAction: 'overwrite' });
 		return queue;
 	}
 	/* eslint-enable complexity */
@@ -179,7 +180,8 @@ module.exports = class extends Command {
 				const relatedVideo = items[Math.floor(Math.random() * items.length)];
 				if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: false })); // eslint-disable-line max-len
 			}
-			await guild.music.update('queue', queue);
+			await guild.music.sync();
+			await guild.music.update('queue', queue, { arrayAction: 'overwrite' });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 			channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
 			return this.client.playerManager.leave(guild.id);
@@ -187,7 +189,8 @@ module.exports = class extends Command {
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
 			const history = guild.music.get('history');
 			history.unshift(mergeObjects(song, { timestamp: Date.now() }));
-			guild.music.update('history', history);
+			await guild.music.sync();
+			guild.music.update('history', history, { arrayAction: 'overwrite' });
 		}
 		const announceChannel = guild.channels.cache.get(guild.settings.get('music.announceChannel')) || channel;
 		if (guild.settings.get('music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len

@@ -35,6 +35,7 @@ module.exports = class extends Command {
 			const [song] = queue.splice(songs, 1);
 			msg.send(`<:check:508594899117932544>  ::  Successfully removed **${escapeMarkdown(song.info.title)}** from the queue.`);
 		}
+		await msg.guild.music.sync();
 		return msg.guild.music.update('queue', queue);
 	}
 

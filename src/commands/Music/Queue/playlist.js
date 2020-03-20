@@ -91,11 +91,13 @@ module.exports = class extends Command {
 			playlist.splice(items, 1);
 			msg.send(`<:check:508594899117932544>  ::  Successfully removed song \`#${items + 1}\` from the playlist.`);
 		}
+		await msg.guild.music.sync();
 		return msg.guild.music.update('playlist', playlist);
 	}
 
 	async clear(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can configure the playlist!';
+		await msg.guild.music.sync();
 		msg.guild.music.update('playlist', []);
 		msg.send('<:check:508594899117932544>  ::  Successfully cleared the music playlist for this server.');
 	}
@@ -139,6 +141,7 @@ module.exports = class extends Command {
 		if (entry > playlist.length - 1 || position > playlist.length - 1) throw `<:error:508595005481549846>  ::  The playlist only has ${playlist.length - 1} entr${playlist.length - 1 === 1 ? 'y' : 'ies'}.`; // eslint-disable-line max-len
 		if (entry === position) throw '<:error:508595005481549846>  ::  What\'s the point of moving a playlist to the same position?';
 		playlist.splice(position, 0, playlist.splice(entry, 1)[0]);
+		await msg.guild.music.sync();
 		await msg.guild.music.update('playlist', playlist);
 		return msg.send(`<:check:508594899117932544>  ::  Successfully moved item \`#${entry + 1}\` to position \`#${position + 1}\`.`);
 	}
@@ -148,6 +151,7 @@ module.exports = class extends Command {
 		const playlist = msg.guild.music.get('playlist');
 		if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the playlist. Add one with \`${msg.guild.settings.get('prefix')}playlist add\``;
 		if (playlist.length === 1) throw '<:error:508595005481549846>  ::  There is only one playlist item... I have nothing to shuffle!';
+		await msg.guild.music.sync();
 		msg.guild.music.update('playlist', (() => {
 			for (let current = playlist.length - 1; current > 0; current--) {
 				const random = Math.floor(Math.random() * (current + 1));
@@ -177,6 +181,7 @@ module.exports = class extends Command {
 			playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
 			msg.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
+		await msg.guild.music.sync();
 		await msg.guild.music.update('playlist', playlist);
 		return playlist;
 	}

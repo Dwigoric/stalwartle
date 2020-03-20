@@ -18,10 +18,11 @@ module.exports = class extends Event {
 		const queue = newState.guild.music.get('queue');
 		if (!queue[0].info.isStream) newState.guild.player.pause(true);
 		if (newState.guild.settings.get('donation') >= 10) return null;
-		return this.client.setTimeout(guild => {
+		return this.client.setTimeout(async guild => {
 			if (guild.me.voice.channelID && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
 			this.client.playerManager.leave(guild.id);
-			if (queue[0].requester === this.client.user.id) newState.guild.music.update('queue', []);
+			await guild.music.sync();
+			if (queue[0].requester === this.client.user.id) guild.music.update('queue', []);
 			return null;
 		}, 30000, newState.guild);
 	}

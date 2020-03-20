@@ -69,6 +69,7 @@ module.exports = class extends Command {
 	async clear(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can clear the history!';
 		this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory' && tk.data.guild === msg.guild.id).forEach(tk => tk.delete());
+		await msg.guild.music.sync();
 		msg.guild.music.update('history', []);
 		msg.send('<:check:508594899117932544>  ::  Successfully cleared the music history for this server.');
 	}

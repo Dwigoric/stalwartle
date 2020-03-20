@@ -3,8 +3,8 @@ const { Task } = require('klasa');
 module.exports = class extends Task {
 
 	async run() {
-		for (const [id, { history }] of this.client.gateways.music.cache.values()) {
-			this.client.gateways.music.get(id).update('history', history.filter(hist => (Date.now() - hist.timestamp) <= (1000 * 60 * 60 * 24)));
+		for (const [id, { history }] of this.client.gateways.get('music').cache.values()) {
+			this.client.gateways.get('music').get(id).update('history', history.filter(hist => (Date.now() - hist.timestamp) <= (1000 * 60 * 60 * 24)));
 		}
 
 		// Create a schedule to make this task work

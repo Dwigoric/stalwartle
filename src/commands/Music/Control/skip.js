@@ -38,6 +38,7 @@ module.exports = class extends Command {
 		if (queue.length < 2) throw '<:error:508595005481549846>  ::  There is no queue entry to skip to.';
 		if (entry > queue.length - 1) throw `<:error:508595005481549846>  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`;
 		queue.splice(1, 0, queue.splice(entry, 1)[0]);
+		await msg.guild.music.sync();
 		await msg.guild.music.update('queue', queue);
 		msg.guild.clearVoteskips();
 		msg.guild.player.stop();
