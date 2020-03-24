@@ -99,6 +99,7 @@ module.exports = class extends Command {
 
 		let i = 0;
 		let finishingMove = '🏁 Retreated';
+		let winner;
 		const start = Date.now();
 		while (challengerData.health > 0 || opponentData.health > 0) {
 			i++;
@@ -165,6 +166,7 @@ module.exports = class extends Command {
 			let addedHp;
 			let bandageSuccess;
 			if (move === 'retreat') {
+				winner = currentFights[channel.id][i % 2 ? 'opponent' : 'challenger'];
 				break;
 			} else if (move === 'bandage') {
 				if (Math.random() > 0.1) {
@@ -219,9 +221,11 @@ module.exports = class extends Command {
 			}
 		}
 
+		if (!winner) winner = challengerData.health === opponentData.health ? 'Draw' : challengerData.health > opponentData.health ? challenger : opponent;
+
 		return channel.sendEmbed(new MessageEmbed()
 			.setColor('RANDOM')
-			.setTitle(`${challengerData.health === opponentData.health ? 'Draw' : challengerData.health > opponentData.health ? `${challenger.tag} won` : `${opponent.tag} won`}!`)
+			.setTitle(`${winner} won!`)
 			.setDescription([
 				'⚔ Match Statistics ⚔',
 				`Rounds Taken: **${parseInt((i + 1) / 2)}**\n`,
