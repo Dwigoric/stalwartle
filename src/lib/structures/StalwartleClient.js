@@ -4,6 +4,9 @@ const { config: { lavalinkNodes } } = require('../../config');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
 
+require('./StalwartleGuild');
+require('./StalwartleGuildMember');
+
 module.exports = class Stalwartle extends Client {
 
 	constructor(clientOptions) {

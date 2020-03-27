@@ -5,21 +5,15 @@ module.exports = class extends Extendable {
 
 	constructor(...args) { super(...args, { appliesTo: [GuildMember] }); }
 
-	get actions() {
-		return this._actions || [];
-	}
-
 	async addAction(action) {
-		if (!this._actions) this._actions = [];
-		this._actions.push(action);
+		this.actions.push(action);
 		this.client.setTimeout(() => {
-			this._actions.shift();
-			if (!this._actions.length) this.resetActions();
+			this.actions.shift();
 		}, this.guild.settings.get('automod.options.quota.within') * 60000);
 	}
 
 	async resetActions() {
-		return delete this._actions;
+		this.actions = [];
 	}
 
 };

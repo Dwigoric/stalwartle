@@ -4,18 +4,13 @@ module.exports = class extends Extendable {
 
 	constructor(...args) { super(...args, { appliesTo: [KlasaGuild] });	}
 
-	get voteskips() {
-		return this._voteskips || [];
-	}
-
 	addVoteskip(vote, members) {
-		if (!this._voteskips) this._voteskips = [];
-		this._voteskips.push(vote);
-		this._voteskips = this._voteskips.filter(voter => members.has(voter));
+		this.voteskips.push(vote);
+		this.voteskips = this.voteskips.filter(voter => members.has(voter));
 	}
 
 	clearVoteskips() {
-		return delete this._voteskips;
+		this.voteskips = [];
 	}
 
 };

@@ -8,9 +8,9 @@
   integrity sha512-CU1q0UXQUpFNzNB7gufgoisDHP7n+T3tkqTsp3MNUkVJ5+hS3BCvME8uCXAUFlz+6T2FbTCu75A+yQ7HMKqRKw==
 
 "@types/node@*":
-  version "13.9.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.1.tgz#96f606f8cd67fb018847d9b61e93997dabdefc72"
-  integrity sha512-E6M6N0blf/jiZx8Q3nb0vNaswQeEyn0XlupO+xN6DtJ6r6IT4nXrTry7zhIfYvFCl3/8Cu6WIysmUBKiqV0bqQ==
+  version "12.12.31"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.31.tgz#d6b4f9645fee17f11319b508fb1001797425da51"
+  integrity sha512-T+wnJno8uh27G9c+1T+a1/WYCHzLeDqtsGJkoEdSp2X8RTh3oOCZQcUnjAx90CS8cmmADX51O0FI/tu9s0yssg==
 
 abort-controller@^3.0.0:
   version "3.0.0"
@@ -69,15 +69,15 @@ delayed-stream@~1.0.0:
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
 discord.js-lavalink@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/discord.js-lavalink/-/discord.js-lavalink-3.0.0.tgz#dbadfc54855615fdbcaf7c1584b25dd559a27842"
-  integrity sha512-Yr6U/SXXZosTJGnTY/f+ESGmrhCka5sG6HncSoRIwUL2z7wEg3ApZrUVM0O1szmj66yfC3ouk9FUOAy2LUwd5g==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/discord.js-lavalink/-/discord.js-lavalink-3.0.1.tgz#72e52e76daf4be6c6b1caf210aeb3c6b200fd4ad"
+  integrity sha512-Qpo42h9kNdSEVoVR5LlQQxel16VfYGHiLysFCOxLuk10Oxi1iEk93P/EXUDsflWoNj4S+BHleHlOZqO/x9A4/g==
   dependencies:
     ws "^7.2.1"
 
 "discord.js@github:discordjs/discord.js":
   version "12.0.2"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/76634db9bec10f52521d77fac970406fa8b3f36a"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/51ff5ddb6449d1b0c12406812afe34663d96430a"
   dependencies:
     "@discordjs/collection" "^0.1.5"
     abort-controller "^3.0.0"
