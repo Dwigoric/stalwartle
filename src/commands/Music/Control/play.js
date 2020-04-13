@@ -63,7 +63,10 @@ module.exports = class extends Command {
 			this.client.emit('wtf', err);
 			throw `<:error:508595005481549846>  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
-		if (msg.flagArgs.force && msg.guild.me.voice.channelID && await msg.hasAtLeastPermissionLevel(5)) return msg.guild.player.stop();
+		if (msg.flagArgs.force && msg.guild.me.voice.channelID && await msg.hasAtLeastPermissionLevel(5)) {
+			msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[0].info.title)}**.`);
+			return msg.guild.player.stop();
+		}
 		return this.play(msg, queue[0]);
 	}
 
