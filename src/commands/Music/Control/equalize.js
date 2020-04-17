@@ -30,7 +30,7 @@ module.exports = class extends Command {
 				gain !== 0 ? ` *Make sure you know what you're doing. Run \`${msg.guild.settings.get('prefix')}eq setall 0\` if you're unsure.*` : ''
 			].join(''));
 		}
-		msg.guild.player.setEQ([{ gain, band }]);
+		msg.guild.player.equalizer([{ gain, band }]);
 		return msg.send([
 			`<:check:508594899117932544>  ::  Successfully equalized band \`#${band}\`'s gain to \`${gain}\`.`,
 			`*Make sure you know what you're doing. Run \`${msg.guild.settings.get('prefix')}eq setall 0\` if you're unsure.*`

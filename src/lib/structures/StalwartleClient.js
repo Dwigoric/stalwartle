@@ -1,10 +1,12 @@
 const { Client, Gateway, Schema } = require('klasa');
 const { PlayerManager } = require('discord.js-lavalink');
 const { config: { lavalinkNodes } } = require('../../config');
+const auth = require('../../auth');
 const fetch = require('node-fetch');
 
 require('./StalwartleGuild');
 require('./StalwartleUser');
+require('./StalwartleGuildMember');
 
 module.exports = class Stalwartle extends Client {
 
@@ -12,6 +14,7 @@ module.exports = class Stalwartle extends Client {
 		super(clientOptions);
 
 		this.playerManager = null;
+		this.auth = auth;
 
 		this.once('ready', this._initplayer.bind(this));
 
@@ -139,8 +142,6 @@ module.exports = class Stalwartle extends Client {
 			.add(9, ({ author }) => clientOptions.owners.includes(author.id))
 			.add(10, ({ author }) => clientOptions.ownerID === author.id, { break: true });
 	}
-
-	get auth() { return require('../../auth'); }
 
 	async postStats() {
 		if (this.auth.ctxAPIkey) {

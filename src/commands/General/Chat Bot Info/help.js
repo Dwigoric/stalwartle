@@ -8,13 +8,14 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['commands', 'cmds'],
-			guarded: true,
 			description: 'Sends the command list to our DMs. Make sure I can send you one!',
 			extendedHelp: [
 				'If you want to get more information about a command, use `s.help <command>`.',
 				'If you want to get the commands for a specific category, use `s.help <category>`.',
 				'If you want to get the commands for a specific subcategory under a category, use `s.help <category>, <subcategory>`.'
 			].join('\n'),
+			guarded: true,
+			requiredPermissions: ['EMBED_LINKS'],
 			usage: '[Command:command|Category:string] [Subcategory:string]',
 			usageDelim: ', '
 		});
@@ -25,7 +26,6 @@ module.exports = class extends Command {
 
 	async run(msg, [category, subcategory]) {
 		if (category instanceof Command) {
-			if (msg.guild && !msg.guild.me.permissions.has('EMBED_LINKS')) throw '<:error:508595005481549846>  ::  Sorry! I need **Embed Links** permission to display command information.';
 			return msg.send({
 				embed: new MessageEmbed()
 					.setTitle(`The \`${this.client.options.prefix}${category.name}\` command`)
