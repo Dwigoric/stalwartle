@@ -22,7 +22,7 @@ module.exports = class extends Command {
 			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.text()).catch(() => null);
 
 		if (steamSearch) {
-			const hrefData = cheerio.load(steamSearch)('#search_result_container > div:nth-child(2) > a:nth-child(2)').attr('href');
+			const hrefData = cheerio.load(steamSearch)('#search_result_container > #search_resultsRows > .search_result_row').attr('href');
 
 			if (!hrefData) throw '<:error:508595005481549846>  ::  Steam game not found!';
 
