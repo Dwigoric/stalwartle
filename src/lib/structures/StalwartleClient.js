@@ -1,5 +1,5 @@
 const { Client } = require('klasa');
-const { PlayerManager } = require('discord.js-lavalink');
+const { Manager } = require('@lavacord/discord.js');
 const { config: { lavalinkNodes } } = require('../../config');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
@@ -145,7 +145,7 @@ module.exports = class Stalwartle extends Client {
 				body: JSON.stringify({
 					guilds: await this.guildCount(),
 					users: await this.userCount(),
-					voice_connections: this.playerManager.players.array().filter(player => player.playing).length // eslint-disable-line camelcase
+					voice_connections: this.playerManager.players.values().filter(player => player.playing).length // eslint-disable-line camelcase
 				}),
 				headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
 			});
@@ -196,10 +196,11 @@ module.exports = class Stalwartle extends Client {
 	}
 
 	_initplayer() {
-		this.playerManager = new PlayerManager(this, lavalinkNodes, {
+		this.playerManager = new Manager(this, lavalinkNodes, {
 			user: this.user.id,
 			shards: this.options.shardCount
 		});
+		return this.playerManager.connect();
 	}
 
 };

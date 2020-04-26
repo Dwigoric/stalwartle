@@ -7,8 +7,8 @@
 		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
 	},
 	"dependencies": {
+		"@lavacord/discord.js": "^0.0.6",
 		"discord.js": "github:discordjs/discord.js",
-		"discord.js-lavalink": "^3.0.0",
 		"klasa": "github:dirigeants/klasa",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",

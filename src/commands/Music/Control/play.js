@@ -42,7 +42,7 @@ module.exports = class extends Command {
 			if (msg.guild.me.voice.channelID) throw `<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
-				this.join(msg);
+				await this.join(msg);
 				return this.play(msg, queue[0]);
 			}
 			if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
@@ -57,7 +57,7 @@ module.exports = class extends Command {
 		const song = await this.resolveQuery(msg, query);
 		delete prompts[msg.author.id];
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
-		if (!msg.guild.me.voice.channelID) this.join(msg);
+		if (!msg.guild.me.voice.channelID) await this.join(msg);
 		queue = await this.addToQueue(msg, song).catch(err => {
 			if (typeof err === 'string') throw err;
 			this.client.emit('wtf', err);
@@ -70,11 +70,11 @@ module.exports = class extends Command {
 		return this.play(msg, queue[0]);
 	}
 
-	join({ guild, channel, member }) {
+	async join({ guild, channel, member }) {
 		if (!member.voice.channelID) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
-		this.client.playerManager.leave(guild.id);
-		this.client.playerManager.join({
-			host: this.client.options.lavalinkNodes[0].host,
+		await this.client.playerManager.leave(guild.id);
+		await this.client.playerManager.join({
+			node: this.client.options.lavalinkNodes[0].id,
 			guild: guild.id,
 			channel: member.voice.channelID
 		}, { selfdeaf: true });
@@ -174,8 +174,7 @@ module.exports = class extends Command {
 
 	async play({ guild, channel }, song) {
 		if (guild.me.voice.channelID && guild.player.playing) return;
-		guild.player.play(song.track);
-		guild.player.volume(guild.settings.get('music.volume'));
+		guild.player.play(song.track, { volume: guild.settings.get('music.volumew') });
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
