@@ -34,7 +34,6 @@ module.exports = class MemorySweeper extends Task {
 			// lastMessages = 0,
 			modlogDBs = 0,
 			musicDBs = 0,
-			players = 0,
 			users = 0;
 
 		// Running garbage collection of Node.js
@@ -85,20 +84,6 @@ module.exports = class MemorySweeper extends Task {
 			musicDBs++;
 		}
 
-		// Empty music player sweeper
-		if (this.client.playerManager) {
-			for (const player of this.client.playerManager.players.values()) {
-				const channel = this.client.channels.cache.get(player.channel);
-				if (channel) {
-					const { members } = channel;
-					if (members.has(this.client.user.id) && this.client.guilds.cache.get(player.id).settings.get('donation') >= 10) continue;
-					if (members.filter(member => !member.user.bot).size) continue;
-				}
-				this.client.playerManager.leave(player.id);
-				players++;
-			}
-		}
-
 		// Modlog database sweeper
 		for (const { id, modlogs } of await this.client.providers.default.getAll('modlogs')) {
 			if (modlogs.length) continue;
@@ -115,7 +100,6 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(presences)} [Presence]s`,
 			`${this.setColor(emojis)} [Emoji]s`,
 			`${this.setColor(musicDBs)} [MusicDB]s`,
-			`${this.setColor(players)} [Player]s`,
 			`${this.setColor(modlogDBs)} [ModlogDB]s`
 		].join('\n'));
 
