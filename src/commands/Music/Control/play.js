@@ -83,7 +83,7 @@ module.exports = class extends Command {
 
 	async resolveQuery(msg, query) {
 		const { loadType, tracks, exception } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flagArgs.soundcloud));
-		if (loadType === 'LOAD_FAILED') throw `<:error:508595005481549846>  ::  Something went wrong when loading your search: **${escapeMarkdown(exception.message)}** (Severity: ${exception.severity})`;
+		if (loadType === 'LOAD_FAILED') throw `<:error:508595005481549846>  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
 		else if (loadType === 'NO_MATCHES') throw '<:error:508595005481549846>  ::  No track found for your query.';
 		else if (loadType === 'TRACK_LOADED') return tracks[0];
 		else if (loadType === 'PLAYLIST_LOADED' && tracks.length) return tracks;
