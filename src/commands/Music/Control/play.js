@@ -176,7 +176,7 @@ module.exports = class extends Command {
 
 	async play({ guild, channel }, song) {
 		if (guild.me.voice.channelID && guild.player.playing) return;
-		guild.player.play(song.track, { volume: guild.settings.get('music.volumew') });
+		guild.player.play(song.track, { volume: guild.settings.get('music.volume') });
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
