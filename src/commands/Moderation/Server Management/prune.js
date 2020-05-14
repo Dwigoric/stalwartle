@@ -1,6 +1,6 @@
 const { Command } = require('klasa');
 
-const pruning = {};
+const pruning = new Set();
 
 module.exports = class extends Command {
 
@@ -11,41 +11,48 @@ module.exports = class extends Command {
 			requiredPermissions: ['MANAGE_MESSAGES'],
 			runIn: ['text'],
 			description: 'Prunes a certain amount of messages w/o filter.',
-			usage: '[Limit:integer{,500}] [link|invite|bots|you|me|pinsonly|upload|user:user]',
+			usage: '[Limit:integer{2,100}] [link|invite|bots|you|me|pinsonly|upload|user:user]',
 			usageDelim: ' ',
-			cooldown: 60
+			cooldown: 10
 		});
 	}
 
-	async run(msg, [msgLimit = 50, filter = null]) {
+	async run(msg, [limit = 50, filter = null]) {
 		let messages = await msg.channel.messages.fetch({ limit: 1 });
 		if (!messages.size) throw '<:error:508595005481549846>  ::  The channel does not have any messages.';
-		if (pruning[msg.channel.id]) throw '<:error:508595005481549846>  ::  I am currently pruning messages from this channel. Please wait until the process is done.';
-		pruning[msg.channel.id] = true;
-		const messageLimit = msgLimit;
-		while (msgLimit > 0) {
-			const limit = msgLimit % 100 || 100;
-			messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
-			msgLimit -= limit;
-		}
+
+		if (pruning.has(msg.channel.id)) throw '<:error:508595005481549846>  ::  I am currently pruning messages from this channel. Please wait until the process is done.';
+		pruning.add(msg.channel.id);
+
+		messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
+		[messages] = messages.partition(message => message.id !== msg.id);
+
 		if (filter) {
 			const user = typeof filter !== 'string' ? filter : null;
 			const type = typeof filter === 'string' ? filter : 'user';
 			messages = messages.filter(this.getFilter(msg, type, user));
 		}
 		if (!messages.size) {
-			delete pruning[msg.channel.id];
-			throw `<:error:508595005481549846>  ::  No message matches the \`${filter}\` filter from the last \`${messageLimit}\` messages.`;
+			pruning.delete(msg.channel.id);
+			throw `<:error:508595005481549846>  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`;
 		}
-		let deleted = 0;
+
 		const loadingMessage = await msg.channel.send('<a:loading:430269209415516160>  ::  Deleting messages...');
-		await Promise.all(messages.map(async message => {
-			await message.delete().catch(() => deleted--);
-			return deleted++;
-		}));
-		delete pruning[msg.channel.id];
-		loadingMessage.delete();
-		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted - 1} messages from ${messages.size - 1}.`).then(pruneMsg => {
+		let deleted = 0;
+		const bulkDeleted = await msg.channel.bulkDelete(messages, true);
+		deleted += bulkDeleted.size;
+		messages = messages.difference(bulkDeleted);
+		if (messages.size) {
+			await Promise.all(messages.map(async message => {
+				await message.delete().catch(() => deleted--);
+				return deleted++;
+			}));
+		}
+		await msg.delete();
+
+		pruning.delete(msg.channel.id);
+		await loadingMessage.delete();
+		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted} messages from ${limit} messages.`).then(pruneMsg => {
 			setTimeout(() => pruneMsg.delete(), 5000);
 		});
 	}
