@@ -20,7 +20,7 @@ module.exports = class extends Event {
 				`\nTo get started, please use \`${guild.settings.get('prefix')}help\` here or on any text channel. You will be given a list of commands.`,
 				`Please feel free to look at the command list. If you want me to serve more Discord users, just use the \`${guild.settings.get('prefix')}invite\` command!`,
 				'\nI can play music, moderate users, send memes, manipulate user avatars, and more!',
-				`\nBy **${this.client.application.owner.tag}**, from 🇵🇭 with ❤`,
+				`\nBy **${this.client.application.owner.members.map(tm => tm.user.tag).join(', ')}**, from 🇵🇭 with ❤`,
 				'\nThis message will be automatically deleted in 10 seconds (if sent in a server channel).'
 			].join('\n'));
 		const postableChannel = guild.channels.cache.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
