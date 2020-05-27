@@ -21,7 +21,10 @@ module.exports = class extends Command {
 				Authorization: `Bearer ${this.client.auth.twitchAPIkey}`
 			}
 		})
-			.then(res => res.json())
+			.then(res => {
+				if (!res.ok) throw `<:error:508595005481549846>  ::  An error occurred: \`${res.json().then(data => data.message)}\``;
+				return res.json();
+			})
 			.then(res => {
 				if (!res.data.length) throw `<:error:508595005481549846>  ::  There is no Twitch streamer named **${twitchName}**.`;
 				return res.data[0];
