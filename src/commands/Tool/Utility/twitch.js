@@ -21,8 +21,8 @@ module.exports = class extends Command {
 				Authorization: `Bearer ${this.client.auth.twitchAPIkey}`
 			}
 		})
-			.then(res => {
-				if (!res.ok) throw `<:error:508595005481549846>  ::  An error occurred: \`${res.json().then(data => data.message)}\``;
+			.then(async res => {
+				if (!res.ok) throw `<:error:508595005481549846>  ::  An error occurred: \`${await res.json().then(data => data.message)}\``;
 				return res.json();
 			})
 			.then(res => {
