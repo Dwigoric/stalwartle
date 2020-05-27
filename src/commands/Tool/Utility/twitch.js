@@ -16,7 +16,10 @@ module.exports = class extends Command {
 		await msg.send('<a:loading:430269209415516160>  ::  Loading Twitch channel...');
 
 		const channel = await fetch(`https://api.twitch.tv/helix/users?login=${twitchName}`, {
-			headers: { 'Client-ID': this.client.auth.twitchAPIkey }
+			headers: {
+				'Client-ID': 'd7sds6f41zr45c3wxkqkkslpcjukig',
+				Authorization: `Bearer ${this.client.auth.twitchAPIkey}`
+			}
 		})
 			.then(res => res.json())
 			.then(res => {
