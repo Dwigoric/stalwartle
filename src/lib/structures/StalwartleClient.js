@@ -145,7 +145,7 @@ module.exports = class Stalwartle extends Client {
 				body: JSON.stringify({
 					guilds: await this.guildCount(),
 					users: await this.userCount(),
-					voice_connections: this.playerManager.players.values().filter(player => player.playing).length // eslint-disable-line camelcase
+					voice_connections: Array.from(this.client.playerManager.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
 				}),
 				headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
 			});
