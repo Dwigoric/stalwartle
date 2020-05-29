@@ -29,7 +29,7 @@ module.exports = class extends Command {
 		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 		return msg.sendEmbed(new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(data.title, null, `https://www.reddit.com${data.permalink}`)
+			.setAuthor(trim(data.title, 253), null, `https://www.reddit.com${data.permalink}`)
 			.setTitle(`u/${data.author}`)
 			.setURL(`https://www.reddit.com/u/${data.author}`)
 			.setDescription(trim(data.selftext, 1024))
