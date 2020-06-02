@@ -6,9 +6,10 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['addchangelog'],
+			description: 'Posts a changelog in the changelog channel on the support server.',
+			flagSupport: false,
 			permissionLevel: 9,
 			requiredPermissions: ['EMBED_LINKS'],
-			description: 'Posts a changelog in the changelog channel on the support server.',
 			usage: '<Content:string>'
 		});
 	}
