@@ -21,6 +21,7 @@ exports.config = {
 	// A presence to login with
 	presence: { status: 'idle', activity: { name: 'Loading...', type: 'PLAYING' } },
 	// A once ready message for your console
+	// eslint-disable-next-line max-len
 	readyMessage: (client) => `${client.user.tag} has been given birth. Currently playing on ${client.guilds.cache.size} servers with ${client.guilds.cache.reduce((a, b) => a + b.memberCount, 1)} users.`,
 	// Amount of time before the bot will respond to a user's command since the last command that user has run
 	slowmode: 3000,
@@ -45,7 +46,7 @@ exports.config = {
 	/**
      * Sharding Options
      */
-	shards: 'auto'
+	shards: 'auto',
 	shardCount: 1,
 
 	/**
