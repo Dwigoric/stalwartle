@@ -29,7 +29,7 @@ module.exports = class Stalwartle extends Client {
 				.add('id', 'string')
 				.add('token', 'string'))
 			.add('restart', restart => restart
-				.add('authority', 'user')
+				.add('channel', 'textchannel')
 				.add('timestamp', 'number'))
 			.add('suggestions', suggestions => suggestions
 				.add('reports', 'textchannel')
