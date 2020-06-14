@@ -104,11 +104,8 @@ module.exports = class MemorySweeper extends Task {
 		].join('\n'));
 
 		// Create a schedule to make this task work
-		if (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length === 1) return;
-		do {
-			this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').forEach(tk => this.client.schedule.delete(tk.id));
-			await this.client.schedule.create('cleanup', '*/30 * * * *');
-		} while (this.client.schedule.tasks.filter(tk => tk.taskName === 'cleanup').length !== 1);
+		if (this.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length === 1) return;
+		await this.client.schedule.create(this.name, '*/30 * * * *');
 	}
 
 	async init() {

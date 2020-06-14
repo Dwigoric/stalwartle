@@ -8,11 +8,8 @@ module.exports = class extends Task {
 		}
 
 		// Create a schedule to make this task work
-		if (this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').length === 1) return;
-		do {
-			this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').forEach(tk => this.client.schedule.delete(tk.id));
-			await this.client.schedule.create('shiftHistory', '*/7 * * * *');
-		} while (this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory').length !== 1);
+		if (this.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length === 1) return;
+		await this.client.schedule.create(this.name, '*/7 * * * *');
 	}
 
 	async init() {
