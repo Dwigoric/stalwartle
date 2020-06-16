@@ -18,7 +18,7 @@ module.exports = class extends Command {
 		const search = await fetch(`https://api.jikan.moe/v3/search/manga?q=${encodeURIComponent(keyword)}&limit=1`)
 			.then(res => res.json())
 			.then(body => body.results[0]);
-		if (!search || (Array.isArray(search) && !search.length)) throw '<:error:508595005481549846>  ::  Manga not found!';
+		if (!search.length) throw '<:error:508595005481549846>  ::  Manga not found!';
 
 		const [manga] = search;
 
