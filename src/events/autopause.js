@@ -15,12 +15,9 @@ module.exports = class extends Event {
 		if (oldState.channel && oldState.channel.id !== newState.guild.me.voice.channelID) return null;
 		if (oldState.channel && newState.channel && oldState.channel.id === newState.channel.id) return null;
 		if (newState.member.user.equals(this.client.user) && newState.channel.id && oldState.channel && !oldState.channel.id) return null;
-
-		const voiceMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
-		if (oldState.guild.me.voice.channelID && !oldState.guild.me.voice.channel.members.filter(mb => !mb.user.bot).size && voiceMembers.size) return newState.guild.player.pause(false);
-
+		if (newState.guild.me.voice.channelID && newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return newState.guild.player.pause(false);
 		const { queue } = await this.client.providers.default.get('music', newState.guild.id);
-		if (!queue[0].info.isStream && voiceMembers.size === 0) newState.guild.player.pause(true);
+		if (!queue[0].info.isStream) newState.guild.player.pause(true);
 		if (newState.guild.settings.get('donation') >= 10) return null;
 		return this.client.setTimeout(guild => {
 			if (guild.me.voice.channelID && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
