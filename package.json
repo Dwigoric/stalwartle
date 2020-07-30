@@ -1,7 +1,7 @@
 {
 	"name": "stalwartle",
 	"description": "A Discord Bot for Discordians' basic needs",
-	"version": "2.10.0",
+	"version": "2.10.1",
 	"main": "src/app.js",
 	"scripts": {
 		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
@@ -12,7 +12,8 @@
 		"klasa": "github:dirigeants/klasa",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
-		"rethinkdb-ts": "^2.4.0-rc.16"
+		"rethinkdb-ts": "^2.4.0-rc.16",
+		"spotify-to-lavalink": "github:takomst/spotify-to-lavalink"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
@@ -21,6 +22,6 @@
 		"steamapi": "^2.0.3"
 	},
 	"engines": {
-		"node": "13.x"
+		"node": "14.x"
 	}
 }
