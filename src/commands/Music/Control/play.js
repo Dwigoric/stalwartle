@@ -43,7 +43,7 @@ module.exports = class extends Command {
 			throw `${this.client.constants.EMOTES.xmark}  ::  An unknown error occured. Please try again.`;
 		}
 		if (!query) {
-			if (msg.guild.me.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
+			if (msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				await this.join(msg);
@@ -68,7 +68,7 @@ module.exports = class extends Command {
 			this.client.emit('wtf', err);
 			throw `${this.client.constants.EMOTES.xmark}  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
-		if (msg.flagArgs.force && queue.length > 1 && msg.guild.me.voice.channelID && await msg.hasAtLeastPermissionLevel(5)) {
+		if (msg.flagArgs.force && queue.length > 1 && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[1].info.title)}**.`);
 			return msg.guild.player.stop();
 		}
@@ -146,7 +146,7 @@ module.exports = class extends Command {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
-			if (msg.guild.me.voice.channelID) queue.splice(1, 0, ...songs);
+			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
 			else queue.splice(0, 1, ...songs);
 		} else if (Array.isArray(song)) {
 			let songCount = 0;
@@ -169,7 +169,7 @@ module.exports = class extends Command {
 				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 			} else {
 				const { title, length, uri, author, isStream } = queue[queue.length - 1].info;
-				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.me.voice.channelID && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
+				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
 					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL())
@@ -186,7 +186,7 @@ module.exports = class extends Command {
 	/* eslint-enable complexity */
 
 	async play({ guild, channel }, song) {
-		if (guild.me.voice.channelID && guild.player.playing) return;
+		if (guild.player.playing) return;
 		guild.player.play(song.track, { volume: guild.settings.get('music.volume') });
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
@@ -201,8 +201,7 @@ module.exports = class extends Command {
 			}
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
-			channel.send('👋  ::  No song left in the queue, so the music session has ended! Thanks for listening!');
-			return this.client.playerManager.leave(guild.id);
+			return channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guild.settings.get('prefix')}play <song search>\`!`);
 		});
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
 			const { history } = await this.client.providers.default.get('music', guild.id);
