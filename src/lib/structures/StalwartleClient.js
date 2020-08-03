@@ -1,6 +1,7 @@
 const { Client } = require('klasa');
 const { Manager } = require('@lavacord/discord.js');
 const { config: { lavalinkNodes } } = require('../../config');
+const constants = require('../util/constants');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
 
@@ -13,6 +14,7 @@ module.exports = class Stalwartle extends Client {
 		super(clientOptions);
 
 		this.playerManager = null;
+		this.constants = constants;
 		this.auth = auth;
 
 		this.once('ready', this._initplayer.bind(this));
