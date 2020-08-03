@@ -3,7 +3,7 @@ const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { parse } = require('url');
 
-const prompts = {};
+const prompts = new Map();
 const YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
 const SPOTIFY_TRACK_REGEX = new RegExp('/track/([a-z0-9-_]+)', 'i');
 const SPOTIFY_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+)', 'i');
@@ -34,7 +34,7 @@ module.exports = class extends Command {
 	async run(msg, [query]) {
 		if (!msg.member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
-		if (prompts[msg.author.id]) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
+		if (prompts.has(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
 		let queue, playlist;
 		try {
 			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
@@ -60,7 +60,7 @@ module.exports = class extends Command {
 			return this.play(msg, playlist[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
-		delete prompts[msg.author.id];
+		prompts.delete(msg.author.id);
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `${this.client.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.me.voice.channelID) await this.join(msg);
 		queue = await this.addToQueue(msg, song).catch(err => {
@@ -97,11 +97,11 @@ module.exports = class extends Command {
 
 		// From here on out, loadType === 'SEARCH_RESULT' : true
 		const finds = tracks.slice(0, 5);
-		prompts[msg.author.id] = finds;
+		prompts.set(msg.author.id, finds);
 		let limit = 0, choice;
 		do {
 			if (limit++ >= 5) {
-				delete prompts[msg.author.id];
+				prompts.delete(msg.author.id);
 				throw `${this.client.constants.EMOTES.xmark}  ::  Too many invalid replies. Please try again.`;
 			}
 			choice = await msg.prompt([
@@ -111,13 +111,14 @@ module.exports = class extends Command {
 					return `\`${index + 1}\`. **${escapeMarkdown(result.info.title)}** by ${escapeMarkdown(result.info.author)} \`${new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
 				}).join('\n')
 			].join('\n')).catch(() => ({ content: 'cancel' }));
-		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts[msg.author.id] && parseInt(choice.content) > prompts[msg.author.id].length));
+		// eslint-disable-next-line max-len
+		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts.has(msg.author.id) && parseInt(choice.content) > prompts.get(msg.author.id).length));
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content === 'cancel') {
-			delete prompts[msg.author.id];
+			prompts.delete(msg.author.id);
 			throw `${this.client.constants.EMOTES.tick}  ::  Successfully cancelled prompt.`;
 		}
-		return prompts[msg.author.id][parseInt(choice.content) - 1];
+		return prompts.get(msg.author.id)[parseInt(choice.content) - 1];
 	}
 
 	async getSongs(query, soundcloud) {
