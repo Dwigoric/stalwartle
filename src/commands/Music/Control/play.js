@@ -40,7 +40,7 @@ module.exports = class extends Command {
 			throw `${this.client.constants.EMOTES.xmark}  ::  An unknown error occured. Please try again.`;
 		}
 		if (!query) {
-			if (msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
+			if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				await this.join(msg);
@@ -139,7 +139,7 @@ module.exports = class extends Command {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
-			if (msg.guild.player.playing) queue.splice(1, 0, ...songs);
+			if (msg.guild.player && msg.guild.player.playing) queue.splice(1, 0, ...songs);
 			else queue.splice(0, 1, ...songs);
 		} else if (Array.isArray(song)) {
 			let songCount = 0;
