@@ -5,9 +5,6 @@ const { parse } = require('url');
 
 const prompts = new Map();
 const YOUTUBE_PLAYLIST_REGEX = new RegExp('[&?]list=([a-z0-9-_]+)', 'i');
-const SPOTIFY_TRACK_REGEX = new RegExp('/track/([a-z0-9-_]+)', 'i');
-const SPOTIFY_ALBUM_REGEX = new RegExp('/album/([a-z0-9-_]+)', 'i');
-const SPOTIFY_PLAYLIST_REGEX = new RegExp('/playlist/([a-z0-9-_]+)', 'i');
 
 module.exports = class extends Command {
 
@@ -128,11 +125,6 @@ module.exports = class extends Command {
 		if (parse(query).protocol && parse(query).hostname) {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
-			else if (SPOTIFY_TRACK_REGEX.test(searchString)) searchString = `ytsearch:${encodeURIComponent(await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(searchString)[1]))}`;
-			// eslint-disable-next-line max-len
-			else if (SPOTIFY_ALBUM_REGEX.test(searchString)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(searchString)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
-			// eslint-disable-next-line max-len
-			else if (SPOTIFY_PLAYLIST_REGEX.test(searchString)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(searchString)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
 		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}:${encodeURIComponent(query)}`; }
 		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: node.password } })
 			.then(res => res.json())

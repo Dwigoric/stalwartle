@@ -12,8 +12,7 @@
 		"klasa": "github:dirigeants/klasa",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
-		"rethinkdb-ts": "^2.4.0-rc.16",
-		"spotify-to-lavalink": "github:takomst/spotify-to-lavalink"
+		"rethinkdb-ts": "^2.4.0-rc.16"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
@@ -22,6 +21,6 @@
 		"steamapi": "^2.0.3"
 	},
 	"engines": {
-		"node": "14.x"
+		"node": "13.x"
 	}
 }

@@ -1,6 +1,5 @@
 const { Client } = require('klasa');
 const { Manager } = require('@lavacord/discord.js');
-const { SpotifyParser } = require('spotify-to-lavalink');
 const { config: { lavalinkNodes } } = require('../../config');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
@@ -14,7 +13,6 @@ module.exports = class Stalwartle extends Client {
 		super(clientOptions);
 
 		this.playerManager = null;
-		this.spotifyParser = null;
 		this.auth = auth;
 
 		this.once('ready', this._initplayer.bind(this));
@@ -202,7 +200,6 @@ module.exports = class Stalwartle extends Client {
 			user: this.user.id,
 			shards: this.options.shardCount
 		});
-		this.spotifyParser = new SpotifyParser(this.playerManager.idealNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
 		return this.playerManager.connect();
 	}
 
