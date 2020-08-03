@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading image...`);
 		await msg.channel.sendFile(`https://cataas.com/cat${msg.flagArgs.gif ? '/gif' : ''}`, `cat.${msg.flagArgs.gif ? 'gif' : 'png'}`);
 		message.delete();
 	}

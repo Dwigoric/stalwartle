@@ -23,9 +23,9 @@ module.exports = class extends Command {
 				if (member) {
 					return await msg.channel.messages.fetch(member.lastMessageID)
 						.then(mg => mg.content)
-						.catch(() => { throw "<:error:508595005481549846>  ::  Whoops... that person hasn't messaged this channel for quite some time..."; });
+						.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  Whoops... that person hasn't messaged this channel for quite some time...`; });
 				} else {
-					throw '<:error:508595005481549846>  ::  Um... what lie will I judge? 🤔';
+					throw `${this.client.constants.EMOTES.xmark}  ::  Um... what lie will I judge? 🤔`;
 				}
 			}
 			return arg;

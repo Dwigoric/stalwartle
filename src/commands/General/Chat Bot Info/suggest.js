@@ -23,9 +23,9 @@ module.exports = class extends Command {
 			`\t\t\tServer: ${server}`,
 			`\`\`\`${suggestion}\`\`\``
 		].join('\n'), { files: msg.attachments.map(a => a.url) });
-		await msg.send('<a:loading:430269209415516160>  ::  Sending suggestion...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Sending suggestion...`);
 		msg.send([
-			`<:check:508594899117932544>  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
+			`${this.client.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
 			'***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'
 		].join('\n'));
 	}

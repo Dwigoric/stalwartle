@@ -17,7 +17,7 @@ module.exports = class extends Command {
 		if (member.user.equals(this.client.user)) throw 'Have I done something wrong?';
 
 		reason = reason.length > 0 ? reason.join(this.usageDelim) : null;
-		msg.channel.send(`<:check:508594899117932544>  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
+		msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
 		return this.client.emit('modlogAction', msg, member.user, reason);
 	}
 

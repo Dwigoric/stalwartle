@@ -21,7 +21,7 @@ module.exports = class extends Command {
 				.setDescription(params)
 				.setTimestamp()
 		});
-		msg.send(`<:check:508594899117932544>  ::  Successfully posted changelog!`);
+		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
 	}
 
 };

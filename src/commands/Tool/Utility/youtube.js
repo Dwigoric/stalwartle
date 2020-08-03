@@ -29,7 +29,7 @@ module.exports = class extends Command {
 	}
 
 	async query(msg, query, type, url) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading YouTube information...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading YouTube information...`);
 
 		const timezone = msg.author.settings.get('timezone');
 		const queries = [];
@@ -43,7 +43,7 @@ module.exports = class extends Command {
 		})) queries.push(`${key}=${value}`);
 		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${queries.join('&')}`).then(result => result.json());
 
-		if (!res || !res.items || !res.items.length) throw '<:error:508595005481549846>  ::  YouTube query not found!';
+		if (!res || !res.items || !res.items.length) throw `${this.client.constants.EMOTES.xmark}  ::  YouTube query not found!`;
 
 		const embed = new MessageEmbed(),
 			request = res.items[0];

@@ -15,11 +15,11 @@ module.exports = class extends Command {
 	async run(msg, [seek]) {
 		seek -= Date.now();
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!queue.length || !msg.guild.me.voice.channelID) throw `<:error:508595005481549846>  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``; // eslint-disable-line max-len
-		if (!queue[0].info.isSeekable) throw '<:error:508595005481549846>  ::  The current track playing cannot be seeked.';
-		if (queue[0].info.length < seek) throw '<:error:508595005481549846>  ::  The time you supplied is longer than the song\'s length.';
+		if (!queue.length || !msg.guild.me.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``; // eslint-disable-line max-len
+		if (!queue[0].info.isSeekable) throw `${this.client.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`;
+		if (queue[0].info.length < seek) throw `${this.client.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`;
 		msg.guild.player.seek(seek);
-		return msg.send('<:check:508594899117932544>  ::  Successfully seeked the music.');
+		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully seeked the music.`);
 	}
 
 };

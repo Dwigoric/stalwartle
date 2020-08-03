@@ -14,11 +14,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [subredditName]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading subreddit...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading subreddit...`);
 
 		let subreddit = await fetch(`https://www.reddit.com/r/${subredditName}/about.json`)
 			.then(res => res.json())
-			.catch(() => { throw "There was an error. Reddit may be down, or the subreddit doesn't exist."; });
+			.catch(() => { throw 'There was an error. Reddit may be down, or the subreddit doesn\'t exist.'; });
 
 		if (subreddit.kind !== 't5') throw `Subreddit ${subredditName} doesn't exist.`;
 		else subreddit = subreddit.data;

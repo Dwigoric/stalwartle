@@ -10,12 +10,12 @@ module.exports = class extends Command {
 			description: 'Searches song lyrics using your search query.',
 			usage: '<Query:string>'
 		});
-		this.NO_LYRICS_FOUND = '<:error:508595005481549846>  ::  No song lyrics found.';
+		this.NO_LYRICS_FOUND = `${this.client.constants.EMOTES.xmark}  ::  No song lyrics found.`;
 	}
 
 	async run(msg, [query]) {
-		const message = await msg.send('<a:loading:430269209415516160>  ::  Loading lyrics...');
-		const { response: { hits } } = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${this.client.auth.geniusAPIkey}` } }).then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  An error occured. Please try again. Sorry \'bout that!'; }); // eslint-disable-line max-len
+		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading lyrics...`);
+		const { response: { hits } } = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${this.client.auth.geniusAPIkey}` } }).then(res => res.json()).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An error occured. Please try again. Sorry 'bout that!`; }); // eslint-disable-line max-len
 		if (!hits.length) throw this.NO_LYRICS_FOUND;
 		const hit = hits.filter(_hit => _hit.type === 'song')[0];
 		if (!hit) throw this.NO_LYRICS_FOUND;
@@ -49,7 +49,7 @@ module.exports = class extends Command {
 			'porn'
 		]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
-		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw '<:error:508595005481549846>  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.';
+		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw `${this.client.constants.EMOTES.xmark}  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.`;
 
 		await msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
 		message.delete();

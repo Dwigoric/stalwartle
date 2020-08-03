@@ -9,11 +9,11 @@ module.exports = class extends Command {
 			description: 'Returns a random reddit post on a given subreddit.',
 			usage: '<Subreddit:str>'
 		});
-		this.errorMessage = "<:error:508595005481549846>  ::  There was an error. Reddit may be down, or the subreddit doesn't exist.";
+		this.errorMessage = `${this.client.constants.EMOTES.xmark}  ::  There was an error. Reddit may be down, or the subreddit doesn't exist.`;
 	}
 
 	async run(msg, [subreddit]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading reddit post...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading reddit post...`);
 		const { data } = await fetch(`https://www.reddit.com/r/${subreddit}/random.json`)
 			.then(res => res.json())
 			.then(res => {
@@ -22,7 +22,7 @@ module.exports = class extends Command {
 			})
 			.catch(() => { throw this.errorMessage; });
 
-		if (data.over_18 && !msg.channel.nsfw) throw '<:error:508595005481549846>  ::  The post contains NSFW content and this channel is not marked as NSFW.';
+		if (data.over_18 && !msg.channel.nsfw) throw `${this.client.constants.EMOTES.xmark}  ::  The post contains NSFW content and this channel is not marked as NSFW.`;
 
 		if (Boolean(msg.guild) && !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) return msg.sendMessage(`***${data.title}***\n\n${data.url}`);
 

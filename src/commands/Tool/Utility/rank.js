@@ -21,24 +21,24 @@ module.exports = class extends Command {
 
 	async run(msg, [sar]) {
 		const selfroles = msg.guild.settings.get('selfroles');
-		if (!selfroles.length) throw '<:error:508595005481549846>  ::  Selfrole is not yet implemented in this server.';
+		if (!selfroles.length) throw `${this.client.constants.EMOTES.xmark}  ::  Selfrole is not yet implemented in this server.`;
 		const role = selfroles.map(_sar => msg.guild.roles.cache.get(_sar)).find(rl => new RegExp(regExpEsc(sar), 'i').test(rl.name));
-		if (!role) throw `<:error:508595005481549846>  ::  Invalid selfrole. Check all available selfroles in this server by using \`${msg.guild.settings.get('prefix')}rank list\`.`;
-		if (role.position > msg.guild.me.roles.highest.position) throw `<:error:508595005481549846>  ::  **${escapeMarkdown(role.name)}**'s position is higher than me.`;
+		if (!role) throw `${this.client.constants.EMOTES.xmark}  ::  Invalid selfrole. Check all available selfroles in this server by using \`${msg.guild.settings.get('prefix')}rank list\`.`;
+		if (role.position > msg.guild.me.roles.highest.position) throw `${this.client.constants.EMOTES.xmark}  ::  **${escapeMarkdown(role.name)}**'s position is higher than me.`;
 		if (msg.member.roles.cache.has(role.id)) {
 			await msg.member.roles.remove(role, `[Selfrole Remove] Selfrole feature of ${this.client.user.username}`);
-			return msg.send(`<:check:508594899117932544>  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.member.displayName)}** via selfrole.`);
+			return msg.send(`${this.client.constants.EMOTES.tick}  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.member.displayName)}** via selfrole.`);
 		} else {
 			await msg.member.roles.add(role, `[Selfrole Add] Selfrole feature of ${this.client.user.username}`);
-			return msg.send(`<:check:508594899117932544>  ::  **${escapeMarkdown(msg.member.displayName)}** has been given **${escapeMarkdown(role.name)}** via selfrole.`);
+			return msg.send(`${this.client.constants.EMOTES.tick}  ::  **${escapeMarkdown(msg.member.displayName)}** has been given **${escapeMarkdown(role.name)}** via selfrole.`);
 		}
 	}
 
 	async list(msg) {
-		if (!msg.channel.permissionsFor(this.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw '<:error:508595005481549846>  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).'; // eslint-disable-line max-len
+		if (!msg.channel.permissionsFor(this.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).`; // eslint-disable-line max-len
 		const selfroles = msg.guild.settings.get('selfroles');
-		if (!selfroles.length) throw '<:error:508595005481549846>  ::  Selfrole is not yet implemented in this server.';
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the selfrole list');
+		if (!selfroles.length) throw `${this.client.constants.EMOTES.xmark}  ::  Selfrole is not yet implemented in this server.`;
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the selfrole list`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(`Selfroles for ${msg.guild.name}`, msg.guild.iconURL())

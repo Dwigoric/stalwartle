@@ -32,40 +32,41 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		if (!msg.member.voice.channelID) throw '<:error:508595005481549846>  ::  Please connect to a voice channel first.';
-		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `<:error:508595005481549846>  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
-		if (prompts[msg.author.id]) throw '<:error:508595005481549846>  ::  You are currently being prompted. Please pick one first or cancel the prompt.';
+		if (!msg.member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
+		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
+		if (prompts[msg.author.id]) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
 		let queue, playlist;
 		try {
 			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
 		} catch (err) {
 			this.client.emit('wtf', err);
-			throw '<:error:508595005481549846>  ::  An unknown error occured. Please try again.';
+			throw `${this.client.constants.EMOTES.xmark}  ::  An unknown error occured. Please try again.`;
 		}
 		if (!query) {
-			if (msg.guild.me.voice.channelID) throw `<:error:508595005481549846>  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
+			if (msg.guild.me.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				await this.join(msg);
 				return this.play(msg, queue[0]);
 			}
-			if (!playlist.length) throw `<:error:508595005481549846>  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
+			// eslint-disable-next-line max-len
+			if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
 			this.join(msg);
-			msg.send('<:check:508594899117932544>  ::  Queue is empty. The playlist has been added to the queue.');
+			msg.send(`${this.client.constants.EMOTES.tick}  ::  Queue is empty. The playlist has been added to the queue.`);
 			await this.addToQueue(msg, playlist).catch(err => {
 				this.client.emit('wtf', err);
-				throw '<:error:508595005481549846>  ::  There was an error loading your playlist to the queue. Please try again.';
+				throw `${this.client.constants.EMOTES.xmark}  ::  There was an error loading your playlist to the queue. Please try again.`;
 			});
 			return this.play(msg, playlist[0]);
 		}
 		const song = await this.resolveQuery(msg, query);
 		delete prompts[msg.author.id];
-		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `<:error:508595005481549846>  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
+		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `${this.client.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 		if (!msg.guild.me.voice.channelID) await this.join(msg);
 		queue = await this.addToQueue(msg, song).catch(err => {
 			if (typeof err === 'string') throw err;
 			this.client.emit('wtf', err);
-			throw `<:error:508595005481549846>  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
+			throw `${this.client.constants.EMOTES.xmark}  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
 		if (msg.flagArgs.force && queue.length > 1 && msg.guild.me.voice.channelID && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[1].info.title)}**.`);
@@ -75,23 +76,24 @@ module.exports = class extends Command {
 	}
 
 	async join({ guild, channel, member }) {
-		if (!member.voice.channelID) throw '<:error:508595005481549846>  ::  Please do not leave the voice channel.';
+		if (!member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
 		await this.client.playerManager.leave(guild.id);
 		await this.client.playerManager.join({
 			node: this.client.playerManager.idealNodes[0].id,
 			guild: guild.id,
 			channel: member.voice.channelID
 		}, { selfdeaf: true });
-		guild.player.on('error', error => channel.send(`<:error:508595005481549846>  ::  ${error.error}`));
+		guild.player.on('error', error => channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error}`));
 	}
 
 	async resolveQuery(msg, query) {
 		const { loadType, tracks, exception } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flagArgs.soundcloud));
-		if (loadType === 'LOAD_FAILED') throw `<:error:508595005481549846>  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
-		else if (loadType === 'NO_MATCHES') throw '<:error:508595005481549846>  ::  No track found for your query.';
+		if (loadType === 'LOAD_FAILED') throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
+		else if (loadType === 'NO_MATCHES') throw `${this.client.constants.EMOTES.xmark}  ::  No track found for your query.`;
 		else if (loadType === 'TRACK_LOADED') return tracks[0];
 		else if (loadType === 'PLAYLIST_LOADED' && tracks.length) return tracks;
-		else if (loadType === 'PLAYLIST_LOADED' && !tracks.length) throw '<:error:508595005481549846>  ::  It seems the playlist is composed of livestreams. Please try adding them individually. Thanks!';
+		// eslint-disable-next-line max-len
+		else if (loadType === 'PLAYLIST_LOADED' && !tracks.length) throw `${this.client.constants.EMOTES.xmark}  ::  It seems the playlist is composed of livestreams. Please try adding them individually. Thanks!`;
 
 		// From here on out, loadType === 'SEARCH_RESULT' : true
 		const finds = tracks.slice(0, 5);
@@ -100,7 +102,7 @@ module.exports = class extends Command {
 		do {
 			if (limit++ >= 5) {
 				delete prompts[msg.author.id];
-				throw '<:error:508595005481549846>  ::  Too many invalid replies. Please try again.';
+				throw `${this.client.constants.EMOTES.xmark}  ::  Too many invalid replies. Please try again.`;
 			}
 			choice = await msg.prompt([
 				`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
@@ -113,7 +115,7 @@ module.exports = class extends Command {
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content === 'cancel') {
 			delete prompts[msg.author.id];
-			throw '<:check:508594899117932544>  ::  Successfully cancelled prompt.';
+			throw `${this.client.constants.EMOTES.tick}  ::  Successfully cancelled prompt.`;
 		}
 		return prompts[msg.author.id][parseInt(choice.content) - 1];
 	}
@@ -135,7 +137,7 @@ module.exports = class extends Command {
 			.then(res => res.json())
 			.catch(err => {
 				this.client.emit('wtf', err);
-				throw '<:error:508595005481549846>  ::  There was an error, please try again.';
+				throw `${this.client.constants.EMOTES.xmark}  ::  There was an error, please try again.`;
 			});
 	}
 
@@ -159,9 +161,9 @@ module.exports = class extends Command {
 			msg.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue, now at **${queue.length - 1}** entries.`);
 			if (songCount < song.length) msg.channel.send(`⚠  ::  Not all songs were added. Possibilities: (1) You've reached the queue limit of ${msg.guild.settings.get('music.maxQueue')} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, or (4) you've reached the limit of ${msg.guild.settings.get('music.maxUserRequests')} song requests per user. View limits via \`${msg.guild.settings.get('prefix')}conf show music\`.`); // eslint-disable-line max-len
 		} else {
-			if (queue.length >= msg.guild.settings.get('music.maxQueue')) throw `<:error:508595005481549846>  ::  The music queue for **${msg.guild.name}** has reached the limit of ${msg.guild.settings.get('music.maxQueue')} songs; currently ${queue.length}. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxQueue <new limit>\`.`; // eslint-disable-line max-len
-			if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('music.maxUserRequests')) throw `<:error:508595005481549846>  ::  You've reached the maximum request per user limit of ${msg.guild.settings.get('music.maxUserRequests')} requests. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxUserRequests <new limit>\`.`; // eslint-disable-line max-len
-			if (msg.guild.settings.get('music.noDuplicates') && queue.filter(request => request.track === song.track).length) throw `<:error:508595005481549846>  ::  This song is already in the queue, and duplicates are disabled in this server. Disable via \`${msg.guild.settings.get('prefix')}conf set music.noDuplicates false\`.`; // eslint-disable-line max-len
+			if (queue.length >= msg.guild.settings.get('music.maxQueue')) throw `${this.client.constants.EMOTES.xmark}  ::  The music queue for **${msg.guild.name}** has reached the limit of ${msg.guild.settings.get('music.maxQueue')} songs; currently ${queue.length}. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxQueue <new limit>\`.`; // eslint-disable-line max-len
+			if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('music.maxUserRequests')) throw `${this.client.constants.EMOTES.xmark}  ::  You've reached the maximum request per user limit of ${msg.guild.settings.get('music.maxUserRequests')} requests. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxUserRequests <new limit>\`.`; // eslint-disable-line max-len
+			if (msg.guild.settings.get('music.noDuplicates') && queue.filter(request => request.track === song.track).length) throw `${this.client.constants.EMOTES.xmark}  ::  This song is already in the queue, and duplicates are disabled in this server. Disable via \`${msg.guild.settings.get('prefix')}conf set music.noDuplicates false\`.`; // eslint-disable-line max-len
 			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) }));
 			if (!msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
 				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len

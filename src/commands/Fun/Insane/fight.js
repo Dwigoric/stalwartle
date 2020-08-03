@@ -13,7 +13,7 @@ module.exports = class extends Command {
 		});
 
 		this.createCustomResolver('user', (arg, possible, message, [action]) => {
-			if (!action && !arg) throw '<:error:508595005481549846>  ::  Please tell me who you want to challenge to a fight.';
+			if (!action && !arg) throw `${this.client.constants.EMOTES.xmark}  ::  Please tell me who you want to challenge to a fight.`;
 			if (action) return undefined;
 			return this.client.arguments.get('user').run(arg, possible, message);
 		});
@@ -58,10 +58,10 @@ module.exports = class extends Command {
 
 	async run(msg, [opponent]) {
 		// Restrictions
-		if (opponent.bot) throw '<:error:508595005481549846>  ::  You cannot challenge bots to a fight. We will automatically win!';
-		if (!opponent.settings.get('acceptFights')) throw '<:error:508595005481549846>  ::  This person is currently not accepting fight requests.';
-		if (msg.channel.id in currentFights) throw '<:error:508595005481549846>  ::  There is a fight ongoing in this channel. Please wait until the fight is over.';
-		if (opponent.equals(msg.author)) throw '<:error:508595005481549846>  ::  You cannot fight against yourself.';
+		if (opponent.bot) throw `${this.client.constants.EMOTES.xmark}  ::  You cannot challenge bots to a fight. We will automatically win!`;
+		if (!opponent.settings.get('acceptFights')) throw `${this.client.constants.EMOTES.xmark}  ::  This person is currently not accepting fight requests.`;
+		if (msg.channel.id in currentFights) throw `${this.client.constants.EMOTES.xmark}  ::  There is a fight ongoing in this channel. Please wait until the fight is over.`;
+		if (opponent.equals(msg.author)) throw `${this.client.constants.EMOTES.xmark}  ::  You cannot fight against yourself.`;
 
 		currentFights[msg.channel.id] = {
 			challenger: msg.author,
@@ -143,17 +143,17 @@ module.exports = class extends Command {
 				}
 				if (responses.first() && responses.first().content.toLowerCase() in this.moves) {
 					if (this.moves[responses.first().content.toLowerCase()].stamina > currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina) {
-						channel.send('<:error:508595005481549846>  ::  Your stamina is too low. Please choose another move.');
+						channel.send(`${this.client.constants.EMOTES.xmark}  ::  Your stamina is too low. Please choose another move.`);
 						responses.first().content = false;
 						continue;
 					}
 					if (responses.first().content.toLowerCase() === 'rest' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina === 20) {
-						channel.send('<:error:508595005481549846>  ::  You\'re too pumped up to rest! Spend your energy. Please choose another move.');
+						channel.send(`${this.client.constants.EMOTES.xmark}  ::  You're too pumped up to rest! Spend your energy. Please choose another move.`);
 						responses.first().content = false;
 						continue;
 					}
 					if (responses.first().content.toLowerCase() === 'bandage' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health === 100) {
-						channel.send('<:error:508595005481549846>  ::  You\'re at your best shape! Please choose another move.');
+						channel.send(`${this.client.constants.EMOTES.xmark}  ::  You're at your best shape! Please choose another move.`);
 						responses.first().content = false;
 						continue;
 					}
@@ -244,19 +244,22 @@ module.exports = class extends Command {
 	/* eslint-enable complexity */
 
 	async accept(msg) {
-		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw '<:error:508595005481549846>  ::  You do not have any pending fight requests.';
+		// eslint-disable-next-line max-len
+		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
 		await this.fight(msg.channel, currentFights[msg.channel.id].challenger, currentFights[msg.channel.id].opponent);
 		return delete currentFights[msg.channel.id];
 	}
 
 	async deny(msg) {
-		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw '<:error:508595005481549846>  ::  You do not have any pending fight requests.';
-		msg.send(`<:check:508594899117932544>  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
+		// eslint-disable-next-line max-len
+		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
+		msg.send(`${this.client.constants.EMOTES.tick}  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
 		return delete currentFights[msg.channel.id];
 	}
 
 	async cancel(msg) {
-		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].challenger)) throw '<:error:508595005481549846>  ::  You do not have any pending fight requests.';
+		// eslint-disable-next-line max-len
+		if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].challenger)) throw `${this.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
 		msg.send(`⚔  ::  ${currentFights[msg.channel.id].challenger.tag} has cancelled their match with ${currentFights[msg.channel.id].opponent.tag}.`);
 		return delete currentFights[msg.channel.id];
 	}

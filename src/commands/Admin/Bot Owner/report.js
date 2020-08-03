@@ -21,7 +21,7 @@ module.exports = class extends Command {
 			[this.client.settings.get('suggestions.reports')]: this.client.settings.get('suggestions.processed')
 		};
 		if (!repMsg.author.equals(this.client.user)) return null;
-		if (!Object.keys(reportChans).includes(msg.channel.id)) throw '<:error:508595005481549846>  ::  This command can only be run in bug and suggestions channels.';
+		if (!Object.keys(reportChans).includes(msg.channel.id)) throw `${this.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`;
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(repUser.tag, repUser.displayAvatarURL())
@@ -35,7 +35,7 @@ module.exports = class extends Command {
 		if (attachments && attachments.size) embed.setImage(attachments.first().url);
 		if (!msg.flagArgs.deny) this.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
 		msg.delete();
-		msg.send(`<:check:508594899117932544>  ::  Report sent to **${repUser.tag}**.`).then(sent => {
+		msg.send(`${this.client.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => {
 			setTimeout(() => {
 				sent.delete();
 			}, 5000);

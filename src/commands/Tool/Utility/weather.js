@@ -17,7 +17,7 @@ module.exports = class extends Command {
 	}
 
 	async currently(msg, [location]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading current weather information...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading current weather information...`);
 
 		const data = await this.getWeatherData(location, 'currently');
 		msg.send({
@@ -47,10 +47,10 @@ module.exports = class extends Command {
 	}
 
 	async minutely(msg, [location]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
 		const data = await this.getWeatherData(location, 'minutely');
-		if (!data.by_minute || !data.by_minute.length) throw `<:error:508595005481549846>  ::  No by-minute data available for **${data.location.address}**.`;
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the weather reports...');
+		if (!data.by_minute || !data.by_minute.length) throw `${this.client.constants.EMOTES.xmark}  ::  No by-minute data available for **${data.location.address}**.`;
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the weather reports...`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle('🌡 Minutely Weather Report')
@@ -71,10 +71,10 @@ module.exports = class extends Command {
 	}
 
 	async hourly(msg, [location]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
 		const data = await this.getWeatherData(location, 'hourly');
-		if (!data.by_hour || !data.by_hour.length) throw `<:error:508595005481549846>  ::  No by-hour data available for **${data.location.address}**.`;
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the weather reports...');
+		if (!data.by_hour || !data.by_hour.length) throw `${this.client.constants.EMOTES.xmark}  ::  No by-hour data available for **${data.location.address}**.`;
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the weather reports...`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle('🌡 Hourly Weather Report')
@@ -106,10 +106,10 @@ module.exports = class extends Command {
 	}
 
 	async daily(msg, [location]) {
-		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw '<:error:508595005481549846>  ::  I need to be able to **Manage Messages** (permissions).';
+		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
 		const data = await this.getWeatherData(location, 'daily');
-		if (!data.by_day || !data.by_day.length) throw `<:error:508595005481549846>  ::  No by-day data available for **${data.location.address}**.`;
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the weather reports...');
+		if (!data.by_day || !data.by_day.length) throw `${this.client.constants.EMOTES.xmark}  ::  No by-day data available for **${data.location.address}**.`;
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the weather reports...`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle('🌡 Daily Weather Report')
@@ -146,8 +146,8 @@ module.exports = class extends Command {
 	async getWeatherData(location, type) {
 		const { data } = await fetch(`https://api.ksoft.si/kumo/weather/${type}?q=${encodeURIComponent(location)}&units=si`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }) // eslint-disable-line max-len
 			.then(res => res.json())
-			.catch(() => { throw '<:error:508595005481549846>  ::  An error occured. Please make sure you\'re giving a valid location and try again.'; });
-		if (!data) throw '<:error:508595005481549846>  ::  I could not find that location.';
+			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An error occured. Please make sure you're giving a valid location and try again.`; });
+		if (!data) throw `${this.client.constants.EMOTES.xmark}  ::  I could not find that location.`;
 		return data;
 	}
 

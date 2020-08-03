@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 		if (typeof user === 'number') {
 			const modlog = list[user - 1];
-			if (!modlog) throw `<:error:508595005481549846>  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
+			if (!modlog) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
 			const _user = await this.client.users.fetch(modlog.user).catch(() => null);
 			const moderator = await this.client.users.fetch(modlog.moderator).catch(() => null);
 			return msg.send({
@@ -50,7 +50,7 @@ module.exports = class extends Command {
 		if (msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type)) list = list.filter(ml => ml.type === msg.flagArgs.type); // eslint-disable-line max-len
 		if (user) list = list.filter(ml => ml.user === user.id);
 		if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading moderation logs...');
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading moderation logs...`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
@@ -76,7 +76,7 @@ module.exports = class extends Command {
 	async showcontent(msg) {
 		const modlogShowContent = msg.guild.settings.get('modlogShowContent');
 		msg.guild.settings.update('modlogShowContent', !modlogShowContent);
-		return msg.send(`<:check:508594899117932544>  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
+		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
 	}
 
 	async reset(msg) {
@@ -86,9 +86,9 @@ module.exports = class extends Command {
 		} while (!['yes', 'no', null].includes(prompt.content));
 		if (prompt.content === 'yes') {
 			await this.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
-			return msg.send(`<:check:508594899117932544>  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
+			return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
 		} else {
-			return msg.send("<:check:508594899117932544>  ::  Alright! You don't want to reset your modlogs.");
+			return msg.send(`${this.client.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
 		}
 	}
 

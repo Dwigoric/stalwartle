@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [twitchName]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading Twitch channel...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading Twitch channel...`);
 
 		const channel = await fetch(`https://api.twitch.tv/helix/users?login=${twitchName}`, {
 			headers: {
@@ -22,11 +22,11 @@ module.exports = class extends Command {
 			}
 		})
 			.then(async res => {
-				if (!res.ok) throw `<:error:508595005481549846>  ::  An error occurred: \`${await res.json().then(data => data.message)}\``;
+				if (!res.ok) throw `${this.client.constants.EMOTES.xmark}  ::  An error occurred: \`${await res.json().then(data => data.message)}\``;
 				return res.json();
 			})
 			.then(res => {
-				if (!res.data.length) throw `<:error:508595005481549846>  ::  There is no Twitch streamer named **${twitchName}**.`;
+				if (!res.data.length) throw `${this.client.constants.EMOTES.xmark}  ::  There is no Twitch streamer named **${twitchName}**.`;
 				return res.data[0];
 			});
 

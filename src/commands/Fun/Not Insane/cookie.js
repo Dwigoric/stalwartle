@@ -29,21 +29,21 @@ module.exports = class extends Command {
 
 	async run(msg, [person]) {
 		if (!person) return msg.send(`🍪  ::  You have **${msg.author.settings.get('cookies')}** cookie${msg.author.settings.get('cookies') === 1 ? '' : 's'}.`);
-		if (person.id === msg.author.id) throw "<:error:508595005481549846>  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿";
+		if (person.id === msg.author.id) throw `${this.client.constants.EMOTES.xmark}  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿`;
 		if (person.equals(this.client.user)) throw `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`;
-		if (person.bot) throw '<:error:508595005481549846>  ::  I wonder if bots can eat cookies... 🤔';
+		if (person.bot) throw `${this.client.constants.EMOTES.xmark}  ::  I wonder if bots can eat cookies... 🤔`;
 		const cookies = person.settings.get('cookies');
 		if (msg.flagArgs.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
 		const cookieTask = this.client.schedule.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
-		if (cookieTask.length) throw `<:error:508595005481549846>  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
+		if (cookieTask.length) throw `${this.client.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
 		await this.client.schedule.create('cookieReset', this.client.arguments.get('time').run('1h', 'time', msg), { data: { user: msg.author.id } });
 		await person.settings.update('cookies', cookies + 1);
 		return msg.send(`🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
 	}
 
 	async lb(msg) {
-		if (!msg.channel.permissionsFor(this.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw '<:error:508595005481549846>  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).'; // eslint-disable-line max-len
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading leaderboard...');
+		if (!msg.channel.permissionsFor(this.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).`; // eslint-disable-line max-len
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading leaderboard...`);
 		let list = await this.getList();
 		if (!msg.flagArgs.global) list = list.filter(user => msg.guild.members.cache.has(user.id)); // eslint-disable-line max-len
 		if (!list.length) throw '🍪  ::  Whoops! It seems no one in this server has any cookie yet!';

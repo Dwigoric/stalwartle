@@ -10,7 +10,7 @@ module.exports = class extends Command {
 		});
 	}
 	async run(msg) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading catfact...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading catfact...`);
 		const { fact } = await fetch('https://catfact.ninja/fact').then(res => res.json());
 		return msg.send(`🐱  ::  **Catfact:** *${fact}*`);
 	}

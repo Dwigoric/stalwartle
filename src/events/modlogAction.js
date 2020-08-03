@@ -33,7 +33,7 @@ module.exports = class extends Event {
 
 		let logMessage = { id: null };
 		if (message.guild.settings.get('logging') && channel) {
-			if (!channel.postable) return message.send(`<:error:508595005481549846>  ::  It seems that I cannot send messages in ${channel}.`);
+			if (!channel.postable) return message.send(`${this.client.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${channel}.`);
 			const embed = new MessageEmbed()
 				.setColor(configs[message.command.name][0])
 				.setTitle(`Case #${modlogs.length + 1}: ${toTitleCase(message.command.name)} ${configs[message.command.name][1]}`)

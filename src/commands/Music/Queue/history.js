@@ -19,10 +19,10 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		if (msg.guild.settings.get('donation') < 3) throw '<:error:508595005481549846>  ::  Sorry! This feature is limited to servers which have donated $3 or more.';
+		if (msg.guild.settings.get('donation') < 3) throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! This feature is limited to servers which have donated $3 or more.`;
 		const { history } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!history.length) throw '<:error:508595005481549846>  ::  There are no songs in the history yet! Songs you play are stored in the history within a day.';
-		const message = await msg.channel.send('<a:loading:430269209415516160>  ::  Loading the music history...');
+		if (!history.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the history yet! Songs you play are stored in the history within a day.`;
+		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the music history...`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
 			.setAuthor(`Server Music History: ${msg.guild.name}`, msg.guild.iconURL())
@@ -44,33 +44,33 @@ module.exports = class extends Command {
 
 	async export(msg) {
 		const { history } = await this.client.providers.default.get('music', msg.guild.id);
-		if (!history.length) throw '<:error:508595005481549846>  ::  The history is empty. Songs you play are stored in the history within a day.';
+		if (!history.length) throw `${this.client.constants.EMOTES.xmark}  ::  The history is empty. Songs you play are stored in the history within a day.`;
 		let choice;
 		do {
 			choice = await msg.prompt('📜  ::  Should the history be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
 		} while (!['file', 'haste', 'hastebin', 'none', null].includes(choice.content));
 		switch (choice.content) {
 			case 'file': {
-				if (!msg.channel.attachable) throw '<:error:508595005481549846>  ::  I do not have the permissions to attach files to this channel.';
-				return msg.channel.sendFile(Buffer.from(history.map(track => track.info.uri).join('\r\n')), 'output.txt', '<:check:508594899117932544>  ::  Exported the history as file.'); // eslint-disable-line max-len
+				if (!msg.channel.attachable) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the permissions to attach files to this channel.`;
+				return msg.channel.sendFile(Buffer.from(history.map(track => track.info.uri).join('\r\n')), 'output.txt', `${this.client.constants.EMOTES.tick}  ::  Exported the history as file.`); // eslint-disable-line max-len
 			}
 			case 'haste':
 			case 'hastebin': {
 				const { key } = await fetch('https://hastebin.com/documents', {
 					method: 'POST',
 					body: history.map(track => track.info.uri).join('\r\n')
-				}).then(res => res.json()).catch(() => { throw '<:error:508595005481549846>  ::  Sorry! An unknown error occurred.'; });
-				return msg.send(`<:check:508594899117932544>  ::  Exported the history to hastebin: <https://hastebin.com/${key}.stalwartle>`);
+				}).then(res => res.json()).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! An unknown error occurred.`; });
+				return msg.send(`${this.client.constants.EMOTES.tick}  ::  Exported the history to hastebin: <https://hastebin.com/${key}.stalwartle>`);
 			}
 		}
 		return null;
 	}
 
 	async clear(msg) {
-		if (!await msg.hasAtLeastPermissionLevel(5)) throw '<:error:508595005481549846>  ::  Only DJs can clear the history!';
+		if (!await msg.hasAtLeastPermissionLevel(5)) throw `${this.client.constants.EMOTES.xmark}  ::  Only DJs can clear the history!`;
 		this.client.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory' && tk.data.guild === msg.guild.id).forEach(tk => tk.delete());
 		this.client.providers.default.update('music', msg.guild.id, { history: [] });
-		msg.send('<:check:508594899117932544>  ::  Successfully cleared the music history for this server.');
+		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully cleared the music history for this server.`);
 	}
 
 };

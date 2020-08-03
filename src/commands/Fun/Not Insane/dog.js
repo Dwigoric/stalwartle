@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const _message = await msg.send('<a:loading:430269209415516160>  ::  Loading image...');
+		const _message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading image...`);
 		const { message } = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
 		await msg.channel.sendFile(message);
 		_message.delete();

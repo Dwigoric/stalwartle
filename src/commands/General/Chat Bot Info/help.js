@@ -42,7 +42,7 @@ module.exports = class extends Command {
 			const previousHandler = this.handlers.get(msg.author.id);
 			if (previousHandler) previousHandler.stop();
 
-			const handler = await (await this.buildDisplay(msg)).run(await msg.send('<a:loading:430269209415516160>  ::  Loading commands...'), {
+			const handler = await (await this.buildDisplay(msg)).run(await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading commands...`), {
 				filter: (reaction, user) => user.id === msg.author.id,
 				time
 			});
@@ -55,7 +55,7 @@ module.exports = class extends Command {
 	}
 
 	async originalHelp(msg, [category, subcategory]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading commands...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading commands...`);
 		const method = this.client.user.bot ? 'author' : 'channel';
 		const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
 		const categories = Object.keys(help);
@@ -115,11 +115,11 @@ module.exports = class extends Command {
 		let cmds;
 		if (!category && !subcategory) cmds = this.client.commands;
 		if (category) {
-			if (!this.client.commands.map(cmd => cmd.category).includes(category)) throw `<:error:508595005481549846>  ::  **${category}** is not a valid category!`;
+			if (!this.client.commands.map(cmd => cmd.category).includes(category)) throw `${this.client.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
 			cmds = this.client.commands.filter(cmd => cmd.category === category);
 		}
 		if (subcategory) {
-			if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `<:error:508595005481549846>  ::  **${subcategory}** is not a valid subcategory!`;
+			if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
 			cmds = this.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
 		}
 
@@ -133,7 +133,7 @@ module.exports = class extends Command {
 			return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
 		}));
 
-		if (!Object.keys(help).length) throw `<:error:508595005481549846>  ::  It would seem that **${subcategory}** is not under **${category}**.`;
+		if (!Object.keys(help).length) throw `${this.client.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`;
 		return help;
 	}
 

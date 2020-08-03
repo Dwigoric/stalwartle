@@ -15,12 +15,12 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [search, index = 1]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading Urban definition...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
 		const body = await fetch(`http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(search)}`).then(res => res.json());
 
 		const result = body.list[index];
-		if (!result) throw `<:error:508595005481549846>  ::  No entry found for **${search}**.`;
+		if (!result) throw `${this.client.constants.EMOTES.xmark}  ::  No entry found for **${search}**.`;
 
 		const definition = result.definition.length > 1000 ?
 			`${this.splitText(result.definition, 1000)}...` :

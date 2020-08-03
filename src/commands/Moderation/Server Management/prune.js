@@ -19,9 +19,9 @@ module.exports = class extends Command {
 
 	async run(msg, [limit = 50, filter = null]) {
 		let messages = await msg.channel.messages.fetch({ limit: 1 });
-		if (!messages.size) throw '<:error:508595005481549846>  ::  The channel does not have any messages.';
+		if (!messages.size) throw `${this.client.constants.EMOTES.xmark}  ::  The channel does not have any messages.`;
 
-		if (pruning.has(msg.channel.id)) throw '<:error:508595005481549846>  ::  I am currently pruning messages from this channel. Please wait until the process is done.';
+		if (pruning.has(msg.channel.id)) throw `${this.client.constants.EMOTES.xmark}  ::  I am currently pruning messages from this channel. Please wait until the process is done.`;
 		pruning.add(msg.channel.id);
 
 		messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
@@ -34,10 +34,10 @@ module.exports = class extends Command {
 		}
 		if (!messages.size) {
 			pruning.delete(msg.channel.id);
-			throw `<:error:508595005481549846>  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`;
+			throw `${this.client.constants.EMOTES.xmark}  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`;
 		}
 
-		const loadingMessage = await msg.channel.send('<a:loading:430269209415516160>  ::  Deleting messages...');
+		const loadingMessage = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Deleting messages...`);
 		let deleted = 0;
 		const bulkDeleted = await msg.channel.bulkDelete(messages, true);
 		deleted += bulkDeleted.size;
@@ -52,7 +52,7 @@ module.exports = class extends Command {
 
 		pruning.delete(msg.channel.id);
 		await loadingMessage.delete();
-		return msg.channel.send(`<:check:508594899117932544>  ::  Successfully deleted ${deleted} messages from ${limit} messages.`).then(pruneMsg => {
+		return msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  Successfully deleted ${deleted} messages from ${limit} messages.`).then(pruneMsg => {
 			setTimeout(() => pruneMsg.delete(), 5000);
 		});
 	}

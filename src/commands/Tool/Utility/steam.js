@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [game]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading game from Steam...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading game from Steam...`);
 
 		const steam = new SteamAPI(this.client.auth.steamAPIkey),
 			embed = new MessageEmbed(),
@@ -24,10 +24,10 @@ module.exports = class extends Command {
 		if (steamSearch) {
 			const hrefData = cheerio.load(steamSearch)('#search_result_container > #search_resultsRows > .search_result_row').attr('href');
 
-			if (!hrefData) throw '<:error:508595005481549846>  ::  Steam game not found!';
+			if (!hrefData) throw `${this.client.constants.EMOTES.xmark}  ::  Steam game not found!`;
 
 			const gameID = hrefData.split('/')[4],
-				steamData = await steam.getGameDetails(gameID).catch(() => { throw '<:error:508595005481549846>  ::  Sorry! I could not find that game in Steam.'; });
+				steamData = await steam.getGameDetails(gameID).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! I could not find that game in Steam.`; });
 
 			const genres = [],
 				platforms = [];

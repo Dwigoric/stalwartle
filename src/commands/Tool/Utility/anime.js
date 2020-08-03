@@ -14,11 +14,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [keyword]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading anime...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading anime...`);
 		const search = await fetch(`https://api.jikan.moe/v3/search/anime?q=${encodeURIComponent(keyword)}&limit=1`)
 			.then(res => res.json())
 			.then(body => body.results);
-		if (!search.length) throw '<:error:508595005481549846>  ::  Anime series not found!';
+		if (!search.length) throw `${this.client.constants.EMOTES.xmark}  ::  Anime series not found!`;
 
 		const [anime] = search;
 

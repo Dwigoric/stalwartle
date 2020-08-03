@@ -26,7 +26,7 @@ module.exports = class extends Argument {
 		}
 
 		switch (querySearch.length) {
-			case 0: throw `<:error:508595005481549846>  ::  \`${possible.name}\` must be a valid name, ID, or channel mention.`;
+			case 0: throw `${this.client.constants.EMOTES.xmark}  ::  \`${possible.name}\` must be a valid name, ID, or channel mention.`;
 			case 1: return querySearch[0];
 			default: throw `Found multiple matches: ${querySearch.map(result => `\`#${result.name}\` (\`${result.id}\`)`).join(', ')}`;
 		}

@@ -77,13 +77,13 @@ module.exports = class extends Command {
 		this.createCustomResolver('string', (arg, possible, msg) => {
 			const osu = msg.author.settings.get('osu');
 			if (osu && !arg) return osu;
-			if (!arg) throw '<:error:508595005481549846>  ::  You did not provide a search query. Do you want a default osu! account? Use `s.userconf set osu <username here>`.';
+			if (!arg) throw `${this.client.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`;
 			return arg;
 		});
 	}
 
 	async run(msg, [...username]) {
-		await msg.send('<a:loading:430269209415516160>  ::  Loading user information...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading user information...`);
 
 		let mode;
 		if (msg.flagArgs.mania) mode = 3;
@@ -99,7 +99,7 @@ module.exports = class extends Command {
 			type: 'string'
 		})) queries.push(`${key}=${value}`);
 		const request = await fetch(`https://osu.ppy.sh/api/get_user?${queries.join('&')}`).then(res => res.json());
-		if (!request.length) throw '<:error:508595005481549846>  ::  Whoops! You supplied an invalid osu! username.';
+		if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
 
 		const user = request[0];
 		const accuracy = `${+`${`${Math.round(`${`${Number(user.accuracy)}e+2`}`)}e-2`}`}%`;
@@ -143,9 +143,9 @@ module.exports = class extends Command {
 		else if (msg.flagArgs.taiko) mode = 1;
 		else mode = 0;
 
-		await msg.send('<a:loading:430269209415516160>  ::  Loading beatmap...');
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading beatmap...`);
 		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${this.client.auth.osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
-		if (!request.length) throw '<:error:508595005481549846>  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.';
+		if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.`;
 
 		const beatmap = request[0];
 		const genres = ['Any', 'Unspecified', 'Video Game', 'Anime', 'Rock', 'Pop', 'Other', 'Novelty', null, 'Hip-Hop', 'Electronic'];
@@ -189,7 +189,7 @@ module.exports = class extends Command {
 	}
 
 	async top(msg, username, type) {
-		await msg.send(`<a:loading:430269209415516160>  ::  Loading ${type} plays...`);
+		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading ${type} plays...`);
 
 		const timezone = msg.author.settings.get('timezone');
 
@@ -206,11 +206,11 @@ module.exports = class extends Command {
 		};
 
 		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?k=${this.client.auth.osuAPIkey}&u=${encodeURIComponent(username)}&type=string`).then(res => res.json());
-		if (!userReq.length) throw '<:error:508595005481549846>  ::  Whoops! You supplied an invalid osu! username.';
+		if (!userReq.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
 		const user = userReq[0];
 
 		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?k=${this.client.auth.osuAPIkey}&u=${user.user_id}&type=id&m=${mode}&limit=5`).then(res => res.json());
-		if (!request.length) throw `<:error:508595005481549846>  ::  Whoops! ${errString[type](user)}`;
+		if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! ${errString[type](user)}`;
 
 		const top = await Promise.all(request.map(async list => {
 			let urank;
@@ -259,7 +259,7 @@ module.exports = class extends Command {
 			.setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
 			.setDescription(top.join('\n\n'));
 
-		return msg.send(embed).catch(() => { throw `<:error:508595005481549846>  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
+		return msg.send(embed).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
 	}
 
 };
