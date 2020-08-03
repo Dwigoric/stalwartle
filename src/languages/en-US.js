@@ -100,7 +100,7 @@ module.exports = class extends Language {
 			COMMAND_RELOAD_ALL: (type, time) => `${this.client.constants.EMOTES.tick}  ::  Reloaded all ${type}. (Took ${time})`,
 			COMMAND_RELOAD_EVERYTHING: (time) => `${this.client.constants.EMOTES.tick}  ::  Reloaded everything. (Took ${time})`,
 			COMMAND_RELOAD_DESCRIPTION: 'Reloads a klasa piece, or all pieces of a klasa store.',
-			COMMAND_REBOOT: `${this.client.constants.EMOTES.loading}  ::  Bot is restarting... I will message you via DMs once I've woken up again.`,
+			COMMAND_REBOOT: `${this.client.constants.EMOTES.loading}  ::  Bot is restarting... I will message you in this channel once I've woken up again.`,
 			COMMAND_REBOOT_DESCRIPTION: 'Reboots the bot.',
 			COMMAND_LOAD: (time, type, name) => `${this.client.constants.EMOTES.tick}  ::  Successfully loaded ${type}: \`${name}\`. (Took: ${time})`,
 			COMMAND_LOAD_FAIL: `${this.client.constants.EMOTES.xmark}  ::  The file does not exist, or an error occurred while loading your file. Please check your console.`,
