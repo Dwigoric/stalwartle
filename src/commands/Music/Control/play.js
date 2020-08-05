@@ -109,7 +109,7 @@ module.exports = class extends Command {
 				}).join('\n')
 			].join('\n')).catch(() => ({ content: 'cancel' }));
 		// eslint-disable-next-line max-len
-		} while ((choice.content !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts.has(msg.author.id) && parseInt(choice.content) > prompts.get(msg.author.id).length));
+		} while ((choice.content.toLowerCase() !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts.has(msg.author.id) && parseInt(choice.content) > prompts.get(msg.author.id).length));
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content === 'cancel') {
 			prompts.delete(msg.author.id);
