@@ -11,7 +11,7 @@ module.exports = class extends Event {
 	async run(oldState, newState) {
 		if (!this.client.playerManager) return null;
 		if (!newState.guild.player) return null;
-		if (!newState.guild.me.voice.channelID) this.client.playerManager.leave(newState.guild.id);
+		if (!newState.guild.me.voice.channelID) return this.client.playerManager.leave(newState.guild.id);
 		if (oldState.channel && newState.channel && (oldState.channel.id === newState.channel.id || ![oldState.channel.id, newState.channel.id].includes(newState.guild.me.voice.channelID))) return null;
 
 		const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
