@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permissionLevel: 5,
 			runIn: ['text'],
-			description: 'Stops the music session in the server.'
+			description: 'Makes the bot leave the voice channel, if connected to one.'
 		});
 	}
 

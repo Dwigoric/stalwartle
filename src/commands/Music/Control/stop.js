@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permissionLevel: 5,
 			runIn: ['text'],
-			description: 'Stops the music session in the server.'
+			description: 'Stops the music session in the server and empties the music queue.'
 		});
 	}
 
