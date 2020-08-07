@@ -13,9 +13,9 @@ module.exports = class extends Command {
 	async run(msg) {
 		if (!msg.guild.me.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music session in this server.`;
 		this.client.playerManager.leave(msg.guild.id);
-		await this.client.providers.default.update('music', msg.guild.id, { queue: [] });
+		if (await this.client.providers.default.get('music', msg.guild.id).then(music => music.queue[0] && music.queue[0].requester === this.client.user.id)) this.client.providers.default.update('music', msg.guild.id, { queue: [] }); // eslint-disable-line max-len
 		// eslint-disable-next-line max-len
-		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully ended the music session for this server, and the queue has been emptied.`);
+		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully left the voice channel.`);
 	}
 
 };
