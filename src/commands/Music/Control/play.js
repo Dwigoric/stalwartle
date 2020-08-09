@@ -111,7 +111,7 @@ module.exports = class extends Command {
 		// eslint-disable-next-line max-len
 		} while ((choice.content.toLowerCase() !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts.has(msg.author.id) && parseInt(choice.content) > prompts.get(msg.author.id).length));
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
-		if (choice.content === 'cancel') {
+		if (choice.content.toLowerCase() === 'cancel') {
 			prompts.delete(msg.author.id);
 			throw `${this.client.constants.EMOTES.tick}  ::  Successfully cancelled prompt.`;
 		}
