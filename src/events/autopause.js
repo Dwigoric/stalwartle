@@ -6,6 +6,8 @@ module.exports = class extends Event {
 		super(...args, {
 			event: 'voiceStateUpdate'
 		});
+
+		this.autopaused = new Set();
 	}
 
 	async run(oldState, newState) {
@@ -16,10 +18,16 @@ module.exports = class extends Event {
 
 		const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
 		if (newState.guild.player && !newState.guild.player.playing && !channelMembers.size) return this.client.playerManager.leave(newState.guild.id);
-		if (newState.guild.me.voice.channelID && channelMembers.size && newState.guild.player.paused) return newState.guild.player.pause(false);
+		if (newState.guild.me.voice.channelID && channelMembers.size && this.autopaused.has(newState.guild.id)) {
+			this.autopaused.delete(newState.guild.id);
+			return newState.guild.player.pause(false);
+		}
 		if (channelMembers.size) return null;
 		const { queue } = await this.client.providers.default.get('music', newState.guild.id);
-		if (!queue[0].info.isStream) newState.guild.player.pause(true);
+		if (!queue[0].info.isStream) {
+			this.autopaused.add(newState.guild.id);
+			newState.guild.player.pause(true);
+		}
 		if (newState.guild.settings.get('donation') >= 10) return null;
 		return this.client.setTimeout(guild => {
 			if (guild.me.voice.channelID && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
