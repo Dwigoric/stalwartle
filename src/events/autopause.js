@@ -16,7 +16,7 @@ module.exports = class extends Event {
 
 		const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
 		if (newState.guild.player && !newState.guild.player.playing && !channelMembers.size) return this.client.playerManager.leave(newState.guild.id);
-		if (newState.guild.me.voice.channelID && channelMembers.size) return newState.guild.player.pause(false);
+		if (newState.guild.me.voice.channelID && channelMembers.size && newState.guild.player.paused) return newState.guild.player.pause(false);
 		if (channelMembers.size) return null;
 		const { queue } = await this.client.providers.default.get('music', newState.guild.id);
 		if (!queue[0].info.isStream) newState.guild.player.pause(true);
