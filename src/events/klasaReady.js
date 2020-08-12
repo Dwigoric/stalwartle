@@ -20,8 +20,7 @@ const statuses = [
 	{ name: 'Pop Rock', type: 'LISTENING' },
 	{ name: 'P!ATD', type: 'LISTENING' },
 	{ name: 'Fall Out Boy', type: 'LISTENING' },
-	{ name: 'Ariana Grande', type: 'LISTENING' },
-	{ name: 'Ultimates', type: 'WATCHING' }
+	{ name: 'Ariana Grande', type: 'LISTENING' }
 ];
 
 module.exports = class extends Event {
