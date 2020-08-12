@@ -165,7 +165,7 @@ module.exports = class extends Command {
 				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
-					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL())
+					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL({ dynamic: true }))
 					.setDescription(`[**${title}** by ${author}](${uri})`)
 					.setFooter(`For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`)
 					.addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1, true)

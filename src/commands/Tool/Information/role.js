@@ -33,7 +33,7 @@ module.exports = class extends Command {
 			return [rgbObj.rd, rgbObj.gn, rgbObj.bl];
 		}
 
-		const avatarURL = msg.author.displayAvatarURL();
+		const avatarURL = msg.author.displayAvatarURL({ dynamic: true });
 		msg.send({
 			embed: new MessageEmbed()
 				.setColor(role.hexColor)

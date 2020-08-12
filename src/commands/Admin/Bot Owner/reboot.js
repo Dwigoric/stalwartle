@@ -25,7 +25,7 @@ module.exports = class extends Command {
 			embed: new MessageEmbed()
 				.setColor(0x40E0D0)
 				.setTitle('Bot has successfully restarted!')
-				.setThumbnail(this.client.user.displayAvatarURL())
+				.setThumbnail(this.client.user.displayAvatarURL({ dynamic: true }))
 				.setDescription(`**Creeping through Discord...**\nand doing some magic!\n\nCurrently running on **${await this.client.guildCount()}** guilds with **${await this.client.userCount()}** users.`) // eslint-disable-line max-len
 				.setFooter(`Reboot duration: ${+`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`}s`)
 				.setTimestamp()

@@ -35,7 +35,7 @@ module.exports = class extends Command {
 		const poll = await chan.send({
 			embed: new MessageEmbed()
 				.setColor(0x40E0D0)
-				.setAuthor(question, msg.author.displayAvatarURL())
+				.setAuthor(question, msg.author.displayAvatarURL({ dynamic: true }))
 				.setDescription(choices)
 				.setFooter(`Poll started by ${msg.author.tag}`)
 				.setTimestamp()

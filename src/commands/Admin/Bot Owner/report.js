@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		if (!Object.keys(reportChans).includes(msg.channel.id)) throw `${this.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`;
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(repUser.tag, repUser.displayAvatarURL())
+			.setAuthor(repUser.tag, repUser.displayAvatarURL({ dynamic: true }))
 			.addField('Submission', repMsg.content)
 			.addField("High Lord's Comments", repCom.join(' '))
 			.setTimestamp();

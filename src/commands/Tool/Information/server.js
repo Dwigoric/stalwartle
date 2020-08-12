@@ -37,7 +37,7 @@ module.exports = class extends Command {
 		}[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
 		if (guild.region.includes('vip')) region += ' [Partnered]';
 
-		const avatarURL = msg.author.displayAvatarURL();
+		const avatarURL = msg.author.displayAvatarURL({ dynamic: true });
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')

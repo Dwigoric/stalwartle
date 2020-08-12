@@ -17,7 +17,6 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [chan = msg.channel]) {
-		const avatarURL = msg.author.displayAvatarURL();
 		const timezone = msg.author.settings.get('timezone');
 
 		let embed = new MessageEmbed()
@@ -26,7 +25,7 @@ module.exports = class extends Command {
 			.addField('ID', chan.id, true)
 			.addField('Type', toTitleCase(chan.type), true)
 			.addField('Category', chan.parent ? chan.parent.name : 'No Category', true)
-			.setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
+			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 		if (chan.type === 'text') {
 			embed = embed

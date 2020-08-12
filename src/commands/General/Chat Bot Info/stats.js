@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		const now = Date.now();
 		msg.sendMessage(new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(`${this.client.user.tag}'s Statistics 📟`, this.client.user.displayAvatarURL())
+			.setAuthor(`${this.client.user.tag}'s Statistics 📟`, this.client.user.displayAvatarURL({ dynamic: true }))
 			.setFooter(`Shard ${((msg.guild ? msg.guild.shard.id : msg.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}`)
 			.setTimestamp()
 			.addField('🤖 General Information', [

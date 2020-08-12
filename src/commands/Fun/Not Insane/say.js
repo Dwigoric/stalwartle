@@ -36,7 +36,7 @@ module.exports = class extends Command {
 		return chan.send({
 			embed: await new MessageEmbed()
 				.setColor(0x40E0D0)
-				.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
+				.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
 				.setDescription(msgargs)
 				.setFooter(`From #${msg.channel.name}`)
 				.setTimestamp()

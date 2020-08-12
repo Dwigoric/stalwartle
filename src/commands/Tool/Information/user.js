@@ -41,15 +41,15 @@ module.exports = class extends Command {
 
 		const embed = new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(player.tag, player.displayAvatarURL())
-			.setThumbnail(player.displayAvatarURL())
+			.setAuthor(player.tag, player.displayAvatarURL({ dynamic: true }))
+			.setThumbnail(player.displayAvatarURL({ dynamic: true }))
 			.addField('ID', player.id, true)
 			.addField('Server Nickname', nick, true);
 		if (!player.bot) embed.addField('User\'s Timezone', player.settings.get('timezone'), true);
 		embed.addField('Joined Server', joined)
 			.addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
 			.addField(`Roles ${roleNum}`, roles)
-			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL())
+			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
 			.setTimestamp();
 		return msg.sendEmbed(embed);
 	}
@@ -69,13 +69,13 @@ module.exports = class extends Command {
 		return msg.send({
 			embed: new MessageEmbed()
 				.setTitle(`**${user.username}**'s avatar`)
-				.setImage(user.displayAvatarURL({ size: 2048 }))
+				.setImage(user.displayAvatarURL({ dynamic: true, size: 2048 }))
 		});
 	}
 
 	async rawavatar(msg, [user = msg.author]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES')) throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! I have no permissions to attach files in this channel.`;
-		return msg.send(`**${user.username}**'s avatar`, { files: [new MessageAttachment(user.displayAvatarURL())] });
+		return msg.send(`**${user.username}**'s avatar`, { files: [new MessageAttachment(user.displayAvatarURL({ dynamic: true }))] });
 	}
 
 	async id(msg, [user = msg.author]) {
