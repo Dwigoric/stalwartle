@@ -85,8 +85,7 @@ module.exports = class extends Command {
 
 	async resolveQuery(msg, query) {
 		const { loadType, tracks, exception } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flagArgs.soundcloud));
-		// eslint-disable-next-line max-len
-		if (loadType === 'LOAD_FAILED') throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity}) Persistent? Append \`--soundcloud\` at the end of your query to search SoundCloud instead!`;
+		if (loadType === 'LOAD_FAILED') throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
 		else if (loadType === 'NO_MATCHES') throw `${this.client.constants.EMOTES.xmark}  ::  No track found for your query.`;
 		else if (loadType === 'TRACK_LOADED') return tracks[0];
 		else if (loadType === 'PLAYLIST_LOADED' && tracks.length) return tracks;
