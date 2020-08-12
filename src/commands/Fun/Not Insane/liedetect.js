@@ -34,8 +34,8 @@ module.exports = class extends Command {
 
 	async run(msg, [member, ...text]) {
 		const gifs = {
-			truth: ['https://giphy.com/gifs/editingandlayout-the-office-true-dwight-5wWf7GR2nhgamhRnEuA', 0x2ECC71],
-			lie: ['https://giphy.com/gifs/cbc-funny-comedy-2wVDK79pXCAsTyqLUa', 0xE74C3C]
+			truth: ['https://media.giphy.com/media/5wWf7GR2nhgamhRnEuA/giphy.gif', 0x2ECC71],
+			lie: ['https://media.giphy.com/media/2wVDK79pXCAsTyqLUa/giphy.gif', 0xE74C3C]
 		};
 		const gif = msg.flagArgs.force && ['truth', 'lie'].includes(msg.flagArgs.force) ? gifs[msg.flagArgs.force] : Object.values(gifs)[Math.round(Math.random())];
 
