@@ -125,7 +125,7 @@ module.exports = class extends Command {
 		if (parse(query).protocol && parse(query).hostname) {
 			searchString = query;
 			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
-		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`; }
+		} else { searchString = `${soundcloud ? 'scsearch' : 'ytsearch'}: ${encodeURIComponent(query)}`; }
 		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: node.password } })
 			.then(res => res.json())
 			.catch(err => {
