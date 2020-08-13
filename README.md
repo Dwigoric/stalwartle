@@ -4,6 +4,7 @@ With sound equalizer, you can play your favorite online radio, SoundCloud tracks
 
 Supported ways to play music:
 * YouTube
+* Spotify
 * SoundCloud
 * Bandcamp
 * Twitch

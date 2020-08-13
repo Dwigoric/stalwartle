@@ -1,7 +1,7 @@
 {
 	"name": "stalwartle",
 	"description": "A Discord Bot for Discordians' basic needs",
-	"version": "2.11.3",
+	"version": "2.12.3",
 	"main": "src/app.js",
 	"scripts": {
 		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
@@ -12,7 +12,8 @@
 		"klasa": "github:dirigeants/klasa",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
-		"rethinkdb-ts": "^2.4.0-rc.16"
+		"rethinkdb-ts": "^2.4.0-rc.16",
+		"spotilink": "^1.1.1"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",

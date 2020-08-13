@@ -10,6 +10,8 @@
 	"googleAPIkey": "",
 	"ksoftAPIkey": "",
 	"osuAPIkey": "",
+	"spotifyClientID": "",
+	"spotifyClientSecret": "",
 	"steamAPIkey": "",
 	"tmdbAPIkey": "",
 	"twitchAPIkey": ""
