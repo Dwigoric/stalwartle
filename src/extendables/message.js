@@ -20,6 +20,14 @@ module.exports = class extends Extendable {
 			.then(messages => messages.first().content);
 	}
 
+	async prompt(text, time = 30000) {
+		const message = await this.channel.send(text);
+		const responses = await this.channel.awaitMessages(msg => msg.author === this.author, { time, max: 1 });
+		message.delete();
+		if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
+		return responses.first();
+	}
+
 	async unreact(emojiID) {
 		const reaction = this.reactions.get(emojiID);
 		return reaction ? reaction.users.remove(this.client.user) : null;

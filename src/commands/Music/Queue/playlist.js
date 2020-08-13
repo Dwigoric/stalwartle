@@ -105,7 +105,7 @@ module.exports = class extends Command {
 		if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  The playlist is empty. Add one using the \`${msg.guild.settings.get('prefix')}playlist add\` command.`;
 		let choice;
 		do {
-			choice = await msg.awaitReply('📜  ::  Should the playlist be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
+			choice = await msg.prompt('📜  ::  Should the playlist be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
 		} while (!['file', 'haste', 'hastebin', 'none', null].includes(choice.content));
 		switch (choice.content) {
 			case 'file': {
@@ -129,11 +129,11 @@ module.exports = class extends Command {
 		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (playlist.length < 2) throw `${this.client.constants.EMOTES.xmark}  ::  There is no playlist item to move.`;
 		let entry;
-		do entry = await msg.awaitReply(`${this.client.constants.EMOTES.loading}  ::  Which playlist item do you want to move? Reply with its playlist number.`);
+		do entry = await msg.prompt(`${this.client.constants.EMOTES.loading}  ::  Which playlist item do you want to move? Reply with its playlist number.`);
 		while (!parseInt(entry));
 		entry = parseInt(entry) - 1;
 		let position;
-		do position = await msg.awaitReply(`${this.client.constants.EMOTES.loading}  ::  To which position do you want \`#${entry + 1}\` to be moved to? Reply with the position number.`);
+		do position = await msg.prompt(`${this.client.constants.EMOTES.loading}  ::  To which position do you want \`#${entry + 1}\` to be moved to? Reply with the position number.`);
 		while (!parseInt(position));
 		position = parseInt(position) - 1;
 		if (entry > playlist.length - 1 || position > playlist.length - 1) throw `${this.client.constants.EMOTES.xmark}  ::  The playlist only has ${playlist.length - 1} entr${playlist.length - 1 === 1 ? 'y' : 'ies'}.`; // eslint-disable-line max-len
