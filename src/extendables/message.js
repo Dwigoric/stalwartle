@@ -17,7 +17,8 @@ module.exports = class extends Extendable {
 		await (embed ? this.send(question, { embed }) : this.send(question));
 		return this.channel.awaitMessages(message => message.author.id === this.author.id,
 			{ max: 1, time, errors: ['time'] })
-			.then(messages => messages.first().content);
+			.then(messages => messages.first().content)
+			.catch(() => false);
 	}
 
 	async prompt(text, time = 30000) {
