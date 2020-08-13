@@ -104,7 +104,7 @@ module.exports = class extends Command {
 				prompts.delete(msg.author.id);
 				throw `${this.client.constants.EMOTES.xmark}  ::  Too many invalid replies. Please try again.`;
 			}
-			choice = await msg.prompt([
+			choice = await msg.awaitReply([
 				`🎶  ::  **${escapeMarkdown(msg.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
 				finds.map((result, index) => {
 					const { length } = result.info;

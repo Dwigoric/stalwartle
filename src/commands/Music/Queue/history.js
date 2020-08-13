@@ -47,7 +47,7 @@ module.exports = class extends Command {
 		if (!history.length) throw `${this.client.constants.EMOTES.xmark}  ::  The history is empty. Songs you play are stored in the history within a day.`;
 		let choice;
 		do {
-			choice = await msg.prompt('📜  ::  Should the history be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
+			choice = await msg.awaitReply('📜  ::  Should the history be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
 		} while (!['file', 'haste', 'hastebin', 'none', null].includes(choice.content));
 		switch (choice.content) {
 			case 'file': {

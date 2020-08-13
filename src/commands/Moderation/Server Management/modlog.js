@@ -82,7 +82,7 @@ module.exports = class extends Command {
 	async reset(msg) {
 		let prompt;
 		do {
-			prompt = await msg.prompt('⚠ Are you sure you want to reset **all** modlogs? Respond with `yes` or `no`.').catch(() => ({ content: 'no' }));
+			prompt = await msg.awaitReply('⚠ Are you sure you want to reset **all** modlogs? Respond with `yes` or `no`.').catch(() => ({ content: 'no' }));
 		} while (!['yes', 'no', null].includes(prompt.content));
 		if (prompt.content === 'yes') {
 			await this.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });

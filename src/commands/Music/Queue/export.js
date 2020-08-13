@@ -15,7 +15,7 @@ module.exports = class extends Command {
 		if (!queue.length) throw `${this.client.constants.EMOTES.xmark}  ::  The queue is empty. Add one using the \`${msg.guild.settings.get('prefix')}play\` command.`;
 		let choice;
 		do {
-			choice = await msg.prompt('📜  ::  Should the queue be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
+			choice = await msg.awaitReply('📜  ::  Should the queue be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer.').catch(() => ({ content: 'none' }));
 		} while (!['file', 'haste', 'hastebin', 'none', null].includes(choice.content));
 		switch (choice.content) {
 			case 'file': {

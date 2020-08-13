@@ -72,7 +72,7 @@ module.exports = class extends Command {
 		if (!options.hastebinUnavailable) _options.push('hastebin');
 		let _choice;
 		do {
-			_choice = await msg.prompt(`Choose one of the following options: ${_options.join(', ')}`).catch(() => ({ content: 'none' }));
+			_choice = await msg.awaitReply(`Choose one of the following options: ${_options.join(', ')}`).catch(() => ({ content: 'none' }));
 		} while (!['file', 'haste', 'hastebin', 'console', 'log', 'default', 'none', null].includes(_choice.content));
 		options.sendAs = _choice.content;
 	}

@@ -63,7 +63,7 @@ module.exports = class extends Command {
 
 	async remove(msg) {
 		const remList = await this.remlist(msg);
-		const prompted = await msg.prompt(`Please give me the list number of the reminder you want to delete:\n${remList.list}`);
+		const prompted = await msg.awaitReply(`Please give me the list number of the reminder you want to delete:\n${remList.list}`);
 		const remNum = Number(prompted.content);
 		if (isNaN(remNum)) throw `${this.client.constants.EMOTES.xmark}  ::  You didn't give a number!`;
 		if (!this.client.schedule.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?`; // eslint-disable-line max-len
