@@ -13,7 +13,7 @@
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
 		"rethinkdb-ts": "^2.4.0-rc.16",
-		"spotilink": "^1.1.1"
+		"spotilink": "^1.1.2"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
