@@ -9,7 +9,7 @@
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.6",
 		"discord.js": "github:discordjs/discord.js",
-		"klasa": "github:dirigeants/klasa",
+		"klasa": "^0.5.0",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
 		"rethinkdb-ts": "^2.4.0-rc.16",
