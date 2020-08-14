@@ -42,7 +42,7 @@ module.exports = class extends Command {
 			const previousHandler = this.handlers.get(msg.author.id);
 			if (previousHandler) previousHandler.stop();
 
-			const handler = await (await this.buildDisplay(msg)).run(await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading commands...`), {
+			const handler = await (await this.buildDisplay(msg, [category, subcategory])).run(await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading commands...`), {
 				filter: (reaction, user) => user.id === msg.author.id,
 				time
 			});
@@ -137,8 +137,8 @@ module.exports = class extends Command {
 		return help;
 	}
 
-	async buildDisplay(message) {
-		const commands = await this._fetchCommands(message);
+	async buildDisplay(message, [maincategory, subcategory]) {
+		const commands = await this._fetchCommands(message, [maincategory ? toTitleCase(maincategory) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
 		const prefix = message.guildSettings.get('prefix');
 		const display = new RichDisplay();
 		const color = message.member.displayColor;
@@ -159,10 +159,22 @@ module.exports = class extends Command {
 		return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
 	}
 
-	async _fetchCommands(message) {
+	async _fetchCommands(message, [maincategory, subcategory]) {
 		const run = this.client.inhibitors.run.bind(this.client.inhibitors, message);
 		const commands = new Map();
-		await Promise.all(this.client.commands.map(command => run(command, true)
+
+		let cmds;
+		if (!maincategory && !subcategory) cmds = this.client.commands;
+		if (maincategory) {
+			if (!this.client.commands.map(cmd => cmd.category).includes(maincategory)) throw `${this.client.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
+			cmds = this.client.commands.filter(cmd => cmd.category === maincategory);
+		}
+		if (subcategory) {
+			if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+			cmds = this.client.commands.filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
+		}
+
+		await Promise.all(cmds.map(command => run(command, true)
 			.then(async () => {
 				if (!await message.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && ['General', 'Bot Owner'].includes(command.subCategory)) return null;
 				const category = commands.get(`${command.category} - ${command.subCategory}`);
