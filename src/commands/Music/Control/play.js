@@ -35,6 +35,7 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts.has(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
+
 		let queue, playlist;
 		try {
 			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
@@ -42,6 +43,7 @@ module.exports = class extends Command {
 			this.client.emit('wtf', err);
 			throw `${this.client.constants.EMOTES.xmark}  ::  An unknown error occured. Please try again.`;
 		}
+
 		if (!query) {
 			if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
@@ -59,35 +61,43 @@ module.exports = class extends Command {
 			});
 			return this.play(msg, playlist[0]);
 		}
+
 		const song = await this.resolveQuery(msg, query);
 		prompts.delete(msg.author.id);
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `${this.client.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
-		if (!msg.guild.me.voice.channelID) await this.join(msg);
+
 		queue = await this.addToQueue(msg, song).catch(err => {
 			if (typeof err === 'string') throw err;
 			this.client.emit('wtf', err);
 			throw `${this.client.constants.EMOTES.xmark}  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
+
+		if (!msg.guild.player) await this.join(msg);
+
 		if (msg.flagArgs.force && queue.length > 1 && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[1].info.title)}**.`);
 			return msg.guild.player.stop();
 		}
+
 		return this.play(msg, queue[0]);
 	}
 
 	async join({ guild, channel, member }) {
 		if (!member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
+
 		await this.client.playerManager.leave(guild.id);
 		await this.client.playerManager.join({
 			node: this.client.playerManager.idealNodes[0].id,
 			guild: guild.id,
 			channel: member.voice.channelID
 		}, { selfdeaf: true });
+
 		guild.player.on('error', error => channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error}`));
 	}
 
 	async resolveQuery(msg, query) {
 		const { loadType, tracks, exception } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flagArgs.soundcloud));
+
 		if (loadType === 'LOAD_FAILED') throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
 		else if (loadType === 'NO_MATCHES') throw `${this.client.constants.EMOTES.xmark}  ::  No track found for your query.`;
 		else if (loadType === 'TRACK_LOADED') return tracks[0];
@@ -98,6 +108,7 @@ module.exports = class extends Command {
 		// From here on out, loadType === 'SEARCH_RESULT' : true
 		const finds = tracks.slice(0, 5);
 		prompts.set(msg.author.id, finds);
+
 		let limit = 0, choice;
 		do {
 			if (limit++ >= 5) {
@@ -113,11 +124,13 @@ module.exports = class extends Command {
 			].join('\n')).catch(() => ({ content: 'cancel' }));
 		// eslint-disable-next-line max-len
 		} while ((choice.content.toLowerCase() !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (prompts.has(msg.author.id) && parseInt(choice.content) > prompts.get(msg.author.id).length));
+
 		if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES') && choice.delete) choice.delete();
 		if (choice.content.toLowerCase() === 'cancel') {
 			prompts.delete(msg.author.id);
 			throw `${this.client.constants.EMOTES.tick}  ::  Successfully cancelled prompt.`;
 		}
+
 		return prompts.get(msg.author.id)[parseInt(choice.content) - 1];
 	}
 
@@ -135,6 +148,7 @@ module.exports = class extends Command {
 			// eslint-disable-next-line max-len
 			else if (SPOTIFY_PLAYLIST_REGEX.test(searchString)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(searchString)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
 		} else { searchString = encodeURIComponent(`${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`); }
+
 		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: node.password } })
 			.then(res => res.json())
 			.catch(err => {
@@ -146,27 +160,34 @@ module.exports = class extends Command {
 	/* eslint-disable complexity */
 	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
+
 			if (msg.guild.player && msg.guild.player.playing) queue.splice(1, 0, ...songs);
 			else queue.splice(0, 1, ...songs);
 		} else if (Array.isArray(song)) {
 			let songCount = 0;
+
 			for (const track of song) {
 				if (queue.length >= msg.guild.settings.get('music.maxQueue')) break;
 				if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('music.maxUserRequests')) break;
 				if (msg.guild.settings.get('music.noDuplicates') && queue.some(request => request.track === track.track)) continue;
 				if (msg.guild.settings.get('donation') < 5 && track.info.length > 18000000) continue;
+
 				queue.push(mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) }));
 				songCount++;
 			}
+
 			msg.send(`🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the queue, now at **${queue.length - 1}** entries.`);
 			if (songCount < song.length) msg.channel.send(`⚠  ::  Not all songs were added. Possibilities: (1) You've reached the queue limit of ${msg.guild.settings.get('music.maxQueue')} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, or (4) you've reached the limit of ${msg.guild.settings.get('music.maxUserRequests')} song requests per user. View limits via \`${msg.guild.settings.get('prefix')}conf show music\`.`); // eslint-disable-line max-len
 		} else {
 			if (queue.length >= msg.guild.settings.get('music.maxQueue')) throw `${this.client.constants.EMOTES.xmark}  ::  The music queue for **${msg.guild.name}** has reached the limit of ${msg.guild.settings.get('music.maxQueue')} songs; currently ${queue.length}. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxQueue <new limit>\`.`; // eslint-disable-line max-len
 			if (queue.filter(request => request.requester === msg.author.id).length >= msg.guild.settings.get('music.maxUserRequests')) throw `${this.client.constants.EMOTES.xmark}  ::  You've reached the maximum request per user limit of ${msg.guild.settings.get('music.maxUserRequests')} requests. Change limit via \`${msg.guild.settings.get('prefix')}conf set music.maxUserRequests <new limit>\`.`; // eslint-disable-line max-len
 			if (msg.guild.settings.get('music.noDuplicates') && queue.filter(request => request.track === song.track).length) throw `${this.client.constants.EMOTES.xmark}  ::  This song is already in the queue, and duplicates are disabled in this server. Disable via \`${msg.guild.settings.get('prefix')}conf set music.noDuplicates false\`.`; // eslint-disable-line max-len
+
 			queue.push(mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) }));
+
 			if (!msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
 				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 			} else {
@@ -191,27 +212,34 @@ module.exports = class extends Command {
 
 	async play({ guild, channel }, song) {
 		if (guild.player.playing) return;
+
 		guild.player.play(song.track, { volume: guild.settings.get('music.volume') });
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
+
 			const { queue } = await this.client.providers.default.get('music', guild.id);
 			const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${queue[0].info.identifier}&type=video&key=${this.client.auth.googleAPIkey}`).then(res => res.json()); // eslint-disable-line max-len
+
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
 			if (items && items.length) {
 				const relatedVideo = items[Math.floor(Math.random() * items.length)];
 				if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(relatedVideo.id.videoId, false)).tracks[0], { requester: this.client.user.id, incognito: false })); // eslint-disable-line max-len
 			}
+
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
+
 			return channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guild.settings.get('prefix')}play <song search>\`!`);
 		});
+
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
 			const { history } = await this.client.providers.default.get('music', guild.id);
 			history.unshift(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', guild.id, { history });
 		}
+
 		const announceChannel = guild.channels.cache.get(guild.settings.get('music.announceChannel')) || channel;
 		if (guild.settings.get('music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len
 	}
