@@ -66,13 +66,13 @@ module.exports = class extends Command {
 		prompts.delete(msg.author.id);
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `${this.client.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 
+		if (!msg.guild.player) await this.join(msg);
+
 		queue = await this.addToQueue(msg, song).catch(err => {
 			if (typeof err === 'string') throw err;
 			this.client.emit('wtf', err);
 			throw `${this.client.constants.EMOTES.xmark}  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
-
-		if (!msg.guild.player) await this.join(msg);
 
 		if (msg.flagArgs.force && queue.length > 1 && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[1].info.title)}**.`);
