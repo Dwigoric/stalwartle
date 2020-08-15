@@ -319,7 +319,7 @@ setimmediate@^1.0.5:
   resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
   integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
-spotilink@^1.1.1:
+spotilink@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.1.2.tgz#f4ec916c780a64c27e2ce216eed187a50428e9e0"
   integrity sha512-Daa277Lr61PK9eb49PrOiwrdEtpr5St+HBm77dyOv8jO3CI7YfB9TXqeEYdpi+cAWI6xjmc5WxxoVmbRC1cykQ==
