@@ -241,7 +241,7 @@ module.exports = class extends Command {
 		}
 
 		const announceChannel = guild.channels.cache.get(guild.settings.get('music.announceChannel')) || channel;
-		if (guild.settings.get('music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**)`); // eslint-disable-line max-len
+		if (guild.settings.get('music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}**. More info on \`${guild.settings.get('prefix')}np\`)`); // eslint-disable-line max-len
 	}
 
 	async init() {
