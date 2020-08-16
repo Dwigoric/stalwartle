@@ -36,8 +36,7 @@ module.exports = class MemorySweeper extends Task {
 			musicDBs = 0,
 			users = 0;
 
-		// Running garbage collection of Node.js
-		if (global.gc) global.gc();
+		// ----- CACHED DATA SWEEPERS ----- //
 
 		// Per-Guild sweeper
 		for (const guild of this.client.guilds.cache.values()) {
@@ -75,6 +74,11 @@ module.exports = class MemorySweeper extends Task {
 			this.client.users.cache.delete(user.id);
 			users++;
 		}
+
+		// Running garbage collection of Node.js
+		if (global.gc) global.gc();
+
+		// ----- PERSISTENT DATA SWEEPERS ----- //
 
 		// Music database sweeper
 		for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
