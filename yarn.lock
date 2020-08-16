@@ -320,9 +320,9 @@ setimmediate@^1.0.5:
   integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
 spotilink@^1.1.2:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.1.3.tgz#7d15b37589c78ba3ecdf9b247158c92e070fe605"
-  integrity sha512-oxc5l977ZF6XrfkeRVKD6JcfNy6uLuvmaB3KDvH121pIEnXbHjQ3S8VfuoUQpGh58J4J9gpK1bqYIQCOZjbBFA==
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.1.4.tgz#b5b31f533652678a619abfe8c41f8cafa0376a09"
+  integrity sha512-hHTA4qSZvGHM5StbM5pjI68rFTzXIhaW4Qoc0ZhX510HBnHs6M3AnA4B6ATeGwzEXYZhtUblDIvgCA3tUj7VnA==
   dependencies:
     "@types/node" "^13.9.8"
     "@types/node-fetch" "^2.5.5"
