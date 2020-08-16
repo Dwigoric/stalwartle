@@ -6,9 +6,19 @@
 	"scripts": {
 		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/takomst/stalwartle.git"
+	},
+	"author": "Dwigoric",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/takomst/stalwartle/issues"
+	},
+	"homepage": "https://github.com/takomst/stalwartle#readme",
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.6",
-		"discord.js": "github:discordjs/discord.js",
+		"discord.js": "github:discordjs/discord.js#master",
 		"klasa": "^0.5.0",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
