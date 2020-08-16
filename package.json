@@ -18,7 +18,7 @@
 	"homepage": "https://github.com/takomst/stalwartle#readme",
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.6",
-		"discord.js": "github:discordjs/discord.js#master",
+		"discord.js": "github:discordjs/discord.js",
 		"klasa": "^0.5.0",
 		"moment-timezone": "^0.5.26",
 		"pako": "^1.0.11",
