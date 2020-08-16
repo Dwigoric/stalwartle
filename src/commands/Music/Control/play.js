@@ -16,7 +16,7 @@ module.exports = class extends Command {
 			aliases: ['p'],
 			permissionLevel: 5,
 			runIn: ['text'],
-			description: 'Plays music in the server. Accepts YouTube, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
+			description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
 			extendedHelp: [
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'To choose which channel I will announce songs, use `s.conf set music.announceChannel <channel>`.',
