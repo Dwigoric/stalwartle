@@ -98,12 +98,14 @@ module.exports = class extends Command {
 	async resolveQuery(msg, query) {
 		const { loadType, tracks, exception } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flagArgs.soundcloud));
 
-		if (loadType === 'LOAD_FAILED') throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
-		else if (loadType === 'NO_MATCHES') throw `${this.client.constants.EMOTES.xmark}  ::  No track found for your query.`;
-		else if (loadType === 'TRACK_LOADED') return tracks[0];
-		else if (loadType === 'PLAYLIST_LOADED' && tracks.length) return tracks;
-		// eslint-disable-next-line max-len
-		else if (loadType === 'PLAYLIST_LOADED' && !tracks.length) throw `${this.client.constants.EMOTES.xmark}  ::  It seems the playlist is composed of livestreams. Please try adding them individually. Thanks!`;
+		switch (loadType) {
+			case 'LOAD_FAILED': throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
+			case 'NO_MATCHES': throw `${this.client.constants.EMOTES.xmark}  ::  No track found for your query.`;
+			case 'TRACK_LOADED': return tracks[0];
+			case 'PLAYLIST_LOADED':
+				if (tracks.length) return tracks;
+				else throw `${this.client.constants.EMOTES.xmark}  ::  It seems the playlist is composed of livestreams. Please try adding them individually. Thanks!`;
+		}
 
 		// From here on out, loadType === 'SEARCH_RESULT' : true
 		const finds = tracks.slice(0, 5);
