@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@discordjs/collection@^0.1.5":
+"@discordjs/collection@^0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.1.6.tgz#9e9a7637f4e4e0688fd8b2b5c63133c91607682c"
   integrity sha512-utRNxnd9kSS2qhyivo9lMlt5qgAUasH2gb7BEOn6p0efFh24gjGomHzWKMAPn2hEReOPQZCJaRKoURwRotKucQ==
@@ -105,17 +105,17 @@ delayed-stream@~1.0.0:
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
 "discord.js@github:discordjs/discord.js":
-  version "12.2.0"
-  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/139e56c7748b0bafced3a48b15be17f49613f3ee"
+  version "12.3.1"
+  resolved "https://codeload.github.com/discordjs/discord.js/tar.gz/56e8ef2d38633154540748acb64f4c1305fcc6d3"
   dependencies:
-    "@discordjs/collection" "^0.1.5"
+    "@discordjs/collection" "^0.1.6"
     "@discordjs/form-data" "^3.0.1"
     abort-controller "^3.0.0"
     node-fetch "^2.6.0"
-    prism-media "^1.2.0"
+    prism-media "^1.2.2"
     setimmediate "^1.0.5"
     tweetnacl "^1.0.3"
-    ws "^7.2.1"
+    ws "^7.3.1"
 
 dom-serializer@0:
   version "0.2.2"
@@ -233,9 +233,9 @@ lavacord@latest:
     ws "^7.3.0"
 
 lodash@^4.15.0:
-  version "4.17.19"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
-  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
+  integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
 mime-db@1.44.0:
   version "1.44.0"
@@ -285,7 +285,7 @@ parse5@^3.0.1:
   dependencies:
     "@types/node" "*"
 
-prism-media@^1.2.0:
+prism-media@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.2.2.tgz#4f1c841f248b67d325a24b4e6b1a491b8f50a24f"
   integrity sha512-I+nkWY212lJ500jLe4tN9tWO7nRiBAVdMv76P9kffZjYhw20raMlW1HSSvS+MLXC9MmbNZCazMrAr+5jEEgTuw==
@@ -320,9 +320,9 @@ setimmediate@^1.0.5:
   integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
 spotilink@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.1.2.tgz#f4ec916c780a64c27e2ce216eed187a50428e9e0"
-  integrity sha512-Daa277Lr61PK9eb49PrOiwrdEtpr5St+HBm77dyOv8jO3CI7YfB9TXqeEYdpi+cAWI6xjmc5WxxoVmbRC1cykQ==
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.1.3.tgz#7d15b37589c78ba3ecdf9b247158c92e070fe605"
+  integrity sha512-oxc5l977ZF6XrfkeRVKD6JcfNy6uLuvmaB3KDvH121pIEnXbHjQ3S8VfuoUQpGh58J4J9gpK1bqYIQCOZjbBFA==
   dependencies:
     "@types/node" "^13.9.8"
     "@types/node-fetch" "^2.5.5"
@@ -351,7 +351,7 @@ util-deprecate@^1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-ws@^7.2.1, ws@^7.3.0:
+ws@^7.3.0, ws@^7.3.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.1.tgz#d0547bf67f7ce4f12a72dfe31262c68d7dc551c8"
   integrity sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
