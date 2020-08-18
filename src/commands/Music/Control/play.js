@@ -4,7 +4,6 @@ const fetch = require('node-fetch');
 const { parse } = require('url');
 
 const prompts = new Map();
-const YOUTUBE_PLAYLIST_REGEX = /[&?]list=([a-z0-9-_]+)/i;
 const SPOTIFY_TRACK_REGEX = /\/track\/([a-z0-9-_]+)/i;
 const SPOTIFY_ALBUM_REGEX = /\/album\/([a-z0-9-_]+)/i;
 const SPOTIFY_PLAYLIST_REGEX = /\/playlist\/([a-z0-9-_]+)/i;
@@ -137,25 +136,25 @@ module.exports = class extends Command {
 	}
 
 	async getSongs(query, soundcloud) {
-		let searchString;
 		const node = this.client.playerManager.idealNodes[0];
 
 		if (parse(query).protocol && parse(query).hostname) {
-			searchString = query;
-			if (YOUTUBE_PLAYLIST_REGEX.test(searchString)) searchString = `https://youtube.com/playlist?list=${YOUTUBE_PLAYLIST_REGEX.exec(searchString)[1]}`;
-			// eslint-disable-next-line max-len
-			else if (SPOTIFY_TRACK_REGEX.test(searchString)) return { loadType: 'TRACK_LOADED', tracks: [this.client.spotifyParser.fetchTrack(await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(searchString)[1]))] };
-			// eslint-disable-next-line max-len
-			else if (SPOTIFY_ALBUM_REGEX.test(searchString)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(searchString)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
-			// eslint-disable-next-line max-len
-			else if (SPOTIFY_PLAYLIST_REGEX.test(searchString)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(searchString)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
-		} else { searchString = encodeURIComponent(`${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`); }
+			const result = await (await fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(query)}`, { headers: { Authorization: node.password } })).json();
+			if (['TRACK_LOADED', 'PLAYLIST_LOADED'].includes(result.loadType)) return result;
 
-		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${searchString}`, { headers: { Authorization: node.password } })
+			// eslint-disable-next-line max-len
+			if (SPOTIFY_TRACK_REGEX.test(query)) return { loadType: 'TRACK_LOADED', tracks: [this.client.spotifyParser.fetchTrack(await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(query)[1]))] };
+			// eslint-disable-next-line max-len
+			else if (SPOTIFY_ALBUM_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(query)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
+			// eslint-disable-next-line max-len
+			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
+		}
+
+		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(`${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`)}`, { headers: { Authorization: node.password } })
 			.then(res => res.json())
 			.catch(err => {
 				this.client.emit('wtf', err);
-				throw `${this.client.constants.EMOTES.xmark}  ::  There was an error, please try again.`;
+				throw `${this.client.constants.EMOTES.xmark}  ::  There was an error looking up your query. Please try again.`;
 			});
 	}
 
