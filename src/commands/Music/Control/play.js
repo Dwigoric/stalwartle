@@ -4,9 +4,9 @@ const fetch = require('node-fetch');
 const { parse } = require('url');
 
 const prompts = new Map();
-const SPOTIFY_TRACK_REGEX = /\/track\/([a-z0-9-_]+)/i;
-const SPOTIFY_ALBUM_REGEX = /\/album\/([a-z0-9-_]+)/i;
-const SPOTIFY_PLAYLIST_REGEX = /\/playlist\/([a-z0-9-_]+)/i;
+const SPOTIFY_TRACK_REGEX = /https?:\/\/open\.spotify\.com\/track\/([a-z0-9-_]+)/i;
+const SPOTIFY_ALBUM_REGEX = /https?:\/\/open\.spotify\.com\/album\/([a-z0-9-_]+)/i;
+const SPOTIFY_PLAYLIST_REGEX = /https?:\/\/open\.spotify\.com\/playlist\/([a-z0-9-_]+)/i;
 
 module.exports = class extends Command {
 
@@ -139,15 +139,15 @@ module.exports = class extends Command {
 		const node = this.client.playerManager.idealNodes[0];
 
 		if (parse(query).protocol && parse(query).hostname) {
-			const result = await (await fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(query)}`, { headers: { Authorization: node.password } })).json();
-			if (['TRACK_LOADED', 'PLAYLIST_LOADED'].includes(result.loadType)) return result;
-
 			// eslint-disable-next-line max-len
 			if (SPOTIFY_TRACK_REGEX.test(query)) return { loadType: 'TRACK_LOADED', tracks: [this.client.spotifyParser.fetchTrack(await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(query)[1]))] };
 			// eslint-disable-next-line max-len
 			else if (SPOTIFY_ALBUM_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(query)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
 			// eslint-disable-next-line max-len
 			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
+
+			const result = await (await fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(query)}`, { headers: { Authorization: node.password } })).json();
+			if (['TRACK_LOADED', 'PLAYLIST_LOADED'].includes(result.loadType)) return result;
 		}
 
 		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(`${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`)}`, { headers: { Authorization: node.password } })
