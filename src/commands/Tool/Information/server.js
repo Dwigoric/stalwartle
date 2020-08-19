@@ -49,15 +49,15 @@ module.exports = class extends Command {
 				.addField('Verification Level', {
 					NONE: 'None (Unrestricted)',
 					LOW: 'Low (Requires a verified email)',
-					MEDIUM: 'Medium (5 mins must\'ve\nelapsed since registry)',
-					HIGH: 'High (10 mins must\'ve\nelapsed since user join)',
-					VERY_HIGH: 'Very High (Needs a verified\nphone number)'
+					MEDIUM: 'Medium (5 mins must\'ve elapsed since registry)',
+					HIGH: 'High (10 mins must\'ve elapsed since user join)',
+					VERY_HIGH: 'Very High (Needs a verified phone number)'
 				}[guild.verificationLevel], true)
 				.addField('Two-Factor Requirement', guild.mfaLevel ? 'Enabled' : 'Disabled', true)
 				.addField('Explicit Content Filter', {
 					DISABLED: 'Don\'t scan any messages.',
-					MEMBERS_WITHOUT_ROLES: 'Scan messages from\nmembers without a role.',
-					ALL_MEMBERS: 'Scan messages sent by\nall members.'
+					MEMBERS_WITHOUT_ROLES: 'Scan messages from members without a role.',
+					ALL_MEMBERS: 'Scan messages sent by all members.'
 				}[guild.explicitContentFilter], true)
 				.addField('Member Count', guild.memberCount, true)
 				.addField('Role Count', guild.roles.cache.size > 1 ? guild.roles.cache.size : 'None', true)
