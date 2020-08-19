@@ -46,19 +46,19 @@ module.exports = class extends Command {
 				.addField('ID', guild.id, true)
 				.addField('Owner', await guild.members.fetch(guild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
 				.addField('Server Region', region, true)
-				.addField('Verification Level', [
-					'None (Unrestricted)',
-					'Low (Requires a verified email)',
-					"Medium (5 mins must've\nelapsed since registry)",
-					"High (10 mins must've\nelapsed since user join)",
-					'Very High (Needs a verified\nphone number)'
-				][guild.verificationLevel], true)
+				.addField('Verification Level', {
+					NONE: 'None (Unrestricted)',
+					LOW: 'Low (Requires a verified email)',
+					MEDIUM: 'Medium (5 mins must\'ve\nelapsed since registry)',
+					HIGH: 'High (10 mins must\'ve\nelapsed since user join)',
+					VERY_HIGH: 'Very High (Needs a verified\nphone number)'
+				}[guild.verificationLevel], true)
 				.addField('Two-Factor Requirement', guild.mfaLevel ? 'Enabled' : 'Disabled', true)
-				.addField('Explicit Content Filter', [
-					'Don\'t scan any messages.',
-					'Scan messages from\nmembers without a role.',
-					'Scan messages sent by\nall members.'
-				][guild.explicitContentFilter], true)
+				.addField('Explicit Content Filter', {
+					DISABLED: 'Don\'t scan any messages.',
+					MEMBERS_WITHOUT_ROLES: 'Scan messages from\nmembers without a role.',
+					ALL_MEMBERS: 'Scan messages sent by\nall members.'
+				}[guild.explicitContentFilter], true)
 				.addField('Member Count', guild.memberCount, true)
 				.addField('Role Count', guild.roles.cache.size > 1 ? guild.roles.cache.size : 'None', true)
 				.addField('Text Channel Count', guild.channels.cache.filter(ch => ch.type === 'text').size, true)
