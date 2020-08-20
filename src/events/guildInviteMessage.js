@@ -20,7 +20,7 @@ module.exports = class extends Event {
 				`\nTo get started, please use \`${guild.settings.get('prefix')}help\` here or on any text channel. You will be given a list of commands.`,
 				`Please feel free to look at the command list. If you want me to serve more Discord users, just use the \`${guild.settings.get('prefix')}invite\` command!`,
 				'\nI can play music, moderate users, send memes, manipulate user avatars, and more!',
-				`Most users use the music feature. Run \`${guild.settings.get('prefix')}help play\` for more information!`,
+				`Most users use the music feature. Run \`${guild.settings.get('prefix')}help music\` and \`${guild.settings.get('prefix')}help play\` for more information!`,
 				`\nBy **${this.client.application.owner.members.map(tm => tm.user.tag).join(', ')}**, from 🇵🇭 with ❤`
 			].join('\n'));
 		const postableChannel = guild.channels.cache.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
