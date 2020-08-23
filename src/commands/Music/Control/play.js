@@ -67,10 +67,8 @@ module.exports = class extends Command {
 		prompts.delete(msg.author.id);
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `${this.client.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 
-		if (timeouts.has(msg.guild.id)) {
-			clearTimeout(timeouts.get(msg.guild.id));
-			timeouts.delete(msg.guild.id);
-		}
+		clearTimeout(timeouts.get(msg.guild.id));
+		timeouts.delete(msg.guild.id);
 		if (!msg.guild.player) await this.join(msg);
 
 		queue = await this.addToQueue(msg, song).catch(err => {
