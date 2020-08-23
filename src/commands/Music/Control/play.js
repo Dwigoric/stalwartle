@@ -239,10 +239,12 @@ module.exports = class extends Command {
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 
-			timeouts.set(guild.id, setTimeout(((guildID) => {
-				this.client.playerManager.leave(guildID);
-				timeouts.delete(guildID);
-			}).bind(this), 1000 * 60 * 5, guild.id));
+			if (guild.settings.get('donation') < 10) {
+				timeouts.set(guild.id, setTimeout(((guildID) => {
+					this.client.playerManager.leave(guildID);
+					timeouts.delete(guildID);
+				}).bind(this), 1000 * 60 * 5, guild.id));
+			}
 			return channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guild.settings.get('prefix')}play <song search>\`!`);
 		});
 
