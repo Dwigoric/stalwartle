@@ -214,7 +214,8 @@ module.exports = class extends Command {
 	async play({ guild, channel }, song) {
 		if (guild.player.playing) return;
 
-		guild.player.play(song.track, { volume: guild.settings.get('music.volume') });
+		const volume = guild.settings.get('music.volume');
+		guild.player.play(song.track, volume === 100 ? undefined : { volume });
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
