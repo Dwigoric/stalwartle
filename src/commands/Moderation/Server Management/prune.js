@@ -26,6 +26,7 @@ module.exports = class extends Command {
 
 		messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
 		[messages] = messages.partition(message => message.id !== msg.id);
+		const { size } = messages;
 
 		if (filter) {
 			const user = typeof filter !== 'string' ? filter : null;
@@ -52,7 +53,7 @@ module.exports = class extends Command {
 
 		pruning.delete(msg.channel.id);
 		await loadingMessage.delete();
-		return msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  Successfully deleted ${deleted} messages from ${limit} messages.`).then(pruneMsg => {
+		return msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  Successfully deleted ${deleted} messages from ${size} messages.`).then(pruneMsg => {
 			setTimeout(() => pruneMsg.delete(), 5000);
 		});
 	}
