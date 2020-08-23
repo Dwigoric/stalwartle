@@ -4,6 +4,8 @@ const fetch = require('node-fetch');
 const { parse } = require('url');
 
 const prompts = new Map();
+const timeouts = new Map();
+
 const SPOTIFY_TRACK_REGEX = /https?:\/\/open\.spotify\.com\/track\/([a-z0-9-_]+)/i;
 const SPOTIFY_ALBUM_REGEX = /https?:\/\/open\.spotify\.com\/album\/([a-z0-9-_]+)/i;
 const SPOTIFY_PLAYLIST_REGEX = /https?:\/\/open\.spotify\.com\/playlist\/([a-z0-9-_]+)/i;
@@ -65,6 +67,10 @@ module.exports = class extends Command {
 		prompts.delete(msg.author.id);
 		if (!Array.isArray(song) && msg.guild.settings.get('donation') < 5 && !song.info.isStream && song.info.length > 18000000) throw `${this.client.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`; // eslint-disable-line max-len
 
+		if (timeouts.has(msg.guild.id)) {
+			clearTimeout(timeouts.get(msg.guild.id));
+			timeouts.delete(msg.guild.id);
+		}
 		if (!msg.guild.player) await this.join(msg);
 
 		queue = await this.addToQueue(msg, song).catch(err => {
@@ -233,6 +239,7 @@ module.exports = class extends Command {
 			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 
+			timeouts.set(guild.id, setTimeout(((guildID) => this.client.playerManager.leave(guildID)).bind(this), 1000 * 60 * 5, guild.id));
 			return channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guild.settings.get('prefix')}play <song search>\`!`);
 		});
 
