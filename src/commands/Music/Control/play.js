@@ -60,6 +60,8 @@ module.exports = class extends Command {
 				this.client.emit('wtf', err);
 				throw `${this.client.constants.EMOTES.xmark}  ::  There was an error loading your playlist to the queue. Please try again.`;
 			});
+			clearTimeout(timeouts.get(msg.guild.id));
+			timeouts.delete(msg.guild.id);
 			return this.play(msg, playlist[0]);
 		}
 
