@@ -16,10 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [keyword]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading anime...`);
 
-		const params = new URLSearchParams();
-		params.set('q', keyword);
-		params.set('limit', 1);
-		const search = await fetch(`https://api.jikan.moe/v3/search/anime?${params}`)
+		const search = await fetch(`https://api.jikan.moe/v3/search/anime?q=${encodeURIComponent(keyword)}&limit=1`)
 			.then(res => res.json())
 			.then(body => body.results);
 		if (!search || !search.length) throw `${this.client.constants.EMOTES.xmark}  ::  Anime series not found!`;
