@@ -1,13 +1,13 @@
 const { Event } = require('klasa');
 
+const autopaused = new Set();
+
 module.exports = class extends Event {
 
 	constructor(...args) {
 		super(...args, {
 			event: 'voiceStateUpdate'
 		});
-
-		this.autopaused = new Set();
 	}
 
 	async run(oldState, newState) {
@@ -17,7 +17,11 @@ module.exports = class extends Event {
 		if (oldState.channel && newState.channel && (oldState.channel.id === newState.channel.id || ![oldState.channel.id, newState.channel.id].includes(newState.guild.me.voice.channelID))) return null;
 
 		const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
-		if (newState.guild.player && !newState.guild.player.playing && !channelMembers.size) return this.client.playerManager.leave(newState.guild.id);
+		if (newState.guild.player && !newState.guild.player.playing && !channelMembers.size) {
+			clearTimeout(this.client.commands.get('play').timeouts.get(newState.guild.id));
+			this.client.commands.get('play').timeouts.delete(newState.guild.id);
+			return this.client.playerManager.leave(newState.guild.id);
+		}
 		if (newState.guild.me.voice.channelID && channelMembers.size && this.autopaused.has(newState.guild.id)) {
 			this.autopaused.delete(newState.guild.id);
 			return newState.guild.player.pause(false);
@@ -35,6 +39,10 @@ module.exports = class extends Event {
 			if (queue[0].requester === this.client.user.id) this.client.providers.default.update('music', newState.guild.id, { queue: [] });
 			return null;
 		}, 30000, newState.guild);
+	}
+
+	get autopaused() {
+		return autopaused;
 	}
 
 };
