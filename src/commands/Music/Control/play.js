@@ -242,6 +242,7 @@ module.exports = class extends Command {
 			if (guild.settings.get('donation') < 10) {
 				timeouts.set(guild.id, setTimeout(((guildID) => {
 					this.client.playerManager.leave(guildID);
+					clearTimeout(timeouts.get(guildID));
 					timeouts.delete(guildID);
 				}).bind(this), 1000 * 60 * 5, guild.id));
 			}
