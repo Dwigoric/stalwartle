@@ -91,14 +91,12 @@ module.exports = class extends Command {
 		else if (msg.flagArgs.taiko) mode = 1;
 		else mode = 0;
 
-		const queries = [];
-		for (const [key, value] of Object.entries({
-			k: this.client.auth.osuAPIkey, // eslint-disable-line id-length
-			m: mode, // eslint-disable-line id-length
-			u: encodeURIComponent(username.join(this.usageDelim)), // eslint-disable-line id-length
-			type: 'string'
-		})) queries.push(`${key}=${value}`);
-		const request = await fetch(`https://osu.ppy.sh/api/get_user?${queries.join('&')}`).then(res => res.json());
+		const params = new URLSearchParams();
+		params.set('k', this.client.auth.osuAPIkey);
+		params.set('m', mode);
+		params.set('u', username.join(this.usageDelim));
+		params.set('type', 'string');
+		const request = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
 		if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
 
 		const user = request[0];
@@ -144,7 +142,12 @@ module.exports = class extends Command {
 		else mode = 0;
 
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading beatmap...`);
-		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${this.client.auth.osuAPIkey}&b=${mapID[0]}&m=${mode}`).then(res => res.json());
+
+		const params = new URLSearchParams();
+		params.set('k', this.client.auth.osuAPIkey);
+		params.set('b', mapID[0]);
+		params.set('m', mode);
+		const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?${params}`).then(res => res.json());
 		if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.`;
 
 		const beatmap = request[0];
@@ -205,11 +208,19 @@ module.exports = class extends Command {
 			best: user => `**${user.username}** doesn't have best plays on **osu!${osumode[mode]}** mode yet.`
 		};
 
-		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?k=${this.client.auth.osuAPIkey}&u=${encodeURIComponent(username)}&type=string`).then(res => res.json());
+		const params = new URLSearchParams();
+		params.set('k', this.client.auth.osuAPIkey);
+		params.set('u', username);
+		params.set('type', 'string');
+		const userReq = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
 		if (!userReq.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
 		const user = userReq[0];
 
-		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?k=${this.client.auth.osuAPIkey}&u=${user.user_id}&type=id&m=${mode}&limit=5`).then(res => res.json());
+		params.set('u', user.user_id);
+		params.set('type', 'id');
+		params.set('m', mode);
+		params.set('limit', 5);
+		const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?${params}`).then(res => res.json());
 		if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! ${errString[type](user)}`;
 
 		const top = await Promise.all(request.map(async list => {
@@ -238,7 +249,12 @@ module.exports = class extends Command {
 			if (mods.includes('NC') && mods.includes('DT')) mods.splice(mods.indexOf('DT'), 1);
 			if (mods.includes('PF') && mods.includes('SD')) mods.splice(mods.indexOf('SD'), 1);
 
-			const beatmap = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${this.client.auth.osuAPIkey}&b=${list.beatmap_id}`)
+			params.delete('u');
+			params.delete('m');
+			params.delete('type');
+			params.delete('limit');
+			params.set('b', list.beatmap_id);
+			const beatmap = await fetch(`https://osu.ppy.sh/api/get_beatmaps?${params}`)
 				.then(res => res.json())
 				.then(b => b[0]);
 			const requests = Object.values(request).map(body => body.date);

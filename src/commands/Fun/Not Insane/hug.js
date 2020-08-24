@@ -16,7 +16,11 @@ module.exports = class extends Command {
 
 	async run(msg, [person]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading GIF...`);
-		const { data } = await fetch(`http://api.giphy.com/v1/gifs/search?api_key=${this.client.auth.giphyAPIkey}&q=${encodeURIComponent('anime hug')}`)
+
+		const params = new URLSearchParams();
+		params.set('api_key', this.client.auth.giphyAPIkey);
+		params.set('q', 'anime hug');
+		const { data } = await fetch(`http://api.giphy.com/v1/gifs/search?${params}`)
 			.then(res => res.json());
 		const gifPage = Math.floor(Math.random() * data.length);
 		const embed = new MessageEmbed()

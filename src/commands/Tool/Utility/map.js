@@ -15,8 +15,14 @@ module.exports = class extends Command {
 
 	async run(msg, [location]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading map...`);
+
 		const zoom = msg.flagArgs.zoom ? parseInt(msg.flagArgs.zoom) : 12;
-		const { data } = await fetch(`https://api.ksoft.si/kumo/gis?q=${encodeURIComponent(location)}&include_map=true&map_zoom=${isNaN(zoom) ? 12 : zoom}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
+
+		const params = new URLSearchParams();
+		params.set('q', location);
+		params.set('include_map', true);
+		params.set('map_zoom', isNaN(zoom) ? 12 : zoom);
+		const { data } = await fetch(`https://api.ksoft.si/kumo/gis?${params}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
 		if (!data) throw `${this.client.constants.EMOTES.xmark}  ::  I could not find that location.`;
 		msg.send({
 			embed: new MessageEmbed()

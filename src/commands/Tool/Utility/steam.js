@@ -17,9 +17,11 @@ module.exports = class extends Command {
 	async run(msg, [game]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading game from Steam...`);
 
+		const params = new URLSearchParams();
+		params.set('term', game);
 		const steam = new SteamAPI(this.client.auth.steamAPIkey),
 			embed = new MessageEmbed(),
-			steamSearch = await fetch(`http://store.steampowered.com/search?term=${encodeURIComponent(game)}`).then(res => res.text()).catch(() => null);
+			steamSearch = await fetch(`http://store.steampowered.com/search?${params}`).then(res => res.text()).catch(() => null);
 
 		if (steamSearch) {
 			const hrefData = cheerio.load(steamSearch)('#search_result_container > #search_resultsRows > .search_result_row').attr('href');

@@ -32,16 +32,14 @@ module.exports = class extends Command {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading YouTube information...`);
 
 		const timezone = msg.author.settings.get('timezone');
-		const queries = [];
 
-		for (const [key, value] of Object.entries({
-			key: this.client.auth.googleAPIkey,
-			part: 'snippet',
-			maxResults: 1,
-			q: encodeURIComponent(query.join(this.usageDelim)), // eslint-disable-line id-length
-			type
-		})) queries.push(`${key}=${value}`);
-		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${queries.join('&')}`).then(result => result.json());
+		const params = new URLSearchParams();
+		params.set('key', this.client.auth.googleAPIkey);
+		params.set('part', 'snippet');
+		params.set('maxResults', 1);
+		params.set('q', query.join(this.usageDelim));
+		params.set('type', type);
+		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(result => result.json());
 
 		if (!res || !res.items || !res.items.length) throw `${this.client.constants.EMOTES.xmark}  ::  YouTube query not found!`;
 
@@ -55,8 +53,11 @@ module.exports = class extends Command {
 			.setColor('RANDOM');
 		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
 		if (type !== 'channel') {
+			params.set('id', request.snipper.channelId);
+			params.delete('q');
+			params.delete('type');
 			embed
-				.setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?key=${this.client.auth.googleAPIkey}&part=snippet&maxResults=1&id=${request.snippet.channelId}`)
+				.setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?${params}`)
 					.then(result => result.json())
 					.then(result => result.items.length ? result.items[0].snippet.thumbnails.high.url : undefined))
 				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);

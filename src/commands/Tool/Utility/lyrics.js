@@ -15,7 +15,10 @@ module.exports = class extends Command {
 
 	async run(msg, [query]) {
 		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading lyrics...`);
-		const { response: { hits } } = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(query)}`, { headers: { Authorization: `Bearer ${this.client.auth.geniusAPIkey}` } }).then(res => res.json()).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An error occured. Please try again. Sorry 'bout that!`; }); // eslint-disable-line max-len
+
+		const params = new URLSearchParams();
+		params.set('q', query);
+		const { response: { hits } } = await fetch(`https://api.genius.com/search?${params}`, { headers: { Authorization: `Bearer ${this.client.auth.geniusAPIkey}` } }).then(res => res.json()).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An error occured. Please try again. Sorry 'bout that!`; }); // eslint-disable-line max-len
 		if (!hits.length) throw this.NO_LYRICS_FOUND;
 		const hit = hits.filter(_hit => _hit.type === 'song')[0];
 		if (!hit) throw this.NO_LYRICS_FOUND;

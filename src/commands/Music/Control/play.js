@@ -143,6 +143,7 @@ module.exports = class extends Command {
 
 	async getSongs(query, soundcloud) {
 		const node = this.client.playerManager.idealNodes[0];
+		const params = new URLSearchParams();
 
 		if (parse(query).protocol && parse(query).hostname) {
 			// eslint-disable-next-line max-len
@@ -152,11 +153,13 @@ module.exports = class extends Command {
 			// eslint-disable-next-line max-len
 			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await Promise.all((await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1])).map(track => this.client.spotifyParser.fetchTrack(track))) };
 
-			const result = await (await fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(query)}`, { headers: { Authorization: node.password } })).json();
+			params.set('identifier', query);
+			const result = await (await fetch(`http://${node.host}:${node.port}/loadtracks?${params}`, { headers: { Authorization: node.password } })).json();
 			if (['TRACK_LOADED', 'PLAYLIST_LOADED'].includes(result.loadType)) return result;
 		}
 
-		return fetch(`http://${node.host}:${node.port}/loadtracks?identifier=${encodeURIComponent(`${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`)}`, { headers: { Authorization: node.password } })
+		params.set('identifier', `${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`);
+		return fetch(`http://${node.host}:${node.port}/loadtracks?${params}`, { headers: { Authorization: node.password } })
 			.then(res => res.json())
 			.catch(err => {
 				this.client.emit('wtf', err);
@@ -227,13 +230,20 @@ module.exports = class extends Command {
 			if (data.reason === 'REPLACED') return null;
 
 			const { queue } = await this.client.providers.default.get('music', guild.id);
-			const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${queue[0].info.identifier}&type=video&key=${this.client.auth.googleAPIkey}`).then(res => res.json()); // eslint-disable-line max-len
 
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
 			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
-			if (items && items.length) {
-				const relatedVideo = items[Math.floor(Math.random() * items.length)];
-				if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length && Boolean(relatedVideo)) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: false })); // eslint-disable-line max-len
+			if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length) {
+				const params = new URLSearchParams();
+				params.set('part', 'snippet');
+				params.set('relatedToVideoId', queue[0].info.identifier);
+				params.set('type', 'video');
+				params.set('key', this.client.auth.googleAPIkey);
+				const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
+				if (items && items.length) {
+					const relatedVideo = items[Math.floor(Math.random() * items.length)];
+					if (relatedVideo) queue.push(mergeObjects((await this.getSongs(`https://youtu.be/${relatedVideo.id.videoId}`, false)).tracks[0], { requester: this.client.user.id, incognito: false })); // eslint-disable-line max-len
+				}
 			}
 
 			await this.client.providers.default.update('music', guild.id, { queue });

@@ -21,10 +21,15 @@ module.exports = class extends Command {
 		const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading TV show...`);
-		const request = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${this.client.auth.tmdbAPIkey}&query=${encodeURIComponent(query)}`).then(res => res.json());
+
+		const params = new URLSearchParams();
+		params.set('api_key', this.client.auth.tmdbAPIkey);
+		params.set('query', query);
+		const request = await fetch(`https://api.themoviedb.org/3/search/tv?${params}`).then(res => res.json());
 		const short = request.results[page - 1];
 		if (!short) throw `${this.client.constants.EMOTES.xmark}  ::  I couldn't find a TV show with title **${query}** in page ${page}.`;
-		const tmdb = await fetch(`https://api.themoviedb.org/3/tv/${short.id}?api_key=${this.client.auth.tmdbAPIkey}`).then(res => res.json());
+		params.delete('query');
+		const tmdb = await fetch(`https://api.themoviedb.org/3/tv/${short.id}?${params}`).then(res => res.json());
 
 		const poster = `https://image.tmdb.org/t/p/original${tmdb.poster_path}`;
 		const url = tmdb.homepage || `https://www.themoviedb.org/tv/${tmdb.id}`;

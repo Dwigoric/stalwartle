@@ -17,7 +17,9 @@ module.exports = class extends Command {
 	async run(msg, [search, index = 1]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
-		const body = await fetch(`http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(search)}`).then(res => res.json());
+		const params = new URLSearchParams();
+		params.set('term', search);
+		const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
 
 		const result = body.list[index];
 		if (!result) throw `${this.client.constants.EMOTES.xmark}  ::  No entry found for **${search}**.`;
