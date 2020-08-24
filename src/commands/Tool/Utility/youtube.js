@@ -53,7 +53,7 @@ module.exports = class extends Command {
 			.setColor('RANDOM');
 		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
 		if (type !== 'channel') {
-			params.set('id', request.snipper.channelId);
+			params.set('id', request.snippet.channelId);
 			params.delete('q');
 			params.delete('type');
 			embed
