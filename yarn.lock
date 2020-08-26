@@ -319,10 +319,10 @@ setimmediate@^1.0.5:
   resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
   integrity sha1-KQy7Iy4waULX1+qbg3Mqt4VvgoU=
 
-spotilink@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.3.1.tgz#0e0a02f6865d6435eaed82ccbc5775e40f4d24f4"
-  integrity sha512-Pf4c6bDHAOsU0gh6Hx+f7WzLWZu6EDxAUatlYmq9pYou/Ch3yje0hY//hLDi+c/1Zz5MpI4Wf457Y1PY0Hvn8w==
+spotilink@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.3.2.tgz#5725eb9bd65ab12e841f4dcc3f2b06cf8b63f9ac"
+  integrity sha512-jCLS/rzdt4OZpFq2sV0clCwXNxJXnng4pTY1EArFPuSwUqzOR8pbKYPrb4PHEoiCBjR5sGELJ15TFczRwkFs1A==
   dependencies:
     "@types/node" "^13.9.8"
     "@types/node-fetch" "^2.5.5"
