@@ -137,14 +137,14 @@ module.exports = class Stalwartle extends Client {
 			});
 		}
 		if (this.auth.dblAPIkey) {
-			fetch(`https://discordbots.org/api/bots/${this.user.id}/stats`, {
+			fetch(`https://top.gg/api/bots/${this.user.id}/stats`, {
 				method: 'POST',
-				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				body: JSON.stringify({ server_count: await this.guildCount(), shard_count: this.options.shardCount }), // eslint-disable-line camelcase
 				headers: { Authorization: this.auth.dblAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
 		if (this.auth.dbl2APIkey) {
-			fetch(`https://discordbotlist.com/api/bots/${this.user.id}/stats`, {
+			fetch(`https://discordbotlist.com/api/v1/bots/${this.user.id}/stats`, {
 				method: 'POST',
 				body: JSON.stringify({
 					guilds: await this.guildCount(),
