@@ -109,7 +109,7 @@ module.exports = class MemorySweeper extends Task {
 
 		// Create a schedule to make this task work
 		if (this.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length >= 1) return;
-		await this.client.schedule.create(this.name, '*/15 * * * *');
+		await this.client.schedule.create(this.name, '*/10 * * * *');
 	}
 
 	async init() {
