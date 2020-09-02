@@ -21,7 +21,8 @@ module.exports = class extends Command {
 		params.set('limit', 1);
 		const search = await fetch(`https://api.jikan.moe/v3/search/anime?${params}`)
 			.then(res => res.json())
-			.then(body => body.results);
+			.then(body => body.results)
+			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  There was an error searching for an anime series.`; });
 		if (!search || !search.length) throw `${this.client.constants.EMOTES.xmark}  ::  Anime series not found!`;
 
 		const [anime] = search;
