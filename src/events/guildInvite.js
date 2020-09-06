@@ -28,7 +28,7 @@ module.exports = class extends Event {
 		this.hook.send(new MessageEmbed()
 			.setColor(0x2ECC71)
 			.setAuthor("I've been added to a new server!", guild.owner.user.displayAvatarURL({ dynamic: true }))
-			.setThumbnail(guild.iconURL({ format: 'png' }))
+			.setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
 			.setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
 			.addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
 			.addField('Guild Region', region, true)

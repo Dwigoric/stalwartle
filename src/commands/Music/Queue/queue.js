@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			'⤴ Up Next:';
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(`Server Music Queue: ${msg.guild.name}`, msg.guild.iconURL())
+			.setAuthor(`Server Music Queue: ${msg.guild.name}`, msg.guild.iconURL({ dynamic: true }))
 			.setTitle('Use reactions to go to next/previous page, go to specific page, or stop the reactions.')
 			.setTimestamp());
 

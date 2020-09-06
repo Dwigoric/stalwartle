@@ -41,7 +41,7 @@ module.exports = class extends Command {
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the selfrole list`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(`Selfroles for ${msg.guild.name}`, msg.guild.iconURL())
+			.setAuthor(`Selfroles for ${msg.guild.name}`, msg.guild.iconURL({ dynamic: true }))
 			.setTitle('Use reactions to go to next/previous page, go to specific page, or stop the reactions.')
 			.setTimestamp());
 

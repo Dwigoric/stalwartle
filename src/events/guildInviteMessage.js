@@ -13,7 +13,7 @@ module.exports = class extends Event {
 			.setAuthor('Thank you for having me!', guild.owner.user.displayAvatarURL({ dynamic: true }))
 			.setTitle(guild.name)
 			.setFooter(`${this.client.user.username} Added!`, this.client.user.displayAvatarURL({ dynamic: true }))
-			.setThumbnail(guild.iconURL({ size: 2048 }))
+			.setThumbnail(guild.iconURL({ dynamic: true, size: 2048 }))
 			.setTimestamp()
 			.setDescription([
 				`Hey there ${guild.owner}! Thank you for having me in **${guild.name}**. It is an honor to serve you.`,

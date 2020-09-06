@@ -41,8 +41,8 @@ module.exports = class extends Command {
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setAuthor(guild.name, guild.iconURL({ format: 'png' }))
-				.setThumbnail(guild.iconURL({ format: 'png' }))
+				.setAuthor(guild.name, guild.iconURL({ dynamic: true, format: 'png' }))
+				.setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
 				.addField('ID', guild.id, true)
 				.addField('Owner', await guild.members.fetch(guild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
 				.addField('Server Region', region, true)
@@ -73,7 +73,7 @@ module.exports = class extends Command {
 		return msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
-				.setImage(guild.iconURL({ format: 'png', size: 2048 }))
+				.setImage(guild.iconURL({ dynamic: true, format: 'png', size: 2048 }))
 		});
 	}
 

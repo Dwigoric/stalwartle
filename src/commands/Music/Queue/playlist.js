@@ -42,7 +42,7 @@ module.exports = class extends Command {
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the music playlist...`);
 		const display = new RichDisplay(new MessageEmbed()
 			.setColor('RANDOM')
-			.setAuthor(`Server Music Playlist: ${msg.guild.name}`, msg.guild.iconURL())
+			.setAuthor(`Server Music Playlist: ${msg.guild.name}`, msg.guild.iconURL({ dynamic: true }))
 			.setTitle('Use reactions to go to next/previous page, go to specific page, or stop the reactions.')
 			.setTimestamp());
 
