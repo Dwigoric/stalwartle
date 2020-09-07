@@ -10,7 +10,7 @@ module.exports = class extends Command {
 			requiredPermissions: ['EMBED_LINKS'],
 			description: 'Gives weather information of a search location; can be currently, minutely, hourly, or daily.',
 			extendedHelp: 'To change report type (daily/hourly/minutely/currently), use a subcommand e.g. `s.weather daily Tokyo, Japan`. Default is the current weather.',
-			usage: '<daily|hourly|minutely|currently:default> <Location:string>',
+			usage: '<daily|hourly|minutely|currently:default> <Location:string> [...]',
 			usageDelim: ' ',
 			subcommands: true
 		});
@@ -19,7 +19,7 @@ module.exports = class extends Command {
 	async currently(msg, [location]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading current weather information...`);
 
-		const data = await this.getWeatherData(location, 'currently');
+		const data = await this.getWeatherData(location.join(this.usageDelim), 'currently');
 		msg.send({
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
@@ -48,7 +48,8 @@ module.exports = class extends Command {
 
 	async minutely(msg, [location]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
-		const data = await this.getWeatherData(location, 'minutely');
+
+		const data = await this.getWeatherData(location.join(this.usageDelim), 'minutely');
 		if (!data.by_minute || !data.by_minute.length) throw `${this.client.constants.EMOTES.xmark}  ::  No by-minute data available for **${data.location.address}**.`;
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the weather reports...`);
 		const display = new RichDisplay(new MessageEmbed()
@@ -72,7 +73,8 @@ module.exports = class extends Command {
 
 	async hourly(msg, [location]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
-		const data = await this.getWeatherData(location, 'hourly');
+
+		const data = await this.getWeatherData(location.join(this.usageDelim), 'hourly');
 		if (!data.by_hour || !data.by_hour.length) throw `${this.client.constants.EMOTES.xmark}  ::  No by-hour data available for **${data.location.address}**.`;
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the weather reports...`);
 		const display = new RichDisplay(new MessageEmbed()
@@ -107,7 +109,8 @@ module.exports = class extends Command {
 
 	async daily(msg, [location]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
-		const data = await this.getWeatherData(location, 'daily');
+
+		const data = await this.getWeatherData(location.join(this.usageDelim), 'daily');
 		if (!data.by_day || !data.by_day.length) throw `${this.client.constants.EMOTES.xmark}  ::  No by-day data available for **${data.location.address}**.`;
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the weather reports...`);
 		const display = new RichDisplay(new MessageEmbed()
