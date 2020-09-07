@@ -49,12 +49,12 @@ module.exports = class extends Command {
 			if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
-				await this.join(msg);
+				if (!msg.guild.player) await this.join(msg);
 				return this.play(msg, queue[0]);
 			}
 			// eslint-disable-next-line max-len
 			if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
-			this.join(msg);
+			if (!msg.guild.player) await this.join(msg);
 			msg.send(`${this.client.constants.EMOTES.tick}  ::  Queue is empty. The playlist has been added to the queue.`);
 			await this.addToQueue(msg, playlist).catch(err => {
 				this.client.emit('wtf', err);
