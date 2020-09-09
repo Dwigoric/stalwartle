@@ -17,7 +17,7 @@ module.exports = class extends Command {
 			`🐛  ::  Bug Report by **${msg.author.tag}** | ${msg.author.id}`,
 			`\t\t\tServer: ${server}`,
 			`\`\`\`${params}\`\`\``
-		].join('\n'), { files: msg.attachments.map(a => a.url) });
+		].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
 		msg.send([
 			`${this.client.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
 			'***Please make sure I can DM (privacy settings) you so you will be updated about your report.***'

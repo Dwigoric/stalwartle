@@ -26,7 +26,7 @@ module.exports = class extends Command {
 				return res.json();
 			})
 			.then(res => {
-				if (!res.data.length) throw `${this.client.constants.EMOTES.xmark}  ::  There is no Twitch streamer named **${twitchName}**.`;
+				if (!res.data.length) throw `${this.client.constants.EMOTES.xmark}  ::  There is no Twitch streamer with that name.`;
 				return res.data[0];
 			});
 

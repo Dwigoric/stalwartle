@@ -27,7 +27,7 @@ module.exports = class extends Command {
 		params.set('query', query);
 		const { results } = await fetch(`https://api.themoviedb.org/3/search/movie?${params}`).then(res => res.json());
 		const short = results[page - 1];
-		if (!short) throw `${this.client.constants.EMOTES.xmark}  ::  I couldn't find a movie with title **${query}** in page ${page}.`;
+		if (!short) throw `${this.client.constants.EMOTES.xmark}  ::  I couldn't find a movie with that title in page ${page}.`;
 		params.delete('query');
 		const tmdb = await fetch(`https://api.themoviedb.org/3/movie/${short.id}?${params}`).then(res => res.json());
 

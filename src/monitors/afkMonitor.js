@@ -24,7 +24,7 @@ module.exports = class extends Monitor {
 		msg.send([
 			`${this.client.constants.EMOTES.blobping}  ::  ${msg.author}, **${await msg.guild.members.fetch(afkUser.id).then(mb => mb.displayName).catch(() => afkUser.username)}** is currently AFK. [Last seen ${Duration.toNow(timestamp)} ago]`, // eslint-disable-line max-len
 			reason ? `**Reason**: ${reason}` : ''
-		].join('\n'));
+		].join('\n'), { disableMentions: 'everyone' });
 	}
 
 };

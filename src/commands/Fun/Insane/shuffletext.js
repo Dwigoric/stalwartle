@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			return a.join('');
 		};
 
-		msg.send(`🔀  ::  ${shuffle(string)}`);
+		msg.send(`🔀  ::  ${shuffle(string)}`, { disableMentions: 'everyone' });
 	}
 
 };

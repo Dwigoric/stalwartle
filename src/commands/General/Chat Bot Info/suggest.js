@@ -22,7 +22,7 @@ module.exports = class extends Command {
 			`💡  ::  Suggestion by **${msg.author.tag}** | ${msg.author.id}`,
 			`\t\t\tServer: ${server}`,
 			`\`\`\`${suggestion}\`\`\``
-		].join('\n'), { files: msg.attachments.map(a => a.url) });
+		].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Sending suggestion...`);
 		msg.send([
 			`${this.client.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,

@@ -22,7 +22,7 @@ module.exports = class extends Command {
 		const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
 
 		const result = body.list[index];
-		if (!result) throw `${this.client.constants.EMOTES.xmark}  ::  No entry found for **${search}**.`;
+		if (!result) throw `${this.client.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`;
 
 		const definition = result.definition.length > 1000 ?
 			`${this.splitText(result.definition, 1000)}...` :
