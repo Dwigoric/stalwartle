@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle('🌡 Weather Report')
-				.setFooter(data.summary)
+				.setFooter(`${data.summary} | Powered by ksoft.si`)
 				.setTimestamp(data.time)
 				.setThumbnail(data.icon_url)
 				.addField('Address', data.location.address)

@@ -33,6 +33,7 @@ module.exports = class extends Command {
 				.addField('Address', data.address)
 				.addField('Latitude', data.lat, true)
 				.addField('Longitude', data.lon, true)
+				.setFooter('Powered by ksoft.si')
 		});
 	}
 
