@@ -14,9 +14,9 @@ module.exports = class extends Command {
 	async run(msg) {
 		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading whale...`);
 
-		const { image } = await fetch(`https://some-random-api.ml/img/whale`).then(res => res.json());
+		const { link } = await fetch(`https://some-random-api.ml/img/whale`).then(res => res.json());
 		const { fact } = await fetch(`https://some-random-api.ml/facts/whale`).then(res => res.json());
-		await msg.channel.sendFile(image, 'whale.png', `Random whale fact: ${fact}`);
+		await msg.channel.sendFile(link, 'whale.gif', `Random whale fact: ${fact}`);
 
 		message.delete();
 	}
