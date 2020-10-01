@@ -16,7 +16,7 @@ module.exports = class extends Command {
 		});
 	}
 
-	async currently(msg, [location]) {
+	async currently(msg, [...location]) {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading current weather information...`);
 
 		const data = await this.getWeatherData(location.join(this.usageDelim), 'currently');
