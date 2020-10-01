@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading current weather information...`);
 
 		const data = await this.getWeatherData(location.join(this.usageDelim), 'currently');
-		msg.send({
+		msg.send('⚠️  ::  **Deprecation Notice**: This command will be removed on October 31, 2020.', {
 			embed: new MessageEmbed()
 				.setColor('RANDOM')
 				.setTitle('🌡 Weather Report')
@@ -68,7 +68,7 @@ module.exports = class extends Command {
 				.addField('Precipitation Intensity', `${report.precipIntensity * 100}%`, true)
 				.addField('Precipitation Probability', `${report.precipProbability * 100}%`, true));
 		}
-		display.run(message, { filter: (reaction, author) => msg.author === author });
+		display.run(await message.edit('⚠️  ::  **Deprecation Notice**: This command will be removed on October 31, 2020.'), { filter: (reaction, author) => msg.author === author });
 	}
 
 	async hourly(msg, [location]) {
@@ -104,7 +104,7 @@ module.exports = class extends Command {
 				.addField('Ozone', report.ozone, true))
 				.setFooterSuffix(` | ${report.summary}`);
 		}
-		display.run(message, { filter: (reaction, author) => msg.author === author });
+		display.run(await message.edit('⚠️  ::  **Deprecation Notice**: This command will be removed on October 31, 2020.'), { filter: (reaction, author) => msg.author === author });
 	}
 
 	async daily(msg, [location]) {
@@ -143,7 +143,7 @@ module.exports = class extends Command {
 				.addField('Ozone', report.ozone, true))
 				.setFooterSuffix(` | ${report.summary}`);
 		}
-		display.run(message, { filter: (reaction, author) => msg.author === author });
+		display.run(await message.edit('⚠️  ::  **Deprecation Notice**: This command will be removed on October 31, 2020.'), { filter: (reaction, author) => msg.author === author });
 	}
 
 	async getWeatherData(location, type) {
