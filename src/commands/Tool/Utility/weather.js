@@ -46,7 +46,7 @@ module.exports = class extends Command {
 		});
 	}
 
-	async minutely(msg, [location]) {
+	async minutely(msg, [...location]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
 
 		const data = await this.getWeatherData(location.join(this.usageDelim), 'minutely');
@@ -71,7 +71,7 @@ module.exports = class extends Command {
 		display.run(await message.edit('⚠️  ::  **Deprecation Notice**: This command will be removed on October 31, 2020.'), { filter: (reaction, author) => msg.author === author });
 	}
 
-	async hourly(msg, [location]) {
+	async hourly(msg, [...location]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
 
 		const data = await this.getWeatherData(location.join(this.usageDelim), 'hourly');
@@ -107,7 +107,7 @@ module.exports = class extends Command {
 		display.run(await message.edit('⚠️  ::  **Deprecation Notice**: This command will be removed on October 31, 2020.'), { filter: (reaction, author) => msg.author === author });
 	}
 
-	async daily(msg, [location]) {
+	async daily(msg, [...location]) {
 		if (!msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) throw `${this.client.constants.EMOTES.xmark}  ::  I need to be able to **Manage Messages** (permissions).`;
 
 		const data = await this.getWeatherData(location.join(this.usageDelim), 'daily');
