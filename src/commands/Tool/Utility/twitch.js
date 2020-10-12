@@ -2,6 +2,9 @@ const { Command } = require('klasa');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
+const TWITCH_CLIENT_ID = 'd7sds6f41zr45c3wxkqkkslpcjukig';
+let TWITCH_API_TOKEN = '';
+
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -17,8 +20,8 @@ module.exports = class extends Command {
 
 		const channel = await fetch(`https://api.twitch.tv/helix/users?login=${twitchName}`, {
 			headers: {
-				'Client-ID': 'd7sds6f41zr45c3wxkqkkslpcjukig',
-				Authorization: `Bearer ${this.client.auth.twitchAPIkey}`
+				'Client-ID': TWITCH_CLIENT_ID,
+				Authorization: `Bearer ${TWITCH_API_TOKEN}`
 			}
 		})
 			.then(async res => {
@@ -38,6 +41,25 @@ module.exports = class extends Command {
 			.setFooter('Click at the account name above to go to the channel.')
 			.addField('Account ID', channel.id, true)
 			.addField('Channel Views', channel.view_count, true));
+	}
+
+	async renewToken() {
+		const params = new URLSearchParams();
+		params.set('client_id', TWITCH_CLIENT_ID);
+		params.set('client_secret', this.client.auth.twitchAPIkey);
+		params.set('grant_type', 'client_credentials');
+		const { access_token, expires_in } = await fetch(`https://id.twitch.tv/oauth2/token?${params}`, { method: 'POST' }).then(res => res.json()); // eslint-disable-line camelcase
+
+		TWITCH_API_TOKEN = access_token; // eslint-disable-line camelcase
+		return expires_in * 1000; // eslint-disable-line camelcase
+	}
+
+	async _renew() {
+		this.client.setTimeout(this._renew.bind(this), await this.renewToken());
+	}
+
+	async init() {
+		this._renew();
 	}
 
 };
