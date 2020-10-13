@@ -51,7 +51,7 @@ module.exports = class extends Command {
 		const { access_token, expires_in } = await fetch(`https://id.twitch.tv/oauth2/token?${params}`, { method: 'POST' }).then(res => res.json()); // eslint-disable-line camelcase
 
 		TWITCH_API_TOKEN = access_token; // eslint-disable-line camelcase
-		return expires_in * 1000; // eslint-disable-line camelcase
+		return expires_in; // eslint-disable-line camelcase
 	}
 
 	async _renew() {
