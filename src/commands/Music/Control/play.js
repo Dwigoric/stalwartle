@@ -231,12 +231,13 @@ module.exports = class extends Command {
 
 			const { queue } = await this.client.providers.default.get('music', guild.id);
 
+			let previous;
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
-			if (guild.settings.get('music.repeat') !== 'song') queue.shift();
+			if (guild.settings.get('music.repeat') !== 'song') previous = queue.shift();
 			if (guild.settings.get('donation') >= 8 && guild.settings.get('music.autoplay') && !queue.length) {
 				const params = new URLSearchParams();
 				params.set('part', 'snippet');
-				params.set('relatedToVideoId', queue[0].info.identifier);
+				params.set('relatedToVideoId', previous.info.identifier);
 				params.set('type', 'video');
 				params.set('key', this.client.auth.googleAPIkey);
 				const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
