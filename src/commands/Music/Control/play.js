@@ -71,13 +71,14 @@ module.exports = class extends Command {
 
 		clearTimeout(timeouts.get(msg.guild.id));
 		timeouts.delete(msg.guild.id);
-		if (!msg.guild.player) await this.join(msg);
 
 		queue = await this.addToQueue(msg, song).catch(err => {
 			if (typeof err === 'string') throw err;
 			this.client.emit('wtf', err);
 			throw `${this.client.constants.EMOTES.xmark}  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
 		});
+
+		if (!msg.guild.player) await this.join(msg);
 
 		if (msg.flagArgs.force && queue.length > 1 && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[1].info.title)}**.`);
@@ -202,7 +203,7 @@ module.exports = class extends Command {
 				msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
 			} else {
 				const { title, length, uri, author, isStream } = queue[queue.length - 1].info;
-				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
+				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player && msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
 				msg.sendEmbed(new MessageEmbed()
 					.setColor('RANDOM')
 					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL({ dynamic: true }))
