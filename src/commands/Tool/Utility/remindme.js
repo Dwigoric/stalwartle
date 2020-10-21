@@ -48,7 +48,7 @@ module.exports = class extends Command {
 			}
 		});
 		msg.send([
-			`${this.client.constants.EMOTES.tick}  ::  Alright! I created you a reminder with the ID: \`${reminder.id}\``,
+			`${this.client.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
 			`You will be reminded of this in ${Duration.toNow(reminder.time)}.`,
 			reminder.data.forceChannel ?
 				'The people of this channel will be reminded.' :
