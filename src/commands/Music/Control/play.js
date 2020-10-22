@@ -91,7 +91,6 @@ module.exports = class extends Command {
 	async join({ guild, channel, member }) {
 		if (!member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
 
-		await this.client.playerManager.leave(guild.id);
 		await this.client.playerManager.join({
 			node: this.client.playerManager.idealNodes[0].id,
 			guild: guild.id,
