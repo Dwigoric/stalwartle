@@ -98,7 +98,10 @@ module.exports = class extends Command {
 			channel: member.voice.channelID
 		}, { selfdeaf: true });
 
-		guild.player.on('error', error => channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error}`));
+		guild.player.on('error', error => {
+			channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error}`);
+			this.client.emit('wtf', error);
+		});
 	}
 
 	async resolveQuery(msg, query) {
