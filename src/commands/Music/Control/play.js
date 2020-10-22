@@ -98,7 +98,7 @@ module.exports = class extends Command {
 		}, { selfdeaf: true });
 
 		guild.player.on('error', error => {
-			channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error}`);
+			channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error || error.reason || 'An unknown error has occurred.'}`);
 			this.client.emit('wtf', error);
 		});
 	}
@@ -107,7 +107,7 @@ module.exports = class extends Command {
 		const { loadType, tracks, exception } = await this.getSongs(query, query.includes('soundcloud.com') || Boolean(msg.flagArgs.soundcloud));
 
 		switch (loadType) {
-			case 'LOAD_FAILED': throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your search: **${exception.message}** (Severity: ${exception.severity})`;
+			case 'LOAD_FAILED': throw `${this.client.constants.EMOTES.xmark}  ::  ${exception.message} (Severity: ${exception.severity})`;
 			case 'NO_MATCHES': throw `${this.client.constants.EMOTES.xmark}  ::  No track found for your query.`;
 			case 'TRACK_LOADED': return tracks[0];
 			case 'PLAYLIST_LOADED':
