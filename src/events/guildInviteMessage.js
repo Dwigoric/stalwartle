@@ -10,7 +10,7 @@ module.exports = class extends Event {
 	async run(guild) {
 		const message = new MessageEmbed()
 			.setColor('#C62A29')
-			.setAuthor('Thank you for having me!', guild.owner.user.displayAvatarURL({ dynamic: true }))
+			.setAuthor('Thank you for having me!', await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })))
 			.setTitle(guild.name)
 			.setFooter(`${this.client.user.username} Added!`, this.client.user.displayAvatarURL({ dynamic: true }))
 			.setThumbnail(guild.iconURL({ dynamic: true, size: 2048 }))

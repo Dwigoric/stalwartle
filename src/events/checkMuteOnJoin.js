@@ -10,6 +10,9 @@ module.exports = class extends Event {
 		if (!member.guild.settings.get('muteRole')) return;
 		if (!member.guild.settings.get('muted').includes(member.user.id)) return;
 
+		if (member.guild.owner.partial) await member.guild.owner.fetch();
+		if (member.guild.owner.user.partial) await member.guild.owner.user.fetch();
+
 		const muteRole = member.guild.roles.cache.get(member.guild.settings.get('muteRole'));
 		if (!muteRole) {
 			member.guild.owner.user.send('⚠  ::  Whoops! The mute role has been deleted. The muterole setting has been reset.').catch(() => null);

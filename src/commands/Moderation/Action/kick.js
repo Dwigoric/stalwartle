@@ -14,9 +14,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [member, ...reason]) {
-		if (member.user.equals(msg.author)) throw 'Why would you kick yourself?';
-		if (member.user.equals(this.client.user)) throw 'Have I done something wrong?';
-		if (member.user.equals(msg.guild.owner.user)) throw 'Pretty sure the server owner cannot be kicked...';
+		if (member.id === msg.author.id) throw 'Why would you kick yourself?';
+		if (member.id === this.client.user.id) throw 'Have I done something wrong?';
+		if (member.id === msg.guild.ownerID) throw 'Pretty sure the server owner cannot be kicked...';
 
 		if (msg.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) throw `${this.client.constants.EMOTES.xmark}  ::  You cannot kick this user.`;
 		if (!member.kickable) throw `${this.client.constants.EMOTES.xmark}  ::  I cannot kick this user.`;

@@ -15,9 +15,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user, days = 1, ...reason]) {
-		if (user.equals(msg.author)) throw 'Why would you ban yourself?';
-		if (user.equals(this.client.user)) throw 'Have I done something wrong?';
-		if (user.equals(msg.guild.owner.user)) throw 'Pretty sure the server owner cannot be banned in the first place...';
+		if (user.id === msg.author.id) throw 'Why would you ban yourself?';
+		if (user.id === this.client.user.id) throw 'Have I done something wrong?';
+		if (user.id === msg.guild.ownerID) throw 'Pretty sure the server owner cannot be banned in the first place...';
 
 		const member = await msg.guild.members.fetch(user).catch(() => null);
 		if (member) {

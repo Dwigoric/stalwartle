@@ -11,6 +11,8 @@ module.exports = class extends Event {
 		if (!member.guild.settings.get('globalBans')) return null;
 		if (!member.guild.me.permissions.has('BAN_MEMBERS')) {
 			member.guild.settings.reset('globalBans');
+			if (member.guild.owner.partial) await member.guild.owner.fetch();
+			if (member.guild.owner.user.partial) await member.guild.owner.user.fetch();
 			return member.guild.owner.user.send('⚠  ::  I do not have permission to ban. I\'ve disabled the global bans settings on your server.');
 		}
 		// eslint-disable-next-line camelcase

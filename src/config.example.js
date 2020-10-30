@@ -37,6 +37,7 @@ exports.config = {
      * Caching Options
      */
 	fetchAllMembers: false,
+	partials: ['GUILD_MEMBER', 'USER'],
 	messageCacheMaxSize: 200,
 	messageCacheLifetime: 120,
 	commandMessageLifetime: 300,
