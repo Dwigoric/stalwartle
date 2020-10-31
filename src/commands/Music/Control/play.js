@@ -157,8 +157,7 @@ module.exports = class extends Command {
 			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1], true) };
 
 			params.set('identifier', query);
-			const result = await (await fetch(`http://${node.host}:${node.port}/loadtracks?${params}`, { headers: { Authorization: node.password } })).json();
-			if (['TRACK_LOADED', 'PLAYLIST_LOADED'].includes(result.loadType)) return result;
+			return (await fetch(`http://${node.host}:${node.port}/loadtracks?${params}`, { headers: { Authorization: node.password } })).json();
 		}
 
 		params.set('identifier', `${soundcloud ? 'scsearch' : 'ytsearch'}: ${query}`);
