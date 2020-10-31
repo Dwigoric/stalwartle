@@ -33,10 +33,10 @@ module.exports = class extends Event {
 
 		this.hook.send(new MessageEmbed()
 			.setColor(0xE74C3C)
-			.setAuthor("I've been removed from a server", await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })))
+			.setAuthor("I've been removed from a server")
 			.setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
 			.setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
-			.addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
+			.addField('Guild Owner ID', guild.ownerID, true)
 			.addField('Guild Region', region, true)
 			.addField('Large Guild', guild.large ? '✅' : '❌', true)
 			.addField('Verified Guild', guild.verified ? '✅' : '❌', true)
