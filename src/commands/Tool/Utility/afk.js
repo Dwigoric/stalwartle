@@ -18,6 +18,8 @@ module.exports = class extends Command {
 			await this.client.providers.default.delete('afk', msg.author.id);
 			return msg.send(`Welcome back, **${msg.author}**! I've removed your AFK status.`);
 		}
+
+		if (typeof reason === 'string' && reason.length > 1024) throw `${this.client.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`;
 		await this.client.providers.default.create('afk', msg.author.id, { reason, timestamp: Date.now() });
 		if (msg.guild && msg.guild.me.permissions.has('MOVE_MEMBERS') && msg.member.voice.channelID && msg.guild.settings.get('afkChannelOnAfk') && msg.guild.afkChannelID) msg.member.voice.setChannel(msg.guild.afkChannelID, 'Moved to AFK channel due to AFK status'); // eslint-disable-line max-len
 		return msg.send(`${this.client.constants.EMOTES.tick}  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
