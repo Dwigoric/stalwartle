@@ -33,16 +33,17 @@ exports.config = {
 	rethinkdbName: 'Stalwartle',
 
 	lavalinkNodes: [{ id: 'server', host: 'localhost', port: 80, password: '' }],
+
 	/**
      * Caching Options
      */
 	fetchAllMembers: false,
 	partials: ['GUILD_MEMBER', 'USER'],
-	messageCacheMaxSize: 200,
-	messageCacheLifetime: 120,
+	messageCacheMaxSize: 100,
+	messageCacheLifetime: 60,
 	commandMessageLifetime: 300,
 	// The above 2 options are ignored while the interval is 0
-	messageSweepInterval: 120,
+	messageSweepInterval: 30,
 
 	/**
      * Sharding Options
