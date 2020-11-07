@@ -39,6 +39,7 @@ exports.config = {
      */
 	fetchAllMembers: false,
 	partials: ['GUILD_MEMBER', 'USER'],
+	messageEditHistoryMaxSize: 0,
 	messageCacheMaxSize: 100,
 	messageCacheLifetime: 60,
 	commandMessageLifetime: 300,
