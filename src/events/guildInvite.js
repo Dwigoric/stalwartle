@@ -19,6 +19,11 @@ module.exports = class extends Event {
 	}
 
 	async run(guild) {
+		// Clear cache
+		guild.members.cache.clear();
+		guild.presences.cache.clear();
+		guild.emojis.cache.clear();
+
 		const regionArr = guild.region.split('-');
 		if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
 		const rawRegion = regionArr.join('-');
