@@ -7,19 +7,16 @@ exports.EMOTES = {
 };
 
 exports.SWEAR_WORDS_REGEX = [
-	'raped?',
-	'bullshit',
-	'nigga',
-	'nigger',
-	'fuc?ke?r?',
+	'bullsh(i|1|!)?t',
+	'n(i|1|!)?gg(a|4)',
+	'n(i|1|!)?gg(e|3)r',
+	'fuc?k(e|3)?r?',
 	'cunt',
-	'cnut',
-	'b(i|1|!)tch',
-	'd(i|1)ck',
-	'pussy',
-	'asshole',
-	'blowjob',
+	'b(i|1|!)?tch',
+	'd(i|1|!)ck',
+	'pu(s|5)(s|5)?y',
+	'(a|4)(s|5)(s|5)?h(o|0)l(e|3)?',
+	'bl(o|0)wj(o|0)b',
 	'c(u|0|o|\\(\\))ck',
-	'sex',
-	'porn'
+	'p(o|0)rn'
 ];
