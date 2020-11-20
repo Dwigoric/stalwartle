@@ -8,8 +8,7 @@ exports.EMOTES = {
 
 exports.SWEAR_WORDS_REGEX = [
 	'bullsh(i|1|!)?t',
-	'n(i|1|!)?gg(a|4)',
-	'n(i|1|!)?gg(e|3)r',
+	'n(i|1|!)?gg((a|4)|((e|3)r))',
 	'fuc?k(e|3)?r?',
 	'cunt',
 	'b(i|1|!)?tch',
