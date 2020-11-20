@@ -35,23 +35,9 @@ module.exports = class extends Command {
 			'\n__*Powered by Genius (https://genius.com)*__'
 		].join('\n');
 
-		const swearArray = (msg.guild ? msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : []).concat([
-			'raped?',
-			'bullshit',
-			'nigga',
-			'nigger',
-			'fuc?ke?r?',
-			'cunt',
-			'cnut',
-			'b(i|1|!)tch',
-			'd(i|1)ck',
-			'pussy',
-			'asshole',
-			'blowjob',
-			'c(u|0|o|\\(\\))ck',
-			'sex',
-			'porn'
-		]).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+		const swearArray = (msg.guild ? msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : [])
+			.concat(this.client.constants.SWEAR_WORDS_REGEX)
+			.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw `${this.client.constants.EMOTES.xmark}  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.`;
 

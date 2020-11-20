@@ -1,23 +1,5 @@
 const { Monitor } = require('klasa');
 
-const globalSwears = [
-	'raped?',
-	'bullshit',
-	'nigga',
-	'nigger',
-	'fuc?ke?r?',
-	'cunt',
-	'cnut',
-	'b(i|1|!)tch',
-	'd(i|1)ck',
-	'pussy',
-	'asshole',
-	'blowjob',
-	'c(u|0|o|\\(\\))ck',
-	'sex',
-	'porn'
-];
-
 module.exports = class extends Monitor {
 
 	constructor(...args) {
@@ -35,7 +17,7 @@ module.exports = class extends Monitor {
 		if (msg.author.equals(this.client.user)) return null;
 
 		let swearArray = msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`);
-		if (msg.guild.settings.get('automod.globalSwears')) swearArray = swearArray.concat(globalSwears).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+		if (msg.guild.settings.get('automod.globalSwears')) swearArray = swearArray.concat(this.client.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
 		const swearRegex = new RegExp(swearArray.join('|'), 'im');
 		if (!swearArray.length || !swearRegex.test(msg.content)) return null;
 		if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
