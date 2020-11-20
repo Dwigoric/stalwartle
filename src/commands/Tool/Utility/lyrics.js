@@ -7,6 +7,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			aliases: ['ly'],
 			description: 'Searches song lyrics using your search query.',
 			usage: '<Query:string>'
 		});
