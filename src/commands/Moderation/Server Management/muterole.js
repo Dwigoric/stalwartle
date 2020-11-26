@@ -9,14 +9,14 @@ module.exports = class extends Command {
 			requiredPermissions: 'MANAGE_ROLES',
 			description: 'Sets the mute role for the server.',
 			extendedHelp: 'You can set an existing role as the mute role; or I can make one for you using the name you provide.',
-			usage: '[reset] <RoleName:string> [...]',
+			usage: '[reset] <Role:role|RoleName:string> [...]',
 			usageDelim: ' ',
 			subcommands: true
 		});
 	}
 
 	async run(msg, [...role]) {
-		const newRole = await msg.guild.roles.create({
+		const newRole = role[0] || await msg.guild.roles.create({
 			data: {
 				name: role.join(this.usageDelim),
 				color: 'DARKER_GREY',
