@@ -20,15 +20,15 @@
 		"@lavacord/discord.js": "^0.0.7",
 		"discord.js": "github:discordjs/discord.js",
 		"klasa": "^0.5.0",
-		"moment-timezone": "^0.5.32",
-		"pako": "^2.0.2",
+		"moment-timezone": "^0.5.26",
+		"pako": "^1.0.11",
 		"rethinkdb-ts": "^2.4.0-rc.16",
-		"spotilink": "^1.4.0"
+		"spotilink": "^1.3.2"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
 		"figlet": "^1.2.1",
-		"roll": "^1.3.1",
+		"roll": "^1.2.0",
 		"steamapi": "^2.1.2"
 	},
 	"engines": {
