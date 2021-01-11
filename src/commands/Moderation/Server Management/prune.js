@@ -37,8 +37,8 @@ module.exports = class extends Command {
 			pruning.delete(msg.channel.id);
 			throw `${this.client.constants.EMOTES.xmark}  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`;
 		}
-
-		const loadingMessage = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Deleting messages...`);
+		// eslint-disable-next-line max-len
+		const loadingMessage = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Deleting messages... Please note that messages older than 14 days will take time to be deleted. If possible, please refrain from deleting them manually until the purging process is complete.`);
 		let deleted = 0;
 		const bulkDeleted = await msg.channel.bulkDelete(messages, true);
 		deleted += bulkDeleted.size;
