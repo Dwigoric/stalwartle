@@ -223,7 +223,7 @@ module.exports = class extends Command {
 		if (guild.player.playing) return;
 
 		const volume = guild.settings.get('music.volume');
-		guild.player.play(song.track, volume === 100 ? undefined : { volume });
+		guild.player.play(song.track, { volume: volume === 100 ? undefined : volume });
 		guild.clearVoteskips();
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
