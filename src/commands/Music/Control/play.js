@@ -223,7 +223,8 @@ module.exports = class extends Command {
 		if (guild.player.playing) return;
 
 		const volume = guild.settings.get('music.volume');
-		guild.player.play(song.track/*, { volume: volume === 100 ? undefined : volume }*/);
+		// { volume: volume === 100 ? undefined : volume }
+		guild.player.play(song.track);
 		if (volume !== 100) guild.player.volume(volume);
 		// the above two lines are temporary until in-op volume is fixed
 		guild.clearVoteskips();
