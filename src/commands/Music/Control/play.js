@@ -149,11 +149,8 @@ module.exports = class extends Command {
 		const params = new URLSearchParams();
 
 		if (parse(query).protocol && parse(query).hostname) {
-			// eslint-disable-next-line max-len
 			if (SPOTIFY_TRACK_REGEX.test(query)) return { loadType: 'TRACK_LOADED', tracks: [await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(query)[1], true)] };
-			// eslint-disable-next-line max-len
 			else if (SPOTIFY_ALBUM_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(query)[1], true) };
-			// eslint-disable-next-line max-len
 			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1], true) };
 
 			params.set('identifier', query);
