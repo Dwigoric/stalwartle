@@ -7,7 +7,7 @@ module.exports = class GuildPlayer extends Extendable {
 	}
 
 	get player() {
-		return this.client.playerManager.players.get(this.id);
+		return this.client.playerManager.players.get(this.id) || null;
 	}
 
 };
