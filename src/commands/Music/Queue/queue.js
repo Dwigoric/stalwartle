@@ -40,7 +40,7 @@ module.exports = class extends Command {
 		return display
 			.setFooterPrefix('Page ')
 			.setFooterSuffix(` [${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}] - Queue Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`) // eslint-disable-line max-len
-			.run(message, { filter: (reaction, author) => author === msg.author });
+			.run(await message.edit(`${this.client.constants.EMOTES.tick}  ::  Server music queue has been loaded!`), { filter: (reaction, author) => author === msg.author });
 	}
 
 };

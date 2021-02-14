@@ -56,7 +56,7 @@ module.exports = class extends Command {
 		return display
 			.setFooterPrefix('Page ')
 			.setFooterSuffix(` [${playlist.length} Playlist Item${playlist.length === 1 ? '' : 's'}] - Playlist Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`) // eslint-disable-line max-len
-			.run(message, { filter: (reaction, author) => author === msg.author });
+			.run(await message.edit(`${this.client.constants.EMOTES.tick}  ::  Server music playlist has been loaded!`), { filter: (reaction, author) => author === msg.author });
 	}
 
 	async add(msg, [songs]) {
