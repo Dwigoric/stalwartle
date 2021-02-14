@@ -13,15 +13,14 @@ module.exports = class extends Command {
 				'e.g. `s.remindme 1m to get in the car, buy stuff, do stuff`',
 				// eslint-disable-next-line max-len
 				'To be reminded in specific times, replace the subcommands with this format: `YYYY-MM-DD HH:mm`. Please be noted that this respects your custom timezone, if you set one.',
-				'i.e. If you want to set a reminder on 29 Feb 2020 at 1:00 PM, you would run `s.rem "2020-02-29 13:00" do something`. You can set the timezone for each reminder as well.',
-				"\nThe subcommands `list` and `remove` are optional. If you want to add a reminder, simply don't use any subcommand.",
-				'**If you want daily, weekly, monthly or annual reminders, just replace the reminder duration with `daily`, `annually` etc., e.g. `s.remindme daily to eat cake`**',
+				'If you want to set a reminder on 29 Feb 2020 at 1:00 PM, you would run `s.rem "2020-02-29 13:00" do something`. You can set the timezone for each reminder as well.',
+				'\nThe subcommands `list` and `remove` are used to list or remove reminders.',
+				'**If you want recurring reminders (GMT timezone), just replace the reminder duration with `daily`, `annually` etc., e.g. `s.remindme daily to drink water`**',
 				'\n**Hourlies** `hourly` → At 0 minute past every hour',
 				'**Dailies** `daily` → At 00:00',
 				'**Weeklies** `weekly` → At 00:00 every Saturday',
 				'**Monthlies** `monthly` → At 00:00 every first day of the month',
 				'**Annuals** `annually` → At 00:00 in January 1',
-				'All of which are in GMT timezone.',
 				'\nIf you want to force the reminder to the channel, use the `--channel` flag.'
 			].join('\n'),
 			usageDelim: ' ',
