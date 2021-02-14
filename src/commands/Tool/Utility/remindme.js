@@ -1,16 +1,20 @@
 const { Command, Duration } = require('klasa');
 const { Util: { escapeMarkdown } } = require('discord.js');
+const moment = require('moment-timezone');
 
 module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
 			aliases: ['rem', 'remind', 'reminder'],
-			description: 'Schedules a reminder for you.',
+			description: 'Schedules a reminder for you. See extended help for time formats.',
 			usage: '[list|remove] (DurationUntilReminder:time) [Reminder:string] [...]',
 			extendedHelp: [
 				'e.g. `s.remindme 1m to get in the car, buy stuff, do stuff`',
-				"The subcommands `list` and `remove` are optional. If you want to add a reminder, simply don't use any subcommand.",
+				// eslint-disable-next-line max-len
+				'To be reminded in specific times, replace the subcommands with the quoted point in time with this format: `YYYY-MM-DD HH:mm`. Please be noted that this respects your custom timezone, if you set one.',
+				'For instance, if you want to set a reminder on 29 Feb 2020 at 1:00 PM, you would run `s.rem "2020-02-29 13:00" do something`. You can set the timezone for each reminder as well.',
+				"\nThe subcommands `list` and `remove` are optional. If you want to add a reminder, simply don't use any subcommand.",
 				'**If you want daily, weekly, monthly or annual reminders, just replace the reminder duration with `daily`, `annually` etc., e.g. `s.remindme daily to eat cake`**',
 				'\n**Hourlies** `hourly` → At 0 minute past every hour',
 				'**Dailies** `daily` → At 00:00',
@@ -21,13 +25,20 @@ module.exports = class extends Command {
 				'\nIf you want to force the reminder to the channel, use the `--channel` flag.'
 			].join('\n'),
 			usageDelim: ' ',
+			quotedStringSupport: true,
 			subcommands: true
 		});
 
 		this
 			.createCustomResolver('time', (arg, possible, msg, [action]) => {
 				if (['list', 'remove'].includes(action)) return undefined;
-				if (!arg) throw `${this.client.constants.EMOTES.xmark}  ::  Please provide the duration (e.g. 2d3h4m) of the reminder.`;
+
+				if (moment(arg).isValid()) {
+					const customTime = Number(moment(arg).tz(msg.author.settings.get('timezone')).format('x'));
+					if (customTime <= Date.now()) throw `${this.client.constants.EMOTES.xmark}  ::  I cannot travel back in time!`;
+					return new Date(customTime);
+				} else if (!arg) { throw `${this.client.constants.EMOTES.xmark}  ::  Please provide the duration (e.g. 2d3h4m) or the specific time of the reminder.`; }
+
 				if (arg === 'annually') return '0 0 1 1 *';
 				else if (arg === 'monthly') return '0 0 1 * *';
 				else if (arg === 'weekly') return '0 0 * * 6';
@@ -38,15 +49,17 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [when, ...text]) {
-		if (when - new Date() >= 94672801000) throw `${this.client.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 3 years!`;
+		if (when - new Date() >= 86400000000) throw `${this.client.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 1000 days!`;
+
 		const reminder = await this.client.schedule.create('reminder', when, {
 			data: {
 				channel: msg.channel.id,
 				user: msg.author.id,
 				text: text.join(this.usageDelim),
-				forceChannel: Object.keys(msg.flagArgs).includes('channel')
+				forceChannel: 'channel' in msg.flagArgs
 			}
 		});
+
 		msg.send([
 			`${this.client.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
 			`You will be reminded of this in approximately ${Duration.toNow(reminder.time)}.`,
