@@ -31,12 +31,13 @@ module.exports = class extends Command {
 		this
 			.createCustomResolver('time', (arg, possible, msg, [action]) => {
 				if (['list', 'remove'].includes(action)) return undefined;
+				if (!arg) throw `${this.client.constants.EMOTES.xmark}  ::  Please provide the duration (e.g. 2d3h4m) or the specific time of the reminder.`;
 
 				if (moment(arg).isValid()) {
-					const customTime = Number(moment(arg).tz(msg.author.settings.get('timezone')).format('x'));
+					const customTime = Number(moment.tz(arg, msg.author.settings.get('timezone')).format('x'));
 					if (customTime <= Date.now()) throw `${this.client.constants.EMOTES.xmark}  ::  I cannot travel back in time!`;
 					return new Date(customTime);
-				} else if (!arg) { throw `${this.client.constants.EMOTES.xmark}  ::  Please provide the duration (e.g. 2d3h4m) or the specific time of the reminder.`; }
+				}
 
 				if (arg === 'annually') return '0 0 1 1 *';
 				else if (arg === 'monthly') return '0 0 1 * *';
