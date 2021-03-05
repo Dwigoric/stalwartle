@@ -204,7 +204,7 @@ module.exports = class extends Command {
 				const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player && msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
 				msg.send(queue.length >= 2 && (!msg.guild.player || (msg.guild.player && !msg.guild.player.playing)) ?
 					// eslint-disable-next-line max-len
-					`There are songs in your queue from your previous session! You can run \`${msg.guild.settings.get('prefix')}remove 1${queue.length >= 3 ? `-${queue.length - 1}` : ''}\` then \`${msg.guild.settings.get('prefix')}skip\` to start over.` :
+					`There are songs in your queue from your previous session! You can run ${queue.length >= 3 ? `\`${msg.guild.settings.get('prefix')}remove 1${queue.length >= 4 ? `-${queue.length - 2}` : ''}\` then` : ''} \`${msg.guild.settings.get('prefix')}skip\` to start over.` :
 					'', { embed: new MessageEmbed()
 					.setColor('RANDOM')
 					.setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL({ dynamic: true }))
