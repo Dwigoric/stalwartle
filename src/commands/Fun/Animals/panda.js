@@ -14,7 +14,9 @@ module.exports = class extends Command {
 	async run(msg) {
 		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading panda...`);
 
-		const { image, fact } = await fetch(`https://some-random-api.ml/animal/panda`).then(res => res.json());
+		const { image, fact } = await fetch(`https://some-random-api.ml/animal/panda`)
+			.then(res => res.json())
+			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
 		await msg.channel.sendFile(image, 'panda.jpg', `Random panda fact: ${fact}`);
 
 		message.delete();
