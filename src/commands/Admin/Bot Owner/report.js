@@ -40,9 +40,8 @@ module.exports = class extends Command {
 				sent.delete();
 			}, 5000);
 		});
-		return repUser.send('Your submission has been acknowledged by a high lord!', { embed })
-			.then(() => repMsg.delete())
-			.catch(() => null);
+		repMsg.delete().catch(() => null);
+		return repUser.send('Your submission has been acknowledged by a high lord!', { embed }).catch(() => null);
 	}
 
 };
