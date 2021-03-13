@@ -16,7 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [reason = null]) {
 		if (await this.client.providers.default.has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
 			await this.client.providers.default.delete('afk', msg.author.id);
-			return msg.send(`Welcome back, **${msg.author}**! I've removed your AFK status.`);
+			return msg.send(`${this.client.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);
 		}
 
 		if (typeof reason === 'string' && reason.length > 1024) throw `${this.client.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`;
