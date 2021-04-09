@@ -200,12 +200,13 @@ module.exports = class Stalwartle extends Client {
 	}
 
 	_initplayer() {
-		this.playerManager = new Manager(this, lavalinkNodes, {
+		this.playerManager = this.playerManager || new Manager(this, lavalinkNodes, {
 			user: this.user.id,
 			shards: this.options.shardCount
 		});
 		this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
-		return this.playerManager.connect();
+		if (!this.playerManager.idealNodes.length) this.playerManager.connect();
+		return true;
 	}
 
 };
