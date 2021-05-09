@@ -14,6 +14,8 @@ module.exports = class extends Command {
 			extendedHelp: [
 				'***Prompts are not supported when adding tracks to the playlist.***',
 				'To add tracks **using the add subcommand**, supply the playlist/album/set link, or the usual way to add videos to the queue with `s.play` command.',
+				'To add the current queue to the playlist, run `s.playlist add queue`.',
+				'To completely replace the playlist with the current queue, run `s.playlist add queuereplace`.',
 				'To remove tracks from the playlist, do the same as you would with `s.remove` but with using the `remove` subcommand.',
 				'To clear the playlist, simply use the `clear` subcommand. e.g. `s.playlist clear`',
 				'To export the playlist, run `s.playlist export`',
@@ -63,6 +65,19 @@ module.exports = class extends Command {
 		if (msg.guild.settings.get('donation') < 3) throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! This feature is limited to servers which have donated $3 or more.`;
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw `${this.client.constants.EMOTES.xmark}  ::  Only DJs can configure the playlist!`;
 		if (!URL_REGEX.test(songs) && !['.m3u', '.pls'].includes(songs.slice(-4))) throw `${this.client.constants.EMOTES.xmark}  ::  Unsupported URL.`;
+
+		if (['queue', 'queuereplace'].includes(songs)) {
+			switch (songs) {
+				case 'queue':
+					this.addToPlaylist(msg, (await this.client.providers.default.get('music', msg.guild.id)).queue);
+					break;
+				case 'queuereplace':
+					this.client.providers.default.update('music', msg.guild.id, { playlist: (await this.client.providers.default.get('music', msg.guild.id)).queue });
+					break;
+			}
+			return null;
+		}
+
 		const { loadType, tracks } = await this.store.get('play').getSongs(songs, songs.includes('soundcloud.com'));
 		if (loadType === 'LOAD_FAILED') throw `${this.client.constants.EMOTES.xmark}  ::  Something went wrong when loading your tracks. Sorry 'bout that! Please try again.`;
 		if (loadType === 'NO_MATCHES') throw `${this.client.constants.EMOTES.xmark}  ::  You provided an invalid stream or URL.`;
