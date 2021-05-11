@@ -48,7 +48,7 @@ module.exports = class MemorySweeper extends Task {
 			const { me } = guild;
 			for (const [id, member] of guild.members.cache) {
 				if ([me, guild.owner].includes(member)) continue;
-				if (member.voice.channelID) continue;
+				if (member.voice.channel) continue;
 				if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
 				if (member.user.settings.get('cookies')) continue;
 				guildMembers++;

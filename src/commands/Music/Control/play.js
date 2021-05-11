@@ -33,7 +33,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
-		if (!msg.member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
+		if (!msg.member.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts.has(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
 
@@ -89,12 +89,12 @@ module.exports = class extends Command {
 	}
 
 	async join({ guild, channel, member }) {
-		if (!member.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
+		if (!member.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
 
 		await this.client.playerManager.join({
 			node: this.client.playerManager.idealNodes[0].id,
 			guild: guild.id,
-			channel: member.voice.channelID
+			channel: member.voice.channel
 		}, { selfdeaf: true });
 
 		guild.player.on('error', error => {

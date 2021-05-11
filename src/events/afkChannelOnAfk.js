@@ -12,7 +12,7 @@ module.exports = class extends Event {
 		if (!newState.member) return null;
 		if (!newState.guild.me.permissions.has('MOVE_MEMBERS')) return null;
 		if (!newState.guild.settings.get('afkChannelOnAfk')) return null;
-		if (!newState.member.voice.channelID) return null;
+		if (!newState.member.voice.channel) return null;
 		if (!newState.guild.afkChannelID) return null;
 		if (newState.channelID === newState.guild.afkChannelID) return null;
 		if (!await this.client.providers.default.has('afk', newState.member.user.id)) return null;

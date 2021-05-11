@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		if (!msg.guild.me.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music session in this server.`;
+		if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music session in this server.`;
 		this.store.get('play').timeouts.delete(msg.guild.id);
 		this.client.playerManager.leave(msg.guild.id);
 		await this.client.providers.default.update('music', msg.guild.id, { queue: [] });

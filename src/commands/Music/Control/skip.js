@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [entry]) {
-		if (!msg.guild.me.voice.channelID) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music playing in this server!`;
+		if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music playing in this server!`;
 		if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			msg.guild.clearVoteskips();
