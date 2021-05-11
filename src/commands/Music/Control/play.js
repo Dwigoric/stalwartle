@@ -94,7 +94,7 @@ module.exports = class extends Command {
 		await this.client.playerManager.join({
 			node: this.client.playerManager.idealNodes[0].id,
 			guild: guild.id,
-			channel: member.voice.channel
+			channel: member.voice.channelID
 		}, { selfdeaf: true });
 
 		guild.player.on('error', error => {
