@@ -73,6 +73,7 @@ module.exports = class Stalwartle extends Client {
 				.add('unmute', 'channel')
 				.add('warn', 'channel'))
 			.add('music', music => music
+				.add('limitToChannel', 'channel', { array: true })
 				.add('announceChannel', 'textchannel')
 				.add('announceSongs', 'boolean', { default: true })
 				.add('autoplay', 'boolean', { default: false })

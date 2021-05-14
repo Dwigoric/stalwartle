@@ -19,6 +19,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
 			extendedHelp: [
+				'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel #channel`.',
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'To choose which channel I will announce songs, use `s.conf set music.announceChannel <channel>`.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
@@ -34,6 +35,9 @@ module.exports = class extends Command {
 
 	async run(msg, [query]) {
 		if (!msg.member.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
+		if (msg.guild.settings.get('music.limitToChannel').length && !msg.guild.settings.get('music.limitToChannel').has(msg.member.voice.channelID)) {
+			throw `${this.client.constants.EMOTES.xmark}  ::  Your current voice channel is not included in this server's music channels.`;
+		}
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts.has(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
 
@@ -166,7 +170,6 @@ module.exports = class extends Command {
 			});
 	}
 
-	/* eslint-disable complexity */
 	async addToQueue(msg, song) {
 		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 
@@ -222,7 +225,6 @@ module.exports = class extends Command {
 		await this.client.providers.default.update('music', msg.guild.id, { queue });
 		return queue;
 	}
-	/* eslint-enable complexity */
 
 	async play({ guild, channel }, song) {
 		if (guild.player.playing) return;
