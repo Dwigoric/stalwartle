@@ -35,7 +35,7 @@ module.exports = class extends Command {
 
 	async run(msg, [query]) {
 		if (!msg.member.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
-		if (msg.guild.settings.get('music.limitToChannel').length && !msg.guild.settings.get('music.limitToChannel').has(msg.member.voice.channelID)) {
+		if (msg.guild.settings.get('music.limitToChannel').length && !msg.guild.settings.get('music.limitToChannel').includes(msg.member.voice.channelID)) {
 			throw `${this.client.constants.EMOTES.xmark}  ::  Your current voice channel is not included in this server's music channels.`;
 		}
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
