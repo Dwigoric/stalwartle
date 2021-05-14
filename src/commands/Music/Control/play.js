@@ -19,7 +19,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
 			extendedHelp: [
-				'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel #channel`.',
+				'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel <channel ID>`.',
 				'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
 				'To choose which channel I will announce songs, use `s.conf set music.announceChannel <channel>`.',
 				'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
