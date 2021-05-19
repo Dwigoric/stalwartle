@@ -1,7 +1,6 @@
 const { Command } = require('klasa');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
-const cheerio = require('cheerio');
 
 module.exports = class extends Command {
 
@@ -19,20 +18,16 @@ module.exports = class extends Command {
 
 		const params = new URLSearchParams();
 		params.set('q', query);
-		const { response: { hits } } = await fetch(`https://api.genius.com/search?${params}`, { headers: { Authorization: `Bearer ${this.client.auth.geniusAPIkey}` } }).then(res => res.json()).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An error occured. Please try again. Sorry 'bout that!`; }); // eslint-disable-line max-len
-		if (!hits.length) throw this.NO_LYRICS_FOUND;
-		const hit = hits.filter(_hit => _hit.type === 'song')[0];
-		if (!hit) throw this.NO_LYRICS_FOUND;
-		const $ = cheerio.load(await fetch(hit.result.url).then(res => res.text())); // eslint-disable-line id-length
-		const lyrics = $('.lyrics').text().trim().split('\n');
+		const metadata = await fetch(`https://some-random-api.ml/lyrics?${params}`).then(res => res.json());
+		const { lyrics } = metadata;
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
+
 		const fullLyrics = [
 			[
-				`__***${hit.result.title_with_featured}***__`,
-				`*by **${hit.result.primary_artist.name}***\n`
+				`__***${metadata.title}***__`,
+				`*by **${metadata.author}***\n`
 			].join('\n'),
-			escapeMarkdown(lyrics.join('\n')),
-			'\n__*Powered by Genius (https://genius.com)*__'
+			escapeMarkdown(lyrics.join('\n'))
 		].join('\n');
 
 		const swearArray = (msg.guild ? msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : [])
