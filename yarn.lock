@@ -217,9 +217,9 @@ inherits@^2.0.1, inherits@^2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-"klasa@github:TheFloppyBanana/klasa#0.5.1":
-  version "0.5.1"
-  resolved "https://codeload.github.com/TheFloppyBanana/klasa/tar.gz/b7c5a6e0a8f6498a7084d30e5e8f527ec2bc0b33"
+"klasa@github:Dwigoric/klasa#message-fix":
+  version "0.5.0"
+  resolved "https://codeload.github.com/Dwigoric/klasa/tar.gz/c721a38aeda4342aa8b4520c10d46297e4457901"
   dependencies:
     fs-nextra "^0.4.7"
 

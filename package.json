@@ -19,7 +19,7 @@
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.7",
 		"discord.js": "github:discordjs/discord.js",
-		"klasa": "github:TheFloppyBanana/klasa#0.5.1",
+		"klasa": "github:Dwigoric/klasa#message-fix",
 		"moment-timezone": "^0.5.33",
 		"rethinkdb-ts": "^2.4.9",
 		"spotilink": "^1.4.5"
