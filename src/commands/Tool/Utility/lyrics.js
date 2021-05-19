@@ -17,9 +17,10 @@ module.exports = class extends Command {
 		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading lyrics...`);
 
 		const params = new URLSearchParams();
-		params.set('q', query);
+		params.set('title', query);
 		const metadata = await fetch(`https://some-random-api.ml/lyrics?${params}`).then(res => res.json());
-		const { lyrics } = metadata;
+		if (metadata.error) throw `${this.client.constants.EMOTES.xmark}  ::  ${metadata.error}`;
+		const lyrics = metadata.lyrics.split('\n');
 		while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
 
 		const fullLyrics = [
