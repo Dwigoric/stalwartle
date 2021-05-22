@@ -43,6 +43,7 @@ module.exports = class Stalwartle extends Client {
 			.add('acceptFights', 'boolean', { default: true })
 			.add('afkIgnore', 'channel', { array: true })
 			.add('afktoggle', 'boolean', { default: false })
+			.add('bannerWidth', 'integer', { default: 0 })
 			.add('cookies', 'integer', { default: 0, configurable: false })
 			.add('hpBoost', 'integer', { default: 0, configurable: false })
 			.add('osu', 'string', { max: 20 })
