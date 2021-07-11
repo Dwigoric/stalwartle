@@ -21,7 +21,7 @@ module.exports = class extends Command {
 		params.set('term', search);
 		const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
 
-		const result = body.list[index];
+		const result = body.list[index - 1];
 		if (!result) throw `${this.client.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`;
 
 		const definition = result.definition.length > 1000 ?
@@ -34,7 +34,7 @@ module.exports = class extends Command {
 				.setTitle(`'${result.word}' as defined by ${result.author}`)
 				.setURL(result.permalink)
 				.setDescription(definition)
-				.addField('Example', result.example.split('\n')[0])
+				.addField('Example', result.example.split('\n')[0] || 'No example available.')
 				.addField('Rating', `**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`)
 				.setFooter('Definition from Urban Dictionary')
 				.setTimestamp()
