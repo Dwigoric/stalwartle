@@ -1,4 +1,4 @@
-const { Command, Duration, RichDisplay, util: { chunk } } = require('klasa');
+const { Command, Duration, RichDisplay, util: { chunk } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {

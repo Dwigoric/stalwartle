@@ -1,4 +1,4 @@
-const { Command, RichDisplay, util: { regExpEsc, chunk } } = require('klasa');
+const { Command, RichDisplay, util: { regExpEsc, chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {

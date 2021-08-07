@@ -1,4 +1,4 @@
-const { Extendable } = require('klasa');
+const { Extendable } = require('@sapphire/framework');
 const { GuildMember } = require('discord.js');
 
 module.exports = class extends Extendable {

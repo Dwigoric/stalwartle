@@ -1,4 +1,4 @@
-const { Monitor, Duration } = require('klasa');
+const { Monitor, Duration } = require('@sapphire/framework');
 
 module.exports = class extends Monitor {
 

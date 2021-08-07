@@ -1,4 +1,4 @@
-const { Command, RichDisplay, util: { isFunction, toTitleCase } } = require('klasa');
+const { Command, RichDisplay, util: { isFunction, toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 const time = 1000 * 60 * 3;

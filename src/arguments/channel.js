@@ -1,4 +1,4 @@
-const { Argument, util: { regExpEsc } } = require('klasa');
+const { Argument, util: { regExpEsc } } = require('@sapphire/framework');
 const { Channel, Message } = require('discord.js');
 
 const CHANNEL_REGEXP = Argument.regex.channel;

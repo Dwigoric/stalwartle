@@ -1,4 +1,4 @@
-const { Command, util: { toTitleCase } } = require('klasa');
+const { Command, util: { toTitleCase } } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 

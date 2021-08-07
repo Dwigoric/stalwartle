@@ -1,4 +1,4 @@
-const { Language, util } = require('klasa');
+const { Language, util } = require('@sapphire/framework');
 
 module.exports = class extends Language {
 

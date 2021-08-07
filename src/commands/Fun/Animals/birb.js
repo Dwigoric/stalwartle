@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {

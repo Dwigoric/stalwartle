@@ -1,4 +1,4 @@
-const { Client } = require('klasa');
+const { SapphireClient } = require('@sapphire/framework');
 const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
 const { config: { lavalinkNodes } } = require('../../config');
@@ -9,7 +9,7 @@ const fetch = require('node-fetch');
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
 
-module.exports = class Stalwartle extends Client {
+module.exports = class Stalwartle extends SapphireClient {
 
 	constructor(clientOptions) {
 		super(clientOptions);

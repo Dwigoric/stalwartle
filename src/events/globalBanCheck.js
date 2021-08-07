@@ -1,4 +1,4 @@
-const { Event } = require('klasa');
+const { Event } = require('@sapphire/framework');
 const fetch = require('node-fetch');
 
 module.exports = class extends Event {

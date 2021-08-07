@@ -1,4 +1,4 @@
-const { Command, Timestamp, util: { toTitleCase } } = require('klasa');
+const { Command, Timestamp, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 const symbols = {

@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
 const figletAsync = require('util').promisify(require('figlet'));
 
 module.exports = class extends Command {

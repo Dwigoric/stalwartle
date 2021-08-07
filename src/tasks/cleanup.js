@@ -1,4 +1,4 @@
-const { Task, Colors } = require('klasa');
+const { Task, Colors } = require('@sapphire/framework');
 const { Util: { binaryToID } } = require('discord.js');
 
 // THRESHOLD equals to 30 minutes in milliseconds:

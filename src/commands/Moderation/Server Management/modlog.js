@@ -1,4 +1,4 @@
-const { Command, RichDisplay, util: { toTitleCase, chunk } } = require('klasa');
+const { Command, RichDisplay, util: { toTitleCase, chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 

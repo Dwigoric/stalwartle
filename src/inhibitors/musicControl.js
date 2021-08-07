@@ -1,4 +1,4 @@
-const { Inhibitor } = require('klasa');
+const { Inhibitor } = require('@sapphire/framework');
 
 module.exports = class extends Inhibitor {
 

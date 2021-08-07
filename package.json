@@ -18,6 +18,7 @@
 	"homepage": "https://github.com/takomst/stalwartle#readme",
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.7",
+		"@sapphire/framework": "^1.0.2",
 		"discord.js": "github:discordjs/discord.js",
 		"moment-timezone": "^0.5.33",
 		"rethinkdb-ts": "^2.4.9",

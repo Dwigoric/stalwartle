@@ -1,4 +1,4 @@
-const { Argument, util: { regExpEsc } } = require('klasa');
+const { Argument, util: { regExpEsc } } = require('@sapphire/framework');
 const { Role } = require('discord.js');
 
 const ROLE_REGEXP = Argument.regex.role;

@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
 const { GuildMember } = require('discord.js');
 
 module.exports = class extends Command {

@@ -1,4 +1,4 @@
-const { Event, util: { codeBlock } } = require('klasa');
+const { Event, util: { codeBlock } } = require('@sapphire/framework');
 const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Event {

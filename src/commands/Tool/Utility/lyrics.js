@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 

@@ -1,4 +1,4 @@
-const { Command, Timestamp } = require('klasa');
+const { Command, Timestamp } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 const currentFights = {};

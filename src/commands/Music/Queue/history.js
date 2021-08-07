@@ -1,4 +1,4 @@
-const { Command, Duration, Timestamp, RichDisplay, util: { chunk } } = require('klasa');
+const { Command, Duration, Timestamp, RichDisplay, util: { chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 

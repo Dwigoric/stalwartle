@@ -1,4 +1,4 @@
-const { Event, Duration, util: { toTitleCase } } = require('klasa');
+const { Event, Duration, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 const configs = {

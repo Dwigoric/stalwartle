@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
 const moment = require('moment-timezone');
 
 module.exports = class extends Command {

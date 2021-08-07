@@ -1,4 +1,4 @@
-const { Command, Stopwatch, util: { exec, codeBlock } } = require('klasa');
+const { Command, Stopwatch, util: { exec, codeBlock } } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 

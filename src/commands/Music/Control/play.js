@@ -1,4 +1,4 @@
-const { Command, Timestamp, util: { mergeObjects } } = require('klasa');
+const { Command, Timestamp, util: { mergeObjects } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { parse } = require('url');

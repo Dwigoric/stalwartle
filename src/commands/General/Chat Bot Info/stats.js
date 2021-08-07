@@ -1,4 +1,4 @@
-const { Command, Duration } = require('klasa');
+const { Command, Duration } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const { uptime, loadavg } = require('os');
 

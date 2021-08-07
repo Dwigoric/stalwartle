@@ -1,4 +1,4 @@
-const { Event } = require('klasa');
+const { Event } = require('@sapphire/framework');
 
 const statuses = [
 	{ name: 'dead', type: 'PLAYING' },

@@ -1,4 +1,4 @@
-const { Command, Stopwatch } = require('klasa');
+const { Command, Stopwatch } = require('@sapphire/framework');
 const { createHash } = require('crypto');
 
 // The permssion levels of commands must be *lower* than this number to be

@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2019 dirigeants. All rights reserved. MIT license.
-const { Extendable, KlasaMessage } = require('klasa');
+const { Extendable, KlasaMessage } = require('@sapphire/framework');
 
 module.exports = class extends Extendable {
 

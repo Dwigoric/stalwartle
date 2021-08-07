@@ -1,4 +1,4 @@
-const { Extendable, KlasaGuild } = require('klasa');
+const { Extendable, KlasaGuild } = require('@sapphire/framework');
 
 module.exports = class GuildPlayer extends Extendable {
 

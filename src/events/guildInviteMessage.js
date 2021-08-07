@@ -1,4 +1,4 @@
-const { Event } = require('klasa');
+const { Event } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Event {

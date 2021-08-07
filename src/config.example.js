@@ -7,7 +7,7 @@ exports.config = {
 	// The default language that comes with klasa. More base languages can be found on Klasa-Pieces
 	language: 'en-US',
 	// The default configurable prefix for each guild
-	prefix: 's.',
+	defaultPrefix: 's.',
 	// Whether to accept unprefixed commands in DMs
 	noPrefixDM: true,
 	// If the bot will be insensitive to the prefix case

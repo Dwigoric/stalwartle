@@ -1,4 +1,4 @@
-const { Command, util: { toTitleCase } } = require('klasa');
+const { Command, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
 const fetch = require('node-fetch');

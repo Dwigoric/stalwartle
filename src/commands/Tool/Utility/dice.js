@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
 const Dice = require('roll');
 
 module.exports = class extends Command {

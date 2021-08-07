@@ -1,4 +1,4 @@
-const { Command, Duration } = require('klasa');
+const { Command, Duration } = require('@sapphire/framework');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
