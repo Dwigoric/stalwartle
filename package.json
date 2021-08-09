@@ -1,21 +1,21 @@
 {
 	"name": "stalwartle",
 	"description": "A Discord Bot for Discordians' basic needs",
-	"version": "2.13.0",
+	"version": "3.0.0",
 	"main": "src/app.js",
 	"scripts": {
 		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/takomst/stalwartle.git"
+		"url": "git+https://github.com/insane-devs/stalwartle.git"
 	},
 	"author": "Dwigoric",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/takomst/stalwartle/issues"
+		"url": "https://github.com/insane-devs/stalwartle/issues"
 	},
-	"homepage": "https://github.com/takomst/stalwartle#readme",
+	"homepage": "https://github.com/insane-devs/stalwartle#readme",
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.7",
 		"@sapphire/framework": "^1.0.2",
