@@ -18,7 +18,7 @@ exports.config = {
 	presence: { status: 'idle', activities: [{ name: 'Loading...', type: 'PLAYING' }] },
 
 	ownerID: '295391820744228867',
-	owners: ['295391820744228867', '296862433136476160', '296256174209105920'],
+	developers: ['295391820744228867', '296862433136476160', '296256174209105920'],
 
 	lavalinkNodes: [{ id: 'server', host: 'localhost', port: 80, password: '' }],
 
@@ -39,13 +39,7 @@ exports.config = {
      * Sharding Options
      */
 	shards: 'auto',
-	shardCount: 1,
-
-	/**
-     * Command Handler Options
-     */
-	commandEditing: true,
-	commandLogging: true
+	shardCount: 1
 };
 
 // The token for this bot to login with
