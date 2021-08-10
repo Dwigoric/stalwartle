@@ -21,6 +21,7 @@ module.exports = class GatewayManager {
 		const gateway = new Gateway(this, this.client, type, schema, this.provider);
 		this.keys.add(type);
 		this[type] = gateway;
+		this._queue.push(gateway.init.bind(gateway));
 		return this;
 	}
 
