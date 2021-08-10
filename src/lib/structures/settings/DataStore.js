@@ -86,9 +86,7 @@ module.exports = class DataStore {
 			for (const key of keys) {
 				const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 				if (!path) {
-					result.errors.push(guild && guild.language ?
-						guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
-						`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
+					result.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 					continue;
 				}
 				const value = deepClone(path.piece.default);
@@ -175,15 +173,11 @@ module.exports = class DataStore {
 		for (const [key, value] of entries) {
 			const path = this.gateway.getPath(key, pathOptions);
 			if (!path) {
-				result.errors.push(guild ?
-					guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
-					`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
+				result.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 				continue;
 			}
 			if (!path.piece.array && Array.isArray(value)) {
-				result.errors.push(guild ?
-					guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
-					`The path ${key} does not store multiple values.`);
+				result.errors.push(`The path ${key} does not store multiple values.`);
 				continue;
 			}
 			promises.push(this._parse(value, guild, options, result, path));
