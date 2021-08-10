@@ -21,7 +21,7 @@
 		"discord.js": "github:discordjs/discord.js",
 		"klasa": "github:Dwigoric/klasa#message-fix",
 		"moment-timezone": "^0.5.33",
-		"rethinkdb-ts": "^2.4.9",
+		"mongodb": "^4.1.0",
 		"spotilink": "^1.4.5"
 	},
 	"optionalDependencies": {
@@ -29,8 +29,5 @@
 		"figlet": "^1.2.1",
 		"roll": "^1.3.1",
 		"steamapi": "^2.1.2"
-	},
-	"engines": {
-		"node": "14.x"
 	}
 }
