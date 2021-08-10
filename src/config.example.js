@@ -22,6 +22,9 @@ exports.config = {
 
 	lavalinkNodes: [{ id: 'server', host: 'localhost', port: 80, password: '' }],
 
+	// The guarded commands
+	guardedCommands: [],
+
 	/**
      * Caching Options
      */

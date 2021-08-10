@@ -1,17 +1,20 @@
 const { SapphireClient } = require('@sapphire/framework');
 const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
-const { config: { lavalinkNodes } } = require('../../config');
-const constants = require('../util/constants');
-const auth = require('../../auth');
 const fetch = require('node-fetch');
 
+const { config: { lavalinkNodes }, config } = require('../../config');
+
+const constants = require('../util/constants');
+const auth = require('../../auth');
+
 const GatewayManager = require('./GatewayManager');
+const Schema = require('./settings/schema/Schema');
 
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
 
-module.exports = class Stalwartle extends SapphireClient {
+class Stalwartle extends SapphireClient {
 
 	constructor(clientOptions) {
 		super(clientOptions);
@@ -25,7 +28,18 @@ module.exports = class Stalwartle extends SapphireClient {
 
 		this.gateways = new GatewayManager();
 
-		Stalwartle.defaultClientSchema
+		const guildSchema = this.constructor.defaultGuildSchema;
+		const userSchema = this.constructor.defaultUserSchema;
+		const clientSchema = this.constructor.defaultClientSchema;
+
+		const prefixKey = guildSchema.get('prefix');
+		if (!prefixKey || prefixKey.default === null) {
+			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.defaultPrefix), default: this.options.defaultPrefix });
+		}
+
+		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
+
+		clientSchema
 			.add('changelogs', 'textchannel')
 			.add('bugs', bugs => bugs
 				.add('reports', 'textchannel')
@@ -43,7 +57,7 @@ module.exports = class Stalwartle extends SapphireClient {
 				.add('reports', 'textchannel')
 				.add('processed', 'textchannel'));
 
-		Stalwartle.defaultUserSchema
+		userSchema
 			.add('acceptFights', 'boolean', { default: true })
 			.add('afkIgnore', 'channel', { array: true })
 			.add('afktoggle', 'boolean', { default: false })
@@ -53,7 +67,7 @@ module.exports = class Stalwartle extends SapphireClient {
 			.add('osu', 'string', { max: 20 })
 			.add('timezone', 'string', { default: 'GMT', configurable: false });
 
-		Stalwartle.defaultGuildSchema
+		guildSchema
 			.add('afkChannelOnAfk', 'boolean', { default: false })
 			.add('donation', 'number', { default: 0, configurable: false })
 			.add('globalBans', 'boolean', { default: false })
@@ -124,6 +138,11 @@ module.exports = class Stalwartle extends SapphireClient {
 					.add('mentionSpam', mentionSpam => mentionSpam
 						.add('action', 'string', { default: 'ban', configurable: false })
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
+
+		this.gateways
+			.register('guilds', guildSchema)
+			.register('users', userSchema)
+			.register('clientStorage', clientSchema);
 
 		Stalwartle.defaultPermissionLevels
 			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.cache.keyArray().includes(role))))
@@ -215,4 +234,22 @@ module.exports = class Stalwartle extends SapphireClient {
 		return true;
 	}
 
-};
+}
+
+Stalwartle.defaultGuildSchema = new Schema()
+	.add('prefix', 'string')
+	.add('disableNaturalPrefix', 'boolean')
+	.add('disabledCommands', 'commands', {
+		array: true,
+		filter: (client, command) => {
+			if (config.guardedCommands.includes(command.name)) throw `${constants.EMOTES.xmark}  ::  The command \`${command.name.toLowerCase()}\` may not be disabled.`;
+		}
+	});
+
+Stalwartle.defaultUserSchema = new Schema();
+
+Stalwartle.defaultClientSchema = new Schema()
+	.add('userBlacklist', 'user', { array: true })
+	.add('guildBlacklist', 'string', { array: true });
+
+module.exports = Stalwartle;
