@@ -6,7 +6,7 @@ const constants = require('../util/constants');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
 
-const GatewayManager = require('./GatewayManager');
+const { GatewayManager } = require('gateway-module');
 
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
