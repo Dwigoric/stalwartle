@@ -21,16 +21,15 @@ module.exports = class extends Command {
 	async run(msg, [code]) {
 		const flagTime = 'no-timeout' in msg.flagArgs ? 'wait' in msg.flagArgs ? Number(msg.flagArgs.wait) : this.timeout : Infinity;
 		const language = msg.flagArgs.lang || msg.flagArgs.language || (msg.flagArgs.json ? 'json' : 'js');
-		const { success, result, time, type } = await this.timedEval(msg, code, flagTime);
+		const { success, result, time } = await this.timedEval(msg, code, flagTime);
 
 		if (msg.flagArgs.silent) {
 			if (!success && result && result.stack) this.client.emit('error', result.stack);
 			return null;
 		}
 
-		const footer = util.codeBlock('ts', type);
 		const sendAs = msg.flagArgs.output || msg.flagArgs['output-to'] || (msg.flagArgs.log ? 'log' : null);
-		return this.handleMessage(msg, { sendAs, hastebinUnavailable: false, url: null }, { success, result, time, footer, language });
+		return this.handleMessage(msg, { sendAs, hastebinUnavailable: false, url: null }, { success, result, time, language });
 	}
 
 	async handleMessage(msg, options, { success, result, time, footer, language }) {
