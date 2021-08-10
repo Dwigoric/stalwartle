@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2018 dirigeants. All rights reserved. MIT license.
-const { Command, Stopwatch, Type, util } = require('klasa');
+const { Command, Stopwatch, util } = require('klasa');
 const { inspect } = require('util');
 const fetch = require('node-fetch');
 
@@ -83,8 +83,7 @@ module.exports = class extends Command {
 			util.sleep(flagTime).then(() => ({
 				success: false,
 				result: msg.language.get('COMMAND_EVAL_TIMEOUT', flagTime / 1000),
-				time: '⏱ ...',
-				type: 'EvalTimeoutError'
+				time: '⏱ ...'
 			})),
 			this.eval(msg, code)
 		]);
@@ -96,12 +95,10 @@ module.exports = class extends Command {
 		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 		let success, syncTime, asyncTime, result;
 		let thenable = false;
-		let type;
 		try {
 			if (msg.flagArgs.async) code = `(async () => {\n${code}\n})();`;
 			result = eval(code);
 			syncTime = stopwatch.toString();
-			type = new Type(result);
 			if (util.isThenable(result)) {
 				thenable = true;
 				stopwatch.restart();
@@ -112,7 +109,6 @@ module.exports = class extends Command {
 		} catch (error) {
 			if (!syncTime) syncTime = stopwatch.toString();
 			if (thenable && !asyncTime) asyncTime = stopwatch.toString();
-			if (!type) type = new Type(error);
 			result = error;
 			success = false;
 		}
@@ -124,7 +120,7 @@ module.exports = class extends Command {
 				showHidden: Boolean(msg.flagArgs.showHidden)
 			});
 		}
-		return { success, type, time: this.formatTime(syncTime, asyncTime), result: util.clean(result) };
+		return { success, time: this.formatTime(syncTime, asyncTime), result: util.clean(result) };
 	}
 
 	formatTime(syncTime, asyncTime) {
