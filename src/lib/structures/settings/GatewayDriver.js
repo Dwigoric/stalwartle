@@ -13,7 +13,7 @@ module.exports = class GatewayManager {
 		this.keys = new Set();
 	}
 
-	async register(type, { schema = new Schema() } = {}) {
+	async register(type, schema = new Schema()) {
 		if (!type) throw new Error('No type given.');
 
 		if (!await this.provider.hasTable(type)) this.provider.createTable(type);
@@ -21,7 +21,7 @@ module.exports = class GatewayManager {
 		const gateway = new Gateway(this, this.client, type, schema, this.provider);
 		this.keys.add(type);
 		this[type] = gateway;
-		return gateway;
+		return this;
 	}
 
 	async init() {
