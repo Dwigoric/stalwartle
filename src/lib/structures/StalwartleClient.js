@@ -6,6 +6,8 @@ const constants = require('../util/constants');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
 
+const GatewayManager = require('./GatewayManager');
+
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
 
@@ -20,6 +22,8 @@ module.exports = class Stalwartle extends SapphireClient {
 		this.auth = auth;
 
 		this.once('ready', this._initplayer.bind(this));
+
+		this.gwMgr = new GatewayManager();
 
 		Stalwartle.defaultClientSchema
 			.add('changelogs', 'textchannel')

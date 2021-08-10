@@ -19,8 +19,10 @@
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.7",
 		"@sapphire/framework": "^1.0.2",
+		"@sapphire/utilities": "^2.0.1",
 		"discord.js": "github:discordjs/discord.js",
 		"moment-timezone": "^0.5.33",
+		"mongodb": "^4.1.0",
 		"spotilink": "^1.4.5"
 	},
 	"optionalDependencies": {
