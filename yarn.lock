@@ -321,6 +321,12 @@ form-data@^3.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+"gateway-module@github:insane-devs/gateway-module":
+  version "0.0.1"
+  resolved "https://codeload.github.com/insane-devs/gateway-module/tar.gz/bdcb241b7073b534b0f31c9f0f912492dc48047a"
+  dependencies:
+    mongodb "^4.1.0"
+
 htmlparser2@^3.9.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-3.10.1.tgz#bd679dc3f59897b6a34bb10749c855bb53a9392f"

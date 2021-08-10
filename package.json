@@ -21,8 +21,8 @@
 		"@sapphire/framework": "^1.0.2",
 		"@sapphire/utilities": "^2.0.1",
 		"discord.js": "github:discordjs/discord.js",
+		"gateway-module": "github:insane-devs/gateway-module",
 		"moment-timezone": "^0.5.33",
-		"mongodb": "^4.1.0",
 		"spotilink": "^1.4.5"
 	},
 	"optionalDependencies": {
