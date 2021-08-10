@@ -11,8 +11,8 @@ module.exports = class PersistenceManager {
 	}
 
 	async init() {
-		const mongoClient = await Mongo.connect(mongodb.connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
-		this.db = mongoClient.db('stalwartle');
+		const mongoClient = await Mongo.connect(mongodb.connectionString, mergeObjects(mongodb.options, { useNewUrlParser: true, useUnifiedTopology: true }));
+		this.db = mongoClient.db(mongodb.name);
 	}
 
 	// Table Methods

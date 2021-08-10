@@ -46,6 +46,9 @@ exports.mongodb = {
 	// The Mongo DB connection string
 	connectionString: '',
 
+	// The DB name
+	name: '',
+
 	// Additional options for Mongo DB
 	options: {}
 };
