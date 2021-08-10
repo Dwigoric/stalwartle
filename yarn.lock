@@ -99,6 +99,11 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.0.1.tgz#d26729db850fa327b7cacc5522252194404226f5"
   integrity sha512-Qm9hBEBu18wt1PO2flE7LPb30BHMQt1eQgbV76YntdNk73XZGpn3izvGTYxbGgzXKgbCjiia0uxTd3aTNQrY/g==
 
+"@skyra/editable-commands@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@skyra/editable-commands/-/editable-commands-2.1.0.tgz#5c26b8716e99a4f7c48468dbda4f9a1603d69754"
+  integrity sha512-J2ok13AxditPel4pUknKFpLQDW7hF6Dchc8JnetGKlOJrHqy+j4/UJ+Qf46KgX/zsPcRB4Q5ydZIHAq4XNtK8g==
+
 "@types/node-fetch@^2.5.5":
   version "2.5.7"
   resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.7.tgz#20a2afffa882ab04d44ca786449a276f9f6bbf3c"
