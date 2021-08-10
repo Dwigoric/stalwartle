@@ -1,15 +1,12 @@
-const PersistenceManager = require('./PersistenceManager');
 const Gateway = require('./Gateway');
 const Schema = require('./schema/Schema');
-
-const provider = new PersistenceManager();
 
 module.exports = class GatewayManager {
 
 	constructor(client) {
 		Object.defineProperty(this, 'client', { value: client });
 		Object.defineProperty(this, '_queue', { value: [] });
-		this.provider = provider;
+		this.provider = client.provider;
 		this.keys = new Set();
 	}
 

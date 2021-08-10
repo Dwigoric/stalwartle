@@ -8,7 +8,8 @@ const { config: { lavalinkNodes }, config } = require('../../config');
 const constants = require('../util/constants');
 const auth = require('../../auth');
 
-const GatewayManager = require('./GatewayManager');
+const PersistenceManager = require('./settings/PersistenceManager');
+const GatewayManager = require('./settings/GatewayManager');
 const Schema = require('./settings/schema/Schema');
 
 require('./StalwartleGuild');
@@ -26,7 +27,8 @@ class Stalwartle extends SapphireClient {
 
 		this.once('ready', this._initplayer.bind(this));
 
-		this.gateways = new GatewayManager();
+		this.provider = new PersistenceManager();
+		this.gateways = new GatewayManager(this);
 
 		const guildSchema = this.constructor.defaultGuildSchema;
 		const userSchema = this.constructor.defaultUserSchema;
@@ -144,6 +146,10 @@ class Stalwartle extends SapphireClient {
 			.register('users', userSchema)
 			.register('clientStorage', clientSchema);
 
+		this.settings = null;
+		this.application = null;
+		this.ready = false;
+
 		Stalwartle.defaultPermissionLevels
 			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.cache.keyArray().includes(role))))
 			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.cache.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
@@ -222,6 +228,12 @@ class Stalwartle extends SapphireClient {
 			users = this.guilds.cache.reduce((a, b) => a + b.memberCount, 0);
 		}
 		return users;
+	}
+
+	async login(token) {
+		await this.provider.init();
+		await this.gateways.init();
+		return super.login(token);
 	}
 
 	_initplayer() {
