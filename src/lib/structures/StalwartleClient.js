@@ -23,7 +23,7 @@ module.exports = class Stalwartle extends SapphireClient {
 
 		this.once('ready', this._initplayer.bind(this));
 
-		this.gwMgr = new GatewayManager();
+		this.gateways = new GatewayManager();
 
 		Stalwartle.defaultClientSchema
 			.add('changelogs', 'textchannel')

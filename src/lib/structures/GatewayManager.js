@@ -7,13 +7,17 @@ module.exports = class GatewayManager {
 
 	constructor() {
 		this.pm = pm;
-		this.gateways = new WeakMap();
+		this.connections = new Set();
 	}
 
-	async create(scope, defaults) {
+	async create(scope, defaults = {}) {
+		if (!scope) throw new Error('No scope given.');
+
 		if (!await this.pm.hasTable(scope)) this.pm.createTable(scope);
+
 		const gateway = new Gateway(scope, defaults, this);
-		this.gateways.set(scope, gateway);
+		this.connections.add(scope);
+		this[scope] = gateway;
 		return gateway;
 	}
 
