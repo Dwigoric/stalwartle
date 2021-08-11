@@ -1,7 +1,7 @@
 // Copyright (c) 2017-2019 digireants. All rights reserved. MIT license.
 const { MongoClient: Mongo } = require('mongodb');
 const { isObject, mergeObjects } = require('@sapphire/utilities');
-const { mongodb } = require('../../config');
+const { mongodb } = require('../../../config');
 
 module.exports = class PersistenceManager {
 
