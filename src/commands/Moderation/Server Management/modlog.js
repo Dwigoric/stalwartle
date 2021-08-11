@@ -85,7 +85,7 @@ module.exports = class extends Command {
 			prompt = await msg.prompt('⚠ Are you sure you want to reset **all** modlogs? Respond with `yes` or `no`.').catch(() => ({ content: 'no' }));
 		} while (!['yes', 'no', null].includes(prompt.content));
 		if (prompt.content === 'yes') {
-			msg.guild.modlogs.reset();
+			await msg.guild.modlogs.reset();
 			return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
 		} else {
 			return msg.send(`${this.client.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
