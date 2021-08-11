@@ -19,7 +19,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { queue } = msg.guild.music;
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!queue.length || !msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music playing in this server!`;
 		const { length } = queue[0].info;
 		const { position } = msg.guild.player.state;

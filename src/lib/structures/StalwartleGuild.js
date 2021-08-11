@@ -6,8 +6,6 @@ module.exports = Structures.extend('Guild', Guild => {
 		constructor(...args) {
 			super(...args);
 			this.voteskips = [];
-			this.music = this.client.gateways.music.get(this.id, true);
-			this.modlogs = this.client.gateways.music.get(this.id, true);
 		}
 
 	}

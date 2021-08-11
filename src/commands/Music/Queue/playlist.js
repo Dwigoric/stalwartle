@@ -39,7 +39,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { playlist } = msg.guild.music;
+		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the playlist yet! Add one with \`${msg.guild.settings.get('prefix')}playlist add\``;
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the music playlist...`);
 		const display = new RichDisplay(new MessageEmbed()
@@ -69,10 +69,10 @@ module.exports = class extends Command {
 		if (['queue', 'queuereplace'].includes(songs)) {
 			switch (songs) {
 				case 'queue':
-					this.addToPlaylist(msg, msg.guild.music.get('queue'));
+					this.addToPlaylist(msg, (await this.client.providers.default.get('music', msg.guild.id)).queue);
 					break;
 				case 'queuereplace':
-					msg.guild.music.update('playlist', msg.guild.music.get('queue'), { action: 'overwrite' });
+					this.client.providers.default.update('music', msg.guild.id, { playlist: (await this.client.providers.default.get('music', msg.guild.id)).queue });
 					break;
 			}
 			return null;
@@ -94,7 +94,7 @@ module.exports = class extends Command {
 		if (!items[1]) items = items[0] - 1; // eslint-disable-line prefer-destructuring
 		else items = [items[0] - 1, items[1] - 1];
 		if (items === -1 || items[0] === -1) throw `${this.client.constants.EMOTES.xmark}  ::  All lists start at 1...`;
-		const { playlist } = msg.guild.music;
+		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no items in the playlist. Add one using \`${msg.guild.settings.get('prefix')}play\``;
 		if (Array.isArray(items)) {
 			if (items[0] > items[1]) throw `${this.client.constants.EMOTES.xmark}  ::  Invalid playlist range. The first number must be less than the second.`;
@@ -106,17 +106,17 @@ module.exports = class extends Command {
 			playlist.splice(items, 1);
 			msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully removed song \`#${items + 1}\` from the playlist.`);
 		}
-		return msg.guild.music.update('playlist', playlist, { action: 'overwrite' });
+		return this.client.providers.default.update('music', msg.guild.id, { playlist });
 	}
 
 	async clear(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw `${this.client.constants.EMOTES.xmark}  ::  Only DJs can configure the playlist!`;
-		msg.guild.music.reset('playlist');
+		this.client.providers.default.update('music', msg.guild.id, { playlist: [] });
 		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully cleared the music playlist for this server.`);
 	}
 
 	async export(msg) {
-		const { playlist } = msg.guild.music;
+		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  The playlist is empty. Add one using the \`${msg.guild.settings.get('prefix')}playlist add\` command.`;
 		let choice;
 		do {
@@ -141,7 +141,7 @@ module.exports = class extends Command {
 
 	async move(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw `${this.client.constants.EMOTES.xmark}  ::  Only DJs can configure the playlist!`;
-		const { playlist } = msg.guild.music;
+		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (playlist.length < 2) throw `${this.client.constants.EMOTES.xmark}  ::  There is no playlist item to move.`;
 		let entry;
 		do entry = await msg.prompt(`${this.client.constants.EMOTES.loading}  ::  Which playlist item do you want to move? Reply with its playlist number.`);
@@ -154,29 +154,31 @@ module.exports = class extends Command {
 		if (entry > playlist.length - 1 || position > playlist.length - 1) throw `${this.client.constants.EMOTES.xmark}  ::  The playlist only has ${playlist.length - 1} entr${playlist.length - 1 === 1 ? 'y' : 'ies'}.`; // eslint-disable-line max-len
 		if (entry === position) throw `${this.client.constants.EMOTES.xmark}  ::  What's the point of moving a playlist to the same position?`;
 		playlist.splice(position, 0, playlist.splice(entry, 1)[0]);
-		await msg.guild.music.update('playlist', playlist, { action: 'overwrite' });
+		await this.client.providers.default.update('music', msg.guild.id, { playlist });
 		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully moved item \`#${entry + 1}\` to position \`#${position + 1}\`.`);
 	}
 
 	async shuffle(msg) {
 		if (!await msg.hasAtLeastPermissionLevel(5)) throw `${this.client.constants.EMOTES.xmark}  ::  Only DJs can configure the playlist!`;
-		const { playlist } = msg.guild.music;
+		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the playlist. Add one with \`${msg.guild.settings.get('prefix')}playlist add\``;
 		if (playlist.length === 1) throw `${this.client.constants.EMOTES.xmark}  ::  There is only one playlist item... I have nothing to shuffle!`;
-		msg.guild.music.update('music', (() => {
-			for (let current = playlist.length - 1; current > 0; current--) {
-				const random = Math.floor(Math.random() * (current + 1));
-				const temp = playlist[current];
-				playlist[current] = playlist[random];
-				playlist[random] = temp;
-			}
-			return playlist;
-		})(), { action: 'overwrite' });
+		this.client.providers.default.update('music', msg.guild.id, {
+			playlist: (() => {
+				for (let current = playlist.length - 1; current > 0; current--) {
+					const random = Math.floor(Math.random() * (current + 1));
+					const temp = playlist[current];
+					playlist[current] = playlist[random];
+					playlist[random] = temp;
+				}
+				return playlist;
+			})()
+		});
 		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully shuffled the playlist. Check it out with \`${msg.guild.settings.get('prefix')}playlist\``);
 	}
 
 	async addToPlaylist(msg, items) {
-		const { playlist } = msg.guild.music;
+		const { playlist } = await this.client.providers.default.get('music', msg.guild.id);
 		if (Array.isArray(items)) {
 			let songCount = 0;
 			for (const track of items) {
@@ -192,7 +194,7 @@ module.exports = class extends Command {
 			playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
 			msg.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
-		await msg.guild.music.update('playlist', playlist, { action: 'overwrite' });
+		await this.client.providers.default.update('music', msg.guild.id, { playlist });
 		return playlist;
 	}
 

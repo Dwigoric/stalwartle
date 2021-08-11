@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { queue } = msg.guild.music;
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!queue.length) throw `${this.client.constants.EMOTES.xmark}  ::  The queue is empty. Add one using the \`${msg.guild.settings.get('prefix')}play\` command.`;
 		let choice;
 		do {

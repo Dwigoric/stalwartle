@@ -41,7 +41,13 @@ module.exports = class extends Command {
 		if (!msg.member.voice.channel.permissionsFor(this.client.user).has(['CONNECT', 'SPEAK', 'VIEW_CHANNEL'])) throw `${this.client.constants.EMOTES.xmark}  ::  I do not have the required permissions (**Connect**, **Speak**, **View Channel**) to play music in #**${msg.member.voice.channel.name}**.`; // eslint-disable-line max-len
 		if (prompts.has(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`;
 
-		let { queue, playlist } = msg.guild.music; // eslint-disable-line prefer-const
+		let queue, playlist;
+		try {
+			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
+		} catch (err) {
+			this.client.emit('wtf', err);
+			throw `${this.client.constants.EMOTES.xmark}  ::  An unknown error occured. Please try again.`;
+		}
 
 		if (!query) {
 			if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
@@ -165,7 +171,7 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
-		const { queue } = msg.guild.music;
+		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
 
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
@@ -216,7 +222,7 @@ module.exports = class extends Command {
 					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true) });
 			}
 		}
-		await msg.guild.music.update('queue', queue, { action: 'overwrite' });
+		await this.client.providers.default.update('music', msg.guild.id, { queue });
 		return queue;
 	}
 
@@ -232,7 +238,7 @@ module.exports = class extends Command {
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
 
-			const { queue } = guild.music;
+			const { queue } = await this.client.providers.default.get('music', guild.id);
 
 			let previous;
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
@@ -250,7 +256,7 @@ module.exports = class extends Command {
 				}
 			}
 
-			await guild.music.update('queue', queue, { action: 'overwrite' });
+			await this.client.providers.default.update('music', guild.id, { queue });
 			if (queue.length) return this.play({ guild, channel }, queue[0]);
 
 			if (guild.settings.get('donation') < 10) {
@@ -264,13 +270,18 @@ module.exports = class extends Command {
 		});
 
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
-			const { history } = guild.music;
+			const { history } = await this.client.providers.default.get('music', guild.id);
 			history.unshift(mergeObjects(song, { timestamp: Date.now() }));
-			guild.music.update('history', history, { action: 'overwrite' });
+			this.client.providers.default.update('music', guild.id, { history });
 		}
 
 		const announceChannel = guild.channels.cache.get(guild.settings.get('music.announceChannel')) || channel;
 		if (guild.settings.get('music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.client.users.fetch(song.requester).then(user => user.tag)))}** - more info on \`${guild.settings.get('prefix')}np\`)`); // eslint-disable-line max-len
+	}
+
+	async init() {
+		const defProvider = this.client.providers.default;
+		if (!await defProvider.hasTable('music')) defProvider.createTable('music');
 	}
 
 	get timeouts() {
