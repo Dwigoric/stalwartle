@@ -16,6 +16,8 @@ exports.config = {
 	restTimeOffset: 500,
 	// A presence to login with
 	presence: { status: 'idle', activities: [{ name: 'Loading...', type: 'PLAYING' }] },
+	// Intents
+	intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_BANS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_WEBHOOKS', 'GUILD_VOICE_STATES', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
 
 	ownerID: '295391820744228867',
 	developers: ['295391820744228867', '296862433136476160', '296256174209105920'],
