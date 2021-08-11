@@ -30,7 +30,6 @@ exports.config = {
 
 	ownerID: '295391820744228867',
 	owners: ['295391820744228867', '296862433136476160', '296256174209105920'],
-	mongodbName: 'Stalwartle',
 
 	lavalinkNodes: [{ id: 'server', host: 'localhost', port: 80, password: '' }],
 
@@ -74,7 +73,10 @@ exports.config = {
             options: {}
         },
         */
-		default: 'json'
+		default: 'json',
+		mongodb: {
+			connectionString: ''
+		}
 	},
 
 	/**
