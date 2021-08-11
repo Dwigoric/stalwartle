@@ -17,7 +17,8 @@ module.exports = class extends Monitor {
 			msg.send(wbMsg).catch(() => msg.author.send(wbMsg).catch());
 		}
 
-		const afkUser = msg.mentions.users.filter(us => us.afk.get('timestamp')).first();
+		const afkUsers = this.client.gateways.afk.cache;
+		const afkUser = msg.mentions.users.filter(us => afkUsers.has(us.id)).first();
 		if (!afkUser) return;
 		const { reason, timestamp } = afkUser.afk;
 		msg.send([
