@@ -1,6 +1,6 @@
-const { Monitor } = require('@sapphire/framework');
+const { Listener } = require('@sapphire/framework');
 
-module.exports = class extends Monitor {
+module.exports = class extends Listener {
 
 	constructor(...args) {
 		super(...args, {

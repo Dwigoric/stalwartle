@@ -1,6 +1,6 @@
-const { Inhibitor } = require('@sapphire/framework');
+const { Precondition } = require('@sapphire/framework');
 
-module.exports = class extends Inhibitor {
+module.exports = class extends Precondition {
 
 	async run(msg, cmd) {
 		if (!msg.guild) return;
