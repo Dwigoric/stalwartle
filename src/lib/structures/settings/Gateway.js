@@ -9,8 +9,10 @@ module.exports = class Gateway {
 		this.provider = provider;
 		this.manager = manager;
 		this.cache = new Collection();
+		this.syncQueue = new Collection();
 		this.schema = schema;
 		this.ready = false;
+		Object.defineProperty(this, '_synced', { value: false, writable: true });
 	}
 
 	get defaults() {
