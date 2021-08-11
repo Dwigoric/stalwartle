@@ -139,7 +139,7 @@ module.exports = class Gateway {
 	toJSON() {
 		return {
 			type: this.type,
-			options: { provider: this.providerName },
+			options: { provider: 'mongodb' },
 			schema: this.schema.toJSON()
 		};
 	}
