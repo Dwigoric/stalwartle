@@ -5,10 +5,7 @@ module.exports = Structures.extend('User', User => {
 
 		constructor(...args) {
 			super(...args);
-
 			this.afk = this.client.gateways.afk.get(this.id, true);
-
-			this.afk.sync(true);
 		}
 
 	}
