@@ -25,7 +25,7 @@ module.exports = class Gateway {
 
 	get(id, create = false) {
 		const entry = this.cache.get(id);
-		if (entry) return entry.settings;
+		if (entry) return entry;
 		if (create) {
 			const settings = new this.DataStore(this, { id });
 			if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
