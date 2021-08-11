@@ -7,7 +7,6 @@ module.exports = class PersistenceManager {
 
 	constructor() {
 		this.db = null;
-		this.init();
 	}
 
 	async init() {
