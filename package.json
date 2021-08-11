@@ -18,7 +18,7 @@
 	"homepage": "https://github.com/insane-devs/stalwartle#readme",
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.7",
-		"@sapphire/framework": "^1.0.2",
+		"@sapphire/framework": "^2.0.0-next.e9bd6aa3.0",
 		"@sapphire/utilities": "^2.0.1",
 		"@skyra/editable-commands": "^2.1.0",
 		"discord.js": "github:discordjs/discord.js",
