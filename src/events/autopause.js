@@ -27,7 +27,7 @@ module.exports = class extends Event {
 			return newState.guild.player.pause(false);
 		}
 		if (channelMembers.size) return null;
-		const { queue } = await this.client.providers.default.get('music', newState.guild.id);
+		const { queue } = newState.guild.music;
 		if (!queue[0].info.isStream) {
 			this.autopaused.add(newState.guild.id);
 			newState.guild.player.pause(true);
@@ -36,7 +36,7 @@ module.exports = class extends Event {
 		return this.client.setTimeout(guild => {
 			if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
 			this.client.playerManager.leave(guild.id);
-			if (queue[0].requester === this.client.user.id) this.client.providers.default.update('music', newState.guild.id, { queue: [] });
+			if (queue[0].requester === this.client.user.id) newState.guild.music.reset('queue');
 			return null;
 		}, 30000, newState.guild);
 	}

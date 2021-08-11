@@ -25,7 +25,7 @@ module.exports = class extends Command {
 
 	async run(msg, [user]) {
 		const timezone = msg.author.settings.get('timezone');
-		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id)));
+		let list = msg.guild.modlogs.get('modlogs').sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
 		if (typeof user === 'number') {
 			const modlog = list[user - 1];
@@ -85,16 +85,11 @@ module.exports = class extends Command {
 			prompt = await msg.prompt('⚠ Are you sure you want to reset **all** modlogs? Respond with `yes` or `no`.').catch(() => ({ content: 'no' }));
 		} while (!['yes', 'no', null].includes(prompt.content));
 		if (prompt.content === 'yes') {
-			await this.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
+			msg.guild.modlogs.reset();
 			return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
 		} else {
 			return msg.send(`${this.client.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
 		}
-	}
-
-	async init() {
-		const defProvider = this.client.providers.default;
-		if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
 	}
 
 };

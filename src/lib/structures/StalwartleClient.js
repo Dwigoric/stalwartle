@@ -1,4 +1,4 @@
-const { Client } = require('klasa');
+const { Client, Schema } = require('klasa');
 const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
 const { config: { lavalinkNodes } } = require('../../config');
@@ -6,10 +6,11 @@ const constants = require('../util/constants');
 const auth = require('../../auth');
 const fetch = require('node-fetch');
 
+require('./StalwartleUser');
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
 
-module.exports = class Stalwartle extends Client {
+class Stalwartle extends Client {
 
 	constructor(clientOptions) {
 		super(clientOptions);
@@ -121,6 +122,14 @@ module.exports = class Stalwartle extends Client {
 						.add('action', 'string', { default: 'ban', configurable: false })
 						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
 
+		// Custom gateways
+		const { musicSchema, modlogSchema, afkSchema } = this.constructor;
+
+		this.gateways
+			.register('music', { schema: musicSchema })
+			.register('modlogs', { schema: modlogSchema })
+			.register('afk', { schema: afkSchema });
+
 		Stalwartle.defaultPermissionLevels
 			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.cache.keyArray().includes(role))))
 			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.cache.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
@@ -211,4 +220,18 @@ module.exports = class Stalwartle extends Client {
 		return true;
 	}
 
-};
+}
+
+Stalwartle.musicSchema = new Schema()
+	.add('history', 'any', { array: true })
+	.add('playlist', 'any', { array: true })
+	.add('queue', 'any', { array: true });
+
+Stalwartle.modlogSchema = new Schema()
+	.add('modlogs', 'any', { array: true });
+
+Stalwartle.afkSchema = new Schema()
+	.add('reason', 'string', { default: null })
+	.add('timestamp', 'number');
+
+module.exports = Stalwartle;

@@ -14,7 +14,7 @@ module.exports = class extends Command {
 
 	async run(msg, [seek]) {
 		seek -= Date.now();
-		const song = await this.client.providers.default.get('music', msg.guild.id).then(ms => ms.queue[0]);
+		const song = msg.guild.music.get('queue')[0];
 		if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``;
 		if (!song.info.isSeekable) throw `${this.client.constants.EMOTES.xmark}  ::  The current track playing cannot be rewinded.`;
 		msg.guild.player.seek(msg.guild.player.state.position - seek);
