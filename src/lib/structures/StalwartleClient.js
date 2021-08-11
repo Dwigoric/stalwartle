@@ -231,10 +231,10 @@ class Stalwartle extends SapphireClient {
 	}
 
 	async login(token) {
-		await this.provider.init();
+		await this.provider.init().catch(() => new Error('Could not establish connection to MongoDB.'));
 		console.log('Connection to MongoDB has been established.');
-		await this.gateways.init();
-		console.log('The gateways have been loaded');
+		await this.gateways.init().catch(() => new Error('The gateways could not load successfully.'));
+		console.log('The gateways have been loaded.');
 		return super.login(token);
 	}
 
