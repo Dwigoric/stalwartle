@@ -39,8 +39,6 @@ class Stalwartle extends SapphireClient {
 			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.defaultPrefix), default: this.options.defaultPrefix });
 		}
 
-		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
-
 		clientSchema
 			.add('changelogs', 'textchannel')
 			.add('bugs', bugs => bugs
@@ -252,7 +250,7 @@ class Stalwartle extends SapphireClient {
 
 Stalwartle.defaultGuildSchema = new Schema()
 	.add('prefix', 'string')
-	.add('disableNaturalPrefix', 'boolean')
+	.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) })
 	.add('disabledCommands', 'commands', {
 		array: true,
 		filter: (client, command) => {
