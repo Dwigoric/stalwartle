@@ -65,7 +65,6 @@ module.exports = class DataStore {
 	async destroy() {
 		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
-			this.client.emit('settingsDeleteEntry', this);
 		}
 		return this;
 	}
@@ -212,11 +211,9 @@ module.exports = class DataStore {
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			this._existsInDB = true;
-			this.client.emit('settingsCreateEntry', this);
 		}
 
 		await this.gateway.provider.update(this.gateway.type, this.id, updated);
-		this.client.emit('settingsUpdateEntry', this, updated);
 	}
 
 	_parseArray(piece, route, parsed, { force, action, arrayPosition }, { updated, errors }) {
