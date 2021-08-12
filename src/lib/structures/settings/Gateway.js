@@ -17,7 +17,7 @@ class Gateway {
     async update(id, obj) {
         if (typeof obj !== 'object') throw new TypeError('Expected an object to update');
 
-        const { value } = await this.client.provider.update(this.collection, id, obj);
+        const { value } = await this.client.provider.update(this.collection, id, obj, true);
         this.cache.set(id, mergeDefault(this.defaults, value));
         return value;
     }
