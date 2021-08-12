@@ -1,4 +1,4 @@
-const { Event } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 
 const statuses = [
     { name: 'dead', type: 'PLAYING' },
@@ -23,7 +23,11 @@ const statuses = [
     { name: 'Ariana Grande', type: 'LISTENING' }
 ];
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
+
+    constructor(...args) {
+        super(...args, { event: Events.ClientReady });
+    }
 
     async run() {
         if (this.client.application.botPublic) this.client.postStats().then(() => this.client.setInterval(() => this.client.postStats(), 1000 * 60 * 5));

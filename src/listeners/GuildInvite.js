@@ -1,4 +1,4 @@
-const { Event } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 const gregion = {
@@ -11,10 +11,10 @@ const gregion = {
     'us-central': 'Central US'
 };
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, { event: 'guildCreate' });
+        super(...args, { event: Events.GuildCreate });
         this.hook = null;
     }
 

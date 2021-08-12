@@ -1,10 +1,10 @@
-const { Event, util: { codeBlock } } = require('@sapphire/framework');
+const { Listener, Events, util: { codeBlock } } = require('@sapphire/framework');
 const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args);
+        super(...args, { event: Events.CommandError });
         this.hook = null;
     }
 

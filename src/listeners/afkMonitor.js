@@ -1,12 +1,10 @@
-const { Monitor, Duration } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
+const { Duration } = require('@sapphire/time-utilities');
 
-module.exports = class extends Monitor {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, {
-            ignoreOthers: false,
-            ignoreEdits: false
-        });
+        super(...args, { event: Events.MessageCreate });
     }
 
     async run(msg) {

@@ -1,10 +1,10 @@
-const { Event } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 const fetch = require('node-fetch');
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, { event: 'guildMemberAdd' });
+        super(...args, { event: Events.GuildMemberAdd });
     }
 
     async run(member) {

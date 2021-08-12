@@ -1,13 +1,11 @@
-const { Event } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 
 const autopaused = new Set();
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, {
-            event: 'voiceStateUpdate'
-        });
+        super(...args, { event: Events.VoiceStateUpdate });
     }
 
     async run(oldState, newState) {

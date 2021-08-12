@@ -1,9 +1,9 @@
-const { Event } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, { event: 'guildMemberAdd' });
+        super(...args, { event: Events.GuildMemberAdd });
     }
 
     async run(member) {

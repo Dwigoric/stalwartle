@@ -1,10 +1,10 @@
-const { Event } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, { event: 'guildCreate' });
+        super(...args, { event: Events.GuildCreate });
     }
 
     async run(guild) {

@@ -1,4 +1,6 @@
-const { Event, Duration, util: { toTitleCase } } = require('@sapphire/framework');
+const { Listener } = require('@sapphire/framework');
+const { Duration } = require('@sapphire/time-utilities');
+const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 
 const configs = {
@@ -11,7 +13,11 @@ const configs = {
     warn: ['#B2884D', '<:blobthinkstare:398843280135028738>']
 };
 
-module.exports = class extends Event {
+module.exports = class extends Listener {
+
+    constructor(...args) {
+        super(...args, { event: 'modlogAction' });
+    }
 
     async run(message, user, reason, duration) {
         if (message.guild.settings.get('automod.quota')) this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));

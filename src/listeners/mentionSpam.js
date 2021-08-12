@@ -1,11 +1,9 @@
-const { Monitor } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
 
-module.exports = class extends Monitor {
+module.exports = class extends Listener {
 
     constructor(...args) {
-        super(...args, {
-            ignoreOthers: false
-        });
+        super(...args, { event: Events.MessageCreate });
     }
 
     /* eslint complexity: ['warn', 25] */
