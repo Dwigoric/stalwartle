@@ -22,7 +22,7 @@ module.exports = class extends Listener {
         if (guild.player) {
             guild.player.removeAllListeners();
             guild.player.destroy();
-            this.client.playerManager.players.delete(guild.id);
+            this.client.lavacord.players.delete(guild.id);
         }
 
         const regionArr = guild.region.split('-');

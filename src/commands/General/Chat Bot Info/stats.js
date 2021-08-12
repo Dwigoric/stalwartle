@@ -27,7 +27,7 @@ module.exports = class extends Command {
             .addField('🤖 General Information', [
                 `**Users**: ${(await this.client.userCount()).toLocaleString()}`,
                 `**Servers**: ${(await this.client.guildCount()).toLocaleString()}`,
-                `**Voice Connections**: ${Array.from(this.client.playerManager.players.values()).filter(player => player.playing).length}`
+                `**Voice Connections**: ${Array.from(this.client.lavacord.players.values()).filter(player => player.playing).length}`
             ], true)
             .addField('⏱ Uptime', [
                 `**Host**: ${Duration.toNow(now - (uptime() * 1000))}`,

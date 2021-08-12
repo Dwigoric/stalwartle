@@ -95,8 +95,8 @@ module.exports = class extends Command {
     async join({ guild, channel, member }) {
         if (!member.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
 
-        await this.client.playerManager.join({
-            node: this.client.playerManager.idealNodes[0].id,
+        await this.client.lavacord.join({
+            node: this.client.lavacord.idealNodes[0].id,
             guild: guild.id,
             channel: member.voice.channelID
         }, { selfdeaf: true });
@@ -149,7 +149,7 @@ module.exports = class extends Command {
     }
 
     async getSongs(query, soundcloud) {
-        const node = this.client.playerManager.idealNodes[0];
+        const node = this.client.lavacord.idealNodes[0];
         const params = new URLSearchParams();
 
         if (parse(query).protocol && parse(query).hostname) {
@@ -261,7 +261,7 @@ module.exports = class extends Command {
 
             if (guild.settings.get('donation') < 10) {
                 timeouts.set(guild.id, setTimeout(((guildID) => {
-                    this.client.playerManager.leave(guildID);
+                    this.client.lavacord.leave(guildID);
                     clearTimeout(timeouts.get(guildID));
                     timeouts.delete(guildID);
                 }).bind(this), 1000 * 60 * 5, guild.id));

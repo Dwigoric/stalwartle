@@ -13,7 +13,7 @@ module.exports = class extends Command {
     async run(msg) {
         if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music session in this server.`;
         this.store.get('play').timeouts.delete(msg.guild.id);
-        this.client.playerManager.leave(msg.guild.id);
+        this.client.lavacord.leave(msg.guild.id);
         await this.client.providers.default.update('music', msg.guild.id, { queue: [] });
         // eslint-disable-next-line max-len
         return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully ended the music session for this server, and the queue has been emptied.`);

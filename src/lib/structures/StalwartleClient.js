@@ -20,7 +20,7 @@ class Stalwartle extends SapphireClient {
     constructor(clientOptions) {
         super(clientOptions);
 
-        this.playerManager = null;
+        this.lavacord = null;
         this.spotifyParser = null;
         this.constants = constants;
         this.auth = auth;
@@ -130,12 +130,12 @@ class Stalwartle extends SapphireClient {
     }
 
     _initplayer() {
-        this.playerManager = this.playerManager || new Manager(this, lavalinkNodes, {
+        this.lavacord = this.lavacord || new Manager(this, lavalinkNodes, {
             user: this.user.id,
             shards: this.options.shardCount
         });
         this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
-        if (!this.playerManager.idealNodes.length) this.playerManager.connect();
+        if (!this.lavacord.idealNodes.length) this.lavacord.connect();
         return true;
     }
 

@@ -9,16 +9,16 @@ module.exports = class extends Listener {
     }
 
     async run(oldState, newState) {
-        if (!this.client.playerManager) return null;
+        if (!this.client.lavacord) return null;
         if (!newState.guild.player) return null;
-        if (!newState.guild.me.voice.channel) return this.client.playerManager.leave(newState.guild.id);
+        if (!newState.guild.me.voice.channel) return this.client.lavacord.leave(newState.guild.id);
         if (oldState.channel && newState.channel && (oldState.channel.id === newState.channel.id || ![oldState.channel.id, newState.channel.id].includes(newState.guild.me.voice.channel))) return null;
 
         const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
         if (newState.guild.player && !newState.guild.player.playing && !channelMembers.size) {
             clearTimeout(this.client.commands.get('play').timeouts.get(newState.guild.id));
             this.client.commands.get('play').timeouts.delete(newState.guild.id);
-            return this.client.playerManager.leave(newState.guild.id);
+            return this.client.lavacord.leave(newState.guild.id);
         }
         if (newState.guild.me.voice.channel && channelMembers.size && this.autopaused.has(newState.guild.id)) {
             this.autopaused.delete(newState.guild.id);
@@ -33,7 +33,7 @@ module.exports = class extends Listener {
         if (newState.guild.settings.get('donation') >= 10) return null;
         return this.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
-            this.client.playerManager.leave(guild.id);
+            this.client.lavacord.leave(guild.id);
             if (queue[0].requester === this.client.user.id) this.client.providers.default.update('music', newState.guild.id, { queue: [] });
             return null;
         }, 30000, newState.guild);
