@@ -166,7 +166,7 @@ module.exports = class Stalwartle extends Client {
 		if (this.auth.blsAPIkey) {
 			fetch(`https://api.botlist.space/v1/bots/${this.user.id}`, {
 				method: 'POST',
-				body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+				body: JSON.stringify({ serverCount: await this.guildCount() }),
 				headers: { Authorization: this.auth.blsAPIkey, 'Content-Type': 'application/json' }
 			});
 		}
