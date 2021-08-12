@@ -1,6 +1,6 @@
 const { Util: { mergeDefault } } = require('discord.js');
 
-class Settings {
+class Gateway {
 
     constructor(client, collection, defaults = {}) {
         Object.defineProperty(this, 'client', { value: client });
@@ -44,4 +44,4 @@ class Settings {
 
 }
 
-module.exports = Settings;
+module.exports = Gateway;

@@ -9,7 +9,7 @@ const constants = require('../util/constants');
 const auth = require('../../auth');
 
 const PersistenceManager = require('./settings/PersistenceManager');
-const Settings = require('./settings/Settings');
+const Gateway = require('./settings/Gateway');
 const schema = require('../util/schema');
 
 require('./StalwartleGuild');
@@ -29,10 +29,10 @@ class Stalwartle extends SapphireClient {
 
         this.provider = new PersistenceManager();
 
-        this.settings = {
-            guilds: new Settings(this, 'guilds', schema.guilds),
-            users: new Settings(this, 'users', schema.users),
-            client: new Settings(this, 'clientStorage', schema.client)
+        this.gateways = {
+            guilds: new Gateway(this, 'guilds', schema.guilds),
+            users: new Gateway(this, 'users', schema.users),
+            client: new Gateway(this, 'clientStorage', schema.client)
         };
 
         this.application = null;
@@ -121,8 +121,11 @@ class Stalwartle extends SapphireClient {
     async login(token) {
         await this.provider.init().catch(() => new Error('Could not establish connection to MongoDB.'));
         console.log('Connection to MongoDB has been established.');
-        for (const setting in this.settings) await this.settings[setting].init().catch(() => new Error(`Could not load Collection ${setting} to cache. Aborting.`));
-        console.log('The databases have been loaded.');
+        for (const gateway in this.gateways) {
+            await this.gateways[gateway].init().catch(() => new Error(`Could not load Collection ${gateway} to cache.`));
+            console.log(`Loaded Collection ${gateway} to cache.`);
+        }
+        console.log('The gateways have been loaded.');
         return super.login(token);
     }
 
