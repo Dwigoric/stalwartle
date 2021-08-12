@@ -35,7 +35,6 @@ class Stalwartle extends SapphireClient {
             client: new Settings(this, 'clientStorage', schema.client)
         };
 
-        this.settings = null;
         this.application = null;
         this.ready = false;
 
