@@ -24,7 +24,7 @@ module.exports = {
         }
     },
 
-    user: {
+    users: {
         acceptFights: true,
         afkIgnore: [],
         afktoggle: false,
@@ -35,7 +35,7 @@ module.exports = {
         timezone: ''
     },
 
-    guild: {
+    guilds: {
         afkChannelOnAfk: false,
         donation: 0,
         globalBans: false,

@@ -9,6 +9,8 @@ const constants = require('../util/constants');
 const auth = require('../../auth');
 
 const PersistenceManager = require('./settings/PersistenceManager');
+const Settings = require('./settings/Settings');
+const schema = require('../util/schema');
 
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
@@ -27,119 +29,11 @@ class Stalwartle extends SapphireClient {
 
         this.provider = new PersistenceManager();
 
-        const guildSchema = this.constructor.defaultGuildSchema;
-        const userSchema = this.constructor.defaultUserSchema;
-        const clientSchema = this.constructor.defaultClientSchema;
-
-        const prefixKey = guildSchema.get('prefix');
-        if (!prefixKey || prefixKey.default === null) {
-            guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.defaultPrefix), default: this.options.defaultPrefix });
-        }
-
-        clientSchema
-            .add('changelogs', 'textchannel')
-            .add('bugs', bugs => bugs
-                .add('reports', 'textchannel')
-                .add('processed', 'textchannel'))
-            .add('errorHook', errorHook => errorHook
-                .add('id', 'string')
-                .add('token', 'string'))
-            .add('guildHook', guildHook => guildHook
-                .add('id', 'string')
-                .add('token', 'string'))
-            .add('restart', restart => restart
-                .add('channel', 'textchannel')
-                .add('timestamp', 'number'))
-            .add('suggestions', suggestions => suggestions
-                .add('reports', 'textchannel')
-                .add('processed', 'textchannel'));
-
-        userSchema
-            .add('acceptFights', 'boolean', { default: true })
-            .add('afkIgnore', 'channel', { array: true })
-            .add('afktoggle', 'boolean', { default: false })
-            .add('bannerWidth', 'integer', { default: 0 })
-            .add('cookies', 'integer', { default: 0, configurable: false })
-            .add('hpBoost', 'integer', { default: 0, configurable: false })
-            .add('osu', 'string', { max: 20 })
-            .add('timezone', 'string', { default: 'GMT', configurable: false });
-
-        guildSchema
-            .add('afkChannelOnAfk', 'boolean', { default: false })
-            .add('donation', 'number', { default: 0, configurable: false })
-            .add('globalBans', 'boolean', { default: false })
-            .add('ignored', 'channel', { array: true })
-            .add('logging', 'boolean', { default: true })
-            .add('modlogShowContent', 'boolean', { default: true })
-            .add('muted', 'user', { array: true, configurable: false })
-            .add('muteRole', 'role', { configurable: false })
-            .add('selfroles', 'role', { array: true })
-            .add('autorole', autorole => autorole
-                .add('user', 'role')
-                .add('bot', 'role'))
-            .add('moderators', moderators => moderators
-                .add('users', 'user', { array: true })
-                .add('roles', 'role', { array: true }))
-            .add('modlogs', modlogs => modlogs
-                .add('ban', 'channel')
-                .add('kick', 'channel')
-                .add('mute', 'channel')
-                .add('softban', 'channel')
-                .add('unban', 'channel')
-                .add('unmute', 'channel')
-                .add('warn', 'channel'))
-            .add('music', music => music
-                .add('limitToChannel', 'channel', { array: true })
-                .add('announceChannel', 'textchannel')
-                .add('announceSongs', 'boolean', { default: true })
-                .add('autoplay', 'boolean', { default: false })
-                .add('dj', 'role', { array: true })
-                .add('maxPlaylist', 'integer', { min: 1, max: 1000, default: 1000 })
-                .add('maxQueue', 'integer', { min: 1, max: 1000, default: 1000 })
-                .add('maxUserRequests', 'integer', { min: 1, max: 1000, default: 250 })
-                .add('noDuplicates', 'boolean', { default: false })
-                .add('repeat', 'string', { default: 'none', configurable: false })
-                .add('volume', 'integer', { min: 1, max: 300, default: 100, configurable: false }))
-            .add('automod', automod => automod
-                .add('ignoreBots', 'boolean', { default: false })
-                .add('ignoreMods', 'boolean', { default: false })
-                .add('antiInvite', 'boolean', { default: false })
-                .add('quota', 'boolean', { default: true })
-                .add('antiSpam', 'boolean', { default: false })
-                .add('antiSwear', 'boolean', { default: false })
-                .add('mentionSpam', 'boolean', { default: false })
-                .add('globalSwears', 'boolean', { default: true })
-                .add('swearWords', 'string', { array: true })
-                .add('filterIgnore', filterIgnore => filterIgnore
-                    .add('antiInvite', 'channel', { array: true })
-                    .add('antiSpam', 'channel', { array: true })
-                    .add('antiSwear', 'channel', { array: true })
-                    .add('mentionSpam', 'channel', { array: true }))
-                .add('options', options => options
-                    .add('antiInvite', antiInvite => antiInvite
-                        .add('action', 'string', { default: 'warn', configurable: false })
-                        .add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
-                    .add('quota', quota => quota
-                        .add('action', 'string', { default: 'mute', configurable: false })
-                        .add('limit', 'integer', { default: 3, min: 3, max: 50 })
-                        .add('within', 'integer', { default: 5, min: 1, max: 1440 })
-                        .add('duration', 'integer', { default: 10, min: 1, max: 43200 }))
-                    .add('antiSpam', antiSpam => antiSpam
-                        .add('action', 'string', { default: 'mute', configurable: false })
-                        .add('limit', 'integer', { default: 5, min: 5, max: 50 })
-                        .add('within', 'integer', { default: 5, min: 3, max: 600 })
-                        .add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
-                    .add('antiSwear', antiSwear => antiSwear
-                        .add('action', 'string', { default: 'warn', configurable: false })
-                        .add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
-                    .add('mentionSpam', mentionSpam => mentionSpam
-                        .add('action', 'string', { default: 'ban', configurable: false })
-                        .add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
-
-        this.gateways
-            .register('guilds', guildSchema)
-            .register('users', userSchema)
-            .register('clientStorage', clientSchema);
+        this.settings = {
+            guilds: new Settings(this, 'guilds', schema.guilds),
+            users: new Settings(this, 'users', schema.users),
+            client: new Settings(this, 'clientStorage', schema.client)
+        };
 
         this.settings = null;
         this.application = null;
@@ -228,8 +122,8 @@ class Stalwartle extends SapphireClient {
     async login(token) {
         await this.provider.init().catch(() => new Error('Could not establish connection to MongoDB.'));
         console.log('Connection to MongoDB has been established.');
-        await this.gateways.init().catch(() => new Error('The gateways could not load successfully.'));
-        console.log('The gateways have been loaded.');
+        for (const setting in this.settings) await this.settings[setting].init();
+        console.log('The databases have been loaded.');
         return super.login(token);
     }
 
