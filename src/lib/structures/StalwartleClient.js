@@ -121,7 +121,7 @@ class Stalwartle extends SapphireClient {
     async login(token) {
         await this.provider.init().catch(() => new Error('Could not establish connection to MongoDB.'));
         console.log('Connection to MongoDB has been established.');
-        for (const setting in this.settings) await this.settings[setting].init();
+        for (const setting in this.settings) await this.settings[setting].init().catch(() => new Error(`Could not load Collection ${setting} to cache. Aborting.`));
         console.log('The databases have been loaded.');
         return super.login(token);
     }
