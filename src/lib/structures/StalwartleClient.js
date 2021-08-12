@@ -8,12 +8,15 @@ const { config: { lavalinkNodes } } = require('../../config');
 const constants = require('../util/constants');
 const auth = require('../../auth');
 
+// Imports for data persistence
 const PersistenceManager = require('./settings/PersistenceManager');
 const Gateway = require('./settings/Gateway');
 const schema = require('../util/schema');
 
-require('./StalwartleGuild');
-require('./StalwartleGuildMember');
+// Imports for cached data
+const CacheManager = require('./cache/CacheManager');
+const GuildCacheData = require('./cache/GuildCacheData');
+const MemberCacheData = require('./cache/MemberCacheData');
 
 class Stalwartle extends SapphireClient {
 
@@ -33,6 +36,11 @@ class Stalwartle extends SapphireClient {
             guilds: new Gateway(this, 'guilds', schema.guilds),
             users: new Gateway(this, 'users', schema.users),
             client: new Gateway(this, 'clientStorage', schema.client)
+        };
+
+        this.cache = {
+            guilds: new CacheManager(this, GuildCacheData),
+            members: new CacheManager(this, MemberCacheData)
         };
 
         this.application = null;
