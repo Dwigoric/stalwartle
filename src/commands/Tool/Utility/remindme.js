@@ -1,4 +1,5 @@
-const { Command, Duration } = require('@sapphire/framework');
+const { Command } = require('@sapphire/framework');
+const { Duration } = require('@sapphire/time-utilities');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
