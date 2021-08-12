@@ -3,14 +3,12 @@ const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
 const fetch = require('node-fetch');
 
-const { config: { lavalinkNodes }, config } = require('../../config');
+const { config: { lavalinkNodes } } = require('../../config');
 
 const constants = require('../util/constants');
 const auth = require('../../auth');
 
 const PersistenceManager = require('./settings/PersistenceManager');
-const GatewayManager = require('./settings/GatewayManager');
-const Schema = require('./settings/schema/Schema');
 
 require('./StalwartleGuild');
 require('./StalwartleGuildMember');
@@ -28,7 +26,6 @@ class Stalwartle extends SapphireClient {
 		this.once('ready', this._initplayer.bind(this));
 
 		this.provider = new PersistenceManager();
-		this.gateways = new GatewayManager(this);
 
 		const guildSchema = this.constructor.defaultGuildSchema;
 		const userSchema = this.constructor.defaultUserSchema;
@@ -247,21 +244,5 @@ class Stalwartle extends SapphireClient {
 	}
 
 }
-
-Stalwartle.defaultGuildSchema = new Schema()
-	.add('prefix', 'string')
-	.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) })
-	.add('disabledCommands', 'commands', {
-		array: true,
-		filter: (client, command) => {
-			if (config.guardedCommands.includes(command.name)) throw `${constants.EMOTES.xmark}  ::  The command \`${command.name.toLowerCase()}\` may not be disabled.`;
-		}
-	});
-
-Stalwartle.defaultUserSchema = new Schema();
-
-Stalwartle.defaultClientSchema = new Schema()
-	.add('userBlacklist', 'user', { array: true })
-	.add('guildBlacklist', 'string', { array: true });
 
 module.exports = Stalwartle;
