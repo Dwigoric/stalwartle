@@ -36,6 +36,7 @@ class Gateway {
     }
 
     async init() {
+        if (!await this.client.provider.hasTable(this.collection)) await this.client.provider.createTable(this.collection);
         const docs = await this.client.provider.getKeys(this.collection);
 
         for (const doc of docs) this.cache.set(doc.id, mergeDefault(this.defaults, doc));
