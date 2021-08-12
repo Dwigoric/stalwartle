@@ -35,7 +35,10 @@ class Stalwartle extends SapphireClient {
         this.gateways = {
             guilds: new Gateway(this, 'guilds', schema.guilds),
             users: new Gateway(this, 'users', schema.users),
-            client: new Gateway(this, 'clientStorage', schema.client)
+            client: new Gateway(this, 'clientStorage', schema.client),
+            afk: new Gateway(this, 'afk', schema.afk),
+            music: new Gateway(this, 'music', schema.music),
+            modlogs: new Gateway(this, 'modlogs', schema.modlogs)
         };
 
         this.cache = {

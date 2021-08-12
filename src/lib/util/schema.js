@@ -1,5 +1,20 @@
 module.exports = {
 
+    afk: {
+        reason: null,
+        timestamp: null
+    },
+
+    modlogs: {
+        modlogs: []
+    },
+
+    music: {
+        queue: [],
+        history: [],
+        playlist: []
+    },
+
     client: {
         changelogs: '',
         bugs: {
