@@ -3,7 +3,7 @@ const { MongoClient: Mongo } = require('mongodb');
 const { isObject, mergeObjects } = require('@sapphire/utilities');
 const { mongodb } = require('../../../config');
 
-module.exports = class PersistenceManager {
+class PersistenceManager {
 
     constructor() {
         this.db = null;
@@ -71,7 +71,7 @@ module.exports = class PersistenceManager {
         return this.db.collection(table).replaceOne(resolveQuery(id), this.parseUpdateInput(doc));
     }
 
-};
+}
 
 const resolveQuery = query => isObject(query) ? query : { id: query };
 
@@ -87,3 +87,5 @@ function flatten(obj, path = '') {
 function parseEngineInput(updated) {
     return Object.assign({}, ...updated.map(entry => ({ [entry.data[0]]: entry.data[1] })));
 }
+
+module.exports = PersistenceManager;
