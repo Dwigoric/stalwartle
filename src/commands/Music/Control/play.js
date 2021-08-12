@@ -50,7 +50,7 @@ module.exports = class extends Command {
         }
 
         if (!query) {
-            if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
+            if (this.client.lavacord.players.get(msg.guild.id) && this.client.lavacord.players.get(msg.guild.id).playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
             if (queue.length) {
                 msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
                 await this.join(msg);
@@ -58,7 +58,7 @@ module.exports = class extends Command {
             }
             // eslint-disable-next-line max-len
             if (!playlist.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${msg.guild.settings.get('prefix')}play\``;
-            if (!msg.guild.player) await this.join(msg);
+            if (!this.client.lavacord.players.get(msg.guild.id)) await this.join(msg);
             msg.send(`${this.client.constants.EMOTES.tick}  ::  Queue is empty. The playlist has been added to the queue.`);
             await this.addToQueue(msg, playlist).catch(err => {
                 this.client.emit('wtf', err);
@@ -82,11 +82,11 @@ module.exports = class extends Command {
             throw `${this.client.constants.EMOTES.xmark}  ::  There was an error adding your song to the queue. Please \`${msg.guild.settings.get('prefix')}clear\` the queue and try again. If issue persists, please submit a bug report. Thanks!`; // eslint-disable-line max-len
         });
 
-        if (!msg.guild.player) await this.join(msg);
+        if (!this.client.lavacord.players.get(msg.guild.id)) await this.join(msg);
 
-        if (msg.flagArgs.force && queue.length > 1 && msg.guild.player.playing && await msg.hasAtLeastPermissionLevel(5)) {
+        if (msg.flagArgs.force && queue.length > 1 && this.client.lavacord.players.get(msg.guild.id).playing && await msg.hasAtLeastPermissionLevel(5)) {
             msg.send(`🎵  ::  Forcibly played **${escapeMarkdown(queue[1].info.title)}**.`);
-            return msg.guild.player.stop();
+            return this.client.lavacord.players.get(msg.guild.id).stop();
         }
 
         return this.play(msg, queue[0]);
@@ -101,7 +101,7 @@ module.exports = class extends Command {
             channel: member.voice.channelID
         }, { selfdeaf: true });
 
-        guild.player.on('error', error => {
+        this.client.lavacord.players.get(guild.id).on('error', error => {
             channel.send(`${this.client.constants.EMOTES.xmark}  ::  ${error.error || error.reason || 'An unknown error has occurred.'}`);
             this.client.emit('wtf', error);
         });
@@ -176,7 +176,7 @@ module.exports = class extends Command {
         if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
 
-            if (msg.guild.player && msg.guild.player.playing) queue.splice(1, 0, ...songs);
+            if (this.client.lavacord.players.get(msg.guild.id) && this.client.lavacord.players.get(msg.guild.id).playing) queue.splice(1, 0, ...songs);
             else queue.splice(0, 1, ...songs);
         } else if (Array.isArray(song)) {
             let songCount = 0;
@@ -205,8 +205,8 @@ module.exports = class extends Command {
                 msg.send(`🎶  ::  **${song.info.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.`); // eslint-disable-line max-len
             } else {
                 const { title, length, uri, author, isStream } = queue[queue.length - 1].info;
-                const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player && msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
-                msg.send(queue.length >= 2 && (!msg.guild.player || (msg.guild.player && !msg.guild.player.playing)) ?
+                const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (this.client.lavacord.players.get(msg.guild.id) && this.client.lavacord.players.get(msg.guild.id).playing && !queue[0].info.isStream ? this.client.lavacord.players.get(msg.guild.id).state.position : 0); // eslint-disable-line max-len
+                msg.send(queue.length >= 2 && (!this.client.lavacord.players.get(msg.guild.id) || (this.client.lavacord.players.get(msg.guild.id) && !this.client.lavacord.players.get(msg.guild.id).playing)) ?
                 // eslint-disable-next-line max-len
                     `🔢  ::  There are songs in your queue from your previous session! You can run ${queue.length >= 3 ? `\`${msg.guild.settings.get('prefix')}remove 1${queue.length >= 4 ? `-${queue.length - 2}` : ''}\` then ` : ' '}\`${msg.guild.settings.get('prefix')}skip\` to start over.` :
                     '', { embed: new MessageEmbed()
@@ -227,15 +227,16 @@ module.exports = class extends Command {
     }
 
     async play({ guild, channel }, song) {
-        if (guild.player.playing) return;
+        const player = this.client.lavacord.players.get(guild.id);
+        if (player.playing) return;
 
         const volume = guild.settings.get('music.volume');
         // { volume: volume === 100 ? undefined : volume }
-        guild.player.play(song.track);
-        if (volume !== 100) guild.player.volume(volume);
+        player.play(song.track);
+        if (volume !== 100) player.volume(volume);
         // the above two lines are temporary until in-op volume is fixed
         guild.clearVoteskips();
-        guild.player.once('end', async data => {
+        player.once('end', async data => {
             if (data.reason === 'REPLACED') return null;
 
             const { queue } = await this.client.providers.default.get('music', guild.id);

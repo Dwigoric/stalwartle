@@ -19,7 +19,7 @@ module.exports = class extends Command {
         if (entry && await msg.hasAtLeastPermissionLevel(5)) return this.skipToEntry(msg, entry);
         if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
             msg.guild.clearVoteskips();
-            msg.guild.player.stop();
+            this.client.lavacord.players.get(msg.guild.id).stop();
             return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully forcibly skipped the music for this server.`);
         }
         if (msg.guild.voteskips.includes(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You've already voted to skip the current song.`;
@@ -36,7 +36,7 @@ module.exports = class extends Command {
             ]);
         }
         msg.guild.clearVoteskips();
-        msg.guild.player.stop();
+        this.client.lavacord.players.get(msg.guild.id).stop();
         return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully skipped the music for this server.`);
     }
 
@@ -47,7 +47,7 @@ module.exports = class extends Command {
         queue.splice(1, 0, queue.splice(entry, 1)[0]);
         await this.client.providers.default.update('music', msg.guild.id, { queue });
         msg.guild.clearVoteskips();
-        msg.guild.player.stop();
+        this.client.lavacord.players.get(msg.guild.id).stop();
         return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully skipped to entry \`#${entry}\`.`);
     }
 

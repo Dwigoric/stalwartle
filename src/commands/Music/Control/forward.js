@@ -17,7 +17,7 @@ module.exports = class extends Command {
         const song = await this.client.providers.default.get('music', msg.guild.id).then(ms => ms.queue[0]);
         if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``;
         if (!song.info.isSeekable) throw `${this.client.constants.EMOTES.xmark}  ::  The current track playing cannot be forwarded.`;
-        msg.guild.player.seek(msg.guild.player.state.position + seek);
+        this.client.lavacord.players.get(msg.guild.id).seek(this.client.lavacord.players.get(msg.guild.id).state.position + seek);
         return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully forwarded the music.`);
     }
 

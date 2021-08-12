@@ -18,7 +18,7 @@ module.exports = class extends Command {
         if (!queue.length || !msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``; // eslint-disable-line max-len
         if (!queue[0].info.isSeekable) throw `${this.client.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`;
         if (queue[0].info.length < seek) throw `${this.client.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`;
-        msg.guild.player.seek(seek);
+        this.client.lavacord.players.get(msg.guild.id).seek(seek);
         return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully seeked the music.`);
     }
 

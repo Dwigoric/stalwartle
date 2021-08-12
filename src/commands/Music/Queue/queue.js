@@ -18,7 +18,7 @@ module.exports = class extends Command {
         const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the music queue...`);
         const np = queue[0];
         const npStatus = msg.guild.me.voice.channel ?
-            msg.guild.player.paused ?
+            this.client.lavacord.players.get(msg.guild.id).paused ?
                 '⏸' :
                 '▶' :
             '⤴ Up Next:';

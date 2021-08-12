@@ -24,13 +24,13 @@ module.exports = class extends Command {
         if (band === 'setall') {
             const bands = [];
             for (band of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]) bands.push({ band, gain });
-            msg.guild.player.equalizer(bands);
+            this.client.lavacord.players.get(msg.guild.id).equalizer(bands);
             return msg.send([
                 `${this.client.constants.EMOTES.tick}  ::  Successfully equalized all bands' gain to \`${gain}\`.`,
                 gain !== 0 ? ` *Make sure you know what you're doing. Run \`${msg.guild.settings.get('prefix')}eq setall 0\` if you're unsure.*` : ''
             ].join(''));
         }
-        msg.guild.player.equalizer([{ gain, band }]);
+        this.client.lavacord.players.get(msg.guild.id).equalizer([{ gain, band }]);
         return msg.send([
             `${this.client.constants.EMOTES.tick}  ::  Successfully equalized band \`#${band}\`'s gain to \`${gain}\`.`,
             `*Make sure you know what you're doing. Run \`${msg.guild.settings.get('prefix')}eq setall 0\` if you're unsure.*`

@@ -19,9 +19,10 @@ module.exports = class extends Listener {
     }
 
     async run(guild) {
-        if (guild.player) {
-            guild.player.removeAllListeners();
-            guild.player.destroy();
+        const player = this.client.lavacord.players.get(guild.id);
+        if (player) {
+            player.removeAllListeners();
+            player.destroy();
             this.client.lavacord.players.delete(guild.id);
         }
 

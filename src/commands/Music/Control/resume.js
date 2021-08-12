@@ -12,8 +12,8 @@ module.exports = class extends Command {
 
     async run(msg) {
         if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music playing in this server!`;
-        if (!msg.guild.player.paused) throw `${this.client.constants.EMOTES.xmark}  ::  Music is already playing! Pause it with \`${msg.guild.settings.get('prefix')}pause\``;
-        msg.guild.player.pause(false);
+        if (!this.client.lavacord.players.get(msg.guild.id).paused) throw `${this.client.constants.EMOTES.xmark}  ::  Music is already playing! Pause it with \`${msg.guild.settings.get('prefix')}pause\``;
+        this.client.lavacord.players.get(msg.guild.id).pause(false);
         return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully resumed the music for this server.`);
     }
 
