@@ -2,23 +2,23 @@ const { Command } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			permissionLevel: 6,
-			runIn: ['text'],
-			description: 'Warns a mentioned user.',
-			usage: '<Member:member> [Reason:string] [...]',
-			usageDelim: ' '
-		});
-	}
+    constructor(...args) {
+        super(...args, {
+            permissionLevel: 6,
+            runIn: ['text'],
+            description: 'Warns a mentioned user.',
+            usage: '<Member:member> [Reason:string] [...]',
+            usageDelim: ' '
+        });
+    }
 
-	async run(msg, [member, ...reason]) {
-		if (member.user.equals(msg.author)) throw 'Why would you warn yourself?';
-		if (member.user.equals(this.client.user)) throw 'Have I done something wrong?';
+    async run(msg, [member, ...reason]) {
+        if (member.user.equals(msg.author)) throw 'Why would you warn yourself?';
+        if (member.user.equals(this.client.user)) throw 'Have I done something wrong?';
 
-		reason = reason.length > 0 ? reason.join(this.usageDelim) : null;
-		msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
-		return this.client.emit('modlogAction', msg, member.user, reason);
-	}
+        reason = reason.length > 0 ? reason.join(this.usageDelim) : null;
+        msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
+        return this.client.emit('modlogAction', msg, member.user, reason);
+    }
 
 };
