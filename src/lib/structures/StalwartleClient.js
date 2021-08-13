@@ -58,6 +58,10 @@ class Stalwartle extends SapphireClient {
             .add(10, ({ author }) => clientOptions.ownerID === author.id, { break: true });
     }
 
+    get settings() {
+        return this.gateways.client.get(this.user.id);
+    }
+
     async postStats() {
         if (this.auth.ctxAPIkey) {
             fetch('https://www.carbonitex.net/discord/data/botdata.php', {
