@@ -81,17 +81,17 @@ module.exports = class MemorySweeper extends Task {
         // ----- PERSISTENT DATA SWEEPERS ----- //
 
         // Music database sweeper
-        for (const { history, id, playlist, queue } of await this.client.providers.default.getAll('music')) {
+        for (const { history, id, playlist, queue } of await this.client.provider.getAll('music')) {
             if (history.length || playlist.length) continue;
             if (this.client.guilds.cache.has(id) && queue.length) continue;
-            this.client.providers.default.delete('music', id);
+            this.client.gateways.music.delete(id);
             musicDBs++;
         }
 
         // Modlog database sweeper
-        for (const { id, modlogs } of await this.client.providers.default.getAll('modlogs')) {
+        for (const { id, modlogs } of await this.client.provider\.getAll('modlogs')) {
             if (modlogs.length) continue;
-            this.client.providers.default.delete('modlogs', id);
+            this.client.gateways.modlogs.delete(id);
             modlogDBs++;
         }
 
