@@ -18,7 +18,7 @@ module.exports = class extends Command {
 
     async run(msg, [suggestion]) {
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
-        this.client.channels.cache.get(this.client.settings.get('suggestions.reports')).send([
+        this.client.channels.cache.get(this.client.settings.suggestions.reports).send([
             `💡  ::  Suggestion by **${msg.author.tag}** | ${msg.author.id}`,
             `\t\t\tServer: ${server}`,
             `\`\`\`${suggestion}\`\`\``

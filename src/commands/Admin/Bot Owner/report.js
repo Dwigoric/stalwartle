@@ -17,8 +17,8 @@ module.exports = class extends Command {
 
     async run(msg, [repUser, repMsg, ...repCom]) {
         const reportChans = {
-            [this.client.settings.get('bugs.reports')]: this.client.settings.get('bugs.processed'),
-            [this.client.settings.get('suggestions.reports')]: this.client.settings.get('suggestions.processed')
+            [this.client.settings.bugs.reports]: this.client.settings.bugs.processed,
+            [this.client.settings.suggestions.reports]: this.client.settings.suggestions.processed
         };
         if (!repMsg.author.equals(this.client.user)) return null;
         if (!Object.keys(reportChans).includes(msg.channel.id)) throw `${this.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`;

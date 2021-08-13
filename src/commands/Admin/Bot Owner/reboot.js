@@ -12,14 +12,14 @@ module.exports = class extends Command {
     }
 
     async run(msg) {
-        await this.client.settings.update([['restart.channel', msg.channel.id], ['restart.timestamp', msg.createdTimestamp]]);
+        await this.client.gateways.client.update(this.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
         await msg.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
         await this.client.destroy();
         process.exit();
     }
 
     async init() {
-        const { channel, timestamp } = await this.client.settings.get('restart');
+        const { channel, timestamp } = await this.client.settings.restart;
         if (!channel) return;
         (await this.client.channels.fetch(channel)).send({
             embed: new MessageEmbed()
@@ -30,7 +30,10 @@ module.exports = class extends Command {
                 .setFooter(`Reboot duration: ${+`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`}s`)
                 .setTimestamp()
         });
-        this.client.settings.reset(['restart.channel', 'restart.timestamp']);
+        this.client.gateways.client.update(this.client.user.id, { restart: {
+            channel: this.client.gateways.client.defaults.channel,
+            timestamp: this.client.gateways.client.defaults.timestamp
+        } });
     }
 
 };
