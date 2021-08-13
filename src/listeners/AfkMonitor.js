@@ -9,7 +9,7 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (this.client.gateways.users.get(msg.author.id).afkIgnore.includes(msg.channel.id)) return;
-        if (this.client.gateways.afk.get(msg.author.id).timestamp && !this.client.gateways.afk.get(msg.author.id).afktoggle) {
+        if (this.client.gateways.afk.get(msg.author.id).timestamp && !this.client.gateways.users.get(msg.author.id).afktoggle) {
             const wbMsg = `${this.client.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`;
             this.client.gateways.afk.delete(msg.author.id);
             msg.send(wbMsg).catch(() => msg.author.send(wbMsg).catch());
