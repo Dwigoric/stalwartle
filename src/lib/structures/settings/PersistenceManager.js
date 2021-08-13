@@ -1,6 +1,6 @@
 // Copyright (c) 2017-2019 digireants. All rights reserved. MIT license.
 const { MongoClient: Mongo } = require('mongodb');
-const { isObject, mergeObjects } = require('@sapphire/utilities');
+const { isObject, mergeObjects, makeObject } = require('@sapphire/utilities');
 const { mongodb } = require('../../../config');
 
 class PersistenceManager {
@@ -56,7 +56,7 @@ class PersistenceManager {
     }
 
     create(table, id, doc = {}) {
-        return this.db.collection(table).insertOne(mergeObjects(this.parseUpdateInput(doc), resolveQuery(id)));
+        return this.db.collection(table).insertOne(mergeObjects(parseUpdateInput(doc), resolveQuery(id)));
     }
 
     delete(table, id) {
@@ -68,7 +68,7 @@ class PersistenceManager {
     }
 
     replace(table, id, doc) {
-        return this.db.collection(table).replaceOne(resolveQuery(id), this.parseUpdateInput(doc));
+        return this.db.collection(table).replaceOne(resolveQuery(id), parseUpdateInput(doc));
     }
 
 }
@@ -86,6 +86,13 @@ function flatten(obj, path = '') {
 
 function parseEngineInput(updated) {
     return Object.assign({}, ...updated.map(entry => ({ [entry.data[0]]: entry.data[1] })));
+}
+
+function parseUpdateInput(updated) {
+    if (isObject(updated)) return updated;
+    const updateObject = {};
+    for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));
+    return updateObject;
 }
 
 module.exports = PersistenceManager;
