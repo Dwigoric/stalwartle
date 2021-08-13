@@ -38,7 +38,7 @@ module.exports = class extends Listener {
     }
 
     async init() {
-        const { id, token } = await this.client.settings.get('errorHook');
+        const { id, token } = this.client.settings.get('errorHook');
         this.hook = new WebhookClient(id, token);
     }
 

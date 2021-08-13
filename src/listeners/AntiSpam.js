@@ -8,16 +8,16 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (!msg.guild) return null;
-        if (!msg.guild.settings.get('automod.antiSpam')) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.get('automod.ignoreMods')) return null;
-        if (msg.guild.settings.get('automod.filterIgnore.antiSpam').includes(msg.channel.id)) return null;
+        if (!this.client.gateways.guilds.get(msg.guild.id).automod.antiSpam) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.client.user)) return null;
 
-        if (msg.member.messages.length <= msg.guild.settings.get('automod.options.antiSpam.limit')) return null;
+        if (msg.member.messages.length <= this.client.gateways.guilds.get(msg.guild.id).automod.options.antiSpam.limit) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
         if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 
-        const { duration, action } = await msg.guild.settings.get('automod.options.antiSpam');
+        const { duration, action } = this.client.gateways.guilds.get(msg.guild.id).automod.options.antiSpam;
         const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.client.emit('modlogAction', {

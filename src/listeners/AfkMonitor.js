@@ -8,17 +8,16 @@ module.exports = class extends Listener {
     }
 
     async run(msg) {
-        if (msg.author.settings.get('afkIgnore').includes(msg.channel.id)) return;
-        if (await this.client.providers.default.has('afk', msg.author.id) && !msg.author.settings.get('afktoggle')) {
+        if (this.client.gateways.users.get(msg.author.id).afkIgnore.includes(msg.channel.id)) return;
+        if (this.client.gateways.afk.get(msg.author.id).timestamp && !this.client.gateways.afk.get(msg.author.id).afktoggle) {
             const wbMsg = `${this.client.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`;
-            this.client.providers.default.delete('afk', msg.author.id);
+            this.client.gateways.afk.delete(msg.author.id);
             msg.send(wbMsg).catch(() => msg.author.send(wbMsg).catch());
         }
 
-        const afkUsers = await this.client.providers.default.getKeys('afk');
-        const afkUser = msg.mentions.users.filter(us => afkUsers.includes(us.id)).first();
+        const afkUser = msg.mentions.users.filter(us => this.client.gateways.afk.cache.has(us.id)).first();
         if (!afkUser) return;
-        const { reason, timestamp } = await this.client.providers.default.get('afk', afkUser.id);
+        const { reason, timestamp } = this.client.gateways.afk.get(afkUser.id);
         msg.send([
             `${this.client.constants.EMOTES.blobping}  ::  ${msg.author}, **${await msg.guild.members.fetch(afkUser.id).then(mb => mb.displayName).catch(() => afkUser.username)}** is currently AFK. [Last seen ${Duration.toNow(timestamp)} ago]`, // eslint-disable-line max-len
             reason ? `**Reason**: ${reason}` : ''

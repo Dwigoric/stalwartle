@@ -8,9 +8,9 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (!msg.guild) return null;
-        if (!msg.guild.settings.get('automod.antiInvite')) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.get('automod.ignoreMods')) return null;
-        if (msg.guild.settings.get('automod.filterIgnore.antiInvite').includes(msg.channel.id)) return null;
+        if (!this.client.gateways.guilds.get(msg.guild.id).automod.antiInvite) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.antiInvite.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.client.user)) return null;
 
         const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;
@@ -18,7 +18,7 @@ module.exports = class extends Listener {
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No sending invites allowed, or I'll punish you!`);
         if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete().catch(() => null);
 
-        const { duration, action } = await msg.guild.settings.get('automod.options.antiInvite');
+        const { duration, action } = this.client.gateways.guilds.get(msg.guild.id).automod.options.antiInvite;
         const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.client.emit('modlogAction', {

@@ -9,10 +9,10 @@ module.exports = class extends Listener {
     /* eslint complexity: ['warn', 25] */
     async run(msg) {
         if (!msg.guild) return null;
-        if (!msg.guild.settings.get('automod.mentionSpam')) return null;
-        if (msg.author.bot && msg.guild.settings.get('automod.ignoreBots')) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.get('automod.ignoreMods')) return null;
-        if (msg.guild.settings.get('automod.filterIgnore.mentionSpam').includes(msg.channel.id)) return null;
+        if (!this.client.gateways.guilds.get(msg.guild.id).automod.mentionSpam) return null;
+        if (msg.author.bot && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreBots) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.client.user)) return null;
 
         if (msg.member.messages.length && msg.member.messages
@@ -32,7 +32,7 @@ module.exports = class extends Listener {
         }
         if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.member.messages.forEach(message => message.delete().catch(() => null));
 
-        const { duration, action } = await msg.guild.settings.get('automod.options.mentionSpam');
+        const { duration, action } = this.client.gateways.guilds.get(msg.guild.id).automod.options.mentionSpam;
         const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.client.emit('modlogAction', {

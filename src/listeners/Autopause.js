@@ -25,16 +25,16 @@ module.exports = class extends Listener {
             return this.client.lavacord.players.get(newState.guild.id).pause(false);
         }
         if (channelMembers.size) return null;
-        const { queue } = await this.client.providers.default.get('music', newState.guild.id);
+        const { queue } = await this.client.gateways.music.get(newState.guild.id);
         if (!queue[0].info.isStream) {
             this.autopaused.add(newState.guild.id);
             this.client.lavacord.players.get(newState.guild.id).pause(true);
         }
-        if (newState.guild.settings.get('donation') >= 10) return null;
+        if (this.client.gateways.guilds.get(newState.guild.id).donation >= 10) return null;
         return this.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
             this.client.lavacord.leave(guild.id);
-            if (queue[0].requester === this.client.user.id) this.client.providers.default.update('music', newState.guild.id, { queue: [] });
+            if (queue[0].requester === this.client.user.id) this.client.gateways.music.update(newState.guild.id, { queue: this.client.gateways.music.defaults.queue });
             return null;
         }, 30000, newState.guild);
     }

@@ -8,19 +8,19 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (!msg.guild) return null;
-        if (!msg.guild.settings.get('automod.antiSwear')) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && msg.guild.settings.get('automod.ignoreMods')) return null;
-        if (msg.guild.settings.get('automod.filterIgnore.antiSwear').includes(msg.channel.id)) return null;
+        if (!this.client.gateways.guilds.get(msg.guild.id).automod.antiSwear) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.antiSwear.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.client.user)) return null;
 
-        let swearArray = msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`);
-        if (msg.guild.settings.get('automod.globalSwears')) swearArray = swearArray.concat(this.client.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+        let swearArray = this.client.gateways.guilds.get(msg.guild.id).automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+        if (this.client.gateways.guilds.get(msg.guild.id).automod.globalSwears) swearArray = swearArray.concat(this.client.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
         const swearRegex = new RegExp(swearArray.join('|'), 'im');
         if (!swearArray.length || !swearRegex.test(msg.content)) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
         if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) msg.delete();
 
-        const { duration, action } = await msg.guild.settings.get('automod.options.antiSwear');
+        const { duration, action } = this.client.gateways.guilds.get(msg.guild.id).automod.options.antiSwear;
         const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.client.emit('modlogAction', {

@@ -5,7 +5,7 @@ module.exports = class IgnoredPrecondition extends Precondition {
     async run(msg, cmd) {
         if (!msg.guild) return this.ok();
         if (cmd.name === 'ignore') return this.ok();
-        if (msg.guild.settings.get('ignored').includes(msg.channel.id)) return this.error({ message: '🔇  ::  This channel is included in this server\'s ignored channels.' });
+        if (this.client.gateways.guilds.get(msg.guild.id).ignored.includes(msg.channel.id)) return this.error({ message: '🔇  ::  This channel is included in this server\'s ignored channels.' });
         return this.ok();
     }
 
