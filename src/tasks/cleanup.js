@@ -89,7 +89,7 @@ module.exports = class MemorySweeper extends Task {
         }
 
         // Modlog database sweeper
-        for (const { id, modlogs } of await this.client.provider\.getAll('modlogs')) {
+        for (const { id, modlogs } of await this.client.provider.getAll('modlogs')) {
             if (modlogs.length) continue;
             this.client.gateways.modlogs.delete(id);
             modlogDBs++;
