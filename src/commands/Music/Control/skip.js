@@ -22,15 +22,15 @@ module.exports = class extends Command {
             this.client.lavacord.players.get(msg.guild.id).stop();
             return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully forcibly skipped the music for this server.`);
         }
-        if (msg.guild.voteskips.includes(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You've already voted to skip the current song.`;
+        if (this.client.cache.guilds.get(msg.guild.id).voteskips.includes(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You've already voted to skip the current song.`;
         const { members } = msg.guild.me.voice.channel;
         if (!members.has(msg.author.id)) throw `${this.client.constants.EMOTES.xmark}  ::  You are not connected to the voice channel I'm playing on.`;
         msg.guild.addVoteskip(msg.author.id, members);
         const requiredVotes = members.filter(mb => !mb.user.bot).size / 2;
-        if (msg.guild.voteskips.length <= requiredVotes) {
+        if (this.client.cache.guilds.get(msg.guild.id).voteskips.length <= requiredVotes) {
             return msg.send([
                 `${this.client.constants.EMOTES.tick}  ::  Successfully added your vote to skip the current song!`,
-                `Current votes: \`${msg.guild.voteskips.length}\`.`,
+                `Current votes: \`${this.client.cache.guilds.get(msg.guild.id).voteskips.length}\`.`,
                 `Required votes: \`${Math.floor(requiredVotes + 1)}\` (more than 50% of current listeners). Bots are not counted.`,
                 `To forcibly skip the song, use \`${msg.guild.settings.get('prefix')}skip --force\`.`
             ]);
