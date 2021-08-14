@@ -34,6 +34,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [query]) {
+		if (msg.guild.player && !msg.guild.me.voice.channel) await this.client.playerManager.leave(msg.guild.id);
 		if (!msg.member.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
 		if (msg.guild.settings.get('music.limitToChannel').length && !msg.guild.settings.get('music.limitToChannel').includes(msg.member.voice.channelID)) {
 			throw `${this.client.constants.EMOTES.xmark}  ::  Your current voice channel is not included in this server's music channels.`;
@@ -50,7 +51,7 @@ module.exports = class extends Command {
 		}
 
 		if (!query) {
-			if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
+			if (msg.guild.player && msg.guild.player.playing) throw `${this.client.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${msg.guild.settings.get('prefix')}leave\` or \`${msg.guild.settings.get('prefix')}stop\` command.`; // eslint-disable-line max-len
 			if (queue.length) {
 				msg.send('🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
 				await this.join(msg);
