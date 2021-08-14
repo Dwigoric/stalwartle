@@ -16,6 +16,9 @@ module.exports = {
     },
 
     client: {
+        userBlacklist: [],
+        guildBlacklist: [],
+        schedules: [],
         changelogs: '',
         bugs: {
             reports: '',
@@ -51,6 +54,9 @@ module.exports = {
     },
 
     guilds: {
+        prefix: 's.',
+        disableNaturalPrefix: false,
+        disabledCommands: [],
         afkChannelOnAfk: false,
         donation: 0,
         globalBans: false,
