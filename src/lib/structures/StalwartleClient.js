@@ -1,6 +1,7 @@
 const { SapphireClient } = require('@sapphire/framework');
 const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
+const { join } = require('path');
 const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
@@ -18,6 +19,13 @@ const CacheManager = require('./cache/CacheManager');
 const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
 
+// Imports for tasks
+const TaskStore = require('./tasks/TaskStore');
+const Task = require('./tasks/Task');
+
+// Imports for schedule
+const Schedule = require('./schedule/Schedule');
+
 class Stalwartle extends SapphireClient {
 
     constructor(clientOptions) {
@@ -31,6 +39,12 @@ class Stalwartle extends SapphireClient {
         this.once('ready', this._initplayer.bind(this));
 
         this.provider = new PersistenceManager();
+        this.schedule = new Schedule(this);
+
+        this._intervals = new Set();
+        this._timeouts = new Set();
+
+        this.stores.register(new TaskStore(Task).registerPath(join(__dirname, '..', 'tasks')));
 
         this.gateways = {
             guilds: new Gateway(this, 'guilds', schema.guilds),
@@ -152,6 +166,31 @@ class Stalwartle extends SapphireClient {
         this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
         if (!this.lavacord.idealNodes.length) this.lavacord.connect();
         return true;
+    }
+
+    setTimeout(fn, delay, ...args) {
+        const timeout = setTimeout(() => {
+            fn(...args);
+            this._timeouts.delete(timeout);
+        }, delay);
+        this._timeouts.add(timeout);
+        return timeout;
+    }
+
+    clearTimeout(timeout) {
+        clearTimeout(timeout);
+        this._timeouts.delete(timeout);
+    }
+
+    setInterval(fn, delay, ...args) {
+        const interval = setInterval(fn, delay, ...args);
+        this._intervals.add(interval);
+        return interval;
+    }
+
+    clearInterval(interval) {
+        clearInterval(interval);
+        this._intervals.delete(interval);
     }
 
 }

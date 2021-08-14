@@ -27,6 +27,12 @@ exports.config = {
     // The guarded commands
     guardedCommands: [],
 
+    // Schedule options
+    schedule: {
+        // The interval, in seconds, for Schedule to run due tasks
+        interval: 1
+    },
+
     /**
      * Caching Options
      */
