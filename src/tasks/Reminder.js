@@ -1,4 +1,4 @@
-const { Task } = require('@sapphire/framework');
+const Task = require('../lib/structures/tasks/Task');
 
 module.exports = class extends Task {
 

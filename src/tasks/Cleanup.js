@@ -1,4 +1,4 @@
-const { Task, Colors } = require('@sapphire/framework');
+const Task = require('../lib/structures/tasks/Task');
 const { Util: { binaryToID } } = require('discord.js');
 
 // THRESHOLD equals to 30 minutes in milliseconds:
@@ -14,15 +14,8 @@ module.exports = class MemorySweeper extends Task {
     constructor(...args) {
         super(...args);
 
-        // The colors to stylise the console's logs
-        this.colors = {
-            red: new Colors({ text: 'lightred' }),
-            yellow: new Colors({ text: 'lightyellow' }),
-            green: new Colors({ text: 'green' })
-        };
-
         // The header with the console colors
-        this.header = new Colors({ text: 'lightblue' }).format('[CACHE AND DATABASE CLEANUP]');
+        this.header = '[CACHE AND DATABASE CLEANUP]';
     }
 
     /* eslint complexity: ['warn', 30] */
@@ -98,13 +91,13 @@ module.exports = class MemorySweeper extends Task {
         // Emit a log
         this.client.emit('log', [
             this.header,
-            `${this.setColor(guildMembers)} [GuildMember]s`,
-            `${this.setColor(users)} [User]s`,
-            // `${this.setColor(lastMessages)} [Last Message]s`,
-            `${this.setColor(presences)} [Presence]s`,
-            `${this.setColor(emojis)} [Emoji]s`,
-            `${this.setColor(musicDBs)} [MusicDB]s`,
-            `${this.setColor(modlogDBs)} [ModlogDB]s`
+            `${guildMembers} [GuildMember]s`,
+            `${users} [User]s`,
+            // `${lastMessages} [Last Message]s`,
+            `${presences} [Presence]s`,
+            `${emojis} [Emoji]s`,
+            `${musicDBs} [MusicDB]s`,
+            `${modlogDBs} [ModlogDB]s`
         ].join('\n'));
 
         // Create a schedule to make this task work
@@ -114,25 +107,6 @@ module.exports = class MemorySweeper extends Task {
 
     async init() {
         this.run();
-    }
-
-    /**
-	 * Set a colour depending on the amount:
-	 * > 1000 : Light Red colour
-	 * > 100  : Light Yellow colour
-	 * < 100  : Green colour
-	 * @since 3.0.0
-	 * @param {number} number The number to colourise
-	 * @returns {string}
-	 */
-    setColor(number) {
-        const text = String(number).padStart(5, ' ');
-        // Light Red color
-        if (number > 1000) return this.colors.red.format(text);
-        // Light Yellow color
-        if (number > 100) return this.colors.yellow.format(text);
-        // Green color
-        return this.colors.green.format(text);
     }
 
 };
