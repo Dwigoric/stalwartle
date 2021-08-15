@@ -30,6 +30,7 @@ module.exports = class extends Listener {
     }
 
     async run() {
+        await this.client.schedule.init();
         if (this.client.application.botPublic) this.client.postStats().then(() => this.client.setInterval(() => this.client.postStats(), 1000 * 60 * 5));
         this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
             this.client.setInterval(() => {
