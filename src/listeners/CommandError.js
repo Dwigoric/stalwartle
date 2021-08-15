@@ -1,4 +1,5 @@
-const { Listener, Events, util: { codeBlock } } = require('@sapphire/framework');
+const { Listener, Events } = require('@sapphire/framework');
+const { codeBlock } = require('@sapphire/utilities');
 const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Listener {
