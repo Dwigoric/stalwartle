@@ -1,4 +1,5 @@
 const { Options } = require('discord.js');
+const { LogLevel } = require('@sapphire/framework');
 
 exports.config = {
     /**
@@ -31,6 +32,11 @@ exports.config = {
     schedule: {
         // The interval, in seconds, for Schedule to run due tasks
         interval: 1
+    },
+
+    // Logger options
+    logger: {
+        level: LogLevel.Info
     },
 
     /**
