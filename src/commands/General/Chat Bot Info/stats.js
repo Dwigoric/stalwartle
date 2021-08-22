@@ -21,17 +21,17 @@ module.exports = class extends Command {
         const now = Date.now();
         msg.sendMessage(new MessageEmbed()
             .setColor('RANDOM')
-            .setAuthor(`${this.client.user.tag}'s Statistics 📟`, this.client.user.displayAvatarURL({ dynamic: true }))
-            .setFooter(`Shard ${((msg.guild ? msg.guild.shard.id : msg.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}`)
+            .setAuthor(`${this.container.client.user.tag}'s Statistics 📟`, this.container.client.user.displayAvatarURL({ dynamic: true }))
+            .setFooter(`Shard ${((msg.guild ? msg.guild.shard.id : msg.channel.shardID) || this.container.client.options.shardId) + 1} / ${this.container.client.options.shardCount}`)
             .setTimestamp()
             .addField('🤖 General Information', [
-                `**Users**: ${(await this.client.userCount()).toLocaleString()}`,
-                `**Servers**: ${(await this.client.guildCount()).toLocaleString()}`,
-                `**Voice Connections**: ${Array.from(this.client.lavacord.players.values()).filter(player => player.playing).length}`
+                `**Users**: ${(await this.container.client.userCount()).toLocaleString()}`,
+                `**Servers**: ${(await this.container.client.guildCount()).toLocaleString()}`,
+                `**Voice Connections**: ${Array.from(this.container.client.lavacord.players.values()).filter(player => player.playing).length}`
             ], true)
             .addField('⏱ Uptime', [
                 `**Host**: ${Duration.toNow(now - (uptime() * 1000))}`,
-                `**Client**: ${Duration.toNow(now - this.client.uptime)}`,
+                `**Client**: ${Duration.toNow(now - this.container.client.uptime)}`,
                 `**Total**: ${Duration.toNow(now - (process.uptime() * 1000))}`
             ], true)
             .addField('💾 Usage', [

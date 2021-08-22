@@ -12,7 +12,7 @@ module.exports = class extends Command {
 
     async run(msg) {
         const now = moment(new Date());
-        const uptime = moment(new Date() - this.client.uptime);
+        const uptime = moment(new Date() - this.container.client.uptime);
         const sinceUp = moment.duration(now.diff(uptime));
         const upDays = sinceUp.days();
         const upHours = sinceUp.hours();

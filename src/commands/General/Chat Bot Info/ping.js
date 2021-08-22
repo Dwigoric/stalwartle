@@ -12,7 +12,7 @@ module.exports = class extends Command {
     async run(msg) {
         const message = await msg.send(`🏓  ::  **Pong!**`);
         msg.send(`🏓  ::  **Pong!** Ping pong game ended! 😃 ~~(I won)~~ | Game Duration: **${(message.editedTimestamp || message.createdTimestamp) -
-			(msg.editedTimestamp || msg.createdTimestamp)}ms**. API Latency: **${Math.round(this.client.ws.ping)}ms**.`);
+			(msg.editedTimestamp || msg.createdTimestamp)}ms**. API Latency: **${Math.round(this.container.client.ws.ping)}ms**.`);
     }
 
 };

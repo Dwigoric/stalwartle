@@ -13,8 +13,8 @@ module.exports = class extends Command {
     }
 
     async run(msg) {
-        const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading image...`);
-        const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${Boolean(msg.flagArgs.gif)}`, { headers: { Authorization: `Bearer ${this.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
+        const message = await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading image...`);
+        const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${Boolean(msg.flagArgs.gif)}`, { headers: { Authorization: `Bearer ${this.container.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
         await msg.channel.sendFile(result.image_url, undefined, `<${result.source}>`);
         message.delete();
     }

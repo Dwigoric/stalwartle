@@ -9,11 +9,11 @@ module.exports = class extends Command {
             description: 'Returns a random reddit post on a given subreddit.',
             usage: '<Subreddit:str>'
         });
-        this.errorMessage = `${this.client.constants.EMOTES.xmark}  ::  There was an error. Reddit may be down, or the subreddit doesn't exist.`;
+        this.errorMessage = `${this.container.client.constants.EMOTES.xmark}  ::  There was an error. Reddit may be down, or the subreddit doesn't exist.`;
     }
 
     async run(msg, [subreddit]) {
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading reddit post...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading reddit post...`);
         const { data } = await fetch(`https://www.reddit.com/r/${subreddit}/random.json`)
             .then(res => res.json())
             .then(res => {
@@ -22,9 +22,9 @@ module.exports = class extends Command {
             })
             .catch(() => { throw this.errorMessage; });
 
-        if (data.over_18 && !msg.channel.nsfw) throw `${this.client.constants.EMOTES.xmark}  ::  The post contains NSFW content and this channel is not marked as NSFW.`;
+        if (data.over_18 && !msg.channel.nsfw) throw `${this.container.client.constants.EMOTES.xmark}  ::  The post contains NSFW content and this channel is not marked as NSFW.`;
 
-        if (Boolean(msg.guild) && !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) return msg.sendMessage(`***${data.title}***\n\n${data.url}`);
+        if (Boolean(msg.guild) && !msg.channel.permissionsFor(this.container.client.user).has('EMBED_LINKS')) return msg.sendMessage(`***${data.title}***\n\n${data.url}`);
 
         const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
         return msg.sendEmbed(new MessageEmbed()

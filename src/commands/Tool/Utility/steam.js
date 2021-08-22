@@ -15,21 +15,21 @@ module.exports = class extends Command {
     }
 
     async run(msg, [game]) {
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading game from Steam...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading game from Steam...`);
 
         const params = new URLSearchParams();
         params.set('term', game);
-        const steam = new SteamAPI(this.client.auth.steamAPIkey),
+        const steam = new SteamAPI(this.container.client.auth.steamAPIkey),
             embed = new MessageEmbed(),
             steamSearch = await fetch(`http://store.steampowered.com/search?${params}`).then(res => res.text()).catch(() => null);
 
         if (steamSearch) {
             const hrefData = cheerio.load(steamSearch)('#search_result_container > #search_resultsRows > .search_result_row').attr('href');
 
-            if (!hrefData) throw `${this.client.constants.EMOTES.xmark}  ::  Steam game not found!`;
+            if (!hrefData) throw `${this.container.client.constants.EMOTES.xmark}  ::  Steam game not found!`;
 
             const gameID = hrefData.split('/')[4],
-                steamData = await steam.getGameDetails(gameID).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! I could not find that game in Steam.`; });
+                steamData = await steam.getGameDetails(gameID).catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! I could not find that game in Steam.`; });
 
             const genres = [],
                 platforms = [];

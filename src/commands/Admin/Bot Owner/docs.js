@@ -18,10 +18,10 @@ module.exports = class extends Command {
     }
 
     init() {
-        this.username = this.client.user.username;
-        this.avatar = (size) => this.client.user.avatarURL({ format: 'png', size: size });
-        this.prefix = this.client.options.prefix;
-        this.invite = this.client.invite;
+        this.username = this.container.client.user.username;
+        this.avatar = (size) => this.container.client.user.avatarURL({ format: 'png', size: size });
+        this.prefix = this.container.client.options.prefix;
+        this.invite = this.container.client.invite;
     }
 
     finish(data, stopwatch, format) {
@@ -37,9 +37,9 @@ module.exports = class extends Command {
         let categories;
         const commands = normalize ? [] : {};
         if (normalize) categories = [];
-        const commandNames = Array.from(this.client.commands.keys());
+        const commandNames = Array.from(this.container.client.commands.keys());
         await Promise.all(
-            this.client.commands
+            this.container.client.commands
                 .filter(cmd => !cmd.permissionLevel || (cmd.permissionLevel &&
 					cmd.permissionLevel < permissionLevel))
                 .map(cmd => {

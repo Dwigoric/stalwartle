@@ -26,7 +26,7 @@ module.exports = class extends Command {
         const embed = new MessageEmbed()
             .setColor(gif[1])
             .setImage(gif[0])
-            .setAuthor(`${this.client.user.username}'s Lie Detector`, this.client.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor(`${this.container.client.user.username}'s Lie Detector`, this.container.client.user.displayAvatarURL({ dynamic: true }))
             .setDescription(lie)
             .setFooter(`It's ${gif[1] === 0x2ECC71 ? 'the truth' : 'a lie'}!`);
 

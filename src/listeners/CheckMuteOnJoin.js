@@ -7,16 +7,16 @@ module.exports = class extends Listener {
     }
 
     async run(member) {
-        if (!this.client.gateways.guilds.get(member.guild.id).muteRole) return;
-        if (!this.client.gateways.guilds.get(member.guild.id).muted.includes(member.user.id)) return;
+        if (!this.container.client.gateways.guilds.get(member.guild.id).muteRole) return;
+        if (!this.container.client.gateways.guilds.get(member.guild.id).muted.includes(member.user.id)) return;
 
         if (member.guild.owner.partial) await member.guild.owner.fetch();
         if (member.guild.owner.user.partial) await member.guild.owner.user.fetch();
 
-        const muteRole = member.guild.roles.cache.get(this.client.gateways.guilds.get(member.guild.id).muteRole);
+        const muteRole = member.guild.roles.cache.get(this.container.client.gateways.guilds.get(member.guild.id).muteRole);
         if (!muteRole) {
             member.guild.owner.user.send('⚠  ::  Whoops! The mute role has been deleted. The muterole setting has been reset.').catch(() => null);
-            this.client.gateways.guilds.update(member.guild.id, { muteRole: this.client.gateways.guilds.defaults.muteRole });
+            this.container.client.gateways.guilds.update(member.guild.id, { muteRole: this.container.client.gateways.guilds.defaults.muteRole });
         } else if (muteRole.position >= member.guild.me.roles.highest.position) {
             member.guild.owner.user.send(`⚠  ::  The mute role **${muteRole.name}** is higher than me, so I couldn't give ${member.user.tag} the mute role.`);
         } else {

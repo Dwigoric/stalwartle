@@ -13,7 +13,7 @@ module.exports = class extends Listener {
         if (!newState.member.voice.channel) return null;
         if (!newState.guild.afkChannelID) return null;
         if (newState.channelID === newState.guild.afkChannelID) return null;
-        if (!this.client.gateways.afk.get(newState.user.id).timestamp) return null;
+        if (!this.container.client.gateways.afk.get(newState.user.id).timestamp) return null;
         return newState.setChannel(newState.guild.afkChannelID, 'Moved to AFK channel due to AFK status');
     }
 

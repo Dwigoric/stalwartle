@@ -18,14 +18,14 @@ module.exports = class extends Command {
 
     async run(msg, [suggestion]) {
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
-        this.client.channels.cache.get(this.client.settings.suggestions.reports).send([
+        this.container.client.channels.cache.get(this.container.client.settings.suggestions.reports).send([
             `💡  ::  Suggestion by **${msg.author.tag}** | ${msg.author.id}`,
             `\t\t\tServer: ${server}`,
             `\`\`\`${suggestion}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Sending suggestion...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Sending suggestion...`);
         msg.send([
-            `${this.client.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
+            `${this.container.client.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'
         ].join('\n'));
     }

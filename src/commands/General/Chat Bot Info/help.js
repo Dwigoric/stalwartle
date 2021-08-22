@@ -28,21 +28,21 @@ module.exports = class extends Command {
         if (category instanceof Command) {
             return msg.send({
                 embed: new MessageEmbed()
-                    .setTitle(`The \`${this.client.options.prefix}${category.name}\` command`)
+                    .setTitle(`The \`${this.container.client.options.prefix}${category.name}\` command`)
                     .setDescription(isFunction(category.description) ? category.description(msg.language) : category.description)
-                    .addField('Usage', `\`${this.client.options.prefix}${category.usage}\``)
+                    .addField('Usage', `\`${this.container.client.options.prefix}${category.usage}\``)
                     .addField('Additional Information', isFunction(category.extendedHelp) ? category.extendedHelp(msg.language) : category.extendedHelp)
                     .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
                     .setFooter(`Classification: ${category.category} → ${category.subCategory}`)
             });
         }
 
-        if (!('all' in msg.flagArgs) && msg.guild && msg.channel.permissionsFor(this.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
+        if (!('all' in msg.flagArgs) && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
             // Finish the previous handler
             const previousHandler = this.handlers.get(msg.author.id);
             if (previousHandler) previousHandler.stop();
 
-            const handler = await (await this.buildDisplay(msg, [category, subcategory])).run(await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading commands...`), {
+            const handler = await (await this.buildDisplay(msg, [category, subcategory])).run(await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading commands...`), {
                 filter: (reaction, user) => user.id === msg.author.id,
                 time
             });
@@ -55,8 +55,8 @@ module.exports = class extends Command {
     }
 
     async originalHelp(msg, [category, subcategory]) {
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading commands...`);
-        const method = this.client.user.bot ? 'author' : 'channel';
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading commands...`);
+        const method = this.container.client.user.bot ? 'author' : 'channel';
         const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
         const categories = Object.keys(help);
         const helpMessage = [];
@@ -76,22 +76,22 @@ module.exports = class extends Command {
                     );
                 }
                 helpMessage.push([
-                    this.client.application.botPublic ? [
-                        `\nWant to add ${this.client.user.username} to your own server or to a server you manage? If you have **Manage Server** permissions, you can add this bot by using the link:`,
-                        `<https://bit.ly/${this.client.user.username.split(' ').join('-')}>`,
+                    this.container.client.application.botPublic ? [
+                        `\nWant to add ${this.container.client.user.username} to your own server or to a server you manage? If you have **Manage Server** permissions, you can add this bot by using the link:`,
+                        `<https://bit.ly/${this.container.client.user.username.split(' ').join('-')}>`,
                         '\nNeed help or has ideas for the bot? Just want somewhere to hang out? Be with us here:',
-                        `**${this.client.guilds.cache.get('502895390807293963').name}** ⇒ https://discord.gg/KDWGvV8`,
-                        `\nUse the command \`${this.client.options.prefix}bug\` to report a bug and \`${this.client.options.prefix}suggest\` if you have suggestions.`,
+                        `**${this.container.client.guilds.cache.get('502895390807293963').name}** ⇒ https://discord.gg/KDWGvV8`,
+                        `\nUse the command \`${this.container.client.options.prefix}bug\` to report a bug and \`${this.container.client.options.prefix}suggest\` if you have suggestions.`,
                         '\n__**DONATION PERKS**__',
                         '$3 ⇒ Enable the history and playlist features.',
                         '$5 ⇒ Removal of 5-hour limit for each track in music. ($3 perk is included)',
                         '$8 ⇒ Autoplay songs (add related videos when queue is empty). Only applicable for YouTube videos. ($3 and $5 perks are included)',
                         '$10 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel; unless the bot is rebooted. ($3, $5, and $8 perks are included)',
                         '*Please pay at <https://www.paypal.com/donate?hosted_button_id=EPD2AY6LRNDGS> OR <https://ko-fi.com/dwigoric> OR <https://patreon.com/Dwigoric>.*',
-                        `*AFTER donating, contact ${(await this.client.users.fetch(this.client.options.ownerID)).tag} or go to my support server to avail of these perks.*`
+                        `*AFTER donating, contact ${(await this.container.client.users.fetch(this.container.client.options.ownerID)).tag} or go to my support server to avail of these perks.*`
                     ].join('\n') : '',
-                    `\nBot developed by **${this.client.application.owner}**, from 🇵🇭 with ❤`,
-                    `💡 **ProTip #1**: By mentioning "${this.client.user}", I will give the server's current prefix.`,
+                    `\nBot developed by **${this.container.client.application.owner}**, from 🇵🇭 with ❤`,
+                    `💡 **ProTip #1**: By mentioning "${this.container.client.user}", I will give the server's current prefix.`,
                     '💡 **ProTip #2**: Prefixes are **case-insensitive**, and **unprefixed commands** are supported **in DMs**.',
                     "💡 **ProTip #3**: By using `s.help (command)`, you can get the command's additional information!",
                     '💡 **ProTip #4**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!',
@@ -102,25 +102,25 @@ module.exports = class extends Command {
         }
 
         return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-            .then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.send(msg.language.get('COMMAND_HELP_DM')); })
-            .catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.send(msg.language.get('COMMAND_HELP_NODM')); });
+            .then(() => { if (msg.channel.type !== 'dm' && this.container.client.user.bot) msg.send(msg.language.get('COMMAND_HELP_DM')); })
+            .catch(() => { if (msg.channel.type !== 'dm' && this.container.client.user.bot) msg.send(msg.language.get('COMMAND_HELP_NODM')); });
     }
 
     async buildHelp(msg, [category, subcategory]) {
         const help = {};
 
-        const commandNames = [...this.client.commands.keys()];
+        const commandNames = [...this.container.client.commands.keys()];
         const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
         let cmds;
-        if (!category && !subcategory) cmds = this.client.commands;
+        if (!category && !subcategory) cmds = this.container.client.commands;
         if (category) {
-            if (!this.client.commands.map(cmd => cmd.category).includes(category)) throw `${this.client.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
-            cmds = this.client.commands.filter(cmd => cmd.category === category);
+            if (!this.container.client.commands.map(cmd => cmd.category).includes(category)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
+            cmds = this.container.client.commands.filter(cmd => cmd.category === category);
         }
         if (subcategory) {
-            if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
-            cmds = this.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
+            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            cmds = this.container.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
         }
 
         await Promise.all(cmds.map(async command => {
@@ -130,10 +130,10 @@ module.exports = class extends Command {
             if (!Object.prototype.hasOwnProperty.call(help, cat)) help[cat] = {};
             if (!Object.prototype.hasOwnProperty.call(help[cat], subCat)) help[cat][subCat] = [];
             const description = typeof command.description === 'function' ? command.description(msg.language) : command.description;
-            return help[cat][subCat].push(`\`${this.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
+            return help[cat][subCat].push(`\`${this.container.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
         }));
 
-        if (!Object.keys(help).length) throw `${this.client.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`;
+        if (!Object.keys(help).length) throw `${this.container.client.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`;
         return help;
     }
 
@@ -160,18 +160,18 @@ module.exports = class extends Command {
     }
 
     async _fetchCommands(message, [maincategory, subcategory]) {
-        const run = this.client.inhibitors.run.bind(this.client.inhibitors, message);
+        const run = this.container.client.inhibitors.run.bind(this.container.client.inhibitors, message);
         const commands = new Map();
 
         let cmds;
-        if (!maincategory && !subcategory) cmds = this.client.commands;
+        if (!maincategory && !subcategory) cmds = this.container.client.commands;
         if (maincategory) {
-            if (!this.client.commands.map(cmd => cmd.category).includes(maincategory)) throw `${this.client.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
-            cmds = this.client.commands.filter(cmd => cmd.category === maincategory);
+            if (!this.container.client.commands.map(cmd => cmd.category).includes(maincategory)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
+            cmds = this.container.client.commands.filter(cmd => cmd.category === maincategory);
         }
         if (subcategory) {
-            if (!this.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
-            cmds = this.client.commands.filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
+            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            cmds = this.container.client.commands.filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
         }
 
         await Promise.all(cmds.map(command => run(command, true)

@@ -20,14 +20,14 @@ module.exports = class extends Command {
         const timezone = msg.author.settings.get('timezone');
         const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading movie...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading movie...`);
 
         const params = new URLSearchParams();
-        params.set('api_key', this.client.auth.tmdbAPIkey);
+        params.set('api_key', this.container.client.auth.tmdbAPIkey);
         params.set('query', query);
         const { results } = await fetch(`https://api.themoviedb.org/3/search/movie?${params}`).then(res => res.json());
         const short = results[page - 1];
-        if (!short) throw `${this.client.constants.EMOTES.xmark}  ::  I couldn't find a movie with that title in page ${page}.`;
+        if (!short) throw `${this.container.client.constants.EMOTES.xmark}  ::  I couldn't find a movie with that title in page ${page}.`;
         params.delete('query');
         const tmdb = await fetch(`https://api.themoviedb.org/3/movie/${short.id}?${params}`).then(res => res.json());
 
@@ -43,7 +43,7 @@ module.exports = class extends Command {
             .setTitle(`${tmdb.title} (${page} out of ${results.length} result${results.length === 1 ? '' : 's'})`)
             .setURL(url)
             .setDescription(`[Poster Here](${poster})  ::  ${trim(tmdb.overview, 1024)}`)
-            .setFooter(`${this.client.user.username} uses the TMDb API but is not endorsed nor certified by TMDb.`, 'https://www.themoviedb.org/assets/1/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png'); // eslint-disable-line max-len
+            .setFooter(`${this.container.client.user.username} uses the TMDb API but is not endorsed nor certified by TMDb.`, 'https://www.themoviedb.org/assets/1/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png'); // eslint-disable-line max-len
         if (tmdb.title !== tmdb.original_title) embed.addField('Original Title', tmdb.original_title, true);
         embed
             .addField('Language', tmdb.original_language.toUpperCase(), true)

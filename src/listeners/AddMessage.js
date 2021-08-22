@@ -9,7 +9,7 @@ module.exports = class extends Listener {
     run(msg) {
         if (!msg.member) return;
         if (!msg.guild.settings.get('automod.antiSpam') && !msg.guild.settings.get('automod.mentionSpam')) return;
-        this.client.cache.members.get(msg.member.id).addMessage(msg);
+        this.container.client.cache.members.get(msg.member.id).addMessage(msg);
     }
 
 };

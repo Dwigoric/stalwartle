@@ -17,7 +17,7 @@ module.exports = class extends Command {
 
         this.createCustomResolver('guild', (arg, possible, msg, [action]) => {
             if (['id'].includes(action) || !arg) return undefined;
-            return this.client.arguments.get('guild').run(arg, possible, msg);
+            return this.container.client.arguments.get('guild').run(arg, possible, msg);
         });
     }
 

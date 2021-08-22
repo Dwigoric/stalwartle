@@ -40,13 +40,13 @@ module.exports = class extends Listener {
             .addField('Large Guild', guild.large ? '✅' : '❌', true)
             .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
             .addField('Guild Members', guild.memberCount, true)
-            .addField('New Guild Count', await this.client.guildCount(), true)
+            .addField('New Guild Count', await this.container.client.guildCount(), true)
             .setTimestamp()
         );
     }
 
     async init() {
-        const { id, token } = this.client.settings.guildHook;
+        const { id, token } = this.container.client.settings.guildHook;
         this.hook = new WebhookClient(id, token);
     }
 

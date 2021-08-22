@@ -11,15 +11,15 @@ module.exports = class extends Command {
     }
 
     async run(msg) {
-        if (!this.client.application.botPublic) throw `${this.client.constants.EMOTES.xmark}  ::  **${this.client.user.tag}** is not public.`;
+        if (!this.container.client.application.botPublic) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`;
         return msg.sendEmbed(new MessageEmbed()
-            .setAuthor(`Upvote ${this.client.user.username}`, this.client.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor(`Upvote ${this.container.client.user.username}`, this.container.client.user.displayAvatarURL({ dynamic: true }))
             .setDescription([
                 'Aside from donations, you can support me by simply upvoting me on bot listing sites!',
-                `• [DiscordBotList.org](https://discordbots.org/bot/${this.client.user.id}/vote)`,
-                `• [DiscordBotList.com](https://discordbotlist.com/bots/${this.client.user.id}/upvote)`,
-                `• [botlist.space](https://botlist.space/bot/${this.client.user.id})`,
-                `• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.client.user.id})`,
+                `• [DiscordBotList.org](https://discordbots.org/bot/${this.container.client.user.id}/vote)`,
+                `• [DiscordBotList.com](https://discordbotlist.com/bots/${this.container.client.user.id}/upvote)`,
+                `• [botlist.space](https://botlist.space/bot/${this.container.client.user.id})`,
+                `• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.container.client.user.id})`,
                 'Thank you!'
             ])
         );

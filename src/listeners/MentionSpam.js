@@ -9,42 +9,42 @@ module.exports = class extends Listener {
     /* eslint complexity: ['warn', 25] */
     async run(msg) {
         if (!msg.guild) return null;
-        if (!this.client.gateways.guilds.get(msg.guild.id).automod.mentionSpam) return null;
-        if (msg.author.bot && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreBots) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && this.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
-        if (this.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
-        if (msg.author.equals(this.client.user)) return null;
+        if (!this.container.client.gateways.guilds.get(msg.guild.id).automod.mentionSpam) return null;
+        if (msg.author.bot && this.container.client.gateways.guilds.get(msg.guild.id).automod.ignoreBots) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.container.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.container.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
+        if (msg.author.equals(this.container.client.user)) return null;
 
-        if (this.client.cache.members.get(msg.member.id).messages.length && this.client.cache.members.get(msg.member.id).messages
+        if (this.container.client.cache.members.get(msg.member.id).messages.length && this.container.client.cache.members.get(msg.member.id).messages
             .map(message => message.mentions.users ? message.mentions.users.size : 0 + message.mentions.roles ? message.mentions.roles.size : 0)
             .reduce((prev, val) => prev + val) < 10) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! Don't spam mentions, ${msg.author}. Got it, ${msg.author}?`);
         if (!msg.member.bannable) {
-            return this.client.emit('modlogAction', {
-                command: this.client.commands.get('warn'),
+            return this.container.client.emit('modlogAction', {
+                command: this.container.client.commands.get('warn'),
                 channel: msg.channel,
                 guild: msg.guild,
                 content: msg.content.length > 900 ? [
-                    `**Roles**: ${this.client.cache.members.get(msg.member.id).messages.map(message => message.mentions.roles.map(rl => rl.toString()).join(', ')).join(', ')}`,
-                    `**Users**: ${this.client.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
+                    `**Roles**: ${this.container.client.cache.members.get(msg.member.id).messages.map(message => message.mentions.roles.map(rl => rl.toString()).join(', ')).join(', ')}`,
+                    `**Users**: ${this.container.client.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
                 ].join('\n') : msg.content
             }, msg.author, 'Spamming mentions with the MentionSpam enabled (member has higher permissions so I could not ban them)', null);
         }
-        if (msg.channel.permissionsFor(this.client.user).has('MANAGE_MESSAGES')) this.client.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
+        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.client.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
 
-        const { duration, action } = this.client.gateways.guilds.get(msg.guild.id).automod.options.mentionSpam;
-        const actionDuration = duration ? await this.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
+        const { duration, action } = this.container.client.gateways.guilds.get(msg.guild.id).automod.options.mentionSpam;
+        const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
-            case 'warn': return this.client.emit('modlogAction', {
-                command: this.client.commands.get('warn'),
+            case 'warn': return this.container.client.emit('modlogAction', {
+                command: this.container.client.commands.get('warn'),
                 channel: msg.channel,
                 guild: msg.guild,
                 content: msg.content
             }, msg.author, 'Spamming mentions with MentionSpam enabled', null);
-            case 'kick': return this.client.commands.get('kick').run(msg, [msg.author, ['Spamming mentions with MentionSpam enabled']]).catch(err => msg.send(err));
-            case 'mute': return this.client.commands.get('mute').run(msg, [msg.member, actionDuration, 'Spamming mentions with MentionSpam enabled'], true).catch(err => msg.send(err));
-            case 'ban': return this.client.commands.get('ban').run(msg, [msg.author, null, actionDuration, ['Spamming mentions with MentionSpam enabled']], true).catch(err => msg.send(err));
-            case 'softban': return this.client.commands.get('softban').run(msg, [msg.author, null, ['Spamming mentions with MentionSpam enabled']]).catch(err => msg.send(err));
+            case 'kick': return this.container.client.commands.get('kick').run(msg, [msg.author, ['Spamming mentions with MentionSpam enabled']]).catch(err => msg.send(err));
+            case 'mute': return this.container.client.commands.get('mute').run(msg, [msg.member, actionDuration, 'Spamming mentions with MentionSpam enabled'], true).catch(err => msg.send(err));
+            case 'ban': return this.container.client.commands.get('ban').run(msg, [msg.author, null, actionDuration, ['Spamming mentions with MentionSpam enabled']], true).catch(err => msg.send(err));
+            case 'softban': return this.container.client.commands.get('softban').run(msg, [msg.author, null, ['Spamming mentions with MentionSpam enabled']]).catch(err => msg.send(err));
         }
         return msg;
     }

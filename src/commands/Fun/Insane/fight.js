@@ -13,9 +13,9 @@ module.exports = class extends Command {
         });
 
         this.createCustomResolver('user', (arg, possible, message, [action]) => {
-            if (!action && !arg) throw `${this.client.constants.EMOTES.xmark}  ::  Please tell me who you want to challenge to a fight.`;
+            if (!action && !arg) throw `${this.container.client.constants.EMOTES.xmark}  ::  Please tell me who you want to challenge to a fight.`;
             if (action) return undefined;
-            return this.client.arguments.get('user').run(arg, possible, message);
+            return this.container.client.arguments.get('user').run(arg, possible, message);
         });
 
         this.getRandomInt = (min, max) => {
@@ -58,16 +58,16 @@ module.exports = class extends Command {
 
     async run(msg, [opponent]) {
         // Restrictions
-        if (opponent.bot) throw `${this.client.constants.EMOTES.xmark}  ::  You cannot challenge bots to a fight. We will automatically win!`;
-        if (!opponent.settings.get('acceptFights')) throw `${this.client.constants.EMOTES.xmark}  ::  This person is currently not accepting fight requests.`;
-        if (msg.channel.id in currentFights) throw `${this.client.constants.EMOTES.xmark}  ::  There is a fight ongoing in this channel. Please wait until the fight is over.`;
-        if (opponent.equals(msg.author)) throw `${this.client.constants.EMOTES.xmark}  ::  You cannot fight against yourself.`;
+        if (opponent.bot) throw `${this.container.client.constants.EMOTES.xmark}  ::  You cannot challenge bots to a fight. We will automatically win!`;
+        if (!opponent.settings.get('acceptFights')) throw `${this.container.client.constants.EMOTES.xmark}  ::  This person is currently not accepting fight requests.`;
+        if (msg.channel.id in currentFights) throw `${this.container.client.constants.EMOTES.xmark}  ::  There is a fight ongoing in this channel. Please wait until the fight is over.`;
+        if (opponent.equals(msg.author)) throw `${this.container.client.constants.EMOTES.xmark}  ::  You cannot fight against yourself.`;
 
         currentFights[msg.channel.id] = {
             challenger: msg.author,
             opponent
         };
-        this.client.setTimeout(() => {
+        this.container.client.setTimeout(() => {
             if (currentFights[msg.channel.id] && currentFights[msg.channel.id].challenger === msg.author && currentFights[msg.channel.id].opponent === opponent) {
                 delete currentFights[msg.channel.id];
                 return msg.send(`⚔  ::  Opponent has not replied within 30 seconds. The match is cancelled.`);
@@ -143,17 +143,17 @@ module.exports = class extends Command {
                 }
                 if (responses.first() && responses.first().content.toLowerCase() in this.moves) {
                     if (this.moves[responses.first().content.toLowerCase()].stamina > currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina) {
-                        channel.send(`${this.client.constants.EMOTES.xmark}  ::  Your stamina is too low. Please choose another move.`);
+                        channel.send(`${this.container.client.constants.EMOTES.xmark}  ::  Your stamina is too low. Please choose another move.`);
                         responses.first().content = false;
                         continue;
                     }
                     if (responses.first().content.toLowerCase() === 'rest' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina === 20) {
-                        channel.send(`${this.client.constants.EMOTES.xmark}  ::  You're too pumped up to rest! Spend your energy. Please choose another move.`);
+                        channel.send(`${this.container.client.constants.EMOTES.xmark}  ::  You're too pumped up to rest! Spend your energy. Please choose another move.`);
                         responses.first().content = false;
                         continue;
                     }
                     if (responses.first().content.toLowerCase() === 'bandage' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health === 100) {
-                        channel.send(`${this.client.constants.EMOTES.xmark}  ::  You're at your best shape! Please choose another move.`);
+                        channel.send(`${this.container.client.constants.EMOTES.xmark}  ::  You're at your best shape! Please choose another move.`);
                         responses.first().content = false;
                         continue;
                     }
@@ -245,21 +245,21 @@ module.exports = class extends Command {
 
     async accept(msg) {
         // eslint-disable-next-line max-len
-        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
+        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.container.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
         await this.fight(msg.channel, currentFights[msg.channel.id].challenger, currentFights[msg.channel.id].opponent);
         return delete currentFights[msg.channel.id];
     }
 
     async deny(msg) {
         // eslint-disable-next-line max-len
-        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
-        msg.send(`${this.client.constants.EMOTES.tick}  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
+        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.container.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
+        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
         return delete currentFights[msg.channel.id];
     }
 
     async cancel(msg) {
         // eslint-disable-next-line max-len
-        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].challenger)) throw `${this.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
+        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].challenger)) throw `${this.container.client.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
         msg.send(`⚔  ::  ${currentFights[msg.channel.id].challenger.tag} has cancelled their match with ${currentFights[msg.channel.id].opponent.tag}.`);
         return delete currentFights[msg.channel.id];
     }

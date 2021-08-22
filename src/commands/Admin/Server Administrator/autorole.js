@@ -26,13 +26,13 @@ module.exports = class extends Command {
     async setRole(msg, role, type) {
         if (role === 'remove') {
             msg.guild.settings.reset(`autorole.${type}`);
-            return msg.send(`${this.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
+            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
         }
-        if (!role) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
-        if (role.position >= msg.guild.me.roles.highest.position) throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`;
-        if (role.position >= msg.member.roles.highest.position) throw `${this.client.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`;
+        if (!role) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
+        if (role.position >= msg.guild.me.roles.highest.position) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`;
+        if (role.position >= msg.member.roles.highest.position) throw `${this.container.client.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`;
         msg.guild.settings.update(`autorole.${type}`, role.id, msg.guild);
-        return msg.send(`${this.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
+        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
     }
 
 

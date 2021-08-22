@@ -14,13 +14,13 @@ module.exports = class extends Command {
     }
 
     async run(msg, [user, ...reason]) {
-        if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) throw `${this.client.constants.EMOTES.xmark}  ::  This user isn't banned from this server.`;
+        if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) throw `${this.container.client.constants.EMOTES.xmark}  ::  This user isn't banned from this server.`;
 
         reason = reason.length ? reason.join(this.usageDelim) : null;
 
         await msg.guild.members.unban(user, reason);
-        msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
-        return this.client.emit('modlogAction', msg, user, reason);
+        msg.channel.send(`${this.container.client.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
+        return this.container.client.emit('modlogAction', msg, user, reason);
     }
 
 };

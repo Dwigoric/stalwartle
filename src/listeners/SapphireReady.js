@@ -30,12 +30,12 @@ module.exports = class extends Listener {
     }
 
     async run() {
-        await this.client.schedule.init();
-        if (this.client.application.botPublic) this.client.postStats().then(() => this.client.setInterval(() => this.client.postStats(), 1000 * 60 * 5));
-        this.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
-            this.client.setInterval(() => {
+        await this.container.client.schedule.init();
+        if (this.container.client.application.botPublic) this.container.client.postStats().then(() => this.container.client.setInterval(() => this.container.client.postStats(), 1000 * 60 * 5));
+        this.container.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
+            this.container.client.setInterval(() => {
                 const status = statuses[Math.floor(Math.random() * statuses.length)];
-                this.client.user.setActivity(`${status.name} | ${this.client.options.prefix}help`, { type: status.type });
+                this.container.client.user.setActivity(`${status.name} | ${this.container.client.options.prefix}help`, { type: status.type });
             }, 60000);
         });
     }

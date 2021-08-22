@@ -17,11 +17,11 @@ module.exports = class extends Command {
 
     async run(msg, [repUser, repMsg, ...repCom]) {
         const reportChans = {
-            [this.client.settings.bugs.reports]: this.client.settings.bugs.processed,
-            [this.client.settings.suggestions.reports]: this.client.settings.suggestions.processed
+            [this.container.client.settings.bugs.reports]: this.container.client.settings.bugs.processed,
+            [this.container.client.settings.suggestions.reports]: this.container.client.settings.suggestions.processed
         };
-        if (!repMsg.author.equals(this.client.user)) return null;
-        if (!Object.keys(reportChans).includes(msg.channel.id)) throw `${this.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`;
+        if (!repMsg.author.equals(this.container.client.user)) return null;
+        if (!Object.keys(reportChans).includes(msg.channel.id)) throw `${this.container.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`;
         const embed = new MessageEmbed()
             .setColor('RANDOM')
             .setAuthor(repUser.tag, repUser.displayAvatarURL({ dynamic: true }))
@@ -33,9 +33,9 @@ module.exports = class extends Command {
             return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
         }) : null;
         if (attachments && attachments.size) embed.setImage(attachments.first().url);
-        if (!msg.flagArgs.deny) this.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
+        if (!msg.flagArgs.deny) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
         msg.delete();
-        msg.send(`${this.client.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => {
+        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => {
             setTimeout(() => {
                 sent.delete();
             }, 5000);

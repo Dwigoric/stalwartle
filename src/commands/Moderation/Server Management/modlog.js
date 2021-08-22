@@ -25,13 +25,13 @@ module.exports = class extends Command {
 
     async run(msg, [user]) {
         const timezone = msg.author.settings.get('timezone');
-        let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id)));
+        let list = await this.container.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id)));
 
         if (typeof user === 'number') {
             const modlog = list[user - 1];
-            if (!modlog) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
-            const _user = await this.client.users.fetch(modlog.user).catch(() => null);
-            const moderator = await this.client.users.fetch(modlog.moderator).catch(() => null);
+            if (!modlog) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
+            const _user = await this.container.client.users.fetch(modlog.user).catch(() => null);
+            const moderator = await this.container.client.users.fetch(modlog.moderator).catch(() => null);
             return msg.send({
                 embed: new MessageEmbed()
                     .setColor('RANDOM')
@@ -47,17 +47,17 @@ module.exports = class extends Command {
             });
         }
 
-        if (msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type)) list = list.filter(ml => ml.type === msg.flagArgs.type); // eslint-disable-line max-len
+        if (msg.flagArgs.type && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type)) list = list.filter(ml => ml.type === msg.flagArgs.type); // eslint-disable-line max-len
         if (user) list = list.filter(ml => ml.user === user.id);
         if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
-        const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading moderation logs...`);
+        const message = await msg.channel.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading moderation logs...`);
         const display = new RichDisplay(new MessageEmbed()
             .setColor('RANDOM')
-            .setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
+            .setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
 
         await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
-            const _user = this.client.users.cache.get(modlog.user) || await this.client.users.fetch(modlog.user).catch(() => null);
-            const moderator = this.client.users.cache.get(modlog.moderator) || await this.client.users.fetch(modlog.moderator).catch(() => null);
+            const _user = this.container.client.users.cache.get(modlog.user) || await this.container.client.users.fetch(modlog.user).catch(() => null);
+            const moderator = this.container.client.users.cache.get(modlog.moderator) || await this.container.client.users.fetch(modlog.moderator).catch(() => null);
             return [
                 `__**Case #${modlog.id}**__`,
                 `Type: ${toTitleCase(modlog.type)}`,
@@ -76,7 +76,7 @@ module.exports = class extends Command {
     async showcontent(msg) {
         const modlogShowContent = msg.guild.settings.get('modlogShowContent');
         msg.guild.settings.update('modlogShowContent', !modlogShowContent);
-        return msg.send(`${this.client.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
+        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
     }
 
     async reset(msg) {
@@ -85,15 +85,15 @@ module.exports = class extends Command {
             prompt = await msg.prompt('⚠ Are you sure you want to reset **all** modlogs? Respond with `yes` or `no`.').catch(() => ({ content: 'no' }));
         } while (!['yes', 'no', null].includes(prompt.content));
         if (prompt.content === 'yes') {
-            await this.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
-            return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
+            await this.container.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
+            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
         } else {
-            return msg.send(`${this.client.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
+            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
         }
     }
 
     async init() {
-        const defProvider = this.client.providers.default;
+        const defProvider = this.container.client.providers.default;
         if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
     }
 

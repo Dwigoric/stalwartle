@@ -29,7 +29,7 @@ module.exports = class extends Command {
         const { success, result, time, type } = await this.timedEval(msg, code, flagTime);
 
         if (msg.flagArgs.silent) {
-            if (!success && result && result.stack) this.client.emit('error', result.stack);
+            if (!success && result && result.stack) this.container.client.emit('error', result.stack);
             return null;
         }
 
@@ -55,7 +55,7 @@ module.exports = class extends Command {
             }
             case 'console':
             case 'log': {
-                this.client.emit('log', result);
+                this.container.client.emit('log', result);
                 return msg.sendMessage(msg.language.get('COMMAND_EVAL_OUTPUT_CONSOLE', time, footer));
             }
             case 'none':

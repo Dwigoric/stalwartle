@@ -13,13 +13,13 @@ module.exports = class extends Command {
 
     async run(msg, ...params) {
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
-        this.client.channels.cache.get(this.client.settings.bugs.reports).send([
+        this.container.client.channels.cache.get(this.container.client.settings.bugs.reports).send([
             `🐛  ::  Bug Report by **${msg.author.tag}** | ${msg.author.id}`,
             `\t\t\tServer: ${server}`,
             `\`\`\`${params}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
         msg.send([
-            `${this.client.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
+            `${this.container.client.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your report.***'
         ].join('\n'));
     }

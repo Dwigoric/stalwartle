@@ -11,7 +11,7 @@ module.exports = class extends Command {
     }
 
     async run(msg) {
-        msg.send({ embed: await this.client.channels.cache.get(this.client.settings.changelogs).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
+        msg.send({ embed: await this.container.client.channels.cache.get(this.container.client.settings.changelogs).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
     }
 
 };

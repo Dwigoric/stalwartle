@@ -19,11 +19,11 @@ module.exports = class extends Listener {
     }
 
     async run(guild) {
-        const player = this.client.lavacord.players.get(guild.id);
+        const player = this.container.client.lavacord.players.get(guild.id);
         if (player) {
             player.removeAllListeners();
             player.destroy();
-            this.client.lavacord.players.delete(guild.id);
+            this.container.client.lavacord.players.delete(guild.id);
         }
 
         const regionArr = guild.region.split('-');
@@ -42,13 +42,13 @@ module.exports = class extends Listener {
             .addField('Large Guild', guild.large ? '✅' : '❌', true)
             .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
             .addField('Guild Members', guild.memberCount, true)
-            .addField('New Guild Count', await this.client.guildCount(), true)
+            .addField('New Guild Count', await this.container.client.guildCount(), true)
             .setTimestamp()
         );
     }
 
     async init() {
-        const { id, token } = this.client.settings.guildHook;
+        const { id, token } = this.container.client.settings.guildHook;
         this.hook = new WebhookClient(id, token);
     }
 

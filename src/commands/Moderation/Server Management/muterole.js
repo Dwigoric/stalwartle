@@ -23,14 +23,14 @@ module.exports = class extends Command {
                 permissions: 0
             }
         }).catch(() => null);
-        if (!newRole) throw `${this.client.constants.EMOTES.xmark}  ::  I cannot create the muted role. Please double-check my permissions.`;
+        if (!newRole) throw `${this.container.client.constants.EMOTES.xmark}  ::  I cannot create the muted role. Please double-check my permissions.`;
         msg.guild.settings.update('muteRole', newRole.id, msg.guild);
-        return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully set this server's mute role to **${newRole.name}**.`);
+        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully set this server's mute role to **${newRole.name}**.`);
     }
 
     async reset(msg) {
         msg.guild.settings.reset('muteRole');
-        return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully reset this server's mute role.`);
+        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully reset this server's mute role.`);
     }
 
 };

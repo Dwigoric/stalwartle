@@ -8,7 +8,7 @@ module.exports = class extends Command {
 
     async run(msg) {
         const afkSet = msg.author.settings.get('afktoggle') ? ['talk', false] : [`run the \`s.afk\` command`, true];
-        msg.send(`${this.client.constants.EMOTES.tick}  ::  Your AFK status will now be removed **when you ${afkSet[0]}**.`);
+        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Your AFK status will now be removed **when you ${afkSet[0]}**.`);
         msg.author.settings.update('afktoggle', afkSet[1]);
     }
 

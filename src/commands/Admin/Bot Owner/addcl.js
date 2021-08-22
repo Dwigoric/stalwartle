@@ -15,13 +15,13 @@ module.exports = class extends Command {
     }
 
     async run(msg, ...params) {
-        this.client.channels.cache.get(this.client.settings.changelogs).send({
+        this.container.client.channels.cache.get(this.container.client.settings.changelogs).send({
             embed: new MessageEmbed()
-                .setTitle(`<a:updating:417233654545383424> ${this.client.user.username}'s Changelog`)
+                .setTitle(`<a:updating:417233654545383424> ${this.container.client.user.username}'s Changelog`)
                 .setDescription(params)
                 .setTimestamp()
         });
-        msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
+        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
     }
 
 };

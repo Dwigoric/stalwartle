@@ -19,9 +19,9 @@ module.exports = class extends Command {
 
     async run(msg, [limit = 50, filter = null]) {
         let messages = await msg.channel.messages.fetch({ limit: 1 });
-        if (!messages.size) throw `${this.client.constants.EMOTES.xmark}  ::  The channel does not have any messages.`;
+        if (!messages.size) throw `${this.container.client.constants.EMOTES.xmark}  ::  The channel does not have any messages.`;
 
-        if (pruning.has(msg.channel.id)) throw `${this.client.constants.EMOTES.xmark}  ::  I am currently pruning messages from this channel. Please wait until the process is done.`;
+        if (pruning.has(msg.channel.id)) throw `${this.container.client.constants.EMOTES.xmark}  ::  I am currently pruning messages from this channel. Please wait until the process is done.`;
         pruning.add(msg.channel.id);
 
         messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
@@ -35,10 +35,10 @@ module.exports = class extends Command {
         }
         if (!messages.size) {
             pruning.delete(msg.channel.id);
-            throw `${this.client.constants.EMOTES.xmark}  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`;
+            throw `${this.container.client.constants.EMOTES.xmark}  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`;
         }
         // eslint-disable-next-line max-len
-        const loadingMessage = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Deleting messages... Please note that messages older than 14 days will take time to be deleted. If possible, please refrain from deleting them manually until the purging process is complete.`);
+        const loadingMessage = await msg.channel.send(`${this.container.client.constants.EMOTES.loading}  ::  Deleting messages... Please note that messages older than 14 days will take time to be deleted. If possible, please refrain from deleting them manually until the purging process is complete.`);
         let deleted = 0;
         const bulkDeleted = await msg.channel.bulkDelete(messages, true);
         deleted += bulkDeleted.size;
@@ -53,7 +53,7 @@ module.exports = class extends Command {
 
         pruning.delete(msg.channel.id);
         await loadingMessage.delete();
-        return msg.channel.send(`${this.client.constants.EMOTES.tick}  ::  Successfully deleted ${deleted} messages from ${size} messages.`).then(pruneMsg => {
+        return msg.channel.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully deleted ${deleted} messages from ${size} messages.`).then(pruneMsg => {
             setTimeout(() => pruneMsg.delete(), 5000);
         });
     }
@@ -67,7 +67,7 @@ module.exports = class extends Command {
             case 'bots':
                 return mes => mes.author.bot;
             case 'you':
-                return mes => mes.author.id === this.client.user.id;
+                return mes => mes.author.id === this.container.client.user.id;
             case 'me':
                 return mes => mes.author.id === msg.author.id;
             case 'pinsonly':

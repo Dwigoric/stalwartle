@@ -77,13 +77,13 @@ module.exports = class extends Command {
         this.createCustomResolver('string', (arg, possible, msg) => {
             const osu = msg.author.settings.get('osu');
             if (osu && !arg) return osu;
-            if (!arg) throw `${this.client.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`;
+            if (!arg) throw `${this.container.client.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`;
             return arg;
         });
     }
 
     async run(msg, [...username]) {
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading user information...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading user information...`);
 
         let mode;
         if (msg.flagArgs.mania) mode = 3;
@@ -92,12 +92,12 @@ module.exports = class extends Command {
         else mode = 0;
 
         const params = new URLSearchParams();
-        params.set('k', this.client.auth.osuAPIkey);
+        params.set('k', this.container.client.auth.osuAPIkey);
         params.set('m', mode);
         params.set('u', username.join(this.usageDelim));
         params.set('type', 'string');
         const request = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
-        if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
+        if (!request.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
 
         const user = request[0];
         const accuracy = `${+`${`${Math.round(`${`${Number(user.accuracy)}e+2`}`)}e-2`}`}%`;
@@ -141,14 +141,14 @@ module.exports = class extends Command {
         else if (msg.flagArgs.taiko) mode = 1;
         else mode = 0;
 
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading beatmap...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading beatmap...`);
 
         const params = new URLSearchParams();
-        params.set('k', this.client.auth.osuAPIkey);
+        params.set('k', this.container.client.auth.osuAPIkey);
         params.set('b', mapID[0]);
         params.set('m', mode);
         const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?${params}`).then(res => res.json());
-        if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.`;
+        if (!request.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.`;
 
         const beatmap = request[0];
         const genres = ['Any', 'Unspecified', 'Video Game', 'Anime', 'Rock', 'Pop', 'Other', 'Novelty', null, 'Hip-Hop', 'Electronic'];
@@ -192,7 +192,7 @@ module.exports = class extends Command {
     }
 
     async top(msg, username, type) {
-        await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading ${type} plays...`);
+        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading ${type} plays...`);
 
         const timezone = msg.author.settings.get('timezone');
 
@@ -209,11 +209,11 @@ module.exports = class extends Command {
         };
 
         const params = new URLSearchParams();
-        params.set('k', this.client.auth.osuAPIkey);
+        params.set('k', this.container.client.auth.osuAPIkey);
         params.set('u', username);
         params.set('type', 'string');
         const userReq = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
-        if (!userReq.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
+        if (!userReq.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
         const user = userReq[0];
 
         params.set('u', user.user_id);
@@ -221,7 +221,7 @@ module.exports = class extends Command {
         params.set('m', mode);
         params.set('limit', 5);
         const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?${params}`).then(res => res.json());
-        if (!request.length) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! ${errString[type](user)}`;
+        if (!request.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! ${errString[type](user)}`;
 
         const top = await Promise.all(request.map(async list => {
             let urank;
@@ -275,7 +275,7 @@ module.exports = class extends Command {
             .setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
             .setDescription(top.join('\n\n'));
 
-        return msg.send(embed).catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
+        return msg.send(embed).catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
     }
 
 };

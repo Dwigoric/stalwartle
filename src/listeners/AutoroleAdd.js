@@ -7,7 +7,7 @@ module.exports = class extends Listener {
     }
 
     async run(member) {
-        const { autorole } = this.client.gateways.guilds.get(member.guild.id);
+        const { autorole } = this.container.client.gateways.guilds.get(member.guild.id);
         if (!autorole.bot && !autorole.user) return null;
         if (member.guild.owner.partial) await member.guild.owner.fetch();
         if (member.guild.owner.user.partial) await member.guild.owner.user.fetch();
@@ -18,10 +18,10 @@ module.exports = class extends Listener {
     }
 
     async giveRole(member, type) {
-        const role = member.guild.roles.cache.get(this.client.gateways.guilds.get(member.guild.id).autorole[type]);
+        const role = member.guild.roles.cache.get(this.container.client.gateways.guilds.get(member.guild.id).autorole[type]);
         if (!role) {
-            member.guild.owner.user.send(`The role **${this.client.gateways.guilds.get(member.guild.id).autorole[type]}** doesn't exist anymore. Autorole aborted.`).catch(() => null);
-            return this.client.gateways.guilds.update({ autorole: { [type]: this.client.gateways.guilds.defaults.autorole[type] } });
+            member.guild.owner.user.send(`The role **${this.container.client.gateways.guilds.get(member.guild.id).autorole[type]}** doesn't exist anymore. Autorole aborted.`).catch(() => null);
+            return this.container.client.gateways.guilds.update({ autorole: { [type]: this.container.client.gateways.guilds.defaults.autorole[type] } });
         }
         if (role.position >= member.guild.me.roles.highest.position) return member.guild.owner.user.send(`⚠ **${role.name}**'s position was higher than my highest role, therefore I couldn't assign that autorole to anyone.`).catch(() => null); // eslint-disable-line max-len
         return member.roles.add(role, 'Autorole on join');

@@ -32,7 +32,7 @@ module.exports = class MemorySweeper extends Task {
         // ----- CACHED DATA SWEEPERS ----- //
 
         // Per-Guild sweeper
-        for (const guild of this.client.guilds.cache.values()) {
+        for (const guild of this.container.client.guilds.cache.values()) {
             // Clear presences
             presences += guild.presences.cache.size;
             guild.presences.cache.clear();
@@ -54,17 +54,17 @@ module.exports = class MemorySweeper extends Task {
         }
 
         // Per-Channel sweeper
-        /* for (const channel of this.client.channels.cache.values()) {
+        /* for (const channel of this.container.client.channels.cache.values()) {
 			if (!channel.lastMessageID) continue;
 			channel.lastMessageID = null;
 			lastMessages++;
 		} */
 
         // Per-User sweeper
-        for (const user of this.client.users.cache.values()) {
+        for (const user of this.container.client.users.cache.values()) {
             if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
             if (user.settings.get('cookies')) continue;
-            this.client.users.cache.delete(user.id);
+            this.container.client.users.cache.delete(user.id);
             users++;
         }
 
@@ -74,22 +74,22 @@ module.exports = class MemorySweeper extends Task {
         // ----- PERSISTENT DATA SWEEPERS ----- //
 
         // Music database sweeper
-        for (const { history, id, playlist, queue } of await this.client.provider.getAll('music')) {
+        for (const { history, id, playlist, queue } of await this.container.client.provider.getAll('music')) {
             if (history.length || playlist.length) continue;
-            if (this.client.guilds.cache.has(id) && queue.length) continue;
-            this.client.gateways.music.delete(id);
+            if (this.container.client.guilds.cache.has(id) && queue.length) continue;
+            this.container.client.gateways.music.delete(id);
             musicDBs++;
         }
 
         // Modlog database sweeper
-        for (const { id, modlogs } of await this.client.provider.getAll('modlogs')) {
+        for (const { id, modlogs } of await this.container.client.provider.getAll('modlogs')) {
             if (modlogs.length) continue;
-            this.client.gateways.modlogs.delete(id);
+            this.container.client.gateways.modlogs.delete(id);
             modlogDBs++;
         }
 
         // Emit a log
-        this.client.emit('log', [
+        this.container.client.emit('log', [
             this.header,
             `${guildMembers} [GuildMember]s`,
             `${users} [User]s`,
@@ -101,8 +101,8 @@ module.exports = class MemorySweeper extends Task {
         ].join('\n'));
 
         // Create a schedule to make this task work
-        if (this.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length >= 1) return;
-        await this.client.schedule.create(this.name, '*/10 * * * *', { catchUp: false });
+        if (this.container.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length >= 1) return;
+        await this.container.client.schedule.create(this.name, '*/10 * * * *', { catchUp: false });
     }
 
     async init() {

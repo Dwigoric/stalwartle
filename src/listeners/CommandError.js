@@ -10,21 +10,21 @@ module.exports = class extends Listener {
     }
 
     async run(msg, command, params, error) {
-        const errorID = (this.client.shard ? this.client.shard.id.toString(36) : '') + Date.now().toString(36);
-        if (error instanceof Error) this.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
+        const errorID = (this.container.client.shard ? this.container.client.shard.id.toString(36) : '') + Date.now().toString(36);
+        if (error instanceof Error) this.container.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
         if (error.message) {
             msg
                 .send(`⚠ Whoa! You found a bug! Please catch this bug and send it with the **error ID \`${errorID}\`** using the \`bug\` command!${codeBlock('xl', error.message)}`)
-                .catch(err => this.client.emit('wtf', err));
+                .catch(err => this.container.client.emit('wtf', err));
         } else {
-            return msg.sendMessage(error).catch(err => this.client.emit('wtf', err));
+            return msg.sendMessage(error).catch(err => this.container.client.emit('wtf', err));
         }
-        if (error.stack && this.client.application.botPublic) {
-            return this.hook.send(`${this.client.application.owner}, an error occured with **${this.client.user.tag}**!`, new MessageEmbed()
+        if (error.stack && this.container.client.application.botPublic) {
+            return this.hook.send(`${this.container.client.application.owner}, an error occured with **${this.container.client.user.tag}**!`, new MessageEmbed()
                 .setColor(0xE74C3C)
                 .setTitle(`Details of Error ID \`${errorID}\``)
                 .setDescription([
-                    `**Shard ID**: ${this.client.shard ? this.client.shard.id : 'N/A'}`,
+                    `**Shard ID**: ${this.container.client.shard ? this.container.client.shard.id : 'N/A'}`,
                     `**Trigerrer**: ${msg.author} (${msg.author.id})`,
                     `**Guild**: ${msg.guild ? `${escapeMarkdown(msg.guild.name)} (${msg.guild.id})` : '[Direct Messages]'}`,
                     `**Channel**: ${msg.guild ? `#${escapeMarkdown(msg.channel.name)}` : '[Direct Messages]'} (${msg.channel.id})`,
@@ -39,7 +39,7 @@ module.exports = class extends Listener {
     }
 
     async init() {
-        const { id, token } = this.client.settings.errorHook;
+        const { id, token } = this.container.client.settings.errorHook;
         this.hook = new WebhookClient(id, token);
     }
 
