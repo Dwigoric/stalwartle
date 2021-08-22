@@ -62,14 +62,6 @@ class Stalwartle extends SapphireClient {
 
         this.application = null;
         this.ready = false;
-
-        Stalwartle.defaultPermissionLevels
-            .add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.cache.keyArray().includes(role))))
-            .add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.cache.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
-            .add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
-            .add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
-            .add(9, ({ author }) => clientOptions.owners.includes(author.id))
-            .add(10, ({ author }) => clientOptions.ownerID === author.id, { break: true });
     }
 
     get settings() {
