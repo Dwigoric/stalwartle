@@ -1,7 +1,8 @@
 class CacheDataInstance {
 
-    constructor(id) {
+    constructor(id, manager) {
         Object.defineProperty(this, 'id', { value: id });
+        Object.defineProperty(this, 'manager', { value: manager });
     }
 
 }

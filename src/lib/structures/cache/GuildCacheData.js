@@ -2,8 +2,8 @@ const CacheDataInstance = require('./CacheDataInstance');
 
 class GuildCacheData extends CacheDataInstance {
 
-    constructor(id) {
-        super(id);
+    constructor(id, manager) {
+        super(id, manager);
 
         this.voteskips = [];
     }

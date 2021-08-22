@@ -2,8 +2,8 @@ const CacheDataInstance = require('./CacheDataInstance');
 
 class MemberCacheData extends CacheDataInstance {
 
-    constructor(id) {
-        super(id);
+    constructor(id, manager) {
+        super(id, manager);
 
         this.actions = [];
         this.messages = [];
@@ -13,7 +13,7 @@ class MemberCacheData extends CacheDataInstance {
         this.actions.push(action);
         setTimeout(() => {
             this.actions.shift();
-        }, this.client.gateways.guilds.get(this.id).automod.options.quota.within * 60000);
+        }, this.manager.client.gateways.guilds.get(this.id).automod.options.quota.within * 60000);
     }
 
     resetActions() {
@@ -24,7 +24,7 @@ class MemberCacheData extends CacheDataInstance {
         this.messages.push(message);
         setTimeout(() => {
             this.messages.shift();
-        }, this.client.gateways.guilds.get(this.id).automod.options.antiSpam.within * 1000);
+        }, this.manager.client.gateways.guilds.get(this.id).automod.options.antiSpam.within * 1000);
     }
 
 }
