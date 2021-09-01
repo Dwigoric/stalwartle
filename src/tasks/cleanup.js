@@ -106,10 +106,6 @@ module.exports = class MemorySweeper extends Task {
 			`${this.setColor(musicDBs)} [MusicDB]s`,
 			`${this.setColor(modlogDBs)} [ModlogDB]s`
 		].join('\n'));
-
-		// Create a schedule to make this task work
-		if (this.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length >= 1) return;
-		await this.client.schedule.create(this.name, '*/10 * * * *', { catchUp: false });
 	}
 
 	async init() {

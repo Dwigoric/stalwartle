@@ -7,10 +7,6 @@ module.exports = class extends Task {
 			if (!history) continue;
 			this.client.providers.default.update('music', id, { history: history.filter(hist => (Date.now() - hist.timestamp) <= (1000 * 60 * 60 * 24)) });
 		}
-
-		// Create a schedule to make this task work
-		if (this.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length >= 1) return;
-		await this.client.schedule.create(this.name, '*/7 * * * *');
 	}
 
 	async init() {
