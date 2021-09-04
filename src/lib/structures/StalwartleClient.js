@@ -1,6 +1,6 @@
 const { SapphireClient } = require('@sapphire/framework');
 const { Manager } = require('@lavacord/discord.js');
-// const { SpotifyParser } = require('spotilink');
+const { SpotifyParser } = require('spotilink');
 const { join } = require('path');
 const fetch = require('node-fetch');
 
@@ -32,7 +32,7 @@ class Stalwartle extends SapphireClient {
         super(clientOptions);
 
         this.lavacord = null;
-        // this.spotifyParser = null;
+        this.spotifyParser = null;
         this.constants = constants;
         this.auth = auth;
 
@@ -155,7 +155,7 @@ class Stalwartle extends SapphireClient {
             user: this.user.id,
             shards: this.options.shardCount
         });
-        // this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
+        this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
         if (!this.lavacord.idealNodes.length) this.lavacord.connect();
         return true;
     }
