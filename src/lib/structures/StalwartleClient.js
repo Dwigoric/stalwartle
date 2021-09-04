@@ -11,8 +11,8 @@ const auth = require('../../auth');
 
 // Imports for data persistence
 const PersistenceManager = require('./settings/PersistenceManager');
+const GatewayStore = require('./settings/GatewayStore');
 const Gateway = require('./settings/Gateway');
-const schema = require('../util/schema');
 
 // Imports for cached data
 const CacheManager = require('./cache/CacheManager');
@@ -44,16 +44,9 @@ class Stalwartle extends SapphireClient {
         this._intervals = new Set();
         this._timeouts = new Set();
 
-        this.stores.register(new TaskStore(Task).registerPath(join(__dirname, '..', 'tasks')));
-
-        this.gateways = {
-            guilds: new Gateway(this, 'guilds', schema.guilds),
-            users: new Gateway(this, 'users', schema.users),
-            client: new Gateway(this, 'clientStorage', schema.client),
-            afk: new Gateway(this, 'afk', schema.afk),
-            music: new Gateway(this, 'music', schema.music),
-            modlogs: new Gateway(this, 'modlogs', schema.modlogs)
-        };
+        this.stores
+            .register(new TaskStore(Task).registerPath(join(__dirname, '..', 'tasks')))
+            .register(new GatewayStore(Gateway).registerPath(join(__dirname, '..', 'gateways')));
 
         this.cache = {
             guilds: new CacheManager(this, GuildCacheData),
