@@ -71,7 +71,9 @@ module.exports = class extends Command {
 
 	async list(msg) {
 		const remList = await this.remlist(msg);
-		return msg.send(`Here is a list of your reminders:\n${remList.list}`);
+		return msg.author.send(`Here is a list of your reminders:\n${remList.list}`)
+			.then(() => msg.send(`${this.client.constants.EMOTES.tick}  ::  The list of your reminders has been sent in your DMs.`))
+			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  I could not send the list of your reminders to your DMs. Please check your privacy settings and try again.`; });
 	}
 
 	async remove(msg) {
