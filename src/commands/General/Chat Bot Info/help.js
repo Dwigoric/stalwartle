@@ -87,7 +87,11 @@ module.exports = class extends Command {
 						'$5 ⇒ Removal of 5-hour limit for each track in music. ($3 perk is included)',
 						'$8 ⇒ Autoplay songs (add related videos when queue is empty). Only applicable for YouTube videos. ($3 and $5 perks are included)',
 						'$10 ⇒ Make bot not leave within 30 seconds when no one is connected to voice channel; unless the bot is rebooted. ($3, $5, and $8 perks are included)',
-						'*Please pay at <https://www.paypal.com/donate?hosted_button_id=EPD2AY6LRNDGS> OR <https://ko-fi.com/dwigoric> OR <https://patreon.com/Dwigoric>.*',
+						'**Fiat Channels**',
+						'PayPal: <https://www.paypal.com/donate?hosted_button_id=EPD2AY6LRNDGS>',
+						'Ko-fi: <https://ko-fi.com/dwigoric>',
+						'Patreon: <https://patreon.com/Dwigoric>.*',
+						'**Cryptocurrency Channel**: <https://nowpayments.io/donation/stalwartle>',
 						`*AFTER donating, contact ${(await this.client.users.fetch(this.client.options.ownerID)).tag} or go to my support server to avail of these perks.*`
 					].join('\n') : '',
 					`\nBot developed by **${this.client.application.owner}**, from 🇵🇭 with ❤`,
