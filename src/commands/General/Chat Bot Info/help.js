@@ -90,7 +90,7 @@ module.exports = class extends Command {
 						'**Fiat Channels**',
 						'PayPal: <https://www.paypal.com/donate?hosted_button_id=EPD2AY6LRNDGS>',
 						'Ko-fi: <https://ko-fi.com/dwigoric>',
-						'Patreon: <https://patreon.com/Dwigoric>.*',
+						'Patreon: <https://patreon.com/Dwigoric>.',
 						'**Cryptocurrency Channel**: <https://nowpayments.io/donation/stalwartle>',
 						`*AFTER donating, contact ${(await this.client.users.fetch(this.client.options.ownerID)).tag} or go to my support server to avail of these perks.*`
 					].join('\n') : '',
