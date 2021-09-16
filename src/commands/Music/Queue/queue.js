@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id) || {};
 		if (!queue.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the queue yet! Add one with \`${msg.guild.settings.get('prefix')}play\``;
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the music queue...`);
 		const np = queue[0];

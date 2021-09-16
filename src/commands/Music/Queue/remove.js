@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		if (isNaN(songs[0])) throw `${this.client.constants.EMOTES.xmark}  ::  Invalid queue entry given. Refer to \`${msg.guild.settings.get('prefix')}help remove\` for more information.`;
 		if (!songs[1]) songs = songs[0]; // eslint-disable-line prefer-destructuring
 		if (songs === 0 || songs[0] === 0) throw `${this.client.constants.EMOTES.xmark}  ::  The current song playing cannot be removed from the queue.`;
-		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id) || {};
 		if (!queue.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the queue. Add one using \`${msg.guild.settings.get('prefix')}play\``;
 		if (Array.isArray(songs)) {
 			if (songs[0] > songs[1]) throw `${this.client.constants.EMOTES.xmark}  ::  Invalid queue range. The first number must be less than the second.`;

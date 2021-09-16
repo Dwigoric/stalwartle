@@ -14,7 +14,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [entry, position]) {
-		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id) || {};
 		if (queue.length < 3) throw `${this.client.constants.EMOTES.xmark}  ::  There is no queue entry to move.`;
 		// eslint-disable-next-line max-len
 		if (entry > queue.length - 1 || position > queue.length - 1) throw `${this.client.constants.EMOTES.xmark}  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`;

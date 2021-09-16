@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [user]) {
-		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id) || { queue: [] };
+		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id) || {};
 		this.client.providers.default.update('music', msg.guild.id, { queue: (msg.guild.player && msg.guild.player.playing ? queue.slice(0, 1) : []).concat(user ? queue.filter((track, index) => index && track.requester !== user.id) : []) }); // eslint-disable-line max-len
 		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully cleared the music queue for this server${user ? ` of ${user.tag}'s requests` : ''}.`);
 	}
