@@ -76,7 +76,7 @@ module.exports = class MemorySweeper extends Task {
 		}
 
 		// Running garbage collection of Node.js
-		if (global.gc) global.gc();
+		// if (global.gc) global.gc();
 
 		// ----- PERSISTENT DATA SWEEPERS ----- //
 
