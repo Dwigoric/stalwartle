@@ -25,7 +25,8 @@ module.exports = class extends Command {
 
 	async run(msg, [user]) {
 		const timezone = msg.author.settings.get('timezone');
-		let list = await this.client.providers.default.get('modlogs', msg.guild.id).then(pv => pv.modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id)));
+		const { modlogs = [] } = await this.client.providers.default.get('modlogs', msg.guild.id) || {};
+		let list = modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
 		if (typeof user === 'number') {
 			const modlog = list[user - 1];
@@ -66,7 +67,7 @@ module.exports = class extends Command {
 				`Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS z')} (${moment(modlog.timestamp).fromNow()})`,
 				`Reason: ${modlog.reason ? escapeMarkdown(modlog.reason) : 'Not specified.'}`
 			].join('\n');
-		})))).then(modlogs => modlogs.forEach(modlog5 => display.addPage(template => template.setDescription(modlog5.join('\n\n')))));
+		})))).then(logs => logs.forEach(modlog5 => display.addPage(template => template.setDescription(modlog5.join('\n\n')))));
 
 		return display
 			.setFooterPrefix('Page ')

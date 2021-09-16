@@ -21,7 +21,7 @@ module.exports = class extends Event {
 				if (message.command.name === 'warn' && message.author) message.send(`⚠ I couldn't send messages to **${user.tag}**, so I couldn't warn them; but this will still be logged.`);
 			});
 		const moderator = message.author ? message.author.equals(user) ? this.client.user : message.author : this.client.user;
-		const { modlogs } = await this.client.providers.default.get('modlogs', message.guild.id);
+		const { modlogs = [] } = await this.client.providers.default.get('modlogs', message.guild.id) || {};
 		const channel = message.guild.channels.cache.get(message.guild.settings.get(`modlogs.${message.command.name}`));
 		if (!channel && message.guild.settings.get('logging') && message.author) {
 			return message.send([
@@ -59,7 +59,7 @@ module.exports = class extends Event {
 			type: message.command.name,
 			user: user.id
 		});
-		return this.client.providers.default.update('modlogs', message.guild.id, { modlogs });
+		return this.client.providers.default.update('modlogs', message.guild.id, { modlogs }, true);
 	}
 
 	async checkAutomodQuota(message, member) {
