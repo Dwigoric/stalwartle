@@ -29,4 +29,4 @@ This bot can fix most of your arguments! By using the poll command (`s.poll`), y
 ### Need a Die?
 This bot can roll a die or multiple dice, in case you have a board game with a friend and you don't have the necessary die and decide whether to heal yourself or attack the monster.
 
-## And much more! [Invite Stalwartle](https://bit.ly/Stalwartle) to your server now!
+## And much more! [Invite Stalwartle](https://bit.ly/stalwartle) to your server now!
