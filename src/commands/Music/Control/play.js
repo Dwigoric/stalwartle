@@ -34,6 +34,7 @@ module.exports = class extends Command {
     }
 
     async run(msg, [query]) {
+        if (msg.guild.player && !msg.guild.me.voice.channel) await this.container.client.lavacord.leave(msg.guild.id);
         if (!msg.member.voice.channel) throw `${this.container.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
         if (msg.guild.settings.get('music.limitToChannel').length && !msg.guild.settings.get('music.limitToChannel').includes(msg.member.voice.channelID)) {
             throw `${this.container.client.constants.EMOTES.xmark}  ::  Your current voice channel is not included in this server's music channels.`;

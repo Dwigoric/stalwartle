@@ -69,7 +69,7 @@ module.exports = class MemorySweeper extends Task {
         }
 
         // Running garbage collection of Node.js
-        if (global.gc) global.gc();
+        // if (global.gc) global.gc();
 
         // ----- PERSISTENT DATA SWEEPERS ----- //
 
@@ -99,10 +99,6 @@ module.exports = class MemorySweeper extends Task {
             `${musicDBs} [MusicDB]s`,
             `${modlogDBs} [ModlogDB]s`
         ].join('\n'));
-
-        // Create a schedule to make this task work
-        if (this.container.client.settings.get('schedules').filter(tk => tk.taskName === this.name).length >= 1) return;
-        await this.container.client.schedule.create(this.name, '*/10 * * * *', { catchUp: false });
     }
 
     async init() {
