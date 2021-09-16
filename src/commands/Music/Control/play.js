@@ -44,7 +44,7 @@ module.exports = class extends Command {
 
 		let queue, playlist;
 		try {
-			({ queue, playlist } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
+			({ queue = [], playlist = [] } = await this.client.providers.default.get('music', msg.guild.id)); // eslint-disable-line prefer-const
 		} catch (err) {
 			this.client.emit('wtf', err);
 			throw `${this.client.constants.EMOTES.xmark}  ::  An unknown error occured. Please try again.`;
@@ -172,7 +172,7 @@ module.exports = class extends Command {
 	}
 
 	async addToQueue(msg, song) {
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id);
 
 		if (msg.flagArgs.force && await msg.hasAtLeastPermissionLevel(5)) {
 			const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })) : [mergeObjects(song, { requester: msg.author.id, incognito: Boolean(msg.flagArgs.incognito) })]; // eslint-disable-line max-len
@@ -239,7 +239,7 @@ module.exports = class extends Command {
 		guild.player.once('end', async data => {
 			if (data.reason === 'REPLACED') return null;
 
-			const { queue } = await this.client.providers.default.get('music', guild.id);
+			const { queue = [] } = await this.client.providers.default.get('music', guild.id);
 
 			let previous;
 			if (guild.settings.get('music.repeat') === 'queue') queue.push(queue[0]);
@@ -271,7 +271,7 @@ module.exports = class extends Command {
 		});
 
 		if (guild.settings.get('donation') >= 3 && !song.incognito) {
-			const { history } = await this.client.providers.default.get('music', guild.id);
+			const { history = [] } = await this.client.providers.default.get('music', guild.id);
 			history.unshift(mergeObjects(song, { timestamp: Date.now() }));
 			this.client.providers.default.update('music', guild.id, { history });
 		}

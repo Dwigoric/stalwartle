@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		if (msg.guild.settings.get('donation') < 3) throw `${this.client.constants.EMOTES.xmark}  ::  Sorry! This feature is limited to servers which have donated $3 or more.`;
-		const { history } = await this.client.providers.default.get('music', msg.guild.id);
+		const { history = [] } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!history.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the history yet! Songs you play are stored in the history within a day.`;
 		const message = await msg.channel.send(`${this.client.constants.EMOTES.loading}  ::  Loading the music history...`);
 		const display = new RichDisplay(new MessageEmbed()
@@ -43,7 +43,7 @@ module.exports = class extends Command {
 	}
 
 	async export(msg) {
-		const { history } = await this.client.providers.default.get('music', msg.guild.id);
+		const { history = [] } = await this.client.providers.default.get('music', msg.guild.id);
 		if (!history.length) throw `${this.client.constants.EMOTES.xmark}  ::  The history is empty. Songs you play are stored in the history within a day.`;
 		let choice;
 		do {

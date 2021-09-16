@@ -27,7 +27,7 @@ module.exports = class extends Event {
 			return newState.guild.player.pause(false);
 		}
 		if (channelMembers.size) return null;
-		const { queue } = await this.client.providers.default.get('music', newState.guild.id);
+		const { queue = [] } = await this.client.providers.default.get('music', newState.guild.id);
 		if (!queue[0].info.isStream) {
 			this.autopaused.add(newState.guild.id);
 			newState.guild.player.pause(true);

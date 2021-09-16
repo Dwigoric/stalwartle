@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const { queue } = await this.client.providers.default.get('music', msg.guild.id);
+		const { queue = [] } = await this.client.providers.default.get('music', msg.guild.id);
 		const upNext = queue.slice(1);
 		if (!queue.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no songs in the queue. Add one with \`${msg.guild.settings.get('prefix')}play\``;
 		if (!upNext.length) throw `${this.client.constants.EMOTES.xmark}  ::  There are no up-next songs... I have nothing to shuffle!`;
