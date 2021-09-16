@@ -27,13 +27,13 @@ module.exports = class extends Command {
             .addField('Category', chan.parent ? chan.parent.name : 'No Category', true)
             .setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
             .setTimestamp();
-        if (chan.type === 'text') {
+        if (chan.type === 'GUILD_TEXT') {
             embed = embed
                 .setDescription(chan.topic || 'No topic set.')
                 .addField('Position', chan.position, true)
                 .addField('NSFW', chan.nsfw ? 'Enabled' : 'Disabled', true)
                 .addField('Ratelimit', chan.rateLimitPerUser ? `1 msg/${chan.rateLimitPerUser} second${chan.rateLimitPerUser === 1 ? '' : 's'}` : 'Disabled', true);
-        } else if (chan.type === 'voice') {
+        } else if (chan.type === 'GUILD_VOICE') {
             embed = embed
                 .addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
                 .addField('User Limit', chan.userLimit, true);

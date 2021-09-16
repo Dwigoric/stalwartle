@@ -27,8 +27,8 @@ module.exports = class extends Command {
         if (member.roles.cache.has(muteRole.id)) throw `${this.container.client.constants.EMOTES.xmark}  ::  ${user.tag} has been already muted!`;
 
         for (const channel of msg.guild.channels.cache.values()) {
-            if (channel.type === 'text') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
-            else if (channel.type === 'voice') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
+            if (channel.type === 'GUILD_TEXT') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
+            else if (channel.type === 'GUILD_VOICE') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
             else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
         }
         await member.roles.add(muteRole, 'Muted');

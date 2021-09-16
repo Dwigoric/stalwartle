@@ -23,7 +23,7 @@ module.exports = class extends Listener {
                 `Most users use the music feature. Run \`${this.container.client.gateways.guilds.get(guild.id).prefix}help music\` and \`${this.container.client.gateways.guilds.get(guild.id).prefix}help play\` for more information!`,
                 `\nBy **${this.container.client.application.owner.members.map(tm => tm.user.tag).join(', ')}**, from 🇵🇭 with ❤`
             ].join('\n'));
-        const postableChannel = guild.channels.cache.filter(ch => ch.type === 'text' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
+        const postableChannel = guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT' && ch.postable && ch.permissionsFor(guild.me).has('EMBED_LINKS')).first();
         if (!postableChannel) return guild.owner.user.sendEmbed(message).catch(() => null);
         return postableChannel.sendEmbed(message);
     }

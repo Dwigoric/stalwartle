@@ -22,8 +22,8 @@ module.exports = class extends Listener {
         } else {
             await member.roles.add(muteRole, 'Muted');
             for (const channel of member.guild.channels.cache.values()) {
-                if (channel.type === 'text') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
-                else if (channel.type === 'voice') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
+                if (channel.type === 'GUILD_TEXT') channel.updateOverwrite(muteRole, { SEND_MESSAGES: false }, 'Muted');
+                else if (channel.type === 'GUILD_VOICE') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
                 else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
             }
         }
