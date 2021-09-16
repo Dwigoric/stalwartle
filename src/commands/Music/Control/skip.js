@@ -41,13 +41,13 @@ module.exports = class extends Command {
     }
 
     async skipToEntry(msg, entry) {
-        const { queue } = await this.container.client.providers.default.get('music', msg.guild.id);
+        const { queue = [] } = await this.container.client.providers.default.get('music', msg.guild.id) || {};
         if (queue.length < 2) throw `${this.container.client.constants.EMOTES.xmark}  ::  There is no queue entry to skip to.`;
         if (entry > queue.length - 1) throw `${this.container.client.constants.EMOTES.xmark}  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`;
         queue.splice(1, 0, queue.splice(entry, 1)[0]);
         await this.container.client.providers.default.update('music', msg.guild.id, { queue });
         msg.guild.clearVoteskips();
-        this.container.client.lavacord.players.get(msg.guild.id).stop();
+        msg.guild.player.stop();
         return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully skipped to entry \`#${entry}\`.`);
     }
 

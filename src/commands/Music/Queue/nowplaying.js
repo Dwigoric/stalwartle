@@ -19,10 +19,10 @@ module.exports = class extends Command {
     }
 
     async run(msg) {
-        const { queue } = await this.container.client.providers.default.get('music', msg.guild.id);
+        const { queue = [] } = await this.container.client.providers.default.get('music', msg.guild.id) || {};
         if (!queue.length || !msg.guild.me.voice.channel) throw `${this.container.client.constants.EMOTES.xmark}  ::  There is no music playing in this server!`;
         const { length } = queue[0].info;
-        const { position } = this.container.client.lavacord.players.get(msg.guild.id).state;
+        const { position } = msg.guild.player.state;
         const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`);
 
         const progress = '░'.repeat(35).split('');

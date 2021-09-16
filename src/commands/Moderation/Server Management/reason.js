@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
     async run(msg, [modlogID, ...reason]) {
         reason = reason.join(this.usageDelim);
-        const modlogs = await this.container.client.providers.default.get('modlogs', msg.guild.id).then(ml => ml.modlogs);
+        const { modlogs = [] } = await this.container.client.providers.default.get('modlogs', msg.guild.id) || {};
         const modlog = modlogs[modlogID - 1];
         if (!modlog) throw `${this.container.client.constants.EMOTES.xmark}  ::  You provided an invalid modlog ID.`;
         modlog.reason = reason;

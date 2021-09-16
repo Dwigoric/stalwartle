@@ -25,7 +25,7 @@ module.exports = class extends Listener {
             return this.container.client.lavacord.players.get(newState.guild.id).pause(false);
         }
         if (channelMembers.size) return null;
-        const { queue } = await this.container.client.gateways.music.get(newState.guild.id);
+        const { queue = [] } = await this.container.client.gateways.music.get(newState.guild.id) || {};
         if (!queue[0].info.isStream) {
             this.autopaused.add(newState.guild.id);
             this.container.client.lavacord.players.get(newState.guild.id).pause(true);
