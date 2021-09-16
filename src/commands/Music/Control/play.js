@@ -223,7 +223,7 @@ module.exports = class extends Command {
 					.addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true) });
 			}
 		}
-		await this.client.providers.default.update('music', msg.guild.id, { queue });
+		await this.client.providers.default.update('music', msg.guild.id, { queue }, true);
 		return queue;
 	}
 

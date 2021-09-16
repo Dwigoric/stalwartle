@@ -72,7 +72,7 @@ module.exports = class extends Command {
 					this.addToPlaylist(msg, (await this.client.providers.default.get('music', msg.guild.id) || {}).queue || []);
 					break;
 				case 'queuereplace':
-					this.client.providers.default.update('music', msg.guild.id, { playlist: (await this.client.providers.default.get('music', msg.guild.id) || {}).queue || [] });
+					this.client.providers.default.update('music', msg.guild.id, { playlist: (await this.client.providers.default.get('music', msg.guild.id) || {}).queue || [] }, true);
 					break;
 			}
 			return null;
@@ -194,7 +194,7 @@ module.exports = class extends Command {
 			playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
 			msg.send(`🎶  ::  **${items.info.title}** has been added to the playlist.`);
 		}
-		await this.client.providers.default.update('music', msg.guild.id, { playlist });
+		await this.client.providers.default.update('music', msg.guild.id, { playlist }, true);
 		return playlist;
 	}
 
