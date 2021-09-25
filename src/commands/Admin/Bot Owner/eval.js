@@ -38,7 +38,9 @@ module.exports = class extends Command {
     }
 
     async run(msg, args) {
-        const code = await args.rest('string');
+        let code = await args.restResult('string');
+        if (!code.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
+        code = code.value;
         const flagTime = args.getFlags('no-timeout') ? Number(args.getOption('wait')) || this.timeout : Infinity;
         const language = args.getOption('lang') || args.getOption('language') || (args.getFlags('json') ? 'json' : 'js');
         const { success, result, time, type } = await this.timedEval(args, code, flagTime);
