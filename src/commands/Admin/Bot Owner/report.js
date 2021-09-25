@@ -24,8 +24,8 @@ module.exports = class extends Command {
             [this.container.client.settings.suggestions.reports]: this.container.client.settings.suggestions.processed
         };
 
-        const repUser = args.pick('user');
-        const repMsg = args.pick('message');
+        const repUser = await args.pick('user');
+        const repMsg = await args.pick('message');
         const repCom = await args.rest('string');
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
