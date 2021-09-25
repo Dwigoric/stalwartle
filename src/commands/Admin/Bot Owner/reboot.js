@@ -3,17 +3,18 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['restart'],
-            permissionLevel: 9,
-            description: 'Restarts the bot, and then notifies in the same channel if the bot is up again.'
+            description: 'Restarts the bot, and then notifies in the same channel if the bot is up again.',
+            preconditions: ['DevsOnly']
         });
     }
 
     async run(msg) {
         await this.container.client.gateways.client.update(this.container.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
-        await msg.sendLocale('COMMAND_REBOOT').catch(err => this.container.client.emit('error', err));
+        await msg.channel.send('<a:loading:430269209415516160>  ::  Bot is restarting... I will message you in this channel once I\'ve woken up again.').catch(err => this.container.client.emit('error', err));
         await this.container.client.destroy();
         await this.container.client.playerManager.destroy();
         process.exit();

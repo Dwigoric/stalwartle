@@ -3,23 +3,31 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            permissionLevel: 9,
-            runIn: ['text'],
-            requiredPermissions: ['EMBED_LINKS'],
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            cooldownDelay: 5000,
             description: 'Replies to a bug report or a suggestion.',
-            extendedHelp: 'To deny, just add the flag `--deny`. It will not send to the resulting channel.',
+            detailedDescription: 'To deny, just add the flag `--deny`. It will not send to the resulting channel.',
+            flags: ['deny'],
+            preconditions: ['DevsOnly'],
+            requiredClientPermissions: ['EMBED_LINKS'],
+            runIn: ['text'],
             usage: '<User:user> <Message:message> <Comment:string> [...]',
             usageDelim: ' '
         });
     }
 
-    async run(msg, [repUser, repMsg, ...repCom]) {
+    async run(msg, args) {
         const reportChans = {
             [this.container.client.settings.bugs.reports]: this.container.client.settings.bugs.processed,
             [this.container.client.settings.suggestions.reports]: this.container.client.settings.suggestions.processed
         };
+
+        const repUser = args.pick('user');
+        const repMsg = args.pick('message');
+        const repCom = await args.rest('string');
+
         if (!repMsg.author.equals(this.container.client.user)) return null;
         if (!Object.keys(reportChans).includes(msg.channel.id)) throw `${this.container.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`;
         const embed = new MessageEmbed()
@@ -35,11 +43,7 @@ module.exports = class extends Command {
         if (attachments && attachments.size) embed.setImage(attachments.first().url);
         if (!msg.flagArgs.deny) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
         msg.delete();
-        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => {
-            setTimeout(() => {
-                sent.delete();
-            }, 5000);
-        });
+        await msg.channel.send(`${this.container.client.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => setTimeout(() => sent.delete(), 5000));
         repMsg.delete().catch(() => null);
         return repUser.send('Your submission has been acknowledged by a high lord!', { embed }).catch(() => null);
     }

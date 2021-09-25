@@ -1,28 +1,35 @@
-const { Command, Stopwatch, util: { exec, codeBlock } } = require('@sapphire/framework');
+const { Command } = require('@sapphire/framework');
+const { Stopwatch } = require('@sapphire/stopwatch');
+const { codeBlock } = require('@sapphire/utilities');
+const { send } = require('@sapphire/plugin-editable-commands');
+
+const { promisify } = require('util');
+const { exec } = require('child_process');
+const execute = promisify(exec);
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['execute'],
+            cooldownDelay: 5000,
             description: 'Execute commands in the terminal, use with EXTREME CAUTION.',
-            flagSupport: false,
-            guarded: true,
-            permissionLevel: 10,
-            usage: '<Expression:string>'
+            preconditions: ['OwnersOnly']
         });
     }
 
-    async run(msg, [input]) {
+    async run(msg, args) {
+        const input = await args.rest('string');
         const stopwatch = new Stopwatch().start();
-        const result = await exec(input, { timeout: 'timeout' in msg.flagArgs ? Number(msg.flagArgs.timeout) : 60000 })
+        const result = await execute(input, { timeout: 'timeout' in msg.flagArgs ? Number(msg.flagArgs.timeout) : 60000 })
             .catch(error => ({ error }));
         const results = [];
         if (result.stdout) results.push(`**\`OUTPUT\`**${codeBlock('', result.stdout)}`);
         if (result.stderr) results.push(`**\`STDERR\`**${codeBlock('', result.stderr)}`);
         if (result.error) results.push(`**\`ERROR\`**${codeBlock('xl', result.error)}`);
 
-        return msg.sendMessage(results.concat(`⏱ ${stopwatch.stop()}`).join('\n'));
+        return send(msg, { content: results.concat(`⏱ ${stopwatch.stop()}`).join('\n') });
     }
 
 };

@@ -1,27 +1,29 @@
 const { Command } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['addchangelog'],
+            cooldownDelay: 5000,
+            cooldownLimit: 3,
             description: 'Posts a changelog in the changelog channel on the support server.',
-            flagSupport: false,
-            permissionLevel: 9,
-            requiredPermissions: ['EMBED_LINKS'],
-            usage: '<Content:string>'
+            preconditions: ['DevsOnly'],
+            requiredClientPermissions: ['EMBED_LINKS']
         });
     }
 
-    async run(msg, ...params) {
+    async run(msg, args) {
         this.container.client.channels.cache.get(this.container.client.settings.changelogs).send({
             embed: new MessageEmbed()
                 .setTitle(`<a:updating:417233654545383424> ${this.container.client.user.username}'s Changelog`)
-                .setDescription(params)
+                .setDescription(await args.rest('string'))
                 .setTimestamp()
         });
-        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
+        send(msg, `${this.container.client.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
     }
 
 };
