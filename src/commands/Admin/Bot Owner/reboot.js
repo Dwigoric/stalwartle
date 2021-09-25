@@ -15,6 +15,7 @@ module.exports = class extends Command {
         await this.container.client.gateways.client.update(this.container.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
         await msg.sendLocale('COMMAND_REBOOT').catch(err => this.container.client.emit('error', err));
         await this.container.client.destroy();
+        await this.container.client.playerManager.destroy();
         process.exit();
     }
 
