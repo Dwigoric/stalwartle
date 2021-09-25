@@ -108,6 +108,21 @@
     "@sapphire/utilities" "^2.0.1"
     tslib "^2.3.1"
 
+"@sapphire/plugin-editable-commands@^0.1.0-next.23809.0":
+  version "0.1.0-next.23809.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-editable-commands/-/plugin-editable-commands-0.1.0-next.23809.0.tgz#140f8c7ca189b60913a83a6cbc314bfbb778aabb"
+  integrity sha512-iSGB6IDjhB3kTxYmhYrPeGcEpgIHNmdEifjjBBrJ08GDnkmTfXZmCoyByY515KFcUmHDGcCY8tb1CHCPrG/KVg==
+  dependencies:
+    "@skyra/editable-commands" "^2.1.0"
+    tslib "^2.3.1"
+
+"@sapphire/plugin-subcommands@^2.0.0-next.23809.0":
+  version "2.0.0-next.23809.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-subcommands/-/plugin-subcommands-2.0.0-next.23809.0.tgz#983c6fba43253ee47e35e2722f0afe511c687f5a"
+  integrity sha512-b+QEgHCKeNA24kDNY/G155a0EjIgoy+LdEfyE2ycKa+LxP1Q+3GEjZPI9T6KNcJAEWtl83QHihuYzUebQXgGug==
+  dependencies:
+    tslib "^2.3.1"
+
 "@sapphire/ratelimits@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@sapphire/ratelimits/-/ratelimits-2.0.1.tgz#e2195d6d93cbb19ed4f54f5078973a7c60e1a6bd"
