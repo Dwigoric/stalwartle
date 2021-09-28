@@ -18,7 +18,7 @@
 	"homepage": "https://github.com/takomst/stalwartle#readme",
 	"dependencies": {
 		"@lavacord/discord.js": "^0.0.7",
-		"discord.js": "github:discordjs/discord.js",
+		"discord.js": "github:discordjs/discord.js#v12",
 		"klasa": "github:Dwigoric/klasa#message-fix",
 		"moment-timezone": "^0.5.33",
 		"mongodb": "^4.1.0",
