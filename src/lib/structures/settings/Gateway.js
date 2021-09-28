@@ -8,7 +8,7 @@ class Gateway extends AliasPiece {
 
         this.cache = new Map();
         this.collection = 'collection' in options ? options.collection : new Error('The MongoDB collection was not supplied.');
-        this.defaults = options.defaults || {};
+        Object.defineProperty(this, 'defaults', { value: options.defaults || {}, writable: false });
     }
 
     get(id) {
