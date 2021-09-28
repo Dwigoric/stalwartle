@@ -13,7 +13,8 @@ class Gateway extends AliasPiece {
 
     get(id, path) {
         if (typeof path === 'string') return objectValueByPath(this.get(id), path);
-        return this.cache.get(id) || this.defaults;
+        if (this.cache.has(id)) return mergeDefault(this.defaults, this.cache.get(id));
+        else return this.defaults;
     }
 
     async update(id, path, val) {
@@ -48,7 +49,7 @@ class Gateway extends AliasPiece {
         if (!await this.container.client.provider.hasTable(this.collection)) await this.container.client.provider.createTable(this.collection);
         const docs = await this.container.client.provider.getKeys(this.collection);
 
-        for (const doc of docs) this.cache.set(doc.id, mergeDefault(this.defaults, doc));
+        for (const doc of docs) this.cache.set(doc.id, doc);
     }
 
 
