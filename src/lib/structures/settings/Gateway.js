@@ -1,5 +1,5 @@
 const { AliasPiece } = require('@sapphire/pieces');
-const { Util: { mergeDefault } } = require('discord.js');
+const { mergeDefault, makeObject } = require('@sapphire/utilities');
 
 class Gateway extends AliasPiece {
 
@@ -11,13 +11,15 @@ class Gateway extends AliasPiece {
         Object.defineProperty(this, 'defaults', { value: options.defaults || {}, writable: false });
     }
 
-    get(id) {
+    get(id, path) {
+        if (typeof path === 'string') return objectValueByPath(this.get(id), path);
         return this.cache.get(id) || this.defaults;
     }
 
-    async update(id, obj) {
-        if (typeof obj !== 'object') throw new TypeError('Expected an object to update');
+    async update(id, path, val) {
+        if (typeof path !== 'string') throw new TypeError('Expected the string path of the object to update');
 
+        const obj = makeObject(path, val);
         const { value } = await this.container.client.provider.update(this.collection, id, obj, true);
         this.cache.set(id, mergeDefault(this.defaults, value));
         return value;
@@ -29,6 +31,12 @@ class Gateway extends AliasPiece {
 
         this.cache.set(id, mergeDefault(this.defaults, doc));
         return doc;
+    }
+
+    async reset(id, path) {
+        if (typeof path !== 'string') throw new TypeError('Expected the path to be a string');
+
+        return this.update(id, path, objectValueByPath(this.defaults, path));
     }
 
     async delete(id) {
@@ -44,6 +52,20 @@ class Gateway extends AliasPiece {
     }
 
 
+}
+
+function objectValueByPath(obj, path) {
+    // convert indices to properties
+    path = path.replace(/\[(\w+)\]/g, '.$1');
+    // strip leading dot
+    path = path.replace(/^\./, '');
+
+    const keys = path.split('.');
+    for (const key of keys) {
+        if (key in obj) obj = obj[key];
+        else throw new ReferenceError('Path does not exist in object');
+    }
+    return obj;
 }
 
 module.exports = Gateway;
