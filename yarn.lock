@@ -68,7 +68,7 @@
     "@sapphire/time-utilities" "^1.4.3"
     "@sapphire/utilities" "^3.0.3"
 
-"@sapphire/framework@^2.0.0-next.e9bd6aa3.0":
+"@sapphire/framework@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@sapphire/framework/-/framework-2.0.0.tgz#b61f65dfaebcb6f4b5029e253118a3e96d0efc77"
   integrity sha512-BV+HEXxz8+HZvPk+bE7ccmOvzaiWTopwo0LP7Ve4VyQGMzXRixk1SWZUhAbeN0pvPM8p+QbjquTUdtfOmZkCrg==
@@ -107,7 +107,7 @@
     colorette "^2.0.16"
     tslib "^2.3.1"
 
-"@sapphire/plugin-subcommands@^2.0.0-next.23809.0":
+"@sapphire/plugin-subcommands@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@sapphire/plugin-subcommands/-/plugin-subcommands-2.0.0.tgz#8b73ef83c622786f6a466f07eafe80ac810b9be3"
   integrity sha512-WI4ZNxHH5PqmmF7Gh5+9BT9cCYRTZooF8CYrLRWBbYn1Dx7ZAxRinRsUBY8mzEH2NriWQspzpqW8cTEYRj8UoQ==
