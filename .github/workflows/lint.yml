@@ -5,9 +5,9 @@ name: Linting
 
 on:
   push:
-    branches: [ master, currency-system, database-gateways ]
+    branches: [ main, v3 ]
   pull_request:
-    branches: [ master, currency-system, database-gateways ]
+    branches: [ main, v3 ]
 
 jobs:
   lint:
