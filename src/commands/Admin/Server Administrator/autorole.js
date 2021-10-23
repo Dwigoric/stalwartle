@@ -1,38 +1,40 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            permissionLevel: 8,
-            runIn: ['text'],
-            requiredPermissions: ['MANAGE_ROLES'],
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            cooldownDelay: 5000,
+            cooldownLimit: 3,
             description: 'Sets the role to be assigned to either bots or users when they join the server.',
-            extendedHelp: "In case I can't assign the role, I will send the server owner why.",
-            usage: '<user|bot> <remove|Role:role> [...]',
-            usageDelim: ' ',
-            subcommands: true
+            detailedDescription: "In case I can't assign the role, I will send the server owner why.",
+            preconditions: ['AdminsOnly'],
+            requiredClientPermissions: ['MANAGE_ROLES'],
+            runIn: ['text']
         });
     }
 
-    async user(msg, [role]) {
-        return await this.setRole(msg, role, 'user');
-    }
+    async run(msg, args) {
+        let type = await args.pickResult('string');
+        if (!role.success || !['bot', 'user'].includes(type.value)) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply the scope of the autorole.`);
+        type = type.value;
 
-    async bot(msg, [role]) {
-        return await this.setRole(msg, role, 'bot');
-    }
+        let role = await args.pickResult('role');
+        if (!role.success) role = await args.pickResult('string');
+        if (!role.success || role.value !== 'remove') return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply a role or the word \`remove\`.`);
+        role = role.value;
 
-    async setRole(msg, role, type) {
         if (role === 'remove') {
-            msg.guild.settings.reset(`autorole.${type}`);
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
+            this.container.client.gateways.guilds.reset(msg.guild.id, `autorole.${type}`);
+            return send(msg, `${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
         }
-        if (!role) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
-        if (role.position >= msg.guild.me.roles.highest.position) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`;
-        if (role.position >= msg.member.roles.highest.position) throw `${this.container.client.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`;
-        msg.guild.settings.update(`autorole.${type}`, role.id, msg.guild);
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
+        if (!role) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`);
+        if (role.position >= msg.guild.me.roles.highest.position) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`);
+        if (role.position >= msg.member.roles.highest.position) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`);
+        this.container.client.gateways.guilds.update(msg.guild.id, `autorole.${type}`, role.id);
+        return send(msg, `${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
     }
 
 
