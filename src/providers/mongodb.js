@@ -54,7 +54,7 @@ module.exports = class extends Provider {
 	}
 
 	getKeys(table) {
-		return this.db.collection(table).find({}, { id: 1, _id: 0 }).toArray();
+		return this.db.collection(table).distinct('id');
 	}
 
 	get(table, id) {
