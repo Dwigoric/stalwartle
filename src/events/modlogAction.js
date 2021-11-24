@@ -43,10 +43,7 @@ module.exports = class extends Event {
 				.addField(user.bot ? 'Bot' : 'User', user, true);
 			if (reason) embed.addField('Reason', reason, true);
 			if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
-			if (message.content) {
-				embed.addField('Channel', message.channel, true);
-				if (message.guild.settings.get('modlogShowContent')) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
-			}
+			if (message.content) embed.addField('Channel', message.channel, true);
 			logMessage = await channel.send(embed);
 		}
 

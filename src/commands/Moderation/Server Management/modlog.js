@@ -17,7 +17,7 @@ module.exports = class extends Command {
 				'If you want to get the details of a specific case number, simply run `s.modlog <case number here>`.',
 				'To get the modlogs of a certain type, you can use the `--type` flag, e.g. `--type=warn`, `--type=kick`, `ban`, etc.'
 			].join('\n'),
-			usage: '[reset|showcontent] [User:user|CaseNumber:integer]',
+			usage: '[reset] [User:user|CaseNumber:integer]',
 			usageDelim: ' ',
 			subcommands: true
 		});
@@ -72,12 +72,6 @@ module.exports = class extends Command {
 		return display
 			.setFooterPrefix('Page ')
 			.run(message, { filter: (reaction, author) => author === msg.author });
-	}
-
-	async showcontent(msg) {
-		const modlogShowContent = msg.guild.settings.get('modlogShowContent');
-		msg.guild.settings.update('modlogShowContent', !modlogShowContent);
-		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
 	}
 
 	async reset(msg) {

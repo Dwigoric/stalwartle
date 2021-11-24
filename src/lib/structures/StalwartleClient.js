@@ -55,7 +55,6 @@ module.exports = class Stalwartle extends Client {
 			.add('globalBans', 'boolean', { default: false })
 			.add('ignored', 'channel', { array: true })
 			.add('logging', 'boolean', { default: true })
-			.add('modlogShowContent', 'boolean', { default: true })
 			.add('muted', 'user', { array: true, configurable: false })
 			.add('muteRole', 'role', { configurable: false })
 			.add('selfroles', 'role', { array: true })
