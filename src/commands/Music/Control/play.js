@@ -1,7 +1,6 @@
 const { Command, Timestamp, util: { mergeObjects } } = require('klasa');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
-const { parse } = require('url');
 
 const prompts = new Map();
 const timeouts = new Map();
@@ -153,7 +152,7 @@ module.exports = class extends Command {
 		const node = this.client.playerManager.idealNodes[0];
 		const params = new URLSearchParams();
 
-		if (parse(query).protocol && parse(query).hostname) {
+		if (new URL(query).protocol && new URL(query).hostname) {
 			if (SPOTIFY_TRACK_REGEX.test(query)) return { loadType: 'TRACK_LOADED', tracks: [await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(query)[1], true)] };
 			else if (SPOTIFY_ALBUM_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(query)[1], true) };
 			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1], true) };
