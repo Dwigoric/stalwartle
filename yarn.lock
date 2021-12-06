@@ -23,23 +23,17 @@
   dependencies:
     lavacord "1.1.9"
 
-"@types/node-fetch@^2.5.5":
-  version "2.5.12"
-  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.5.12.tgz#8a6f779b1d4e60b7a57fb6fd48d84fb545b9cc66"
-  integrity sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==
+"@types/node-fetch@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-3.0.3.tgz#9d969c9a748e841554a40ee435d26e53fa3ee899"
+  integrity sha512-HhggYPH5N+AQe/OmN6fmhKmRRt2XuNJow+R3pQwJxOOF9GuwM7O2mheyGeIrs5MOIeNjDEdgdoyHBOrFeJBR3g==
   dependencies:
-    "@types/node" "*"
-    form-data "^3.0.0"
+    node-fetch "*"
 
-"@types/node@*":
+"@types/node@*", "@types/node@^16.11.11":
   version "16.11.11"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.11.tgz#6ea7342dfb379ea1210835bada87b3c512120234"
   integrity sha512-KB0sixD67CeecHC33MYn+eYARkqTheIRNuu97y2XMjR7Wu3XibO1vaY6VBV6O/a89SPI81cEUIYT87UqUWlZNw==
-
-"@types/node@^13.9.8":
-  version "13.13.52"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.52.tgz#03c13be70b9031baaed79481c0c0cfb0045e53f7"
-  integrity sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==
 
 "@types/webidl-conversions@*":
   version "6.1.1"
@@ -54,10 +48,10 @@
     "@types/node" "*"
     "@types/webidl-conversions" "*"
 
-"@types/ws@^7.2.6":
-  version "7.4.7"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-7.4.7.tgz#f7c390a36f7a0679aa69de2d501319f4f8d9b702"
-  integrity sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==
+"@types/ws@^8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.2.1.tgz#7bdf6b12869726c9f3cc3c48485efea5d4505274"
+  integrity sha512-SqQ+LhVZaJi7c7sYVkjWALDigi/Wy7h7Iu72gkQp8Y8OWw/DddEVBrTSKu86pQftV2+Gm8lYM61hadPKqyaIeg==
   dependencies:
     "@types/node" "*"
 
@@ -145,6 +139,11 @@ css-what@^5.0.0, css-what@^5.0.1:
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-5.1.0.tgz#3f7b707aadf633baf62c2ceb8579b545bb40f7fe"
   integrity sha512-arSMRWIIFY0hV8pIxZMEfmMI47Wj3R/aWpZDDxWYCPEiOMv6tfOrnpDtgxBYPEQD4V0Y/958+1TdC3iWTFcUPw==
 
+data-uri-to-buffer@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-4.0.0.tgz#b5db46aea50f6176428ac05b73be39a57701a64b"
+  integrity sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==
+
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
@@ -208,19 +207,24 @@ event-target-shim@^5.0.0:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+fetch-blob@^3.1.2:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/fetch-blob/-/fetch-blob-3.1.3.tgz#a7dca4855e39d3e3c5a1da62d4ee335c37d26012"
+  integrity sha512-ax1Y5I9w+9+JiM+wdHkhBoxew+zG4AJ2SvAD1v1szpddUIiPERVGBxrMcB2ZqW0Y3PP8bOWYv2zqQq1Jp2kqUQ==
+  dependencies:
+    web-streams-polyfill "^3.0.3"
+
 figlet@^1.2.1:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/figlet/-/figlet-1.5.2.tgz#dda34ff233c9a48e36fcff6741aeb5bafe49b634"
   integrity sha512-WOn21V8AhyE1QqVfPIVxe3tupJacq1xGkPTB4iagT6o+P2cAgEOOwIxMftr4+ZCTI6d551ij9j61DFr0nsP2uQ==
 
-form-data@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
-  integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+formdata-polyfill@^4.0.10:
+  version "4.0.10"
+  resolved "https://registry.yarnpkg.com/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz#24807c31c9d402e002ab3d8c720144ceb8848423"
+  integrity sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==
   dependencies:
-    asynckit "^0.4.0"
-    combined-stream "^1.0.8"
-    mime-types "^2.1.12"
+    fetch-blob "^3.1.2"
 
 fs-nextra@^0.4.7:
   version "0.4.7"
@@ -309,6 +313,15 @@ mongodb@^4.2.1:
   optionalDependencies:
     saslprep "^1.0.3"
 
+node-fetch@*, node-fetch@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-3.1.0.tgz#714f4922dc270239487654eaeeab86b8206cb52e"
+  integrity sha512-QU0WbIfMUjd5+MUzQOYhenAazakV7Irh1SGkWCsRzBwvm4fAhzEUaHMJ6QLP7gWT6WO9/oH2zhKMMGMuIrDyKw==
+  dependencies:
+    data-uri-to-buffer "^4.0.0"
+    fetch-blob "^3.1.2"
+    formdata-polyfill "^4.0.10"
+
 node-fetch@^2.6.0, node-fetch@^2.6.1:
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.6.tgz#1751a7c01834e8e1697758732e9efb6eeadfaf89"
@@ -371,15 +384,15 @@ sparse-bitfield@^3.0.3:
   dependencies:
     memory-pager "^1.0.2"
 
-spotilink@1.4.5:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.4.5.tgz#8cd8898f6fee83da02f9e8f8519dc2c7617c9467"
-  integrity sha512-rnP6Ac9CJqp+2b/MzURTQjobZhZfKhSTr1Abjrt9aRWujAv2nDlMyAaMGdk3mSwjU24+DJmd6WYg3jzGpYeLMA==
+spotilink@^1.4.8:
+  version "1.4.8"
+  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.4.8.tgz#5c39e5cd23b269671b542795e8b8d7211b7a1091"
+  integrity sha512-NDnYAebw/xRTC1hNRaHGfbgofR1l68a5+mWm5UjXv5pebR9OTu4m40I3TzVpd/zf/DjqTbI13RGU2YD0nySSSA==
   dependencies:
-    "@types/node" "^13.9.8"
-    "@types/node-fetch" "^2.5.5"
-    "@types/ws" "^7.2.6"
-    node-fetch "^2.6.0"
+    "@types/node" "^16.11.11"
+    "@types/node-fetch" "^3.0.3"
+    "@types/ws" "^8.2.1"
+    node-fetch "^3.1.0"
 
 steamapi@^2.1.2:
   version "2.2.0"
@@ -414,6 +427,11 @@ tweetnacl@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
+
+web-streams-polyfill@^3.0.3:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.2.0.tgz#a6b74026b38e4885869fb5c589e90b95ccfc7965"
+  integrity sha512-EqPmREeOzttaLRm5HS7io98goBgZ7IVz79aDvqjD0kYXLtFZTc0T/U6wHTPKyIjb+MdN7DFIIX6hgdBEpWmfPA==
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
