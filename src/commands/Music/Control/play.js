@@ -154,8 +154,8 @@ module.exports = class extends Command {
 
 		let isURL = true;
 		try {
-			new URL(query);
-		} catch (e) {
+			new URL(query); // eslint-disable-line no-new
+		} catch (err) {
 			isURL = false;
 		}
 
