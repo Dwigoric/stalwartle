@@ -371,10 +371,10 @@ sparse-bitfield@^3.0.3:
   dependencies:
     memory-pager "^1.0.2"
 
-spotilink@1.4.5:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.4.5.tgz#8cd8898f6fee83da02f9e8f8519dc2c7617c9467"
-  integrity sha512-rnP6Ac9CJqp+2b/MzURTQjobZhZfKhSTr1Abjrt9aRWujAv2nDlMyAaMGdk3mSwjU24+DJmd6WYg3jzGpYeLMA==
+spotilink@1.4.7:
+  version "1.4.7"
+  resolved "https://registry.yarnpkg.com/spotilink/-/spotilink-1.4.7.tgz#20b7787c4e9995465734b934d659e80121e781f4"
+  integrity sha512-La3GpTocb2FAtIBJQlvjro+oLl/+MfsC3mLFqUcpdnibmBUtxNuLCjPOr+PQq2wz1WY7zmz/MF1OW9w2BCJz0w==
   dependencies:
     "@types/node" "^13.9.8"
     "@types/node-fetch" "^2.5.5"

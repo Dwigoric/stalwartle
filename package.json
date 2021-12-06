@@ -22,7 +22,7 @@
 		"klasa": "github:Dwigoric/klasa#message-fix",
 		"moment-timezone": "^0.5.34",
 		"mongodb": "^4.2.1",
-		"spotilink": "1.4.5"
+		"spotilink": "1.4.7"
 	},
 	"optionalDependencies": {
 		"cheerio": "^1.0.0-rc.2",
