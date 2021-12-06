@@ -152,7 +152,14 @@ module.exports = class extends Command {
 		const node = this.client.playerManager.idealNodes[0];
 		const params = new URLSearchParams();
 
-		if (new URL(query).protocol && new URL(query).hostname) {
+		let isURL = true;
+		try {
+			new URL(query);
+		} catch (e) {
+			isURL = false;
+		}
+
+		if (isURL) {
 			if (SPOTIFY_TRACK_REGEX.test(query)) return { loadType: 'TRACK_LOADED', tracks: [await this.client.spotifyParser.getTrack(SPOTIFY_TRACK_REGEX.exec(query)[1], true)] };
 			else if (SPOTIFY_ALBUM_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getAlbumTracks(SPOTIFY_ALBUM_REGEX.exec(query)[1], true) };
 			else if (SPOTIFY_PLAYLIST_REGEX.test(query)) return { loadType: 'PLAYLIST_LOADED', tracks: await this.client.spotifyParser.getPlaylistTracks(SPOTIFY_PLAYLIST_REGEX.exec(query)[1], true) };
