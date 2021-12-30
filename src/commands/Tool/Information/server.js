@@ -24,19 +24,6 @@ module.exports = class extends Command {
 	async run(msg, [guild = msg.guild]) {
 		const timezone = msg.author.settings.get('timezone');
 
-		const rawRegion = guild.region.split('-').slice(guild.region.includes('vip') ? 1 : 0).join('-');
-		let region = {
-			'eu-central': 'Central Europe',
-			'eu-west': 'Western Europe',
-			hongkong: 'Hong Kong',
-			southafrica: 'South Africa',
-			'us-west': 'Western US',
-			'us-east': 'Eastern US',
-			'us-south': 'Southern US',
-			'us-central': 'Central US'
-		}[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
-		if (guild.region.includes('vip')) region += ' [Partnered]';
-
 		const avatarURL = msg.author.displayAvatarURL({ dynamic: true });
 		return msg.send({
 			embed: new MessageEmbed()
@@ -45,7 +32,6 @@ module.exports = class extends Command {
 				.setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
 				.addField('ID', guild.id, true)
 				.addField('Owner', await guild.members.fetch(guild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
-				.addField('Server Region', region, true)
 				.addField('Verification Level', {
 					NONE: 'None (Unrestricted)',
 					LOW: 'Low (Requires a verified email)',
