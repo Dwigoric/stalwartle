@@ -45,8 +45,8 @@ class Stalwartle extends SapphireClient {
         this._timeouts = new Set();
 
         this.stores
-            .register(new TaskStore(Task).registerPath(join(__dirname, '..', 'tasks')))
-            .register(new GatewayStore(Gateway).registerPath(join(__dirname, '..', 'gateways')));
+            .register(new TaskStore(Task).registerPath(join(__dirname, '..', '..', 'tasks')))
+            .register(new GatewayStore(Gateway).registerPath(join(__dirname, '..', '..', 'gateways')));
 
         container.cache = {
             guilds: new CacheManager(this, GuildCacheData),
