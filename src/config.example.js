@@ -1,4 +1,3 @@
-const { Options } = require('discord.js');
 const { LogLevel } = require('@sapphire/framework');
 
 exports.config = {
@@ -43,14 +42,12 @@ exports.config = {
      * Caching Options
      */
     partials: ['GUILD_MEMBER', 'USER'],
-    makeCache: Options.cacheWithLimits({
-        MessageManager: {
-            maxSize: 100,
-            sweepInterval: 30,
-            sweepFilter: coll => coll.filterByLifetime({ lifetime: 60 })
-        },
-        PresenceManager: { maxSize: 0 }
-    }),
+    sweepers: {
+        messages: {
+            interval: 30,
+            lifetime: 60
+        }
+    },
 
     /**
      * Sharding Options
