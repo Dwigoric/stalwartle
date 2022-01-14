@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async messagemessageRun(msg) {
+    async messageRun(msg) {
         await this.container.client.gateways.client.update(this.container.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
         await msg.channel.send('<a:loading:430269209415516160>  ::  Bot is restarting... I will message you in this channel once I\'ve woken up again.').catch(err => this.container.client.emit('error', err));
         await this.container.client.destroy();
