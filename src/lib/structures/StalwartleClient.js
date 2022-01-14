@@ -1,4 +1,4 @@
-const { SapphireClient } = require('@sapphire/framework');
+const { SapphireClient, container } = require('@sapphire/framework');
 const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
 const { join } = require('path');
@@ -31,15 +31,15 @@ class Stalwartle extends SapphireClient {
     constructor(clientOptions) {
         super(clientOptions);
 
-        this.lavacord = null;
-        this.spotifyParser = null;
-        this.constants = constants;
-        this.auth = auth;
+        container.lavacord = null;
+        container.spotifyParser = null;
+        container.constants = constants;
+        container.auth = auth;
 
         this.once('ready', this._initplayer.bind(this));
 
-        this.provider = new PersistenceManager();
-        this.schedule = new Schedule(this);
+        container.database = new PersistenceManager();
+        container.schedule = new Schedule(this);
 
         this._intervals = new Set();
         this._timeouts = new Set();
@@ -48,7 +48,7 @@ class Stalwartle extends SapphireClient {
             .register(new TaskStore(Task).registerPath(join(__dirname, '..', 'tasks')))
             .register(new GatewayStore(Gateway).registerPath(join(__dirname, '..', 'gateways')));
 
-        this.cache = {
+        container.cache = {
             guilds: new CacheManager(this, GuildCacheData),
             members: new CacheManager(this, MemberCacheData)
         };
@@ -59,50 +59,50 @@ class Stalwartle extends SapphireClient {
     }
 
     async postStats() {
-        if (this.auth.ctxAPIkey) {
+        if (container.auth.ctxAPIkey) {
             fetch('https://www.carbonitex.net/discord/data/botdata.php', {
                 method: 'POST',
-                body: JSON.stringify({ key: this.auth.ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
+                body: JSON.stringify({ key: container.auth.ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
                 headers: { 'Content-Type': 'application/json' }
             });
         }
-        if (this.auth.dblAPIkey) {
+        if (container.auth.dblAPIkey) {
             fetch(`https://top.gg/api/bots/${this.user.id}/stats`, {
                 method: 'POST',
                 body: JSON.stringify({ server_count: await this.guildCount(), shard_count: this.options.shardCount }), // eslint-disable-line camelcase
-                headers: { Authorization: this.auth.dblAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: container.auth.dblAPIkey, 'Content-Type': 'application/json' }
             });
         }
-        if (this.auth.dbl2APIkey) {
+        if (container.auth.dbl2APIkey) {
             fetch(`https://discordbotlist.com/api/v1/bots/${this.user.id}/stats`, {
                 method: 'POST',
                 body: JSON.stringify({
                     guilds: await this.guildCount(),
                     users: await this.userCount(),
-                    voice_connections: Array.from(this.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
+                    voice_connections: Array.from(container.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
                 }),
-                headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
+                headers: { Authorization: `Bot ${container.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
             });
         }
-        if (this.auth.dcbAPIkey) {
+        if (container.auth.dcbAPIkey) {
             fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
                 method: 'POST',
                 body: JSON.stringify({ guildCount: await this.guildCount() }),
-                headers: { Authorization: this.auth.dcbAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: container.auth.dcbAPIkey, 'Content-Type': 'application/json' }
             });
         }
-        if (this.auth.blsAPIkey) {
+        if (container.auth.blsAPIkey) {
             fetch(`https://api.botlist.space/v1/bots/${this.user.id}`, {
                 method: 'POST',
                 body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
-                headers: { Authorization: this.auth.blsAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: container.auth.blsAPIkey, 'Content-Type': 'application/json' }
             });
         }
-        if (this.auth.bodAPIkey) {
+        if (container.auth.bodAPIkey) {
             fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
                 method: 'POST',
                 body: JSON.stringify({ guildCount: await this.guildCount() }),
-                headers: { Authorization: this.auth.bodAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: container.auth.bodAPIkey, 'Content-Type': 'application/json' }
             });
         }
     }
@@ -130,7 +130,7 @@ class Stalwartle extends SapphireClient {
     }
 
     async login(token) {
-        await this.provider.init().catch(() => new Error('Could not establish connection to MongoDB.'));
+        await container.provider.init().catch(() => new Error('Could not establish connection to MongoDB.'));
         console.log('Connection to MongoDB has been established.');
         for (const gateway in this.gateways) {
             await this.gateways[gateway].init().catch(() => new Error(`Could not load Collection ${gateway} to cache.`));
@@ -141,12 +141,12 @@ class Stalwartle extends SapphireClient {
     }
 
     _initplayer() {
-        this.lavacord = this.lavacord || new Manager(this, lavalinkNodes, {
+        container.lavacord = container.lavacord || new Manager(this, lavalinkNodes, {
             user: this.user.id,
             shards: this.options.shardCount
         });
-        this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
-        if (!this.lavacord.idealNodes.length) this.lavacord.connect();
+        container.spotifyParser = new SpotifyParser(lavalinkNodes[0], container.auth.spotifyClientID, container.auth.spotifyClientSecret);
+        if (!container.lavacord.idealNodes.length) container.lavacord.connect();
         return true;
     }
 
