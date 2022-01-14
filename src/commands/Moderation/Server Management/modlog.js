@@ -23,7 +23,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [user]) {
+    async messageRun(msg, [user]) {
         const timezone = msg.author.settings.get('timezone');
         const { modlogs = [] } = await this.container.client.providers.default.get('modlogs', msg.guild.id) || {};
         let list = modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id));

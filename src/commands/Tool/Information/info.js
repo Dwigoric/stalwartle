@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         const timezone = msg.author.settings.get('timezone');
         const owners = await Promise.all(require('../../../config').config.owners.map(owner => this.container.client.users.fetch(owner).then(own => own.tag)));
 

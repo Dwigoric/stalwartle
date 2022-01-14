@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [query, page = 1]) {
+    async messageRun(msg, [query, page = 1]) {
         const timezone = msg.author.settings.get('timezone');
         const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 

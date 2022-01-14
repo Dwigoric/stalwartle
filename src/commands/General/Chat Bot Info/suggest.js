@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [suggestion]) {
+    async messageRun(msg, [suggestion]) {
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
         this.container.client.channels.cache.get(this.container.client.settings.suggestions.reports).send([
             `💡  ::  Suggestion by **${msg.author.tag}** | ${msg.author.id}`,

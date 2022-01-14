@@ -17,7 +17,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [songs]) {
+    async messageRun(msg, [songs]) {
         songs = songs.split('-').slice(0, 2);
         songs = [parseInt(songs[0]), parseInt(songs[1])];
         if (isNaN(songs[0])) throw `${this.container.client.constants.EMOTES.xmark}  ::  Invalid queue entry given. Refer to \`${msg.guild.settings.get('prefix')}help remove\` for more information.`;

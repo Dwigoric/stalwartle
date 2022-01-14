@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [...rgb]) {
+    async messageRun(msg, [...rgb]) {
         const [red, grn, blu] = rgb;
 
         function rgbToHex(rd, gn, bl) {

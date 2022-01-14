@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [member, ...reason]) {
+    async messageRun(msg, [member, ...reason]) {
         reason = reason.length ? reason.join(this.usageDelim) : null;
         if (!msg.guild.settings.get('muteRole')) throw `${this.container.client.constants.EMOTES.xmark}  ::  The mute role has not yet been set up for this server. You can do so by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`; // eslint-disable-line max-len
         if (member.user.equals(msg.author)) throw 'Look... how are you able to use this command if you were already unmuted?';

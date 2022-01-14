@@ -18,7 +18,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         if (msg.guild.settings.get('donation') < 3) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! This feature is limited to servers which have donated $3 or more.`;
         const { history = [] } = await this.container.client.providers.default.get('music', msg.guild.id) || {};
         if (!history.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  There are no songs in the history yet! Songs you play are stored in the history within a day.`;

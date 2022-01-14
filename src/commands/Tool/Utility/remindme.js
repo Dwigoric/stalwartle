@@ -49,7 +49,7 @@ module.exports = class extends Command {
             });
     }
 
-    async run(msg, [when, ...text]) {
+    async messageRun(msg, [when, ...text]) {
         if (when - new Date() >= 1577880000000) throw `${this.container.client.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 5 decades!`;
 
         const reminder = await this.container.client.schedule.create('reminder', when, {

@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [chan = msg.channel, ...msgargs]) {
+    async messageRun(msg, [chan = msg.channel, ...msgargs]) {
         msgargs = msgargs.join(this.usageDelim);
         if (!chan.postable) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`; // eslint-disable-line max-len
         if (chan !== msg.channel) msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Message sent!`);

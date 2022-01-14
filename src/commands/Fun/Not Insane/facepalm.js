@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         const message = await msg.channel.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading GIF...`);
 
         const { link } = await fetch(`https://some-random-api.ml/animu/face-palm`)

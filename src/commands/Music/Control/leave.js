@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         if (!msg.guild.me.voice.channel) throw `${this.container.client.constants.EMOTES.xmark}  ::  There is no music session in this server.`;
         this.store.get('play').timeouts.delete(msg.guild.id);
         this.container.client.playerManager.leave(msg.guild.id);

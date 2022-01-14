@@ -17,7 +17,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [role]) {
+    async messageRun(msg, [role]) {
         const timezone = msg.author.settings.get('timezone');
 
         function hexToRgb(hex) {

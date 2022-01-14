@@ -12,7 +12,7 @@ module.exports = class extends Command {
         this.errorMessage = `${this.container.client.constants.EMOTES.xmark}  ::  There was an error. Reddit may be down, or the subreddit doesn't exist.`;
     }
 
-    async run(msg, [subreddit]) {
+    async messageRun(msg, [subreddit]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading reddit post...`);
         const { data } = await fetch(`https://www.reddit.com/r/${subreddit}/random.json`)
             .then(res => res.json())

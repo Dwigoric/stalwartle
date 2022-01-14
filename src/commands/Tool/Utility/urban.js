@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [search, index = 1]) {
+    async messageRun(msg, [search, index = 1]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
         const params = new URLSearchParams();

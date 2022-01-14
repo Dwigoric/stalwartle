@@ -17,7 +17,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         const now = Date.now();
         msg.sendMessage(new MessageEmbed()
             .setColor('RANDOM')

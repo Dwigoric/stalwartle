@@ -9,7 +9,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [hexColor]) {
+    async messageRun(msg, [hexColor]) {
         hexColor = hexColor.input;
 
         function hexToRgb(hex) {

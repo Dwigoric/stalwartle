@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         msg.send({ embed: await this.container.client.channels.cache.get(this.container.client.settings.changelogs).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
     }
 

@@ -19,7 +19,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, args) {
+    async messageRun(msg, args) {
         let input = await args.restResult('string');
         if (!input.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
         input = input.value;

@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [query]) {
+    async messageRun(msg, [query]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading Wikipedia article...`);
 
         const article = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`).then(res => res.json());

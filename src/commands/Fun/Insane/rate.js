@@ -9,7 +9,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [msgargs]) {
+    async messageRun(msg, [msgargs]) {
         msg.send(`I would rate ${msgargs} a **${Math.round(Math.random() * 100)}/100**!`, { disableMentions: 'everyone' });
     }
 

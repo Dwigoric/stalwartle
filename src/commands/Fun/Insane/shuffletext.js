@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [string]) {
+    async messageRun(msg, [string]) {
         const shuffle = (str) => {
             const a = str.split('');
 

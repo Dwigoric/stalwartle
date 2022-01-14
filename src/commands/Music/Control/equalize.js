@@ -20,7 +20,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [band, gain]) {
+    async messageRun(msg, [band, gain]) {
         if (band === 'setall') {
             const bands = [];
             for (band of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]) bands.push({ band, gain });

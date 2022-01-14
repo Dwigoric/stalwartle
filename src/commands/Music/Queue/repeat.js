@@ -18,7 +18,7 @@ module.exports = class extends Command {
         };
     }
 
-    async run(msg, [repeat]) {
+    async messageRun(msg, [repeat]) {
         if (!repeat) return msg.send(`${this.symbols[msg.guild.settings.get('music.repeat')]}  ::  Music sessions in this server are set to repeat ${msg.guild.settings.get('music.repeat') === 'none' ? 'nothing' : `the ${msg.guild.settings.get('music.repeat')}`}. Run \`${msg.guild.settings.get('prefix')}help repeat\` to get more information on changing music loops.`); // eslint-disable-line max-len
         msg.guild.settings.update('music.repeat', repeat);
         return msg.send(`${this.symbols[repeat]}  ::  Music sessions in this server are now set to repeat ${repeat === 'none' ? 'nothing' : `the ${repeat}`}.`);

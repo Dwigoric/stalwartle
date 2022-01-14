@@ -11,7 +11,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, ...params) {
+    async messageRun(msg, ...params) {
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
         this.container.client.channels.cache.get(this.container.client.settings.bugs.reports).send([
             `🐛  ::  Bug Report by **${msg.author.tag}** | ${msg.author.id}`,

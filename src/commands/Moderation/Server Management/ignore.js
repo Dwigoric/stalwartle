@@ -20,7 +20,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [channel]) {
+    async messageRun(msg, [channel]) {
         if (channel.type === 'GUILD_VOICE') throw `${this.container.client.constants.EMOTES.xmark}  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.`;
         if (channel.type === 'GUILD_CATEGORY') channel = msg.guild.channels.cache.filter(chan => chan.parentID === channel.id && chan.type === 'GUILD_TEXT');
         else channel = [channel];

@@ -9,7 +9,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         msg.send(`🖥  ::  The bot is in **${await this.container.client.guildCount()}** servers.`);
     }
 

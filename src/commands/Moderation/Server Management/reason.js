@@ -11,7 +11,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [modlogID, ...reason]) {
+    async messageRun(msg, [modlogID, ...reason]) {
         reason = reason.join(this.usageDelim);
         const { modlogs = [] } = await this.container.client.providers.default.get('modlogs', msg.guild.id) || {};
         const modlog = modlogs[modlogID - 1];

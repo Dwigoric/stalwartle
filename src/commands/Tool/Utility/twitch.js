@@ -15,7 +15,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [twitchName]) {
+    async messageRun(msg, [twitchName]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading Twitch channel...`);
 
         const channel = await fetch(`https://api.twitch.tv/helix/users?login=${twitchName}`, {

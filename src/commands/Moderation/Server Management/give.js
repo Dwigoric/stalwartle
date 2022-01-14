@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [member, role]) {
+    async messageRun(msg, [member, role]) {
         if (!role) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
         if (member.roles.highest.position >= msg.guild.me.roles.highest.position) throw `${this.container.client.constants.EMOTES.xmark}  ::  ${role.name} has higher or equal position to my highest role!`;
         if (member.roles.highest.position >= msg.guild.me.roles.highest.position) throw `${this.container.client.constants.EMOTES.xmark}  ::  I cannot give ${role.name} to this user.`;

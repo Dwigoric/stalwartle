@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [banner]) {
+    async messageRun(msg, [banner]) {
         const bannerWidth = msg.author.settings.get('bannerWidth');
         const data = await figletAsync(banner, { width: bannerWidth === 0 ? undefined : bannerWidth });
         if (data.length > 2000) throw `${this.container.client.constants.EMOTES.xmark}  ::  The banner was too long! Please try making it shorter.`;

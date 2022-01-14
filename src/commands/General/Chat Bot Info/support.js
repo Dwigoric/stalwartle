@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         msg.send({
             embed: await new MessageEmbed()
                 .setColor('RANDOM')

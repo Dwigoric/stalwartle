@@ -11,7 +11,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [question]) {
+    async messageRun(msg, [question]) {
         if (question instanceof Message) question = question.content;
         return msg.send(`❓  ::  ${question}\n🎱  ::  ${answers[Math.floor(Math.random() * answers.length)]}`, { disableMentions: 'everyone' });
     }

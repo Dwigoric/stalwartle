@@ -82,7 +82,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [...username]) {
+    async messageRun(msg, [...username]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading user information...`);
 
         let mode;

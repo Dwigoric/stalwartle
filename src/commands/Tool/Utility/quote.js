@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [mssg, chan = msg.channel]) {
+    async messageRun(msg, [mssg, chan = msg.channel]) {
         const message = await chan.messages.fetch(mssg).catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  \`${mssg}\` is not a valid message ID from ${chan}.`; });
         const embed = new MessageEmbed()
             .setColor('RANDOM')

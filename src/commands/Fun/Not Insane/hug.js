@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [person]) {
+    async messageRun(msg, [person]) {
         const message = await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading GIF...`);
 
         const { link } = await fetch(`https://some-random-api.ml/animu/hug`)

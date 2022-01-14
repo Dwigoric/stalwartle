@@ -37,7 +37,7 @@ module.exports = class extends Command {
         this.timeout = 30000;
     }
 
-    async run(msg, args) {
+    async messageRun(msg, args) {
         let code = await args.restResult('string');
         if (!code.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
         code = code.value;

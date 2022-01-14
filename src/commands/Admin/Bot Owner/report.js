@@ -17,7 +17,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, args) {
+    async messageRun(msg, args) {
         const reportChans = {
             [this.container.client.settings.bugs.reports]: this.container.client.settings.bugs.processed,
             [this.container.client.settings.suggestions.reports]: this.container.client.settings.suggestions.processed

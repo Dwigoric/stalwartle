@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading story...`);
         const $ = cheerio.load(await fetch('http://www.fmylife.com/random').then(res => res.text())); // eslint-disable-line id-length
 

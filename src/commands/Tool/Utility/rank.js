@@ -19,7 +19,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [sar]) {
+    async messageRun(msg, [sar]) {
         const selfroles = msg.guild.settings.get('selfroles');
         if (!selfroles.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  Selfrole is not yet implemented in this server.`;
         const role = selfroles.map(_sar => msg.guild.roles.cache.get(_sar)).find(rl => new RegExp(regExpEsc(sar), 'i').test(rl.name));

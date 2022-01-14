@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [chan = msg.channel, question, ...choices]) {
+    async messageRun(msg, [chan = msg.channel, question, ...choices]) {
         if (!chan.postable) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
         // eslint-disable-next-line max-len
         if (!chan.permissionsFor(this.container.client.user).has(['EMBED_LINKS', 'ADD_REACTIONS'])) throw `${this.container.client.constants.EMOTES.xmark}  ::  Please allow me to send embeds and/or give reactions in that channel.`;

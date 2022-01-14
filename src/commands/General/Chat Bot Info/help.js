@@ -24,7 +24,7 @@ module.exports = class extends Command {
         this.handlers = new Map();
     }
 
-    async run(msg, [category, subcategory]) {
+    async messageRun(msg, [category, subcategory]) {
         if (category instanceof Command) {
             return msg.send({
                 embed: new MessageEmbed()

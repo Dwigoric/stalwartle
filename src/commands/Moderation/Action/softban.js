@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [user, days = 1, ...reason]) {
+    async messageRun(msg, [user, days = 1, ...reason]) {
         if (user.id === msg.author.id) throw 'Why would you ban yourself?';
         if (user.id === this.container.client.user.id) throw 'Have I done something wrong?';
         if (user.id === msg.guild.ownerID) throw 'Pretty sure the server owner cannot be banned in the first place...';

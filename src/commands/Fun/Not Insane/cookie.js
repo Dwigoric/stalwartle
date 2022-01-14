@@ -27,7 +27,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [person]) {
+    async messageRun(msg, [person]) {
         if (!person) return msg.send(`🍪  ::  You have **${msg.author.settings.get('cookies')}** cookie${msg.author.settings.get('cookies') === 1 ? '' : 's'}.`);
         if (person.id === msg.author.id) throw `${this.container.client.constants.EMOTES.xmark}  ::  I know this command gives someone a cookie, but you can't give yourself a cookie! Don't be greedy 😿`;
         if (person.equals(this.container.client.user)) throw `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`;

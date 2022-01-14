@@ -9,7 +9,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [string]) {
+    async messageRun(msg, [string]) {
         msg.send(`↩  ::  ${string.split('').reverse().join('')}`, { disableMentions: 'everyone' });
     }
 

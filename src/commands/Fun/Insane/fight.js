@@ -56,7 +56,7 @@ module.exports = class extends Command {
         };
     }
 
-    async run(msg, [opponent]) {
+    async messageRun(msg, [opponent]) {
         // Restrictions
         if (opponent.bot) throw `${this.container.client.constants.EMOTES.xmark}  ::  You cannot challenge bots to a fight. We will automatically win!`;
         if (!opponent.settings.get('acceptFights')) throw `${this.container.client.constants.EMOTES.xmark}  ::  This person is currently not accepting fight requests.`;

@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [location]) {
+    async messageRun(msg, [location]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading map...`);
 
         const zoom = msg.flagArgs.zoom ? parseInt(msg.flagArgs.zoom) : 12;

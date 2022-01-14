@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [...query]) {
+    async messageRun(msg, [...query]) {
         return await this.query(msg, query, 'video', 'watch?v=');
     }
 

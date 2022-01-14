@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [volume]) {
+    async messageRun(msg, [volume]) {
         if (!volume) return msg.send(`🎚  ::  The volume for this server is currently set to ${msg.guild.settings.get('music.volume')}%.`);
         msg.guild.settings.update('music.volume', volume);
         if (this.container.client.lavacord.players.get(msg.guild.id)) this.container.client.lavacord.players.get(msg.guild.id).volume(volume);

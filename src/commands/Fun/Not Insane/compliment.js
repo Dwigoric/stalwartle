@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    run(msg, [mentioned = msg.member]) {
+    messageRun(msg, [mentioned = msg.member]) {
         return msg.send(`⭐  ::  ${mentioned}: ${compliments[Math.floor(Math.random() * compliments.length)]}`);
     }
 

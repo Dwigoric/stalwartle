@@ -11,7 +11,7 @@ module.exports = class extends Command {
         });
     }
 
-    run(msg, [coins = 0]) {
+    messageRun(msg, [coins = 0]) {
         if (coins > 1) {
             let heads = 0;
             let tails = 0;

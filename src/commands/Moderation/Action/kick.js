@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [member, ...reason]) {
+    async messageRun(msg, [member, ...reason]) {
         if (member.id === msg.author.id) throw 'Why would you kick yourself?';
         if (member.id === this.container.client.user.id) throw 'Have I done something wrong?';
         if (member.id === msg.guild.ownerID) throw 'Pretty sure the server owner cannot be kicked...';

@@ -17,7 +17,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [limit = 50, filter = null]) {
+    async messageRun(msg, [limit = 50, filter = null]) {
         let messages = await msg.channel.messages.fetch({ limit: 1 });
         if (!messages.size) throw `${this.container.client.constants.EMOTES.xmark}  ::  The channel does not have any messages.`;
 

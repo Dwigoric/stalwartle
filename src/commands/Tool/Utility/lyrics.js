@@ -13,7 +13,7 @@ module.exports = class extends Command {
         this.NO_LYRICS_FOUND = `${this.container.client.constants.EMOTES.xmark}  ::  No song lyrics found.`;
     }
 
-    async run(msg, [query]) {
+    async messageRun(msg, [query]) {
         const message = await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading lyrics...`);
 
         const params = new URLSearchParams();

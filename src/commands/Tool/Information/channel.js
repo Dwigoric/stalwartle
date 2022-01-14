@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [chan = msg.channel]) {
+    async messageRun(msg, [chan = msg.channel]) {
         const timezone = msg.author.settings.get('timezone');
 
         let embed = new MessageEmbed()

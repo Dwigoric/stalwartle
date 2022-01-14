@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [game]) {
+    async messageRun(msg, [game]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading game from Steam...`);
 
         const params = new URLSearchParams();

@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, args) {
+    async messageRun(msg, args) {
         let type = await args.pickResult('string');
         if (!role.success || !['bot', 'user'].includes(type.value)) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply the scope of the autorole.`);
         type = type.value;

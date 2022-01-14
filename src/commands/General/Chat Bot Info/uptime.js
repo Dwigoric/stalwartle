@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         const now = moment(new Date());
         const uptime = moment(new Date() - this.container.client.uptime);
         const sinceUp = moment.duration(now.diff(uptime));

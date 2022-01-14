@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [subredditName]) {
+    async messageRun(msg, [subredditName]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading subreddit...`);
 
         let subreddit = await fetch(`https://www.reddit.com/r/${subredditName}/about.json`)

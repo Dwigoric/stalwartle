@@ -11,7 +11,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         const message = await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading koala...`);
 
         const { image, fact } = await fetch(`https://some-random-api.ml/animal/koala`)

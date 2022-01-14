@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [member, ...reason]) {
+    async messageRun(msg, [member, ...reason]) {
         if (member.user.equals(msg.author)) throw 'Why would you warn yourself?';
         if (member.user.equals(this.container.client.user)) throw 'Have I done something wrong?';
 

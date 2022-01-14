@@ -29,7 +29,7 @@ module.exports = class extends Command {
             });
     }
 
-    async run(msg) {
+    async messagemessageRun(msg) {
         const { roles, users } = await msg.guild.settings.get('moderators');
         const modRoles = roles.map(rl => {
             const modRole = msg.guild.roles.cache.get(rl);

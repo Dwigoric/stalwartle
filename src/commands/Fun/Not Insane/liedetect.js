@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [lie]) {
+    async messageRun(msg, [lie]) {
         const gifs = {
             truth: ['https://media.giphy.com/media/5wWf7GR2nhgamhRnEuA/giphy.gif', 0x2ECC71],
             lie: ['https://media.giphy.com/media/2wVDK79pXCAsTyqLUa/giphy.gif', 0xE74C3C]

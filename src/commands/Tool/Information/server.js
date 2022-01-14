@@ -21,7 +21,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [guild = msg.guild]) {
+    async messageRun(msg, [guild = msg.guild]) {
         const timezone = msg.author.settings.get('timezone');
 
         const rawRegion = guild.region.split('-').slice(guild.region.includes('vip') ? 1 : 0).join('-');

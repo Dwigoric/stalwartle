@@ -33,7 +33,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [query]) {
+    async messageRun(msg, [query]) {
         if (msg.guild.player && !msg.guild.me.voice.channel) await this.container.client.playerManager.leave(msg.guild.id);
         if (!msg.member.voice.channel) throw `${this.container.client.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`;
         if (msg.guild.settings.get('music.limitToChannel').length && !msg.guild.settings.get('music.limitToChannel').includes(msg.member.voice.channelID)) {

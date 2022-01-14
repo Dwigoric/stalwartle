@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [user, ...reason]) {
+    async messageRun(msg, [user, ...reason]) {
         if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) throw `${this.container.client.constants.EMOTES.xmark}  ::  This user isn't banned from this server.`;
 
         reason = reason.length ? reason.join(this.usageDelim) : null;

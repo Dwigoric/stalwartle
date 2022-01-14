@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         const timezone = msg.author.settings.get('timezone');
         const prompted = await msg.prompt(`Current Timezone: \`${timezone}\`\n\n**I'm using the TZ format for timezones. You can view the valid timezones here: <http://bit.ly/2ySrZKP>**\n\nPlease **reply** with the timezone in the correct TZ format, or type \`cancel\` if you don't want me to change your timezone.`); // eslint-disable-line max-len
         if (prompted.content.toLowerCase().split(' ').includes('cancel')) throw `${this.container.client.constants.EMOTES.tick}  ::  Alright! You don't want to change your timezone.`;

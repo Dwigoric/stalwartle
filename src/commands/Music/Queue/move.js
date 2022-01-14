@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [entry, position]) {
+    async messageRun(msg, [entry, position]) {
         const { queue = [] } = await this.container.client.providers.default.get('music', msg.guild.id) || {};
         if (queue.length < 3) throw `${this.container.client.constants.EMOTES.xmark}  ::  There is no queue entry to move.`;
         // eslint-disable-next-line max-len

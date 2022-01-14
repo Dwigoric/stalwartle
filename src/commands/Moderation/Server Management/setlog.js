@@ -38,7 +38,7 @@ module.exports = class extends Command {
             .join('\n'));
     }
 
-    async run(msg, [modlog]) {
+    async messageRun(msg, [modlog]) {
         this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.settings.update(`modlogs.${action}`, modlog.id, msg.guild)); // eslint-disable-line max-len
         return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for all moderation actions to ${modlog}.`);
     }

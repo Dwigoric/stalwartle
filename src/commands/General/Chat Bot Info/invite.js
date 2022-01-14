@@ -9,7 +9,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         if (!this.container.client.user.bot) return msg.reply(msg.language.get('COMMAND_INVITE_SELFBOT'));
         return msg.send(msg.language.get('COMMAND_INVITE', this.container.client));
     }

@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [reason = null]) {
+    async messageRun(msg, [reason = null]) {
         if (await this.container.client.providers.default.has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
             await this.container.client.providers.default.delete('afk', msg.author.id);
             return msg.send(`${this.container.client.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);

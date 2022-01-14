@@ -12,7 +12,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [seek]) {
+    async messageRun(msg, [seek]) {
         seek -= Date.now();
         const song = ((await this.container.client.providers.default.get('music', msg.guild.id) || {}).queue || [])[0];
         if (!msg.guild.me.voice.channel) throw `${this.container.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``;

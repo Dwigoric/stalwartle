@@ -13,7 +13,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [keyword]) {
+    async messageRun(msg, [keyword]) {
         await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading anime...`);
 
         const params = new URLSearchParams();

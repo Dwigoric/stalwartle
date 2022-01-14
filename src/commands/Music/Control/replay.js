@@ -10,7 +10,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg) {
+    async messageRun(msg) {
         if (!msg.guild.player || !msg.guild.player.playing) throw `${this.container.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``;
         const song = ((await this.container.client.providers.default.get('music', msg.guild.id) || {}).queue || [])[0];
         if (!song.info.isSeekable) throw `${this.container.client.constants.EMOTES.xmark}  ::  The current track playing cannot be replayed.`;

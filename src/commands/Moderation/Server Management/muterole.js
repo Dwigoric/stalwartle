@@ -15,7 +15,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, [...role]) {
+    async messageRun(msg, [...role]) {
         const newRole = await msg.guild.roles.create({
             data: {
                 name: role.join(this.usageDelim),

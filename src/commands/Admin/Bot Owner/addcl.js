@@ -16,7 +16,7 @@ module.exports = class extends Command {
         });
     }
 
-    async run(msg, args) {
+    async messageRun(msg, args) {
         this.container.client.channels.cache.get(this.container.client.settings.changelogs).send({
             embed: new MessageEmbed()
                 .setTitle(`<a:updating:417233654545383424> ${this.container.client.user.username}'s Changelog`)
