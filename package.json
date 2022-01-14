@@ -4,7 +4,8 @@
 	"version": "3.0.0",
 	"main": "src/app.js",
 	"scripts": {
-		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\""
+		"start": "pm2 start src/app.js --name Stalwartle --node-args=\"--expose_gc --always_compact\"",
+		"run": "node src/app.js"
 	},
 	"repository": {
 		"type": "git",
