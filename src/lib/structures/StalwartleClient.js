@@ -52,9 +52,6 @@ class Stalwartle extends SapphireClient {
             guilds: new CacheManager(this, GuildCacheData),
             members: new CacheManager(this, MemberCacheData)
         };
-
-        this.application = null;
-        this.ready = false;
     }
 
     get settings() {
