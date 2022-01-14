@@ -79,7 +79,7 @@ class Stalwartle extends SapphireClient {
                 body: JSON.stringify({
                     guilds: await this.guildCount(),
                     users: await this.userCount(),
-                    voice_connections: Array.from(this.playerManager.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
+                    voice_connections: Array.from(this.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
                 }),
                 headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
             });
