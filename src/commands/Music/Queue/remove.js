@@ -1,11 +1,11 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             permissionLevel: 5,
             description: 'Removes a single entry or multiple entries from the server music queue.',
             extendedHelp: [

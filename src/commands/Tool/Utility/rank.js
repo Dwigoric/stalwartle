@@ -1,11 +1,11 @@
-const { Command, RichDisplay, util: { regExpEsc, chunk } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, RichDisplay, util: { regExpEsc, chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['MANAGE_ROLES'],
             description: 'Gives/takes a self-assignable role (selfrole).',
             extendedHelp: 'You can setup selfroles via `s.conf set selfroles`',

@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -8,7 +8,7 @@ module.exports = class extends Command {
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Creates a poll in the current channel or in the channel you specify.',
             extendedHelp: 'The first you give is the question, then separated by `|`, you give the choices. If you do not want the default reactions, use the flag `--no-default`',
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             usage: '[Channel:channel] <Question:string> <Choices:string> [...]',
             usageDelim: ' | '
         });

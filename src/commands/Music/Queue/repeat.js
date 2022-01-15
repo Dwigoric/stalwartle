@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
         super(...args, {
             aliases: ['loop'],
             permissionLevel: 5,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets if the current song will be repeated or the whole queue.',
             extendedHelp: 'Supply `song` if you want to repeat the song, or `queue` if you want the queue to repeat.',
             usage: '[song|queue|none]'

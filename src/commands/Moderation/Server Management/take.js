@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
         super(...args, {
             permissionLevel: 6,
             requiredPermissions: ['MANAGE_ROLES'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Takes a role from a member.',
             usage: '<User:member> <Role:role>',
             usageDelim: ' '

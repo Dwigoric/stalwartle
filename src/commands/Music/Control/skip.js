@@ -1,10 +1,10 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Skips current song playing in the voice channel.',
             extendedHelp: [
                 'If you want to force skip, just use the `--force` flag. Usable only by DJs and moderators.',

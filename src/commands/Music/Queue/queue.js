@@ -1,4 +1,4 @@
-const { Command, Timestamp, RichDisplay, util: { chunk } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, Timestamp, RichDisplay, util: { chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
@@ -6,7 +6,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             aliases: ['q'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
             description: 'Shows the queue for the server.'
         });

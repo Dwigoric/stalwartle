@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const { send } = require('@sapphire/plugin-editable-commands');
 
@@ -13,7 +13,7 @@ module.exports = class extends Command {
             flags: ['deny'],
             preconditions: ['DevsOnly'],
             requiredClientPermissions: ['EMBED_LINKS'],
-            runIn: ['text']
+            runIn: [CommandOptionsRunTypeEnum.GuildText]
         });
     }
 

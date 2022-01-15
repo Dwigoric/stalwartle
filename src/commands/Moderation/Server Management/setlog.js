@@ -1,4 +1,4 @@
-const { Command, util: { toTitleCase } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, util: { toTitleCase } } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
         super(...args, {
             aliases: ['setlogs'],
             permissionLevel: 7,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Configures the modlog channel in the server.',
             extendedHelp: [
                 'If you want to configure the modlog for all moderation actions, do not use any subcommand.',

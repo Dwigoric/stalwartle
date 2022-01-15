@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -7,7 +7,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             aliases: ['ri', 'rinfo', 'roleinfo'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Gives information about a role.',
             extendedHelp: "You can use the role's name in providing the role.",

@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
         super(...args, {
             permissionLevel: 6,
             requiredPermissions: ['MANAGE_ROLES', 'MANAGE_CHANNELS'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Mutes a mentioned user.',
             extendedHelp: 'To mute a user indefinitely, simply do not provide the duration.',
             usage: '<Member:member> [MuteDuration:time] [Reason:string] [...]',

@@ -1,11 +1,11 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Puts a certain message (given the message ID) in an embed, as if "quoting" the message.',
             usage: '<MessageID:string> [Channel:channel]',

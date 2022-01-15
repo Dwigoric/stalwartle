@@ -1,4 +1,4 @@
-const { Command, util: { toTitleCase } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -7,7 +7,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             aliases: ['ci', 'cinfo', 'channelinfo'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS'],
             description: "Gives information about the channel you're on or the channel you provided.",
             usage: '[id] [Channel:channel]',

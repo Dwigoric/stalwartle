@@ -1,10 +1,10 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             permissionLevel: 7,
             description: 'Unpins all pinned messages in the text channel.',
             usage: '[TextChannel:channel]'

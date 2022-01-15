@@ -1,4 +1,4 @@
-const { Command, RichDisplay, util: { toTitleCase, chunk } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, RichDisplay, util: { toTitleCase, chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -7,7 +7,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             permissionLevel: 6,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             aliases: ['modlogs', 'log', 'logs'],
             requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
             description: 'Gives the modlogs for a certain person or the server, or the details of a specific case number.',

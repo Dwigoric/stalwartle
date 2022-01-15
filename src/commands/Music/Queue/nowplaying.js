@@ -1,4 +1,4 @@
-const { Command, Timestamp, util: { toTitleCase } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, Timestamp, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 const symbols = {
@@ -12,7 +12,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             aliases: ['np'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Shows information about the current song playing in the server.'
         });

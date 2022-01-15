@@ -1,11 +1,11 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
             permissionLevel: 7,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: 'MANAGE_ROLES',
             description: 'Sets the mute role for the server.',
             extendedHelp: 'Set the server\'s mute role using the name you provide.',

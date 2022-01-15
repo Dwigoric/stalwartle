@@ -1,10 +1,10 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             aliases: ['ti'],
             requiredPermissions: ['MANAGE_GUILD'],
             description: 'Shows the top invites in a server.'

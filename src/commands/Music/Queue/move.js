@@ -1,11 +1,11 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Moves a queue entry to a specified position in the queue.',
             extendedHelp: 'If you want to move e.g. entry #3 to position #7, do `s.move 3 7`',
             usage: '<QueueEntry:integer{1}> <NewPosition:integer{1}>',

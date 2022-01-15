@@ -1,11 +1,11 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
             permissionLevel: 6,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Makes me ignore channels or a channel category in the server.',
             extendedHelp: 'If you want to unignore channels or categories, simply reuse the command and give the channel you want to unignore.',
             usage: '[list] (ChannelOrCategory:channel)',

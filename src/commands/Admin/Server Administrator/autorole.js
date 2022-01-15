@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
@@ -12,7 +12,7 @@ module.exports = class extends Command {
             detailedDescription: "In case I can't assign the role, I will send the server owner why.",
             preconditions: ['AdminsOnly'],
             requiredClientPermissions: ['MANAGE_ROLES'],
-            runIn: ['text']
+            runIn: [CommandOptionsRunTypeEnum.GuildText]
         });
     }
 

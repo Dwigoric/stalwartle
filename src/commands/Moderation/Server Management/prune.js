@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 const pruning = new Set();
 
@@ -9,7 +9,7 @@ module.exports = class extends Command {
             aliases: ['purge'],
             permissionLevel: 6,
             requiredPermissions: ['MANAGE_MESSAGES'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Prunes a certain amount of messages w/o filter.',
             usage: '[Limit:integer{2,100}] [link|invite|bots|you|me|pinsonly|upload|user:user]',
             usageDelim: ' ',

@@ -1,11 +1,11 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
             permissionLevel: 5,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Forwards the current song by the specified time.',
             extendedHelp: 'To use this command use e.g. `22m 29s` to forward the song by 22 minutes and 29 seconds.',
             usage: '<SeekTime:time>'

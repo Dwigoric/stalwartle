@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { GuildMember } = require('discord.js');
 
 module.exports = class extends Command {
@@ -6,7 +6,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             permissionLevel: 8,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',
             extendedHelp: 'If no argument is provided, this will list the moderator roles and members.',
             usage: '[add|remove] (Member:member|Role:role) [...]',

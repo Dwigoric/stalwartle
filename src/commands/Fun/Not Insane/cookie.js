@@ -1,4 +1,4 @@
-const { Command, Duration, RichDisplay, util: { chunk } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, Duration, RichDisplay, util: { chunk } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -6,7 +6,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             cooldown: 10,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             aliases: ['cookies', 'stalkie', 'stalkies'],
             description: 'Gives a person a cookie!',
             extendedHelp: [

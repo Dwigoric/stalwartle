@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
         super(...args, {
             permissionLevel: 6,
             requiredPermissions: ['BAN_MEMBERS'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Softbans (bans then automatically unbans) a mentioned user.',
             extendedHelp: 'The default age of messages to delete is `1` day.',
             usage: '<Member:user> [MessageDaysToDelete:integer{1,7}] [Reason:string] [...]',

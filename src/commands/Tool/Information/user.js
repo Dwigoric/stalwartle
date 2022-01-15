@@ -1,4 +1,4 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const moment = require('moment-timezone');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 
@@ -7,7 +7,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             aliases: ['ui', 'userinfo', 'uinfo', 'who', 'whois'],
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             cooldown: 10,
             subcommands: true,
             requiredPermissions: ['EMBED_LINKS'],

@@ -1,4 +1,4 @@
-const { Command, Timestamp, util: { mergeObjects } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, Timestamp, util: { mergeObjects } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { parse } = require('url');
@@ -16,7 +16,7 @@ module.exports = class extends Command {
         super(...args, {
             aliases: ['p'],
             permissionLevel: 5,
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
             extendedHelp: [
                 'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel <channel ID>`.',

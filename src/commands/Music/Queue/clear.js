@@ -1,10 +1,10 @@
-const { Command } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             permissionLevel: 5,
             description: 'Clears the music queue for the server, optionally those requested by a specified user.',
             usage: '[Requester:user]'

@@ -1,4 +1,4 @@
-const { Command, Duration, Timestamp, RichDisplay, util: { chunk } } = require('@sapphire/framework');
+const { Command, CommandOptionsRunTypeEnum, Duration, Timestamp, RichDisplay, util: { chunk } } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            runIn: ['text'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
             description: 'Shows the songs played in the server in the last 24 hours.',
             extendedHelp: [
