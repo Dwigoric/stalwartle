@@ -22,7 +22,7 @@ class Gateway extends AliasPiece {
 
         const obj = makeObject(path, val);
         const { value } = await this.container.client.provider.update(this.collection, id, obj, true);
-        this.cache.set(id, mergeDefault(this.defaults, value));
+        this.cache.set(id, value);
         return value;
     }
 
@@ -30,7 +30,7 @@ class Gateway extends AliasPiece {
         const doc = await this.container.client.provider.get(this.collection, id);
         if (!doc) return null;
 
-        this.cache.set(id, mergeDefault(this.defaults, doc));
+        this.cache.set(id, doc);
         return doc;
     }
 
