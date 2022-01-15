@@ -19,6 +19,6 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-        npx eslint .
+        npx eslint . --legacy-peer-deps
       env:
         CI: true
