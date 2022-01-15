@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [subredditName]) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading subreddit...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading subreddit...`);
 
         let subreddit = await fetch(`https://www.reddit.com/r/${subredditName}/about.json`)
             .then(res => res.json())

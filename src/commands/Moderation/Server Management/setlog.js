@@ -23,9 +23,9 @@ module.exports = class extends Command {
             if (['list', 'reset'].includes(action)) return undefined;
             if (arg) {
                 const modlog = await this.container.client.arguments.get('channel').run(arg, possible, msg);
-                if (!modlog.postable) throw `${this.container.client.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${modlog}.`;
+                if (!modlog.postable) throw `${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${modlog}.`;
                 return modlog;
-            } else { throw `${this.container.client.constants.EMOTES.xmark}  ::  Please provide the modlog channel.`; }
+            } else { throw `${this.container.constants.EMOTES.xmark}  ::  Please provide the modlog channel.`; }
         });
     }
 
@@ -40,12 +40,12 @@ module.exports = class extends Command {
 
     async messageRun(msg, [modlog]) {
         this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.settings.update(`modlogs.${action}`, modlog.id, msg.guild)); // eslint-disable-line max-len
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for all moderation actions to ${modlog}.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for all moderation actions to ${modlog}.`);
     }
 
     async reset(msg) {
         this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => msg.guild.settings.reset(`modlogs.${action}`));
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully reset the modlog channel for all moderation actions.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully reset the modlog channel for all moderation actions.`);
     }
 
     async kick(msg, [modlog]) {
@@ -75,7 +75,7 @@ module.exports = class extends Command {
     async indivSet(msg, modlog, action) {
         if (modlog === 'reset') msg.guild.settings.reset(`modlogs.${action}`);
         else msg.guild.settings.update(`modlogs.${action}`, modlog.id, msg.guild);
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for member ${action}s to ${modlog}.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for member ${action}s to ${modlog}.`);
     }
 
 };

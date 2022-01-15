@@ -13,12 +13,12 @@ module.exports = class extends Command {
 
     async messageRun(msg, [modlogID, ...reason]) {
         reason = reason.join(this.usageDelim);
-        const { modlogs = [] } = await this.container.client.providers.default.get('modlogs', msg.guild.id) || {};
+        const { modlogs = [] } = await this.container.databases.default.get('modlogs', msg.guild.id) || {};
         const modlog = modlogs[modlogID - 1];
-        if (!modlog) throw `${this.container.client.constants.EMOTES.xmark}  ::  You provided an invalid modlog ID.`;
+        if (!modlog) throw `${this.container.constants.EMOTES.xmark}  ::  You provided an invalid modlog ID.`;
         modlog.reason = reason;
         modlogs.splice(Number(modlog.id) - 1, 1, modlog);
-        this.container.client.providers.default.update('modlogs', msg.guild.id, { modlogs });
+        this.container.databases.default.update('modlogs', msg.guild.id, { modlogs });
 
         const channel = msg.guild.channels.cache.get(msg.guild.settings.get(`modlogs.${modlog.type}`));
         if (!modlog.message) throw `⚠  ::  I've updated the modlog in \`${msg.guild.settings.get('prefix')}modlogs\`, however the one sent in the modlog channel is not edited.`;
@@ -28,7 +28,7 @@ module.exports = class extends Command {
         const index = embed.fields.findIndex(field => field.name === 'Reason');
         embed.fields.splice(index >= 0 ? index : 2, index >= 0 ? 1 : 0, { inline: true, name: 'Reason', value: reason });
         message.edit({ embed });
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully updated modlog #\`${modlog.id}\`'s reason.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully updated modlog #\`${modlog.id}\`'s reason.`);
     }
 
 };

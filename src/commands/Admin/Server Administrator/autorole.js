@@ -18,23 +18,23 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let type = await args.pickResult('string');
-        if (!role.success || !['bot', 'user'].includes(type.value)) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply the scope of the autorole.`);
+        if (!role.success || !['bot', 'user'].includes(type.value)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the scope of the autorole.`);
         type = type.value;
 
         let role = await args.pickResult('role');
         if (!role.success) role = await args.pickResult('string');
-        if (!role.success || role.value !== 'remove') return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply a role or the word \`remove\`.`);
+        if (!role.success || role.value !== 'remove') return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply a role or the word \`remove\`.`);
         role = role.value;
 
         if (role === 'remove') {
             this.container.client.gateways.guilds.reset(msg.guild.id, `autorole.${type}`);
-            return send(msg, `${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
+            return send(msg, `${this.container.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
         }
-        if (!role) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`);
-        if (role.position >= msg.guild.me.roles.highest.position) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`);
-        if (role.position >= msg.member.roles.highest.position) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`);
+        if (!role) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`);
+        if (role.position >= msg.guild.me.roles.highest.position) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`);
+        if (role.position >= msg.member.roles.highest.position) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`);
         this.container.client.gateways.guilds.update(msg.guild.id, `autorole.${type}`, role.id);
-        return send(msg, `${this.container.client.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
+        return send(msg, `${this.container.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
     }
 
 

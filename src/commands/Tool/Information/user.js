@@ -74,7 +74,7 @@ module.exports = class extends Command {
     }
 
     async rawavatar(msg, [user = msg.author]) {
-        if (!msg.channel.permissionsFor(this.container.client.user).has('ATTACH_FILES')) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! I have no permissions to attach files in this channel.`;
+        if (!msg.channel.permissionsFor(this.container.client.user).has('ATTACH_FILES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I have no permissions to attach files in this channel.`;
         return msg.send(`**${user.username}**'s avatar`, { files: [new MessageAttachment(user.displayAvatarURL({ dynamic: true }))] });
     }
 

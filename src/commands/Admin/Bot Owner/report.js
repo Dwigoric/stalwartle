@@ -24,19 +24,19 @@ module.exports = class extends Command {
         };
 
         let repUser = await args.pick('user');
-        if (!repUser.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
+        if (!repUser.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
         repUser = repUser.value;
 
         let repMsg = await args.pick('message');
-        if (!repMsg.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
+        if (!repMsg.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
         repMsg = repMsg.value;
 
         let repCom = await args.rest('string');
-        if (!repUser.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
+        if (!repUser.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
         repCom = repCom.value;
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
-        if (!Object.keys(reportChans).includes(msg.channel.id)) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
+        if (!Object.keys(reportChans).includes(msg.channel.id)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
         const embed = new MessageEmbed()
             .setColor('RANDOM')
             .setAuthor(repUser.tag, repUser.displayAvatarURL({ dynamic: true }))
@@ -50,7 +50,7 @@ module.exports = class extends Command {
         if (attachments && attachments.size) embed.setImage(attachments.first().url);
         if (!msg.flagArgs.deny) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
         msg.delete();
-        await msg.channel.send(`${this.container.client.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => setTimeout(() => sent.delete(), 5000));
+        await msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => setTimeout(() => sent.delete(), 5000));
         repMsg.delete().catch(() => null);
         return repUser.send('Your submission has been acknowledged by a high lord!', { embed }).catch(() => null);
     }

@@ -31,68 +31,68 @@ module.exports = class extends Command {
             if (['enable', 'disable'].includes(arg)) return arg;
             const modcommands = this.container.client.commands.filter(cmd => !['unban', 'unmute'].includes(cmd.name) && cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name);
             if (modcommands.includes(arg)) return arg;
-            throw `${this.container.client.constants.EMOTES.xmark}  ::  \`${possible.name}\` must include: ${modcommands.join(', ')}`;
+            throw `${this.container.constants.EMOTES.xmark}  ::  \`${possible.name}\` must include: ${modcommands.join(', ')}`;
         });
     }
 
     async invite(msg, [option]) {
         if (['enable', 'disable'].includes(option)) {
             this.setAutoMod(msg, option, 'antiInvite');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The AntiInvite module has been ${option}d on ${msg.guild.name}.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  The AntiInvite module has been ${option}d on ${msg.guild.name}.`);
         } else {
             this.changeAction(msg, option, 'antiInvite');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  :: The AntiInvite module now uses the **${option}** action.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  :: The AntiInvite module now uses the **${option}** action.`);
         }
     }
 
     async swear(msg, [option]) {
         if (['enable', 'disab;e'].includes(option)) {
             this.setAutoMod(msg, option, 'antiSwear');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The AntiSwear module has been ${option}d on ${msg.guild.name}.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  The AntiSwear module has been ${option}d on ${msg.guild.name}.`);
         } else {
             this.changeAction(msg, option, 'antiSwear');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  :: The AntiSwear module now uses the **${option}** action.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  :: The AntiSwear module now uses the **${option}** action.`);
         }
     }
 
     async spam(msg, [option]) {
         if (['enable', 'disable'].includes(option)) {
             this.setAutoMod(msg, option, 'antiSpam');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The AntiSpam module has been ${option}d on ${msg.guild.name}.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  The AntiSpam module has been ${option}d on ${msg.guild.name}.`);
         } else {
             this.changeAction(msg, option, 'antiSpam');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  :: The AntiSpam module now uses the **${option}** action.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  :: The AntiSpam module now uses the **${option}** action.`);
         }
     }
 
     async mentionspam(msg, [option]) {
         if (['enable', 'disable'].includes(option)) {
             this.setAutoMod(msg, option, 'mentionSpam');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The MentionSpam module has been ${option}d on ${msg.guild.name}.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  The MentionSpam module has been ${option}d on ${msg.guild.name}.`);
         } else {
             this.changeAction(msg, option, 'mentionSpam');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  :: The MentionSpam module now uses the **${option}** action.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  :: The MentionSpam module now uses the **${option}** action.`);
         }
     }
 
     async quota(msg, [option]) {
         if (['enable', 'disable'].includes(option)) {
             this.setAutoMod(msg, option, 'quota');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The Action Quota has been ${option}d on ${msg.guild.name}.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  The Action Quota has been ${option}d on ${msg.guild.name}.`);
         } else {
             this.changeAction(msg, option, 'quota');
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  :: The Action Quota module now uses the ${option} action.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  :: The Action Quota module now uses the ${option} action.`);
         }
     }
 
     async ignorebots(msg, [option]) {
         const _option = this.setAutoMod(msg, option, 'ignoreBots');
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on bots in ${msg.guild.name}.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on bots in ${msg.guild.name}.`);
     }
 
     async ignoremods(msg, [option]) {
         const _option = this.setAutoMod(msg, option, 'ignoreMods');
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on moderators in ${msg.guild.name}.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Automod actions will now be ${_option ? 'not ' : ''}applied on moderators in ${msg.guild.name}.`);
     }
 
     setAutoMod(msg, option, type) {
@@ -103,7 +103,7 @@ module.exports = class extends Command {
 
     changeAction(msg, option, type) {
         // eslint-disable-next-line max-len
-        if (!['antiInvite', 'antiSwear', 'antiSpam', 'mentionSpam', 'quota'].includes(type)) throw `${this.container.client.constants.EMOTES.xmark}  ::  The \`${option}\` option is only applicable for automod modules.`;
+        if (!['antiInvite', 'antiSwear', 'antiSpam', 'mentionSpam', 'quota'].includes(type)) throw `${this.container.constants.EMOTES.xmark}  ::  The \`${option}\` option is only applicable for automod modules.`;
         msg.guild.settings.update(`automod.options.${type}`, option);
     }
 

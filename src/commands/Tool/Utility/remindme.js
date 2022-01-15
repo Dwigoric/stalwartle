@@ -32,11 +32,11 @@ module.exports = class extends Command {
         this
             .createCustomResolver('time', (arg, possible, msg, [action]) => {
                 if (['list', 'remove'].includes(action)) return undefined;
-                if (!arg) throw `${this.container.client.constants.EMOTES.xmark}  ::  Please provide the duration (e.g. 2d3h4m) or the specific time of the reminder.`;
+                if (!arg) throw `${this.container.constants.EMOTES.xmark}  ::  Please provide the duration (e.g. 2d3h4m) or the specific time of the reminder.`;
 
                 if (moment(arg).isValid()) {
                     const customTime = Number(moment.tz(arg, msg.author.settings.get('timezone')).format('x'));
-                    if (customTime <= Date.now()) throw `${this.container.client.constants.EMOTES.xmark}  ::  I cannot travel back in time!`;
+                    if (customTime <= Date.now()) throw `${this.container.constants.EMOTES.xmark}  ::  I cannot travel back in time!`;
                     return new Date(customTime);
                 }
 
@@ -50,9 +50,9 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [when, ...text]) {
-        if (when - new Date() >= 1577880000000) throw `${this.container.client.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 5 decades!`;
+        if (when - new Date() >= 1577880000000) throw `${this.container.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 5 decades!`;
 
-        const reminder = await this.container.client.schedule.create('reminder', when, {
+        const reminder = await this.container.schedule.create('reminder', when, {
             data: {
                 channel: msg.channel.id,
                 user: msg.author.id,
@@ -62,7 +62,7 @@ module.exports = class extends Command {
         });
 
         msg.send([
-            `${this.container.client.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
+            `${this.container.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
             `You will be reminded of this in approximately ${Duration.toNow(reminder.time)}.`,
             reminder.data.forceChannel ?
                 'The people of this channel will be reminded.' :
@@ -73,23 +73,23 @@ module.exports = class extends Command {
     async list(msg) {
         const remList = await this.remlist(msg);
         return msg.author.send(`Here is a list of your reminders:\n${remList.list}`)
-            .then(() => { if (msg.channel.type !== 'DM') msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The list of your reminders has been sent to your DMs.`); })
-            .catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  I could not send the list of your reminders to your DMs. Please check your privacy settings and try again.`; });
+            .then(() => { if (msg.channel.type !== 'DM') msg.send(`${this.container.constants.EMOTES.tick}  ::  The list of your reminders has been sent to your DMs.`); })
+            .catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  I could not send the list of your reminders to your DMs. Please check your privacy settings and try again.`; });
     }
 
     async remove(msg) {
         const remList = await this.remlist(msg);
         const prompted = await msg.prompt(`Please give me the list number of the reminder you want to delete:\n${remList.list}`);
         const remNum = Number(prompted.content);
-        if (isNaN(remNum)) throw `${this.container.client.constants.EMOTES.xmark}  ::  You didn't give a number!`;
-        if (!this.container.client.schedule.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?`; // eslint-disable-line max-len
-        this.container.client.schedule.delete(remList[remNum]);
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully deleted reminder ID \`${remList[remNum]}\`.`);
+        if (isNaN(remNum)) throw `${this.container.constants.EMOTES.xmark}  ::  You didn't give a number!`;
+        if (!this.container.schedule.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?`; // eslint-disable-line max-len
+        this.container.schedule.delete(remList[remNum]);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully deleted reminder ID \`${remList[remNum]}\`.`);
     }
 
     async remlist(msg) {
-        const userRems = this.container.client.schedule.tasks.filter(tk => tk.taskName === 'reminder' && tk.data.user === msg.author.id);
-        if (!userRems.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  You do not have any reminder!`;
+        const userRems = this.container.schedule.tasks.filter(tk => tk.taskName === 'reminder' && tk.data.user === msg.author.id);
+        if (!userRems.length) throw `${this.container.constants.EMOTES.xmark}  ::  You do not have any reminder!`;
         const remList = { list: '' };
         userRems.forEach(rem => {
             const remPage = Object.values(userRems).map(rmd => rmd.id).indexOf(rem.id) + 1;

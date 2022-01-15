@@ -25,12 +25,12 @@ module.exports = class extends Command {
 
     async messageRun(msg, [user]) {
         const timezone = msg.author.settings.get('timezone');
-        const { modlogs = [] } = await this.container.client.providers.default.get('modlogs', msg.guild.id) || {};
+        const { modlogs = [] } = await this.container.databases.default.get('modlogs', msg.guild.id) || {};
         let list = modlogs.sort((a, b) => parseInt(a.id) - parseInt(b.id));
 
         if (typeof user === 'number') {
             const modlog = list[user - 1];
-            if (!modlog) throw `${this.container.client.constants.EMOTES.xmark}  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
+            if (!modlog) throw `${this.container.constants.EMOTES.xmark}  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
             const _user = await this.container.client.users.fetch(modlog.user).catch(() => null);
             const moderator = await this.container.client.users.fetch(modlog.moderator).catch(() => null);
             return msg.send({
@@ -51,7 +51,7 @@ module.exports = class extends Command {
         if (msg.flagArgs.type && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type)) list = list.filter(ml => ml.type === msg.flagArgs.type); // eslint-disable-line max-len
         if (user) list = list.filter(ml => ml.user === user.id);
         if (!list.length) throw `<:blobStop:399433444108533780>  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`;
-        const message = await msg.channel.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading moderation logs...`);
+        const message = await msg.channel.send(`${this.container.constants.EMOTES.loading}  ::  Loading moderation logs...`);
         const display = new RichDisplay(new MessageEmbed()
             .setColor('RANDOM')
             .setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
@@ -77,7 +77,7 @@ module.exports = class extends Command {
     async showcontent(msg) {
         const modlogShowContent = msg.guild.settings.get('modlogShowContent');
         msg.guild.settings.update('modlogShowContent', !modlogShowContent);
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
     }
 
     async reset(msg) {
@@ -86,15 +86,15 @@ module.exports = class extends Command {
             prompt = await msg.prompt('⚠ Are you sure you want to reset **all** modlogs? Respond with `yes` or `no`.').catch(() => ({ content: 'no' }));
         } while (!['yes', 'no', null].includes(prompt.content));
         if (prompt.content === 'yes') {
-            await this.container.client.providers.default.update('modlogs', msg.guild.id, { modlogs: [] });
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
+            await this.container.databases.default.update('modlogs', msg.guild.id, { modlogs: [] });
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
         } else {
-            return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
+            return msg.send(`${this.container.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
         }
     }
 
     async init() {
-        const defProvider = this.container.client.providers.default;
+        const defProvider = this.container.databases.default;
         if (!await defProvider.hasTable('modlogs')) defProvider.createTable('modlogs');
     }
 

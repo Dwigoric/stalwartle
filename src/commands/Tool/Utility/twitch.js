@@ -16,7 +16,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [twitchName]) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading Twitch channel...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading Twitch channel...`);
 
         const channel = await fetch(`https://api.twitch.tv/helix/users?login=${twitchName}`, {
             headers: {
@@ -25,11 +25,11 @@ module.exports = class extends Command {
             }
         })
             .then(async res => {
-                if (!res.ok) throw `${this.container.client.constants.EMOTES.xmark}  ::  An error occurred: \`${await res.json().then(data => data.message)}\``;
+                if (!res.ok) throw `${this.container.constants.EMOTES.xmark}  ::  An error occurred: \`${await res.json().then(data => data.message)}\``;
                 return res.json();
             })
             .then(res => {
-                if (!res.data.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  There is no Twitch streamer with that name.`;
+                if (!res.data.length) throw `${this.container.constants.EMOTES.xmark}  ::  There is no Twitch streamer with that name.`;
                 return res.data[0];
             });
 
@@ -46,7 +46,7 @@ module.exports = class extends Command {
     async renewToken() {
         const params = new URLSearchParams();
         params.set('client_id', TWITCH_CLIENT_ID);
-        params.set('client_secret', this.container.client.auth.twitchAPIkey);
+        params.set('client_secret', this.container.auth.twitchAPIkey);
         params.set('grant_type', 'client_credentials');
         const { access_token, expires_in } = await fetch(`https://id.twitch.tv/oauth2/token?${params}`, { method: 'POST' }).then(res => res.json()); // eslint-disable-line camelcase
 

@@ -11,7 +11,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        if (!this.container.client.application.botPublic) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`;
+        if (!this.container.client.application.botPublic) throw `${this.container.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`;
         return msg.sendEmbed(new MessageEmbed()
             .setAuthor(`Upvote ${this.container.client.user.username}`, this.container.client.user.displayAvatarURL({ dynamic: true }))
             .setDescription([

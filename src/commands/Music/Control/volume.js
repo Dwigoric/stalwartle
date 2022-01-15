@@ -15,8 +15,8 @@ module.exports = class extends Command {
     async messageRun(msg, [volume]) {
         if (!volume) return msg.send(`🎚  ::  The volume for this server is currently set to ${msg.guild.settings.get('music.volume')}%.`);
         msg.guild.settings.update('music.volume', volume);
-        if (this.container.client.lavacord.players.get(msg.guild.id)) this.container.client.lavacord.players.get(msg.guild.id).volume(volume);
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully changed the volume for this server to ${volume}%.`);
+        if (this.container.lavacord.players.get(msg.guild.id)) this.container.lavacord.players.get(msg.guild.id).volume(volume);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully changed the volume for this server to ${volume}%.`);
     }
 
 };

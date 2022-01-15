@@ -19,11 +19,11 @@ module.exports = class extends Listener {
     }
 
     async run(guild) {
-        const player = this.container.client.lavacord.players.get(guild.id);
+        const player = this.container.lavacord.players.get(guild.id);
         if (player) {
             player.removeAllListeners();
             player.destroy();
-            this.container.client.lavacord.players.delete(guild.id);
+            this.container.lavacord.players.delete(guild.id);
         }
 
         const regionArr = guild.region.split('-');

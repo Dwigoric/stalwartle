@@ -19,7 +19,7 @@ module.exports = class extends Command {
         try {
             msg.send(`\`${rgb.join(', ')}\` has the HEX code of \`${rgbToHex(red, grn, blu)}\`.`);
         } catch (err) {
-            msg.send(`${this.container.client.constants.EMOTES.xmark}  ::  Invalid color RGB value!`);
+            msg.send(`${this.container.constants.EMOTES.xmark}  ::  Invalid color RGB value!`);
         }
     }
 

@@ -13,10 +13,10 @@ module.exports = class extends Command {
 
     async messageRun(msg, [channel = msg.channel]) {
         const pinnedMessages = await channel.messages.fetchPinned(false);
-        if (!pinnedMessages.size) throw `${this.container.client.constants.EMOTES.xmark}  ::  There are no pinned messages in ${channel}.`;
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Unpinning messages...`);
+        if (!pinnedMessages.size) throw `${this.container.constants.EMOTES.xmark}  ::  There are no pinned messages in ${channel}.`;
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Unpinning messages...`);
         pinnedMessages.each(pinned => pinned.unpin());
-        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully unpinned messages from ${channel}!`);
+        msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully unpinned messages from ${channel}!`);
     }
 
 };

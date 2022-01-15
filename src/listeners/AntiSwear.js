@@ -14,7 +14,7 @@ module.exports = class extends Listener {
         if (msg.author.equals(this.container.client.user)) return null;
 
         let swearArray = this.container.client.gateways.guilds.get(msg.guild.id).automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
-        if (this.container.client.gateways.guilds.get(msg.guild.id).automod.globalSwears) swearArray = swearArray.concat(this.container.client.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+        if (this.container.client.gateways.guilds.get(msg.guild.id).automod.globalSwears) swearArray = swearArray.concat(this.container.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
         const swearRegex = new RegExp(swearArray.join('|'), 'im');
         if (!swearArray.length || !swearRegex.test(msg.content)) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);

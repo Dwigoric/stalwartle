@@ -39,7 +39,7 @@ module.exports = class extends Listener {
 
         let logMessage = { id: null };
         if (this.container.client.gateways.guilds.get(message.guild.id).logging && channel) {
-            if (!channel.postable) return message.send(`${this.container.client.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${channel}.`);
+            if (!channel.postable) return message.send(`${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${channel}.`);
             const embed = new MessageEmbed()
                 .setColor(configs[message.command.name][0])
                 .setTitle(`Case #${modlogs.length + 1}: ${toTitleCase(message.command.name)} ${configs[message.command.name][1]}`)

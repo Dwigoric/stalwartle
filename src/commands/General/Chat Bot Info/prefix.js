@@ -14,9 +14,9 @@ module.exports = class extends Command {
     async messageRun(msg, [newPrefix]) {
         const prefix = msg.guild.settings.get('prefix');
         if (!newPrefix) throw `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`;
-        if (!await msg.hasAtLeastPermissionLevel(6)) throw `${this.container.client.constants.EMOTES.xmark}  ::  Sorry! Only moderators or people with Manage Server permission may change the server prefix.`; // eslint-disable-line max-len
+        if (!await msg.hasAtLeastPermissionLevel(6)) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! Only moderators or people with Manage Server permission may change the server prefix.`; // eslint-disable-line max-len
         msg.guild.settings.update('prefix', newPrefix);
-        msg.send(`${this.container.client.constants.EMOTES.tick}  ::  The prefix for **${msg.guild.name}** is now \`${newPrefix}\`. Type \`@${this.container.client.user.tag}\` to get the current prefix.`);
+        msg.send(`${this.container.constants.EMOTES.tick}  ::  The prefix for **${msg.guild.name}** is now \`${newPrefix}\`. Type \`@${this.container.client.user.tag}\` to get the current prefix.`);
     }
 
 };

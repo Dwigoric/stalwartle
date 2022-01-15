@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [keyword]) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading manga...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading manga...`);
 
         const params = new URLSearchParams();
         params.set('q', keyword);
@@ -22,8 +22,8 @@ module.exports = class extends Command {
         const search = await fetch(`https://api.jikan.moe/v3/search/manga?${params}`)
             .then(res => res.json())
             .then(body => body.results[0])
-            .catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  There was an error searching for a manga series.`; });
-        if (!search || !search.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  Manga not found!`;
+            .catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  There was an error searching for a manga series.`; });
+        if (!search || !search.length) throw `${this.container.constants.EMOTES.xmark}  ::  Manga not found!`;
 
         const [manga] = search;
 

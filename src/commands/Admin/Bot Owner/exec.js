@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let input = await args.restResult('string');
-        if (!input.success) return send(msg, `${this.container.client.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
+        if (!input.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
         input = input.value;
         const stopwatch = new Stopwatch().start();
         const result = await execute(input, { timeout: 'timeout' in msg.flagArgs ? Number(msg.flagArgs.timeout) : 60000 })

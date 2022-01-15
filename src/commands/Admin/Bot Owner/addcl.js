@@ -23,7 +23,7 @@ module.exports = class extends Command {
                 .setDescription(await args.rest('string'))
                 .setTimestamp()
         });
-        send(msg, `${this.container.client.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
+        send(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
     }
 
 };

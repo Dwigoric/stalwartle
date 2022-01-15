@@ -12,11 +12,11 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const message = await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading elephant fact...`);
+        const message = await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading elephant fact...`);
 
         const { fact } = await fetch(`https://some-random-api.ml/facts/elephant`)
             .then(res => res.json())
-            .catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
+            .catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
         await msg.channel.send(`🐘  ::  ${fact}`);
 
         message.delete();

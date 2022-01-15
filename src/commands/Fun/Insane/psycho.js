@@ -16,7 +16,7 @@ module.exports = class extends Command {
     async messageRun(msg, [mentioned]) {
         const msgargs = msg.args.join(' ');
         const crimec = Math.round(Math.random() * 1000);
-        if (msgargs && !mentioned) throw `${this.container.client.constants.EMOTES.xmark}  ::  No person specified. Cymatic scanner was not used.`;
+        if (msgargs && !mentioned) throw `${this.container.constants.EMOTES.xmark}  ::  No person specified. Cymatic scanner was not used.`;
 
         let results;
         if (!msgargs) {

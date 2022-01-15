@@ -23,9 +23,9 @@ module.exports = class extends Command {
             `\t\t\tServer: ${server}`,
             `\`\`\`${suggestion}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Sending suggestion...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Sending suggestion...`);
         msg.send([
-            `${this.container.client.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
+            `${this.container.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'
         ].join('\n'));
     }

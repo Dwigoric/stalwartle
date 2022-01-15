@@ -14,12 +14,12 @@ module.exports = class extends Command {
 
     async messageRun(msg, [seek]) {
         seek -= Date.now();
-        const { queue = [] } = await this.container.client.providers.default.get('music', msg.guild.id) || {};
-        if (!queue.length || !msg.guild.me.voice.channel) throw `${this.container.client.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``; // eslint-disable-line max-len
-        if (!queue[0].info.isSeekable) throw `${this.container.client.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`;
-        if (queue[0].info.length < seek) throw `${this.container.client.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`;
+        const { queue = [] } = await this.container.databases.default.get('music', msg.guild.id) || {};
+        if (!queue.length || !msg.guild.me.voice.channel) throw `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``; // eslint-disable-line max-len
+        if (!queue[0].info.isSeekable) throw `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`;
+        if (queue[0].info.length < seek) throw `${this.container.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`;
         msg.guild.player.seek(seek);
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  Successfully seeked the music.`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully seeked the music.`);
     }
 
 };

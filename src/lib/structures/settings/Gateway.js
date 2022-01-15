@@ -21,13 +21,13 @@ class Gateway extends AliasPiece {
         if (typeof path !== 'string') throw new TypeError('Expected the string path of the object to update');
 
         const obj = makeObject(path, val);
-        const { value } = await this.container.client.provider.update(this.collection, id, obj, true);
+        const { value } = await this.container.database.update(this.collection, id, obj, true);
         this.cache.set(id, value);
         return value;
     }
 
     async sync(id) {
-        const doc = await this.container.client.provider.get(this.collection, id);
+        const doc = await this.container.database.get(this.collection, id);
         if (!doc) return null;
 
         this.cache.set(id, doc);
@@ -41,13 +41,13 @@ class Gateway extends AliasPiece {
     }
 
     async delete(id) {
-        await this.container.client.provider.delete(this.collection, id);
+        await this.container.database.delete(this.collection, id);
         this.cache.delete(id);
     }
 
     async init() {
-        if (!await this.container.client.provider.hasTable(this.collection)) await this.container.client.provider.createTable(this.collection);
-        const docs = await this.container.client.provider.getKeys(this.collection);
+        if (!await this.container.database.hasTable(this.collection)) await this.container.database.createTable(this.collection);
+        const docs = await this.container.database.getKeys(this.collection);
 
         for (const doc of docs) this.cache.set(doc.id, doc);
     }

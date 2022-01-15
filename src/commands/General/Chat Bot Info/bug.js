@@ -19,7 +19,7 @@ module.exports = class extends Command {
             `\`\`\`${params}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
         msg.send([
-            `${this.container.client.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
+            `${this.container.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your report.***'
         ].join('\n'));
     }

@@ -18,7 +18,7 @@ module.exports = class extends Command {
     async messageRun(msg, [rolled]) {
         const dice = new Dice();
         if (!rolled) return msg.send(`🎲  ::  **One die** (default) was embedded with magic and resulted to **${dice.roll('d6').result}**!`);
-        if (!dice.validate(rolled)) return msg.send(`${this.container.client.constants.EMOTES.xmark}  ::  **${rolled}** cannot be embedded with magic.`);
+        if (!dice.validate(rolled)) return msg.send(`${this.container.constants.EMOTES.xmark}  ::  **${rolled}** cannot be embedded with magic.`);
         return msg.send(`🎲  ::  **${rolled}** was embedded with magic and resulted to **${dice.roll(rolled).result}**!`);
     }
 

@@ -14,19 +14,19 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [reason = null]) {
-        if (await this.container.client.providers.default.has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
-            await this.container.client.providers.default.delete('afk', msg.author.id);
-            return msg.send(`${this.container.client.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);
+        if (await this.container.databases.default.has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
+            await this.container.databases.default.delete('afk', msg.author.id);
+            return msg.send(`${this.container.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);
         }
 
-        if (typeof reason === 'string' && reason.length > 1024) throw `${this.container.client.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`;
-        await this.container.client.providers.default.create('afk', msg.author.id, { reason, timestamp: Date.now() });
+        if (typeof reason === 'string' && reason.length > 1024) throw `${this.container.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`;
+        await this.container.databases.default.create('afk', msg.author.id, { reason, timestamp: Date.now() });
         if (msg.guild && msg.guild.me.permissions.has('MOVE_MEMBERS') && msg.member.voice.channel && msg.guild.settings.get('afkChannelOnAfk') && msg.guild.afkChannelID) msg.member.voice.setChannel(msg.guild.afkChannelID, 'Moved to AFK channel due to AFK status'); // eslint-disable-line max-len
-        return msg.send(`${this.container.client.constants.EMOTES.tick}  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
     }
 
     async init() {
-        const defProvider = this.container.client.providers.default;
+        const defProvider = this.container.databases.default;
         if (!await defProvider.hasTable('afk')) defProvider.createTable('afk');
     }
 

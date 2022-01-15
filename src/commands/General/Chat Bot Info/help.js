@@ -42,7 +42,7 @@ module.exports = class extends Command {
             const previousHandler = this.handlers.get(msg.author.id);
             if (previousHandler) previousHandler.stop();
 
-            const handler = await (await this.buildDisplay(msg, [category, subcategory])).run(await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading commands...`), {
+            const handler = await (await this.buildDisplay(msg, [category, subcategory])).run(await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`), {
                 filter: (reaction, user) => user.id === msg.author.id,
                 time
             });
@@ -55,7 +55,7 @@ module.exports = class extends Command {
     }
 
     async originalHelp(msg, [category, subcategory]) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading commands...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
         const method = this.container.client.user.bot ? 'author' : 'channel';
         const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
         const categories = Object.keys(help);
@@ -119,11 +119,11 @@ module.exports = class extends Command {
         let cmds;
         if (!category && !subcategory) cmds = this.container.client.commands;
         if (category) {
-            if (!this.container.client.commands.map(cmd => cmd.category).includes(category)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
+            if (!this.container.client.commands.map(cmd => cmd.category).includes(category)) throw `${this.container.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
             cmds = this.container.client.commands.filter(cmd => cmd.category === category);
         }
         if (subcategory) {
-            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
             cmds = this.container.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
         }
 
@@ -137,7 +137,7 @@ module.exports = class extends Command {
             return help[cat][subCat].push(`\`${this.container.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
         }));
 
-        if (!Object.keys(help).length) throw `${this.container.client.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`;
+        if (!Object.keys(help).length) throw `${this.container.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`;
         return help;
     }
 
@@ -170,11 +170,11 @@ module.exports = class extends Command {
         let cmds;
         if (!maincategory && !subcategory) cmds = this.container.client.commands;
         if (maincategory) {
-            if (!this.container.client.commands.map(cmd => cmd.category).includes(maincategory)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
+            if (!this.container.client.commands.map(cmd => cmd.category).includes(maincategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
             cmds = this.container.client.commands.filter(cmd => cmd.category === maincategory);
         }
         if (subcategory) {
-            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.client.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
             cmds = this.container.client.commands.filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
         }
 

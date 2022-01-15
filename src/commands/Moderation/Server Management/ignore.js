@@ -15,13 +15,13 @@ module.exports = class extends Command {
 
         this.createCustomResolver('channel', (arg, possible, msg, [action]) => {
             if (action === 'list') return undefined;
-            if (!arg) throw `${this.container.client.constants.EMOTES.xmark}  ::  Please provide the channel you want me to ignore.`;
+            if (!arg) throw `${this.container.constants.EMOTES.xmark}  ::  Please provide the channel you want me to ignore.`;
             return this.container.client.arguments.get('channel').run(arg, possible, msg);
         });
     }
 
     async messageRun(msg, [channel]) {
-        if (channel.type === 'GUILD_VOICE') throw `${this.container.client.constants.EMOTES.xmark}  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.`;
+        if (channel.type === 'GUILD_VOICE') throw `${this.container.constants.EMOTES.xmark}  ::  That is a voice channel... Commands cannot be input in a voice channel in the first place.`;
         if (channel.type === 'GUILD_CATEGORY') channel = msg.guild.channels.cache.filter(chan => chan.parentID === channel.id && chan.type === 'GUILD_TEXT');
         else channel = [channel];
         const ignored = msg.guild.settings.get('ignored');

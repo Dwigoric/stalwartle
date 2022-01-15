@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [location]) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading map...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading map...`);
 
         const zoom = msg.flagArgs.zoom ? parseInt(msg.flagArgs.zoom) : 12;
 
@@ -22,8 +22,8 @@ module.exports = class extends Command {
         params.set('q', location);
         params.set('include_map', true);
         params.set('map_zoom', isNaN(zoom) ? 12 : zoom);
-        const { data } = await fetch(`https://api.ksoft.si/kumo/gis?${params}`, { headers: { Authorization: `Bearer ${this.container.client.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
-        if (!data) throw `${this.container.client.constants.EMOTES.xmark}  ::  I could not find that location.`;
+        const { data } = await fetch(`https://api.ksoft.si/kumo/gis?${params}`, { headers: { Authorization: `Bearer ${this.container.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
+        if (!data) throw `${this.container.constants.EMOTES.xmark}  ::  I could not find that location.`;
         msg.send({
             embed: new MessageEmbed()
                 .setColor('RANDOM')

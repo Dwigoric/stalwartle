@@ -13,9 +13,9 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const { queue = [] } = await this.container.client.providers.default.get('music', msg.guild.id) || {};
-        if (!queue.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  There are no songs in the queue yet! Add one with \`${msg.guild.settings.get('prefix')}play\``;
-        const message = await msg.channel.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading the music queue...`);
+        const { queue = [] } = await this.container.databases.default.get('music', msg.guild.id) || {};
+        if (!queue.length) throw `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the queue yet! Add one with \`${msg.guild.settings.get('prefix')}play\``;
+        const message = await msg.channel.send(`${this.container.constants.EMOTES.loading}  ::  Loading the music queue...`);
         const np = queue[0];
         const npStatus = msg.guild.me.voice.channel ?
             msg.guild.player.paused ?
@@ -40,7 +40,7 @@ module.exports = class extends Command {
         return display
             .setFooterPrefix('Page ')
             .setFooterSuffix(` [${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}] - Queue Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`) // eslint-disable-line max-len
-            .run(await message.edit(`${this.container.client.constants.EMOTES.tick}  ::  Server music queue has been loaded!`), { filter: (reaction, author) => author === msg.author });
+            .run(await message.edit(`${this.container.constants.EMOTES.tick}  ::  Server music queue has been loaded!`), { filter: (reaction, author) => author === msg.author });
     }
 
 };

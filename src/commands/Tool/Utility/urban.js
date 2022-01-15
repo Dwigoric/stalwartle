@@ -15,14 +15,14 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [search, index = 1]) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading Urban definition...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
         const params = new URLSearchParams();
         params.set('term', search);
         const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
 
         const result = body.list[index - 1];
-        if (!result) throw `${this.container.client.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`;
+        if (!result) throw `${this.container.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`;
 
         const definition = result.definition.length > 1000 ?
             `${this.splitText(result.definition, 1000)}...` :

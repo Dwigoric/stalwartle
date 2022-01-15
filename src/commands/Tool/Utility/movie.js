@@ -20,14 +20,14 @@ module.exports = class extends Command {
         const timezone = msg.author.settings.get('timezone');
         const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading movie...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading movie...`);
 
         const params = new URLSearchParams();
-        params.set('api_key', this.container.client.auth.tmdbAPIkey);
+        params.set('api_key', this.container.auth.tmdbAPIkey);
         params.set('query', query);
         const { results } = await fetch(`https://api.themoviedb.org/3/search/movie?${params}`).then(res => res.json());
         const short = results[page - 1];
-        if (!short) throw `${this.container.client.constants.EMOTES.xmark}  ::  I couldn't find a movie with that title in page ${page}.`;
+        if (!short) throw `${this.container.constants.EMOTES.xmark}  ::  I couldn't find a movie with that title in page ${page}.`;
         params.delete('query');
         const tmdb = await fetch(`https://api.themoviedb.org/3/movie/${short.id}?${params}`).then(res => res.json());
 

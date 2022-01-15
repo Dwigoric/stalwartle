@@ -38,14 +38,14 @@ module.exports = class extends Command {
     async handleMessage(msg, options, result) {
         switch (options.sendAs) {
             case 'file': {
-                if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', `${this.container.client.constants.EMOTES.tick}  ::  Sent the ban list as a file.`);
+                if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', `${this.container.constants.EMOTES.tick}  ::  Sent the ban list as a file.`);
                 await this.getTypeOutput(msg, options);
                 return this.handleMessage(msg, options, result);
             }
             case 'haste':
             case 'hastebin': {
                 if (!options.url) options.url = await this.getHaste(result).catch(() => null);
-                if (options.url) return msg.sendMessage(`${this.container.client.constants.EMOTES.tick}  ::  Sent the ban list to hastebin: ${options.url}`);
+                if (options.url) return msg.sendMessage(`${this.container.constants.EMOTES.tick}  ::  Sent the ban list to hastebin: ${options.url}`);
                 options.hastebinUnavailable = true;
                 await this.getTypeOutput(msg, options);
                 return this.handleMessage(msg, options, result);
@@ -64,7 +64,7 @@ module.exports = class extends Command {
         if (msg.channel.attachable) _options.push('file');
         if (!options.hastebinUnavailable) _options.push('hastebin');
         // eslint-disable-next-line max-len
-        if (!_options.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  It seems that hastebin is unavailable, and I cannot send an attachment to this channel. Please check my permissions and retry.`;
+        if (!_options.length) throw `${this.container.constants.EMOTES.xmark}  ::  It seems that hastebin is unavailable, and I cannot send an attachment to this channel. Please check my permissions and retry.`;
         let _choice;
         do {
             _choice = await msg.prompt(`Choose one of the following options: ${_options.join(', ')}`).catch(() => ({ content: 'none' }));

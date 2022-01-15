@@ -29,19 +29,19 @@ module.exports = class extends Command {
     }
 
     async query(msg, query, type, url) {
-        await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading YouTube information...`);
+        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading YouTube information...`);
 
         const timezone = msg.author.settings.get('timezone');
 
         const params = new URLSearchParams();
-        params.set('key', this.container.client.auth.googleAPIkey);
+        params.set('key', this.container.auth.googleAPIkey);
         params.set('part', 'snippet');
         params.set('maxResults', 1);
         params.set('q', query.join(this.usageDelim));
         params.set('type', type);
         const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(result => result.json());
 
-        if (!res || !res.items || !res.items.length) throw `${this.container.client.constants.EMOTES.xmark}  ::  YouTube query not found!`;
+        if (!res || !res.items || !res.items.length) throw `${this.container.constants.EMOTES.xmark}  ::  YouTube query not found!`;
 
         const embed = new MessageEmbed(),
             request = res.items[0];

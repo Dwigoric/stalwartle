@@ -13,11 +13,11 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, [person]) {
-        const message = await msg.send(`${this.container.client.constants.EMOTES.loading}  ::  Loading GIF...`);
+        const message = await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
 
         const { link } = await fetch(`https://some-random-api.ml/animu/hug`)
             .then(res => res.json())
-            .catch(() => { throw `${this.container.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
+            .catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
         msg.channel.sendFile(link, 'hug.gif', `🤗  ::  **${msg.member.displayName}** wants to hug ${person}!`);
 
         message.delete();

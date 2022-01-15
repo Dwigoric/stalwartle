@@ -74,7 +74,7 @@ module.exports = class MemorySweeper extends Task {
         // ----- PERSISTENT DATA SWEEPERS ----- //
 
         // Music database sweeper
-        for (const { history, id, playlist, queue } of await this.container.client.provider.getAll('music')) {
+        for (const { history, id, playlist, queue } of await this.container.database.getAll('music')) {
             if ((history && history.length) || (playlist && playlist.length)) continue;
             if (this.container.client.guilds.cache.has(id) && queue && queue.length) continue;
             this.container.client.gateways.music.delete(id);
@@ -82,7 +82,7 @@ module.exports = class MemorySweeper extends Task {
         }
 
         // Modlog database sweeper
-        for (const { id, modlogs } of await this.container.client.provider.getAll('modlogs')) {
+        for (const { id, modlogs } of await this.container.database.getAll('modlogs')) {
             if (modlogs && modlogs.length) continue;
             this.container.client.gateways.modlogs.delete(id);
             modlogDBs++;
