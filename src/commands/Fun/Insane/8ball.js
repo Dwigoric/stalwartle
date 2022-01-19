@@ -1,19 +1,22 @@
 const { Command } = require('@sapphire/framework');
 const { Message } = require('discord.js');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            aliases: ['magic', 'eightballball'],
-            description: 'Magic 8-Ball, does exactly what the toy does.',
-            usage: '<MessageID:message|Question:string>'
+            aliases: ['8b', 'eightballball'],
+            description: 'Magic 8-Ball, does exactly what the toy does.'
         });
     }
 
-    async messageRun(msg, [question]) {
+    async messageRun(msg, args) {
+        let question = args.pick('message').catch(() => args.pick('rest')).catch(() => null);
+        if (!question === null) return send(msg, `${this.containter.constants.EMOTES.xmark}  ::  Please provide the message (ID/link) or the question to be answered.`);
+
         if (question instanceof Message) question = question.content;
-        return msg.send(`❓  ::  ${question}\n🎱  ::  ${answers[Math.floor(Math.random() * answers.length)]}`, { disableMentions: 'everyone' });
+        return send(msg, `❓  ::  ${question}\n🎱  ::  ${answers[Math.floor(Math.random() * answers.length)]}`, { disableMentions: 'everyone' });
     }
 
 };
