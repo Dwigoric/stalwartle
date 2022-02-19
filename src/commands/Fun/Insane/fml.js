@@ -6,8 +6,9 @@ const cheerio = require('cheerio');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Gets a random FML story.'
         });

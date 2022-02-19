@@ -3,8 +3,9 @@ const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             description: 'This command is based from the anime Psycho Pass.',
             detailedDescription: [
                 "A person's Crime Coefficient is a numerical measure of said person's probability/propensity to commit a crime.",

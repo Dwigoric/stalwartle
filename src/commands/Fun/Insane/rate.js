@@ -3,8 +3,9 @@ const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             description: "Rates anything you want from 0-10. Either 10 being the worst or the best -- it's really up to you."
         });
     }

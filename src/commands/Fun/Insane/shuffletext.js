@@ -3,8 +3,9 @@ const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['jumble'],
             description: 'Shuffles any word or phrase you give.'
         });

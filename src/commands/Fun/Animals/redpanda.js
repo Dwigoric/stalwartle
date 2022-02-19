@@ -4,8 +4,9 @@ const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             cooldownDelay: 10,
             requiredClientPermissions: ['ATTACH_FILES'],
             description: 'Grabs a random red panda image and fact.'

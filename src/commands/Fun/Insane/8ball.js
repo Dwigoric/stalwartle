@@ -4,8 +4,9 @@ const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['8b', 'eightballball'],
             description: 'Magic 8-Ball, does exactly what the toy does.'
         });

@@ -5,8 +5,9 @@ const { GuildMember } = require('discord.js');
 
 module.exports = class extends SubCommandPluginCommand {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             preconditions: ['AdminsOnly'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',

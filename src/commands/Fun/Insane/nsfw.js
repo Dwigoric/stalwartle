@@ -4,8 +4,9 @@ const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             nsfw: true,
             requiredClientPermissions: ['ATTACH_FILES'],
             description: 'Gives a random NSFW image. Must be in a NSFW channel.',
