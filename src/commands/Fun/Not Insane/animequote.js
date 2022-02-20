@@ -1,24 +1,25 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            requiredPermissions: ['EMBED_LINKS'],
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives a random anime quote.'
         });
     }
 
     async messageRun(msg) {
-        const message = await msg.channel.send(`${this.container.constants.EMOTES.loading}  ::  Loading quote...`);
+        await send(msg, `${this.container.constants.EMOTES.loading}  ::  Loading quote...`);
 
-        const { sentence, characther, anime } = await fetch(`https://some-random-api.ml/animu/quote`)
+        const { sentence, character, anime } = await fetch(`https://some-random-api.ml/animu/quote`)
             .then(res => res.json())
-            .catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
-        msg.send(`> ${sentence}\n> \n> _**${characther}** on ${anime}_`);
-
-        message.delete();
+            .catch(() => ({ sentence: null, character: null, anime: null }));
+        if (!sentence || !character || !anime) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        return send(msg, `> ${sentence}\n> \n> _**${character}** on ${anime}_`);
     }
 
 };

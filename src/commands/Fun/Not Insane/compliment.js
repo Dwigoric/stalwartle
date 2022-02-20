@@ -1,17 +1,18 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            description: 'Compliments a user.',
-            usage: '[UserToCompliment:member]'
+            description: 'Compliments a user.'
         });
     }
 
     messageRun(msg, [mentioned = msg.member]) {
-        return msg.send(`⭐  ::  ${mentioned}: ${compliments[Math.floor(Math.random() * compliments.length)]}`);
+        return send(msg, `⭐  ::  ${mentioned}: ${compliments[Math.floor(Math.random() * compliments.length)]}`);
     }
 
 };

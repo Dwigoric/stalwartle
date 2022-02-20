@@ -1,24 +1,25 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            requiredPermissions: ['EMBED_LINKS'],
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives a random pat GIF.'
         });
     }
 
     async messageRun(msg) {
-        const message = await msg.channel.send(`${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
+        await send(msg, `${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
 
         const { link } = await fetch(`https://some-random-api.ml/animu/pat`)
             .then(res => res.json())
-            .catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
-        msg.channel.sendFile(link, 'pat.gif');
-
-        message.delete();
+            .catch(() => ({ link: null }));
+        if (!link) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        return send(msg, { files: [{ attachment: link, name: 'pat.gif', content: `${this.container.constants.EMOTES.tick}  ::  GIF loaded!` }] });
     }
 
 };
