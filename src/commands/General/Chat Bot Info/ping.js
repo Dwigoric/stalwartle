@@ -3,9 +3,9 @@ const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            guarded: true,
+    constructor(context, options) {
+        super(context, {
+            ...options,
             description: "Displays the bot's latency in terms of a ping-pong game. API latency is the ping for the Discord's API so please ignore that."
         });
     }

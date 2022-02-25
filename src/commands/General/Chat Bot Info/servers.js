@@ -1,16 +1,18 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             guarded: true,
             description: 'Gives the amount of servers the bot is in.'
         });
     }
 
     async messageRun(msg) {
-        msg.send(`🖥  ::  The bot is in **${await this.container.client.guildCount()}** servers.`);
+        send(msg, `🖥  ::  The bot is in **${await this.container.client.guildCount()}** servers.`);
     }
 
 };

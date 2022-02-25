@@ -1,22 +1,24 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            guarded: true,
+    constructor(context, options) {
+        super(context, {
+            ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Changes the bot prefix server-wide.',
-            usage: '[Prefix:string]'
+            requiredUserPermissions: ['MANAGE_GUILD']
         });
     }
 
-    async messageRun(msg, [newPrefix]) {
+    async messageRun(msg, args) {
+        const newPrefix = args.pick('string').catch(() => null);
         const prefix = msg.guild.settings.get('prefix');
-        if (!newPrefix) throw `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`;
-        if (!await msg.hasAtLeastPermissionLevel(6)) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! Only moderators or people with Manage Server permission may change the server prefix.`; // eslint-disable-line max-len
-        msg.guild.settings.update('prefix', newPrefix);
-        msg.send(`${this.container.constants.EMOTES.tick}  ::  The prefix for **${msg.guild.name}** is now \`${newPrefix}\`. Type \`@${this.container.client.user.tag}\` to get the current prefix.`);
+
+        if (!newPrefix) return send(msg, `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`);
+        this.container.client.gateways.guilds.update(msg.guild.id, 'prefix', newPrefix);
+        return send(msg, `${this.container.constants.EMOTES.tick}  ::  The prefix for **${msg.guild.name}** is now \`${newPrefix}\`. Type \`@${this.container.client.user.tag}\` to get the current prefix.`);
     }
 
 };

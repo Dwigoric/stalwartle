@@ -1,10 +1,11 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            guarded: true,
+    constructor(context, options) {
+        super(context, {
+            ...options,
             description: 'This command is used to give suggestions for the bot.',
             usage: '<Suggestion:string>',
             extendedHelp: [
@@ -16,15 +17,20 @@ module.exports = class extends Command {
         });
     }
 
-    async messageRun(msg, [suggestion]) {
-        const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
+    async messageRun(msg, args) {
+        let suggestion = await args.restResult('string');
+        if (!suggestion.success) return send(`${this.container.constants.EMOTES.xmark}  ::  Please provide your suggestion for the bot!`);
+        suggestion = suggestion.value;
+
+        await send(msg, `${this.container.constants.EMOTES.loading}  ::  Sending suggestion...`);
+
         this.container.client.channels.cache.get(this.container.client.settings.suggestions.reports).send([
             `💡  ::  Suggestion by **${msg.author.tag}** | ${msg.author.id}`,
-            `\t\t\tServer: ${server}`,
+            `\t\t\tServer: ${msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)'}`,
             `\`\`\`${suggestion}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Sending suggestion...`);
-        msg.send([
+
+        return send(msg, [
             `${this.container.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'
         ].join('\n'));

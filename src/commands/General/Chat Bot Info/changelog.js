@@ -1,17 +1,18 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['changelogs', 'cl'],
-            guarded: true,
             description: 'Gives you my latest changelog to keep you updated!'
         });
     }
 
     async messageRun(msg) {
-        msg.send({ embed: await this.container.client.channels.cache.get(this.container.client.settings.changelogs).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
+        send(msg, { embed: await this.container.client.channels.cache.get(this.container.client.settings.changelogs).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
     }
 
 };

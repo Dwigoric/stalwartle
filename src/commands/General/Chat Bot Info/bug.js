@@ -1,24 +1,29 @@
 const { Command } = require('@sapphire/framework');
+const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            guarded: true,
+    constructor(context, options) {
+        super(context, {
+            ...options,
             description: 'This command is used to report bugs.',
-            usage: '<BugReport:string>',
-            extendedHelp: 'Those who submit silly bug reports will be banned from the bot. Your bug report is escorted by a samurai to my dev server where my developers can fix the bug as soon as they can.' // eslint-disable-line max-len
+            detailedDescription: 'Those who submit silly bug reports will be banned from the bot. Your bug report is escorted by a samurai to my dev server where my developers can fix the bug as soon as they can.' // eslint-disable-line max-len
         });
     }
 
-    async messageRun(msg, ...params) {
+    async messageRun(msg, args) {
+        let params = args.restResult('string');
+        if (!params.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the bug report!`);
+        params = params.value;
+
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
         this.container.client.channels.cache.get(this.container.client.settings.bugs.reports).send([
             `🐛  ::  Bug Report by **${msg.author.tag}** | ${msg.author.id}`,
             `\t\t\tServer: ${server}`,
             `\`\`\`${params}\`\`\``
-        ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
-        msg.send([
+        ].join('\n'), { files: msg.attachments.map(a => ({ attachment: a.url })), allowedMentions: { parse: [] } });
+
+        return send(msg, [
             `${this.container.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your report.***'
         ].join('\n'));
