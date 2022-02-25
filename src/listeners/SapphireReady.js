@@ -32,12 +32,12 @@ module.exports = class extends Listener {
     async run() {
         await this.container.schedule.init();
         if (this.container.client.application.botPublic) this.container.client.postStats().then(() => this.container.client.setInterval(() => this.container.client.postStats(), 1000 * 60 * 5));
-        this.container.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' }).then(() => {
-            this.container.client.setInterval(() => {
-                const status = statuses[Math.floor(Math.random() * statuses.length)];
-                this.container.client.user.setActivity(`${status.name} | ${this.container.client.options.prefix}help`, { type: status.type });
-            }, 60000);
-        });
+        this.container.client.user.setPresence({ status: 'online' });
+        this.container.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' });
+        this.container.client.setInterval(() => {
+            const status = statuses[Math.floor(Math.random() * statuses.length)];
+            this.container.client.user.setActivity(`${status.name} | ${this.container.client.options.defaultPrefix}help`, { type: status.type });
+        }, 60000);
     }
 
 };
