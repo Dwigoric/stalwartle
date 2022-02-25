@@ -9,10 +9,10 @@ module.exports = class extends Listener {
     /* eslint complexity: ['warn', 25] */
     async run(msg) {
         if (!msg.guild) return null;
-        if (!this.container.client.gateways.guilds.get(msg.guild.id).automod.mentionSpam) return null;
-        if (msg.author.bot && this.container.client.gateways.guilds.get(msg.guild.id).automod.ignoreBots) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && this.container.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
-        if (this.container.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
+        if (!this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.mentionSpam) return null;
+        if (msg.author.bot && this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.ignoreBots) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
 
         if (this.container.client.cache.members.get(msg.member.id).messages.length && this.container.client.cache.members.get(msg.member.id).messages
@@ -32,7 +32,7 @@ module.exports = class extends Listener {
         }
         if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.client.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
 
-        const { duration, action } = this.container.client.gateways.guilds.get(msg.guild.id).automod.options.mentionSpam;
+        const { duration, action } = this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.options.mentionSpam;
         const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.container.client.emit('modlogAction', {

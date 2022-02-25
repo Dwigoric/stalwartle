@@ -55,7 +55,7 @@ class Stalwartle extends SapphireClient {
     }
 
     get settings() {
-        return this.gateways.client.get(this.user.id);
+        return container.stores.get('gateways').get('clientGateway').get(this.user.id);
     }
 
     async postStats() {
@@ -132,8 +132,8 @@ class Stalwartle extends SapphireClient {
     async login(token) {
         await container.database.init().catch(() => new Error('Could not establish connection to MongoDB.'));
         console.log('Connection to MongoDB has been established.');
-        for (const gateway in this.gateways) {
-            await this.gateways[gateway].init().catch(() => new Error(`Could not load Collection ${gateway} to cache.`));
+        for (const gateway in container.stores.get('gateways').aliases) {
+            await gateway.init().catch(() => new Error(`Could not load Collection ${gateway.name} to cache.`));
             console.log(`Loaded Collection ${gateway} to cache.`);
         }
         console.log('The gateways have been loaded.');

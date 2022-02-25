@@ -4,7 +4,7 @@ module.exports = class extends Task {
 
     async run() {
         for (const { history, id } of await this.container.database.getAll('music')) {
-            this.container.client.gateways.music.update(id, { history: history.filter(hist => (Date.now() - hist.timestamp) <= (1000 * 60 * 60 * 24)) });
+            this.container.stores.get('gateways').music.update(id, { history: history.filter(hist => (Date.now() - hist.timestamp) <= (1000 * 60 * 60 * 24)) });
         }
     }
 

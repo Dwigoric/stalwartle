@@ -8,9 +8,9 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (!msg.guild) return null;
-        if (!this.container.client.gateways.guilds.get(msg.guild.id).automod.antiInvite) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && this.container.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
-        if (this.container.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.antiInvite.includes(msg.channel.id)) return null;
+        if (!this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.antiInvite) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.filterIgnore.antiInvite.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
 
         const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;
@@ -18,7 +18,7 @@ module.exports = class extends Listener {
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No sending invites allowed, or I'll punish you!`);
         if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) msg.delete().catch(() => null);
 
-        const { duration, action } = this.container.client.gateways.guilds.get(msg.guild.id).automod.options.antiInvite;
+        const { duration, action } = this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.options.antiInvite;
         const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.container.client.emit('modlogAction', {

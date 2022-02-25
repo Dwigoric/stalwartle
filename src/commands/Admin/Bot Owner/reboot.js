@@ -13,7 +13,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        await this.container.client.gateways.client.update(this.container.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
+        await this.container.stores.get('gateways').get('clientGateway').update(this.container.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
         await msg.channel.send('<a:loading:430269209415516160>  ::  Bot is restarting... I will message you in this channel once I\'ve woken up again.').catch(err => this.container.client.emit('error', err));
         await this.container.client.destroy();
         await this.container.client.playerManager.destroy();
@@ -32,9 +32,9 @@ module.exports = class extends Command {
                 .setFooter(`Reboot duration: ${+`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`}s`)
                 .setTimestamp()
         });
-        this.container.client.gateways.client.update(this.container.client.user.id, { restart: {
-            channel: this.container.client.gateways.client.defaults.channel,
-            timestamp: this.container.client.gateways.client.defaults.timestamp
+        this.container.stores.get('gateways').get('clientGateway').update(this.container.client.user.id, { restart: {
+            channel: this.container.stores.get('gateways').get('clientGateway').defaults.channel,
+            timestamp: this.container.stores.get('gateways').get('clientGateway').defaults.timestamp
         } });
     }
 

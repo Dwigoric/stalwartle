@@ -22,7 +22,7 @@ module.exports = class extends Command {
         banner = banner.value;
         if (banner.length > 50) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Banner must be between 1 to 50 characters (inclusive).`);
 
-        const bannerWidth = this.container.client.gateways.users.get(msg.author.id, 'bannerWidth');
+        const bannerWidth = this.container.stores.get('gateways').users.get(msg.author.id, 'bannerWidth');
         const data = await figletAsync(banner, { width: bannerWidth === 0 ? undefined : bannerWidth });
 
         if (data.length > 2000) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  The banner was too long! Please try making it shorter.`);

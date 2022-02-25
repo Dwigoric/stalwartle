@@ -8,7 +8,7 @@ module.exports = class extends Listener {
     }
 
     async run(member) {
-        if (!this.container.client.gateways.guilds.get(member.guild.id).globalBans) return null;
+        if (!this.container.stores.get('gateways').guilds.get(member.guild.id).globalBans) return null;
         if (!member.guild.me.permissions.has('BAN_MEMBERS')) {
             member.guild.settings.reset('globalBans');
             if (member.guild.owner.partial) await member.guild.owner.fetch();

@@ -8,16 +8,16 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (!msg.guild) return null;
-        if (!this.container.client.gateways.guilds.get(msg.guild.id).automod.antiSpam) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && this.container.client.gateways.guilds.get(msg.guild.id).automod.ignoreMods) return null;
-        if (this.container.client.gateways.guilds.get(msg.guild.id).automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
+        if (!this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.antiSpam) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
 
-        if (this.container.client.cache.members.get(msg.member.id).messages.length <= this.container.client.gateways.guilds.get(msg.guild.id).automod.options.antiSpam.limit) return null;
+        if (this.container.client.cache.members.get(msg.member.id).messages.length <= this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.options.antiSpam.limit) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
         if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.client.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
 
-        const { duration, action } = this.container.client.gateways.guilds.get(msg.guild.id).automod.options.antiSpam;
+        const { duration, action } = this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.options.antiSpam;
         const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.container.client.emit('modlogAction', {
