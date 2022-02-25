@@ -2,8 +2,8 @@ const { Listener, Events } = require('@sapphire/framework');
 
 module.exports = class extends Listener {
 
-    constructor(...args) {
-        super(...args, { event: Events.VoiceStateUpdate });
+    constructor(context, options) {
+        super(context, { ...options, event: Events.VoiceStateUpdate });
     }
 
     async run(oldState, newState) {

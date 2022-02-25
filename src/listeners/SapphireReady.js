@@ -25,8 +25,8 @@ const statuses = [
 
 module.exports = class extends Listener {
 
-    constructor(...args) {
-        super(...args, { event: Events.ClientReady, once: true });
+    constructor(context, options) {
+        super(context, { ...options, event: Events.ClientReady, once: true });
     }
 
     async run() {

@@ -3,16 +3,16 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Listener {
 
-    constructor(...args) {
-        super(...args, { event: Events.GuildCreate });
+    constructor(context, options) {
+        super(context, { ...options, event: Events.GuildCreate });
     }
 
     async run(guild) {
         const message = new MessageEmbed()
             .setColor('#C62A29')
-            .setAuthor('Thank you for having me!', await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })))
+            .setAuthor({ name: 'Thank you for having me!', iconURL: await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
             .setTitle(guild.name)
-            .setFooter(`${this.container.client.user.username} Added!`, this.container.client.user.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: `${this.container.client.user.username} Added!`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
             .setThumbnail(guild.iconURL({ dynamic: true, size: 2048 }))
             .setTimestamp()
             .setDescription([

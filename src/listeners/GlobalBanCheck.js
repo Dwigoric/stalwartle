@@ -3,8 +3,8 @@ const fetch = require('node-fetch');
 
 module.exports = class extends Listener {
 
-    constructor(...args) {
-        super(...args, { event: Events.GuildMemberAdd });
+    constructor(context, options) {
+        super(context, { ...options, event: Events.GuildMemberAdd });
     }
 
     async run(member) {

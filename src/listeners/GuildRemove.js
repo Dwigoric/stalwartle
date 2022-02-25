@@ -13,8 +13,8 @@ const gregion = {
 
 module.exports = class extends Listener {
 
-    constructor(...args) {
-        super(...args, { event: Events.GuildDelete });
+    constructor(context, options) {
+        super(context, { ...options, event: Events.GuildDelete });
         this.hook = null;
     }
 
@@ -34,7 +34,7 @@ module.exports = class extends Listener {
 
         this.hook.send(new MessageEmbed()
             .setColor(0xE74C3C)
-            .setAuthor("I've been removed from a server")
+            .setAuthor({ name: "I've been removed from a server" })
             .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
             .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
             .addField('Guild Owner ID', guild.ownerID, true)

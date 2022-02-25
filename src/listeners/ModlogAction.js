@@ -15,8 +15,8 @@ const configs = {
 
 module.exports = class extends Listener {
 
-    constructor(...args) {
-        super(...args, { event: 'modlogAction' });
+    constructor(context, options) {
+        super(context, { ...options, event: 'modlogAction' });
     }
 
     async run(message, user, reason, duration) {
@@ -43,7 +43,7 @@ module.exports = class extends Listener {
             const embed = new MessageEmbed()
                 .setColor(configs[message.command.name][0])
                 .setTitle(`Case #${modlogs.length + 1}: ${toTitleCase(message.command.name)} ${configs[message.command.name][1]}`)
-                .setFooter(`User ID: ${user.id}`)
+                .setFooter({ text: `User ID: ${user.id}` })
                 .setTimestamp()
                 .addField('Moderator', moderator, true)
                 .addField(user.bot ? 'Bot' : 'User', user, true);
