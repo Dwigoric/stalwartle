@@ -13,7 +13,7 @@ class MemberCacheData extends CacheDataInstance {
         this.actions.push(action);
         setTimeout(() => {
             this.actions.shift();
-        }, this.manager.client.gateways.guilds.get(this.id).automod.options.quota.within * 60000);
+        }, this.manager.client.stores.get('gateways').get('guilds').get(this.id).automod.options.quota.within * 60000);
     }
 
     resetActions() {
@@ -24,7 +24,7 @@ class MemberCacheData extends CacheDataInstance {
         this.messages.push(message);
         setTimeout(() => {
             this.messages.shift();
-        }, this.manager.client.gateways.guilds.get(this.id).automod.options.antiSpam.within * 1000);
+        }, this.manager.client.stores.get('gateways').get('guilds').get(this.id).automod.options.antiSpam.within * 1000);
     }
 
 }

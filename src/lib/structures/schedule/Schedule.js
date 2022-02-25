@@ -56,7 +56,7 @@ class Schedule {
         if (!task) return null;
         const { schedules } = this.client.settings;
         schedules.push(task);
-        await this.client.gateways.client.update(this.client.user.id, { schedules });
+        await this.client.stores.get('gateways').get('client').update(this.client.user.id, { schedules });
         return task;
     }
 
@@ -68,13 +68,13 @@ class Schedule {
         const task = this._tasks.findIndex(entry => entry.id === id);
         const { schedules } = this.client.settings;
         schedules.splice(task, 1);
-        if (task) await this.client.gateways.client.update(this.client.user.id, { schedules });
+        if (task) await this.client.stores.get('gateways').get('client').update(this.client.user.id, { schedules });
 
         return this;
     }
 
     async clear() {
-        this.client.gateways.client.update(this.client.user.id, { schedules: this.client.gateways.client.defaults.schedules });
+        this.client.stores.get('gateways').get('client').update(this.client.user.id, { schedules: this.client.stores.get('gateways').get('client').defaults.schedules });
         this.tasks = [];
     }
 
