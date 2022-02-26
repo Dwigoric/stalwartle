@@ -6,6 +6,9 @@ const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
 
+// Register editable-commands plugin
+require('@sapphire/plugin-editable-commands/register');
+
 const constants = require('../util/constants');
 const auth = require('../../auth');
 

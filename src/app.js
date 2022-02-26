@@ -4,9 +4,6 @@ const { config, token } = require('./config');
 // Instantiate Stalwartle
 const client = new Stalwartle(config);
 
-// Register editable-commands plugin
-require('@sapphire/plugin-editable-commands/register');
-
 const main = async () => {
     try {
         client.logger.info('Logging in...');
