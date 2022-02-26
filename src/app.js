@@ -8,7 +8,7 @@ const main = async () => {
     try {
         client.logger.info('Logging in...');
         await client.login(token);
-        client.logger.info('Sucessfully logged in.');
+        client.logger.info('Successfully logged in.');
     } catch (error) {
         client.logger.fatal(error);
         client.destroy();
