@@ -9,9 +9,6 @@ const { config: { lavalinkNodes } } = require('../../config');
 // Register editable-commands plugin
 require('@sapphire/plugin-editable-commands/register');
 
-const constants = require('../util/constants');
-const auth = require('../../auth');
-
 // Imports for data persistence
 const PersistenceManager = require('./settings/PersistenceManager');
 const GatewayStore = require('./settings/GatewayStore');
@@ -36,8 +33,11 @@ class Stalwartle extends SapphireClient {
 
         container.lavacord = null;
         container.spotifyParser = null;
-        container.constants = constants;
-        container.auth = auth;
+        container.constants = require('../util/constants');
+        container.auth = require('../../auth');
+        container.utils = {
+            messages: require('../util/messageUtils')
+        };
 
         this.once('ready', this._initplayer.bind(this));
 
