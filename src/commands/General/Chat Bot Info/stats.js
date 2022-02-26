@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { Duration } = require('@sapphire/time-utilities');
 const { MessageEmbed } = require('discord.js');
 const { uptime, loadavg } = require('os');
@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
     async messageRun(msg) {
         const now = Date.now();
-        send(msg, {
+        reply(msg, {
             embed: new MessageEmbed()
                 .setColor('RANDOM')
                 .setAuthor({ name: `${this.container.client.user.tag}'s Statistics 📟`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })

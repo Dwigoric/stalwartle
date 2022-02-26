@@ -1,5 +1,5 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -12,7 +12,7 @@ module.exports = class extends Command {
     }
 
     messageRun(msg, [mentioned = msg.member]) {
-        return send(msg, `⭐  ::  ${mentioned}: ${compliments[Math.floor(Math.random() * compliments.length)]}`);
+        return reply(msg, `⭐  ::  ${mentioned}: ${compliments[Math.floor(Math.random() * compliments.length)]}`);
     }
 
 };

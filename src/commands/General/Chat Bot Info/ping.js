@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -11,8 +11,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const message = await send(msg, `🏓  ::  **Pong!**`);
-        send(msg, `🏓  ::  **Pong!** Ping pong game ended! 😃 ~~(I won)~~ | Game Duration: **${(message.editedTimestamp || message.createdTimestamp) -
+        const message = await reply(msg, `🏓  ::  **Pong!**`);
+        reply(msg, `🏓  ::  **Pong!** Ping pong game ended! 😃 ~~(I won)~~ | Game Duration: **${(message.editedTimestamp || message.createdTimestamp) -
 			(msg.editedTimestamp || msg.createdTimestamp)}ms**. API Latency: **${Math.round(this.container.client.ws.ping)}ms**.`);
     }
 

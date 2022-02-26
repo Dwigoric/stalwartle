@@ -17,7 +17,7 @@ module.exports = class extends Command {
         msgargs = msgargs.join(this.usageDelim);
         if (!chan.postable) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`; // eslint-disable-line max-len
         if (chan !== msg.channel) msg.send(`${this.container.constants.EMOTES.tick}  ::  Message sent!`);
-        return chan.send(msgargs);
+        return chan.reply(msgargs);
     }
 
     async delete(msg, [chan = msg.channel, ...msgargs]) {
@@ -25,7 +25,7 @@ module.exports = class extends Command {
         msgargs = msgargs.join(this.usageDelim);
         if (!chan.postable) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
         if (chan !== msg.channel) msg.send(`${this.container.constants.EMOTES.tick}  ::  Message sent!`);
-        chan.send(msgargs);
+        chan.reply(msgargs);
         return msg.delete().catch(() => null);
     }
 

@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -22,7 +22,7 @@ module.exports = class extends Command {
         if (!suggestion.success) return send(`${this.container.constants.EMOTES.xmark}  ::  Please provide your suggestion for the bot!`);
         suggestion = suggestion.value;
 
-        await send(msg, `${this.container.constants.EMOTES.loading}  ::  Sending suggestion...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Sending suggestion...`);
 
         this.container.client.channels.cache.get(this.container.client.settings.suggestions.reports).send([
             `💡  ::  Suggestion by **${msg.author.tag}** | ${msg.author.id}`,
@@ -30,7 +30,7 @@ module.exports = class extends Command {
             `\`\`\`${suggestion}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => a.url), disableMentions: 'everyone' });
 
-        return send(msg, [
+        return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  I've successfully submitted your suggestion! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your suggestion.***'
         ].join('\n'));

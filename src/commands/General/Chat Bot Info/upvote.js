@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -13,8 +13,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        if (!this.container.client.application.botPublic) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`);
-        return send(msg, {
+        if (!this.container.client.application.botPublic) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`);
+        return reply(msg, {
             embed: new MessageEmbed()
                 .setAuthor({ name: `Upvote ${this.container.client.user.username}`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
                 .setDescription([

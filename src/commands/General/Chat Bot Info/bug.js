@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let params = args.restResult('string');
-        if (!params.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the bug report!`);
+        if (!params.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the bug report!`);
         params = params.value;
 
         const server = msg.guild ? `${msg.guild.name} | ${msg.guild.id}` : 'None (Direct Messages)';
@@ -23,7 +23,7 @@ module.exports = class extends Command {
             `\`\`\`${params}\`\`\``
         ].join('\n'), { files: msg.attachments.map(a => ({ attachment: a.url })), allowedMentions: { parse: [] } });
 
-        return send(msg, [
+        return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  I've successfully submitted your bug report! Thank you for helping to make this bot better. 💖\n`,
             '***Please make sure I can DM (privacy settings) you so you will be updated about your report.***'
         ].join('\n'));

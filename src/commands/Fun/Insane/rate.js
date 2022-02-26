@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -12,9 +12,9 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         const ratething = args.restResult('string');
-        if (!ratething.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide what you want to rate.`);
+        if (!ratething.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide what you want to rate.`);
 
-        return send(msg, `I would rate ${ratething.value} a **${Math.round(Math.random() * 100)}/100**!`, { disableMentions: 'everyone' });
+        return reply(msg, `I would rate ${ratething.value} a **${Math.round(Math.random() * 100)}/100**!`, { disableMentions: 'everyone' });
     }
 
 };

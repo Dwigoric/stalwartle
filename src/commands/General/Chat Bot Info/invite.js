@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -11,7 +11,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        return send(msg, message);
+        return reply(msg, message);
     }
 
 };

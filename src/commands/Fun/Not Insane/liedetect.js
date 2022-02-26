@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let lie = args.restResult('string');
-        if (!lie.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  \`Lie\` is a required argument.`);
+        if (!lie.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  \`Lie\` is a required argument.`);
         lie = lie.value;
 
         const gifs = {
@@ -37,7 +37,7 @@ module.exports = class extends Command {
             .setDescription(lie)
             .setFooter({ text: `It's ${gif[1] === 0x2ECC71 ? 'the truth' : 'a lie'}!` });
 
-        return send(msg, { embed });
+        return reply(msg, { embed });
     }
 
 };

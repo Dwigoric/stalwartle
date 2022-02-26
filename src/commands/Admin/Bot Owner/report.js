@@ -1,6 +1,6 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -24,19 +24,19 @@ module.exports = class extends Command {
         };
 
         let repUser = await args.pick('user');
-        if (!repUser.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
+        if (!repUser.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
         repUser = repUser.value;
 
         let repMsg = await args.pick('message');
-        if (!repMsg.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
+        if (!repMsg.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
         repMsg = repMsg.value;
 
         let repCom = await args.rest('string');
-        if (!repUser.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
+        if (!repUser.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
         repCom = repCom.value;
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
-        if (!Object.keys(reportChans).includes(msg.channel.id)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
+        if (!Object.keys(reportChans).includes(msg.channel.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
         const embed = new MessageEmbed()
             .setColor('RANDOM')
             .setAuthor(repUser.tag, repUser.displayAvatarURL({ dynamic: true }))

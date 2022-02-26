@@ -1,6 +1,6 @@
 const { Command } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -23,7 +23,7 @@ module.exports = class extends Command {
                 .setDescription(await args.rest('string'))
                 .setTimestamp()
         });
-        send(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
     }
 
 };

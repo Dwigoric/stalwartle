@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         const num = await args.pick('integer').catch(() => 1);
-        if (num < 1 || num > 10) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Amount of card must be 1 to 10!`);
+        if (num < 1 || num > 10) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Amount of card must be 1 to 10!`);
 
         const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const suits = ['♠️', '♦', '♥️', '♠️'];
@@ -23,7 +23,7 @@ module.exports = class extends Command {
             lines.push(`**${ranks[Math.floor(Math.random() * ranks.length)]}**${suits[Math.floor(Math.random() * suits.length)]}`);
         }
 
-        return send(msg, `You drew ${lines.join(', ')}.`);
+        return reply(msg, `You drew ${lines.join(', ')}.`);
     }
 
 };

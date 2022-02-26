@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        send(msg, {
+        reply(msg, {
             embed: await new MessageEmbed()
                 .setColor('RANDOM')
                 .setDescription('Please visit my dev server (<https://discord.gg/KDWGvV8>) and go to the questions and support channel so we can give you the utmost support.')

@@ -1,6 +1,6 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { GuildMember } = require('discord.js');
 
 module.exports = class extends SubCommandPluginCommand {
@@ -39,7 +39,7 @@ module.exports = class extends SubCommandPluginCommand {
             return null;
         }));
         [modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));
-        send(msg, `**Roles**:${modRoles.length ? `\n${modRoles.join(' **|** ')}` : ' ***None***'}\n**Users**:${modUsers.length ? `\n${modUsers.join(' **|** ')}` : ' ***None***'}`);
+        reply(msg, `**Roles**:${modRoles.length ? `\n${modRoles.join(' **|** ')}` : ' ***None***'}\n**Users**:${modUsers.length ? `\n${modUsers.join(' **|** ')}` : ' ***None***'}`);
     }
 
     async add(msg, args) {
@@ -52,15 +52,15 @@ module.exports = class extends SubCommandPluginCommand {
 
     async toggle(msg, args, action) {
         const mod = args.pick('member').catch(() => args.pick('role')).catch(() => null);
-        if (mod === null) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the user/role.`);
+        if (mod === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the user/role.`);
 
         const type = mod instanceof GuildMember ? 'users' : 'roles';
         const guildMods = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
-        if (action === 'add' && guildMods[type].includes(mod.id)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already a moderator!`);
-        if (action === 'remove' && !guildMods[type].includes(mod.id)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already not a moderator!`);
+        if (action === 'add' && guildMods[type].includes(mod.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already a moderator!`);
+        if (action === 'remove' && !guildMods[type].includes(mod.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already not a moderator!`);
 
         this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { [type]: mod.id } });
-        return send(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
     }
 
 };

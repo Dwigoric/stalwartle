@@ -4,7 +4,7 @@ const { codeBlock, isThenable } = require('@sapphire/utilities');
 const { Stopwatch } = require('@sapphire/stopwatch');
 const { Type } = require('@sapphire/type');
 const { MessagePrompter, MessagePrompterStrategies } = require('@sapphire/discord.js-utilities');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 const { inspect, promisify } = require('util');
 const fetch = require('node-fetch');
@@ -39,7 +39,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let code = await args.restResult('string');
-        if (!code.success) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
+        if (!code.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
         code = code.value;
         const flagTime = args.getFlags('no-timeout') ? Number(args.getOption('wait')) || this.timeout : Infinity;
         const language = args.getOption('lang') || args.getOption('language') || (args.getFlags('json') ? 'json' : 'js');
@@ -59,7 +59,7 @@ module.exports = class extends Command {
         switch (options.sendAs) {
             case 'file': {
                 if (msg.channel.attachable) {
-                    return send(msg, {
+                    return reply(msg, {
                         files: [{ name: 'output.txt', attachment: Buffer.from(result) }],
                         content: `Sent the result as a file.\n**Type**:${footer}\n${time}`
                     });
@@ -70,7 +70,7 @@ module.exports = class extends Command {
             case 'haste':
             case 'hastebin': {
                 if (!options.url) options.url = await this.getHaste(result, language).catch(() => null);
-                if (options.url) return send(msg, { content: `Sent the result to hastebin: ${options.url}\n**Type**:${footer}\n${time}` });
+                if (options.url) return reply(msg, { content: `Sent the result to hastebin: ${options.url}\n**Type**:${footer}\n${time}` });
                 options.hastebinUnavailable = true;
                 await this.getTypeOutput(msg, options);
                 return this.handleMessage(msg, options, { success, result, time, footer, language });
@@ -78,7 +78,7 @@ module.exports = class extends Command {
             case 'console':
             case 'log': {
                 this.container.client.emit('log', result);
-                return send(msg, { content: `Sent the result to console.\n**Type**:${footer}\n${time}` });
+                return reply(msg, { content: `Sent the result to console.\n**Type**:${footer}\n${time}` });
             }
             case 'none':
                 return null;
@@ -87,7 +87,7 @@ module.exports = class extends Command {
                     await this.getTypeOutput(msg, options);
                     return this.handleMessage(msg, options, { success, result, time, footer, language });
                 }
-                return send(msg, { content: `**${success ? 'Output' : 'Error'}**:${codeBlock(language, result)}\n**Type**:${footer}\n${time}` });
+                return reply(msg, { content: `**${success ? 'Output' : 'Error'}**:${codeBlock(language, result)}\n**Type**:${footer}\n${time}` });
             }
         }
     }

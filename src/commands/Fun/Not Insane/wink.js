@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
@@ -13,13 +13,13 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        await send(msg, `${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
 
         const { link } = await fetch(`https://some-random-api.ml/animu/wink`)
             .then(res => res.json())
             .catch(() => ({ link: null }));
-        if (!link) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
-        return send(msg, { content: `${this.container.constants.EMOTES.tick}  ::  GIF loaded!`, files: [{ attachment: link, name: 'wink.gif' }] });
+        if (!link) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        return reply(msg, { content: `${this.container.constants.EMOTES.tick}  ::  GIF loaded!`, files: [{ attachment: link, name: 'wink.gif' }] });
     }
 
 };

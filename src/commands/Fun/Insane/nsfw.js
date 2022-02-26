@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
@@ -16,9 +16,9 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        await send(msg, `${this.container.constants.EMOTES.loading}  ::  Loading image...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading image...`);
         const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${args.getFlags('gif')}`, { headers: { Authorization: `Bearer ${this.container.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
-        send(msg, { files: [{ attachment: result.image_url }], content: `<${result.source}>` });
+        reply(msg, { files: [{ attachment: result.image_url }], content: `<${result.source}>` });
     }
 
 };

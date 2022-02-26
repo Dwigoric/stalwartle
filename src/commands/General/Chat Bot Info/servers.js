@@ -1,5 +1,5 @@
 const { Command } = require('@sapphire/framework');
-const { send } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -12,7 +12,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        send(msg, `🖥  ::  The bot is in **${await this.container.client.guildCount()}** servers.`);
+        reply(msg, `🖥  ::  The bot is in **${await this.container.client.guildCount()}** servers.`);
     }
 
 };
