@@ -18,9 +18,7 @@ class Gateway extends AliasPiece {
     }
 
     async update(id, path, val) {
-        if (typeof path !== 'string') throw new TypeError('Expected the string path of the object to update');
-
-        const obj = makeObject(path, val);
+        const obj = typeof path === 'string' ? makeObject(path, val) : path;
         await this.container.database.update(this.collection, id, mergeObjects(obj, { id }), true);
         this.sync(id);
     }
