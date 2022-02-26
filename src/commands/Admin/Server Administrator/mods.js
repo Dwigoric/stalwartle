@@ -17,14 +17,14 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async messageRun(msg) {
-        const { roles, users } = await this.container.stores.get('gateways').guilds.get(msg.guild.id, 'moderators');
+        const { roles, users } = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
         const modRoles = roles.map(rl => {
             const modRole = msg.guild.roles.cache.get(rl);
             if (modRole) {
                 return modRole.name;
             } else {
                 const dummyArray = roles.concat([]).splice(roles.findIndex(rl), 1);
-                this.container.stores.get('gateways').guilds.update(msg.guild.id, { moderators: { roles: dummyArray } });
+                this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { roles: dummyArray } });
             }
             return null;
         });
@@ -34,7 +34,7 @@ module.exports = class extends SubCommandPluginCommand {
                 return modUser.user.tag;
             } else {
                 const dummyArray = users.concat([]).splice(users.findIndex(us), 1);
-                this.container.stores.get('gateways').guilds.update(msg.guild.id, { moderators: { users: dummyArray } });
+                this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { users: dummyArray } });
             }
             return null;
         }));
@@ -55,11 +55,11 @@ module.exports = class extends SubCommandPluginCommand {
         if (mod === null) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the user/role.`);
 
         const type = mod instanceof GuildMember ? 'users' : 'roles';
-        const guildMods = await this.container.stores.get('gateways').guilds.get(msg.guild.id, 'moderators');
+        const guildMods = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
         if (action === 'add' && guildMods[type].includes(mod.id)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already a moderator!`);
         if (action === 'remove' && !guildMods[type].includes(mod.id)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already not a moderator!`);
 
-        this.container.stores.get('gateways').guilds.update(msg.guild.id, { moderators: { [type]: mod.id } });
+        this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { [type]: mod.id } });
         return send(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
     }
 

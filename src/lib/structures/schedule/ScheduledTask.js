@@ -53,7 +53,7 @@ class ScheduledTask {
 
         const _index = this.store._tasks.findIndex(entry => entry.id === this.id);
         const newArray = this.client.settings.schedules.splice(_index, 0, this.toJSON());
-        if (_index !== -1) await this.client.stores.get('gateways').get('client').update(this.client.user.id, { schedules: newArray });
+        if (_index !== -1) await this.client.stores.get('gateways').get('clientGateway').update(this.client.user.id, { schedules: newArray });
 
         return this;
     }

@@ -20,25 +20,25 @@ module.exports = class extends Listener {
     }
 
     async run(message, user, reason, duration) {
-        if (this.container.stores.get('gateways').guilds.get(message.guild.id).automod.quota) this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));
+        if (this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).automod.quota) this.checkAutomodQuota(message, await message.guild.members.fetch(user.id).catch(() => null));
         user
             .send(`You have been ${message.command.name}${message.command.name.slice(-3) === 'ban' ? 'n' : ''}${message.command.name.slice(-1) === 'e' ? '' : 'e'}d in **${message.guild}**. ${reason ? `**Reason**: ${reason}` : ''}`) // eslint-disable-line max-len
             .catch(() => {
                 if (message.command.name === 'warn' && message.author) message.send(`⚠ I couldn't send messages to **${user.tag}**, so I couldn't warn them; but this will still be logged.`);
             });
         const moderator = message.author ? message.author.equals(user) ? this.container.client.user : message.author : this.container.client.user;
-        const { modlogs } = await this.container.stores.get('gateways').modlogs.get(message.guild.id);
-        const channel = message.guild.channels.cache.get(this.container.stores.get('gateways').guilds.get(message.guild.id).modlogs[message.command.name]);
-        if (!channel && this.container.stores.get('gateways').guilds.get(message.guild.id).logging && message.author) {
+        const { modlogs } = await this.container.stores.get('gateways').get('modlogGateway').get(message.guild.id);
+        const channel = message.guild.channels.cache.get(this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).modlogs[message.command.name]);
+        if (!channel && this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).logging && message.author) {
             return message.send([
                 `⚠ It seems that the modlog channel for ${message.command.name}s is not yet set.`,
-                `If you want to continue without logging in the future without this warning, you can use \`${this.container.stores.get('gateways').guilds.get(message.guild.id).prefix}conf set logging false\`.`,
-                `This does not mean that I will stop the logs. You can always view them at \`${this.container.stores.get('gateways').guilds.get(message.guild.id).prefix}modlogs\`.`
+                `If you want to continue without logging in the future without this warning, you can use \`${this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).prefix}conf set logging false\`.`,
+                `This does not mean that I will stop the logs. You can always view them at \`${this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).prefix}modlogs\`.`
             ].join(' '));
         }
 
         let logMessage = { id: null };
-        if (this.container.stores.get('gateways').guilds.get(message.guild.id).logging && channel) {
+        if (this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).logging && channel) {
             if (!channel.postable) return message.send(`${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${channel}.`);
             const embed = new MessageEmbed()
                 .setColor(configs[message.command.name][0])
@@ -51,7 +51,7 @@ module.exports = class extends Listener {
             if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
             if (message.content) {
                 embed.addField('Channel', message.channel, true);
-                if (this.container.stores.get('gateways').guilds.get(message.guild.id).modlogShowContent) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
+                if (this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).modlogShowContent) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
             }
             logMessage = await channel.send(embed);
         }
@@ -65,14 +65,14 @@ module.exports = class extends Listener {
             type: message.command.name,
             user: user.id
         });
-        return this.container.stores.get('gateways').modlogs.update(message.guild.id, { modlogs });
+        return this.container.stores.get('gateways').get('modlogGateway').update(message.guild.id, { modlogs });
     }
 
     async checkAutomodQuota(message, member) {
         if (!member) return null;
         if (!['unban', 'unmute'].includes(message.command.name) && message.author && !message.author.bot) member.addAction(message.command.name);
 
-        const { limit, duration, action, within } = this.container.stores.get('gateways').guilds.get(message.guild.id).automod.options.quota;
+        const { limit, duration, action, within } = this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).automod.options.quota;
         if (this.container.client.cache.members.get(member.id).actions.length >= limit) {
             if (message.channel.postable) message.channel.send(`${member.user} made ${limit} actions within ${within} minutes, which is punishable by a ${duration}-minute automated ${action}.`);
             await member.resetActions();

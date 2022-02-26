@@ -25,16 +25,16 @@ module.exports = class extends Listener {
             return this.container.lavacord.players.get(newState.guild.id).pause(false);
         }
         if (channelMembers.size) return null;
-        const { queue = [] } = await this.container.stores.get('gateways').music.get(newState.guild.id) || {};
+        const { queue = [] } = await this.container.stores.get('gateways').get('musicGateway').get(newState.guild.id) || {};
         if (!queue[0].info.isStream) {
             this.autopaused.add(newState.guild.id);
             this.container.lavacord.players.get(newState.guild.id).pause(true);
         }
-        if (this.container.stores.get('gateways').guilds.get(newState.guild.id).donation >= 10) return null;
+        if (this.container.stores.get('gateways').get('guildGateway').get(newState.guild.id).donation >= 10) return null;
         return this.container.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
             this.container.lavacord.leave(guild.id);
-            if (queue[0].requester === this.container.client.user.id) this.container.stores.get('gateways').music.update(newState.guild.id, { queue: this.container.stores.get('gateways').music.defaults.queue });
+            if (queue[0].requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').update(newState.guild.id, { queue: this.container.stores.get('gateways').get('musicGateway').defaults.queue });
             return null;
         }, 30000, newState.guild);
     }

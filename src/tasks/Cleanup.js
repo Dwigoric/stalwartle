@@ -77,14 +77,14 @@ module.exports = class MemorySweeper extends Task {
         for (const { history, id, playlist, queue } of await this.container.database.getAll('music')) {
             if ((history && history.length) || (playlist && playlist.length)) continue;
             if (this.container.client.guilds.cache.has(id) && queue && queue.length) continue;
-            this.container.stores.get('gateways').music.delete(id);
+            this.container.stores.get('gateways').get('musicGateway').delete(id);
             musicDBs++;
         }
 
         // Modlog database sweeper
         for (const { id, modlogs } of await this.container.database.getAll('modlogs')) {
             if (modlogs && modlogs.length) continue;
-            this.container.stores.get('gateways').modlogs.delete(id);
+            this.container.stores.get('gateways').get('modlogGateway').delete(id);
             modlogDBs++;
         }
 

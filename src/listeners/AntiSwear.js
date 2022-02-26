@@ -8,19 +8,19 @@ module.exports = class extends Listener {
 
     async run(msg) {
         if (!msg.guild) return null;
-        if (!this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.antiSwear) return null;
-        if (await msg.hasAtLeastPermissionLevel(6) && this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.ignoreMods) return null;
-        if (this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.filterIgnore.antiSwear.includes(msg.channel.id)) return null;
+        if (!this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.antiSwear) return null;
+        if (await msg.hasAtLeastPermissionLevel(6) && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;
+        if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.antiSwear.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
 
-        let swearArray = this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
-        if (this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.globalSwears) swearArray = swearArray.concat(this.container.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+        let swearArray = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
+        if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.globalSwears) swearArray = swearArray.concat(this.container.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);
         const swearRegex = new RegExp(swearArray.join('|'), 'im');
         if (!swearArray.length || !swearRegex.test(msg.content)) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
         if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) msg.delete();
 
-        const { duration, action } = this.container.stores.get('gateways').guilds.get(msg.guild.id).automod.options.antiSwear;
+        const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSwear;
         const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
         switch (action) {
             case 'warn': return this.container.client.emit('modlogAction', {

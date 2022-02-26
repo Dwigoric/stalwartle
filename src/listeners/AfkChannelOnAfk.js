@@ -9,11 +9,11 @@ module.exports = class extends Listener {
     async run(oldState, newState) {
         if (!newState.member) return null;
         if (!newState.guild.me.permissions.has('MOVE_MEMBERS')) return null;
-        if (!newState.guild.settings.get('afkChannelOnAfk')) return null;
+        if (!this.container.stores.get('gateways').get('guildGateway').get(newState.guild.id, 'afkChannelOnAfk')) return null;
         if (!newState.member.voice.channel) return null;
         if (!newState.guild.afkChannelID) return null;
         if (newState.channelID === newState.guild.afkChannelID) return null;
-        if (!this.container.stores.get('gateways').afk.get(newState.user.id).timestamp) return null;
+        if (!this.container.stores.get('gateways').get('afkGateway').get(newState.user.id).timestamp) return null;
         return newState.setChannel(newState.guild.afkChannelID, 'Moved to AFK channel due to AFK status');
     }
 

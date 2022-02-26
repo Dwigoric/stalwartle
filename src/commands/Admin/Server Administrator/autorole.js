@@ -27,13 +27,13 @@ module.exports = class extends Command {
         role = role.value;
 
         if (role === 'remove') {
-            this.container.stores.get('gateways').guilds.reset(msg.guild.id, `autorole.${type}`);
+            this.container.stores.get('gateways').get('guildGateway').reset(msg.guild.id, `autorole.${type}`);
             return send(msg, `${this.container.constants.EMOTES.tick}  ::  The autorole for ${type}s has been removed!`);
         }
         if (!role) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`);
         if (role.position >= msg.guild.me.roles.highest.position) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! That role is higher than mine!`);
         if (role.position >= msg.member.roles.highest.position) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that role is higher than yours...`);
-        this.container.stores.get('gateways').guilds.update(msg.guild.id, `autorole.${type}`, role.id);
+        this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, `autorole.${type}`, role.id);
         return send(msg, `${this.container.constants.EMOTES.tick}  ::  The autorole for ${type}s has been set to **${role.name}**.`);
     }
 
