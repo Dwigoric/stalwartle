@@ -30,6 +30,14 @@ module.exports = class extends Listener {
     }
 
     async run() {
+        await this.container.database.init().catch(() => new Error('Could not establish connection to MongoDB.'));
+        console.log('Connection to MongoDB has been established.');
+        for (const gateway of this.container.stores.get('gateways').values()) {
+            await gateway.init().catch(() => new Error(`Could not load Collection ${gateway.name} to cache.`));
+            console.log(`Loaded Collection ${gateway.name} to cache.`);
+        }
+        console.log('The gateways have been loaded.');
+
         await this.container.schedule.init();
         if (this.container.client.application.botPublic) this.container.client.postStats().then(() => this.container.client.setInterval(() => this.container.client.postStats(), 1000 * 60 * 5));
         this.container.client.user.setPresence({ status: 'online' });

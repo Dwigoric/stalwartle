@@ -132,17 +132,6 @@ class Stalwartle extends SapphireClient {
         return users;
     }
 
-    async login(token) {
-        await container.database.init().catch(() => new Error('Could not establish connection to MongoDB.'));
-        console.log('Connection to MongoDB has been established.');
-        for (const gateway in container.stores.get('gateways').aliases) {
-            await gateway.init().catch(() => new Error(`Could not load Collection ${gateway.name} to cache.`));
-            console.log(`Loaded Collection ${gateway} to cache.`);
-        }
-        console.log('The gateways have been loaded.');
-        return super.login(token);
-    }
-
     _initplayer() {
         container.lavacord = container.lavacord || new Manager(this, lavalinkNodes, {
             user: this.user.id,
