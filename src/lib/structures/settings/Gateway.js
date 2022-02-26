@@ -1,5 +1,5 @@
 const { AliasPiece } = require('@sapphire/pieces');
-const { mergeDefault, makeObject } = require('@sapphire/utilities');
+const { mergeObjects, makeObject } = require('@sapphire/utilities');
 
 class Gateway extends AliasPiece {
 
@@ -13,7 +13,7 @@ class Gateway extends AliasPiece {
 
     get(id, path) {
         if (typeof path === 'string') return objectValueByPath(this.get(id), path);
-        if (this.cache.has(id)) return mergeDefault(this.defaults, this.cache.get(id));
+        if (this.cache.has(id)) return mergeObjects(this.defaults, this.cache.get(id));
         else return this.defaults;
     }
 
@@ -46,7 +46,7 @@ class Gateway extends AliasPiece {
 
     async init() {
         if (!await this.container.database.hasTable(this.collection)) await this.container.database.createTable(this.collection);
-        const docs = await this.container.database.getKeys(this.collection);
+        const docs = await this.container.database.getAll(this.collection);
 
         for (const doc of docs) this.cache.set(doc.id, doc);
     }
