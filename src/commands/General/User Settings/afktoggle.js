@@ -3,8 +3,8 @@ const { send } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, { description: 'Toggle whether your AFK status will be removed either when you talk or when you run the `s.afk` command.' });
+    constructor(context, options) {
+        super(context, { ...options, description: 'Toggle whether your AFK status will be removed either when you talk or when you run the `s.afk` command.' });
     }
 
     async messageRun(msg) {
