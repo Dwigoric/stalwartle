@@ -1,10 +1,18 @@
 const Task = require('../lib/structures/tasks/Task');
 const { SnowflakeUtil } = require('discord.js');
+const { LoggerStyle, LoggerStyleText } = require('@sapphire/plugin-logger');
 
 module.exports = class MemorySweeper extends Task {
 
     constructor(context, options) {
         super(context, options);
+
+        // The colors to stylize the console's logs
+        this.colors = {
+            red: new LoggerStyle({ text: LoggerStyleText.RedBright }),
+            yellow: new LoggerStyle({ text: LoggerStyleText.YellowBright }),
+            green: new LoggerStyle({ text: LoggerStyleText.Green })
+        };
 
         // The header with the console colors
         this.header = '[CACHE AND DATABASE CLEANUP]';
@@ -83,18 +91,36 @@ module.exports = class MemorySweeper extends Task {
         // Emit a log
         console.log([
             this.header,
-            `${guildMembers} [GuildMember]s`,
-            `${users} [User]s`,
-            // `${lastMessages} [Last Message]s`,
-            `${presences} [Presence]s`,
-            `${emojis} [Emoji]s`,
-            `${musicDBs} [MusicDB]s`,
-            `${modlogDBs} [ModlogDB]s`
+            `${this.setColor(guildMembers)} [GuildMember]s`,
+            `${this.setColor(users)} [User]s`,
+            // `${this.setColor(lastMessages)} [Last Message]s`,
+            `${this.setColor(presences)} [Presence]s`,
+            `${this.setColor(emojis)} [Emoji]s`,
+            `${this.setColor(musicDBs)} [MusicDB]s`,
+            `${this.setColor(modlogDBs)} [ModlogDB]s`
         ].join('\n'));
     }
 
     async init() {
         this.run();
+    }
+
+    /**
+     * Set color depending on the number:
+     * > 1000 : Light red color
+     * > 100 : Light yellow color
+     * < 100 : Green color
+     * @param {number} number The number to colorise
+     * @returns {string}
+     */
+    setColor(number) {
+        const text = String(number).padStart(5, ' ');
+        // Light red color
+        if (number > 1000) return this.colors.red.run(text);
+        // Light yellow color
+        if (number > 100) return this.colors.yellow.run(text);
+        // Green color
+        return this.colors.green.run(text);
     }
 
 };
