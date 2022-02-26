@@ -10,7 +10,7 @@ module.exports = class extends Command {
             cooldownLimit: 3,
             description: 'Sets the role to be assigned to either bots or users when they join the server.',
             detailedDescription: "In case I can't assign the role, I will send the server owner why.",
-            preconditions: ['AdminsOnly'],
+            requiredUserPermissions: ['ADMINISTRATOR'],
             requiredClientPermissions: ['MANAGE_ROLES'],
             runIn: [CommandOptionsRunTypeEnum.GuildText]
         });

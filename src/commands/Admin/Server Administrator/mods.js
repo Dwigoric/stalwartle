@@ -8,7 +8,7 @@ module.exports = class extends SubCommandPluginCommand {
     constructor(context, options) {
         super(context, {
             ...options,
-            preconditions: ['AdminsOnly'],
+            requiredUserPermissions: ['ADMINISTRATOR'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',
             detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
