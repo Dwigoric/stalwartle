@@ -11,8 +11,8 @@ const THRESHOLD = 1000 * 60 * 30,
 
 module.exports = class MemorySweeper extends Task {
 
-    constructor(...args) {
-        super(...args);
+    constructor(context, options) {
+        super(context, options);
 
         // The header with the console colors
         this.header = '[CACHE AND DATABASE CLEANUP]';
