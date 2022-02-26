@@ -27,13 +27,13 @@ module.exports = class extends Command {
     async messageRun(msg, [category, subcategory]) {
         if (category instanceof Command) {
             return msg.send({
-                embed: new MessageEmbed()
+                embeds: [new MessageEmbed()
                     .setTitle(`The \`${this.container.client.options.prefix}${category.name}\` command`)
                     .setDescription(isFunction(category.description) ? category.description(msg.language) : category.description)
                     .addField('Usage', `\`${this.container.client.options.prefix}${category.usage}\``)
                     .addField('Additional Information', isFunction(category.extendedHelp) ? category.extendedHelp(msg.language) : category.extendedHelp)
                     .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
-                    .setFooter(`Classification: ${category.category} → ${category.subCategory}`)
+                    .setFooter({ text: `Classification: ${category.category} → ${category.subCategory}` })]
             });
         }
 

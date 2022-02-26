@@ -1,6 +1,7 @@
 const { Command } = require('@sapphire/framework');
 const fetch = require('node-fetch');
 const { MessageEmbed } = require('discord.js');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -23,7 +24,7 @@ module.exports = class extends Command {
         if (subreddit.kind !== 't5') throw `Subreddit ${subredditName} doesn't exist.`;
         else subreddit = subreddit.data;
 
-        return msg.sendEmbed(new MessageEmbed()
+        return reply(msg, { embeds: [new MessageEmbed()
             .setTitle(subreddit.title)
             .setDescription(subreddit.public_description)
             .setURL(`https://www.reddit.com/r/${subredditName}/`)
@@ -31,7 +32,8 @@ module.exports = class extends Command {
             .setThumbnail(subreddit.icon_img)
             .setImage(subreddit.banner_img)
             .addField('Subscribers', subreddit.subscribers.toLocaleString(), true)
-            .addField('Users Active', subreddit.accounts_active.toLocaleString(), true));
+            .addField('Users Active', subreddit.accounts_active.toLocaleString(), true)
+        ] });
     }
 
 };

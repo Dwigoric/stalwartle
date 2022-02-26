@@ -2,6 +2,7 @@ const { Command, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 const MODS = Object.freeze({
     None: 0,
@@ -111,7 +112,7 @@ module.exports = class extends Command {
         const embed = new MessageEmbed()
             .setColor(0xF462A3)
             .setThumbnail(thumbnails[mode])
-            .setAuthor('User Information', 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png')
+            .setAuthor({ name: 'User Information', iconURL: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png' })
             .setTitle(`${user.username} (PP Rank #${Number(user.pp_rank).toLocaleString()})`)
             .setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
             .addField(`Country Rank (${user.country})`, Number(user.pp_country_rank).toLocaleString(), true)
@@ -129,7 +130,7 @@ module.exports = class extends Command {
                 `A → ${user.count_rank_a}`
             ]);
 
-        msg.send(embed);
+        reply(msg, { embeds: [embed] });
     }
 
     async beatmap(msg, [...mapID]) {
@@ -162,12 +163,12 @@ module.exports = class extends Command {
 
         const embed = new MessageEmbed()
             .setColor(0xF462A3)
-            .setAuthor('Beatmap Information', 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png')
+            .setAuthor({ name: 'Beatmap Information', iconURL: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png' })
             .setThumbnail(thumbnails[Number(beatmap.mode)])
             .setTitle(`Mapped by ${beatmap.creator}`)
             .setURL(`https://osu.ppy.sh/beatmaps/${beatmap.beatmap_id}`)
             .setDescription(`${beatmap.title}\nby ${beatmap.artist}`)
-            .setFooter('Click "Mapped by" at the top to download the beatmap')
+            .setFooter({ text: 'Click "Mapped by" at the top to download the beatmap' })
             .addField('Difficulty', beatmap.version, true)
             .addField('Tempo', `${Number(beatmap.bpm).toLocaleString()}bpm`, true)
             .addField('Stars', `${+`${`${Math.round(`${`${Number(beatmap.difficultyrating)}e+2`}`)}e-2`}`}⭐`, true)
@@ -180,7 +181,7 @@ module.exports = class extends Command {
         if (beatmap.tags.length) embed.addField('Tags', beatmap.tags.split(' ').join(', '), true);
         embed.addField('Approved', moment(beatmap.approved_date).tz(timezone).format('dddd, LL | LTS'), true);
 
-        msg.send(embed);
+        reply(msg, { embeds: [embed] });
     }
 
     async best(msg, [...username]) {
@@ -270,12 +271,12 @@ module.exports = class extends Command {
 
         const embed = new MessageEmbed()
             .setColor(0xF462A3)
-            .setAuthor(`${toTitleCase(type)} Plays on osu!${osumode[mode]}`, 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png')
+            .setAuthor({ name: `${toTitleCase(type)} Plays on osu!${osumode[mode]}`, iconURL: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png' })
             .setTitle(user.username)
             .setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
             .setDescription(top.join('\n\n'));
 
-        return msg.send(embed).catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
+        return reply(msg, { embeds: [embed] }).catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
     }
 
 };

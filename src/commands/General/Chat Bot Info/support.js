@@ -15,9 +15,9 @@ module.exports = class extends Command {
 
     async messageRun(msg) {
         reply(msg, {
-            embed: await new MessageEmbed()
+            embeds: [await new MessageEmbed()
                 .setColor('RANDOM')
-                .setDescription('Please visit my dev server (<https://discord.gg/KDWGvV8>) and go to the questions and support channel so we can give you the utmost support.')
+                .setDescription('Please visit my dev server (<https://discord.gg/KDWGvV8>) and go to the questions and support channel so we can give you the utmost support.')]
         });
     }
 

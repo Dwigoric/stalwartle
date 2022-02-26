@@ -115,7 +115,7 @@ module.exports = class extends Command {
             const moveDescriptions = [];
             for (const [move, data] of Object.entries(this.moves)) moveDescriptions.push(`**${move}**: ${data.description}`);
 
-            const message = await channel.send(`${i % 2 ? challenger : opponent}, it's your turn now`, { embed: new MessageEmbed()
+            const message = await channel.send(`${i % 2 ? challenger : opponent}, it's your turn now`, { embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(`Round ${parseInt((i + 1) / 2)}: ${challenger.tag} vs ${opponent.tag}`)
                 .setDescription([
@@ -132,7 +132,8 @@ module.exports = class extends Command {
                     opHealth.join(''),
                     `Stamina: ${opponentData.stamina}`
                 ].join('\n'), true)
-                .setFooter(`${(i % 2 ? challenger : opponent).tag}'s turn | Please reply how you want to attack.`) });
+                .setFooter({ text: `${(i % 2 ? challenger : opponent).tag}'s turn | Please reply how you want to attack.` })
+            ] });
 
             let responses;
             do {
@@ -223,7 +224,7 @@ module.exports = class extends Command {
 
         if (!winner) winner = challengerData.health === opponentData.health ? 'Draw' : challengerData.health > opponentData.health ? challenger : opponent;
 
-        return channel.sendEmbed(new MessageEmbed()
+        return channel.send({ embeds: [new MessageEmbed()
             .setColor('RANDOM')
             .setTitle(`${winner.tag} won!`)
             .setDescription([
@@ -238,8 +239,8 @@ module.exports = class extends Command {
                 `\nMatch Duration: ${new Timestamp(`${Date.now() - start >= 3600000 ? 'HH:' : ''}mm:ss`).display(Date.now() - start)}`,
                 `Finishing Move: ${finishingMove}`
             ])
-            .setFooter('Ended')
-            .setTimestamp());
+            .setFooter({ text: 'Ended' })
+            .setTimestamp()] });
     }
     /* eslint-enable complexity */
 

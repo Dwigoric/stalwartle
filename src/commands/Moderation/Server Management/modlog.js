@@ -1,4 +1,5 @@
 const { Command, CommandOptionsRunTypeEnum, RichDisplay, util: { toTitleCase, chunk } } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -33,8 +34,8 @@ module.exports = class extends Command {
             if (!modlog) throw `${this.container.constants.EMOTES.xmark}  ::  Whoops! Seems like Case #${user} doesn't exist on this server... yet.`;
             const _user = await this.container.client.users.fetch(modlog.user).catch(() => null);
             const moderator = await this.container.client.users.fetch(modlog.moderator).catch(() => null);
-            return msg.send({
-                embed: new MessageEmbed()
+            return reply(msg, {
+                embeds: [new MessageEmbed()
                     .setColor('RANDOM')
                     .setTitle(`<:blobBan:399433444670701568> Case #${modlog.id} | ${msg.guild.name}`)
                     .setDescription([
@@ -44,7 +45,7 @@ module.exports = class extends Command {
                         `Date: ${moment(modlog.timestamp).tz(timezone).format('dddd, LL | LTS z')} (${moment(modlog.timestamp).fromNow()})`,
                         `Reason: ${modlog.reason || 'Not specified.'}`
                     ].join('\n'))
-                    .setTimestamp(new Date(modlog.timestamp))
+                    .setTimestamp(new Date(modlog.timestamp))]
             });
         }
 

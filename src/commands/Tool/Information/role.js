@@ -1,4 +1,5 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -33,11 +34,10 @@ module.exports = class extends Command {
             return [rgbObj.rd, rgbObj.gn, rgbObj.bl];
         }
 
-        const avatarURL = msg.author.displayAvatarURL({ dynamic: true });
-        msg.send({
-            embed: new MessageEmbed()
+        reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor(role.hexColor)
-                .setAuthor(`Role information for ${role.name}`)
+                .setAuthor({ name: `Role information for ${role.name}` })
                 .addField('ID', role.id)
                 .addField('Hoisted', `${role.hoist}`.replace(/^./, i => i.toUpperCase()), true)
                 .addField('Managed', `${role.managed}`.replace(/^./, i => i.toUpperCase()), true)
@@ -45,8 +45,8 @@ module.exports = class extends Command {
                 .addField('Color', `HEX: ${role.hexColor}\nRGB: ${hexToRgb(role.hexColor).join(', ')}`, true)
                 .addField('Position', `${msg.guild.roles.cache.size - role.position} out of ${msg.guild.roles.cache.size}`, true)
                 .addField('Created', `${moment(role.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(role.createdAt).fromNow()}`)
-                .setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
-                .setTimestamp()
+                .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
+                .setTimestamp()]
         });
     }
 

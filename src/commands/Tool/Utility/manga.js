@@ -1,4 +1,5 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -27,8 +28,8 @@ module.exports = class extends Command {
 
         const [manga] = search;
 
-        msg.send({
-            embed: new MessageEmbed()
+        reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(manga.title)
                 .setThumbnail(manga.image_url)
@@ -36,7 +37,7 @@ module.exports = class extends Command {
                 .setURL(manga.url)
                 .addField('Volumes', manga.volumes, true)
                 .addField('Chapters', manga.chapters, true)
-                .addField('Score', manga.score, true)
+                .addField('Score', manga.score, true)]
         });
     }
 

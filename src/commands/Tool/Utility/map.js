@@ -1,4 +1,5 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -24,8 +25,8 @@ module.exports = class extends Command {
         params.set('map_zoom', isNaN(zoom) ? 12 : zoom);
         const { data } = await fetch(`https://api.ksoft.si/kumo/gis?${params}`, { headers: { Authorization: `Bearer ${this.container.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
         if (!data) throw `${this.container.constants.EMOTES.xmark}  ::  I could not find that location.`;
-        msg.send({
-            embed: new MessageEmbed()
+        reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle('🗺 Map Information')
                 .setTimestamp()
@@ -33,7 +34,7 @@ module.exports = class extends Command {
                 .addField('Address', data.address)
                 .addField('Latitude', data.lat, true)
                 .addField('Longitude', data.lon, true)
-                .setFooter('Powered by ksoft.si')
+                .setFooter({ text: 'Powered by ksoft.si' })]
         });
     }
 

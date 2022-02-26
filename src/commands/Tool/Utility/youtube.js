@@ -2,6 +2,7 @@ const { Command, util: { toTitleCase } } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -47,7 +48,7 @@ module.exports = class extends Command {
             request = res.items[0];
 
         embed
-            .setAuthor(`YouTube ${toTitleCase(type)}`, 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png')
+            .setAuthor({ name: `YouTube ${toTitleCase(type)}`, iconURL: 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png' })
             .setTitle(request.snippet.title)
             .setURL(`https://www.youtube.com/${url}${request.id[`${type}Id`]}`)
             .setColor('RANDOM');
@@ -65,7 +66,7 @@ module.exports = class extends Command {
         embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS z'))
             .addField('Description', request.snippet.description ? request.snippet.description : 'No Description');
 
-        return msg.send(embed);
+        return reply(msg, { embeds: [embed] });
     }
 
 };

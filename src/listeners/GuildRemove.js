@@ -32,19 +32,20 @@ module.exports = class extends Listener {
         let region = gregion[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
         if (guild.region.includes('vip')) region += ' [Partnered]';
 
-        this.hook.send(new MessageEmbed()
-            .setColor(0xE74C3C)
-            .setAuthor({ name: "I've been removed from a server" })
-            .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
-            .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
-            .addField('Guild Owner ID', guild.ownerID, true)
-            .addField('Guild Region', region, true)
-            .addField('Large Guild', guild.large ? '✅' : '❌', true)
-            .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
-            .addField('Guild Members', guild.memberCount, true)
-            .addField('New Guild Count', await this.container.client.guildCount(), true)
-            .setTimestamp()
-        );
+        this.hook.send({
+            embeds: [new MessageEmbed()
+                .setColor(0xE74C3C)
+                .setAuthor({ name: "I've been removed from a server" })
+                .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
+                .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
+                .addField('Guild Owner ID', guild.ownerID, true)
+                .addField('Guild Region', region, true)
+                .addField('Large Guild', guild.large ? '✅' : '❌', true)
+                .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
+                .addField('Guild Members', guild.memberCount, true)
+                .addField('New Guild Count', await this.container.client.guildCount(), true)
+                .setTimestamp()]
+        });
     }
 
     async init() {

@@ -30,19 +30,20 @@ module.exports = class extends Listener {
         let region = gregion[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
         if (guild.region.includes('vip')) region += ' [Partnered]';
 
-        this.hook.send(new MessageEmbed()
-            .setColor(0x2ECC71)
-            .setAuthor({ name: "I've been added to a new server!", iconURL: await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
-            .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
-            .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
-            .addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
-            .addField('Guild Region', region, true)
-            .addField('Large Guild', guild.large ? '✅' : '❌', true)
-            .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
-            .addField('Guild Members', guild.memberCount, true)
-            .addField('New Guild Count', await this.container.client.guildCount(), true)
-            .setTimestamp()
-        );
+        this.hook.send({
+            embeds: [new MessageEmbed()
+                .setColor(0x2ECC71)
+                .setAuthor({ name: "I've been added to a new server!", iconURL: await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
+                .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
+                .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
+                .addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
+                .addField('Guild Region', region, true)
+                .addField('Large Guild', guild.large ? '✅' : '❌', true)
+                .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
+                .addField('Guild Members', guild.memberCount, true)
+                .addField('New Guild Count', await this.container.client.guildCount(), true)
+                .setTimestamp()]
+        });
     }
 
     async init() {

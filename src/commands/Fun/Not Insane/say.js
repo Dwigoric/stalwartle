@@ -34,12 +34,12 @@ module.exports = class extends Command {
         if (!chan.postable) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
         if (chan !== msg.channel) msg.send(`${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send({
-            embed: await new MessageEmbed()
+            embeds: [await new MessageEmbed()
                 .setColor(0x40E0D0)
-                .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+                .setAuthor({ name: msg.author.tag, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setDescription(msgargs)
-                .setFooter(`From #${msg.channel.name}`)
-                .setTimestamp()
+                .setFooter({ text: `From #${msg.channel.name}` })
+                .setTimestamp()]
         });
     }
 
@@ -49,12 +49,12 @@ module.exports = class extends Command {
         if (!chan.postable) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
         if (chan !== msg.channel) msg.send(`${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         chan.send({
-            embed: await new MessageEmbed()
+            embeds: [await new MessageEmbed()
                 .setColor(0x40E0D0)
-                .setAuthor('Anonymous User')
+                .setAuthor({ name: 'Anonymous User' })
                 .setDescription(msgargs)
-                .setFooter(`From #${msg.channel.name}`)
-                .setTimestamp()
+                .setFooter({ text: `From #${msg.channel.name}` })
+                .setTimestamp()]
         });
         return msg.delete().catch(() => null);
     }

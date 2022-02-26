@@ -1,4 +1,5 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -27,14 +28,15 @@ module.exports = class extends Command {
         if (Boolean(msg.guild) && !msg.channel.permissionsFor(this.container.client.user).has('EMBED_LINKS')) return msg.sendMessage(`***${data.title}***\n\n${data.url}`);
 
         const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
-        return msg.sendEmbed(new MessageEmbed()
+        return reply(msg, { embeds: [new MessageEmbed()
             .setColor('RANDOM')
-            .setAuthor(trim(data.title, 253), null, `https://www.reddit.com${data.permalink}`)
+            .setAuthor({ name: trim(data.title, 253), url: `https://www.reddit.com${data.permalink}` })
             .setTitle(`u/${data.author}`)
             .setURL(`https://www.reddit.com/u/${data.author}`)
             .setDescription(trim(data.selftext, 1024))
             .setImage(data.url)
-            .setFooter(data.subreddit_name_prefixed));
+            .setFooter(data.subreddit_name_prefixed)
+        ] });
     }
 
 };

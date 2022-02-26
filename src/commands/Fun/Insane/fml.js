@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
         if ($('.article-contents .article-link').length < 5) return reply(msg, '<:akcry:333597917342466048>  ::  Today, something went wrong, so you will have to try again in a few moments. FML again.');
 
-        return reply(msg, { embed, content: 'FML story loaded!' });
+        return reply(msg, { embeds: [embed], content: 'FML story loaded!' });
     }
 
 };

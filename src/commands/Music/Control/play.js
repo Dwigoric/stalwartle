@@ -1,4 +1,5 @@
 const { Command, CommandOptionsRunTypeEnum, Timestamp, util: { mergeObjects } } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { parse } = require('url');
@@ -207,20 +208,20 @@ module.exports = class extends Command {
             } else {
                 const { title, length, uri, author, isStream } = queue[queue.length - 1].info;
                 const duration = queue.reduce((prev, current) => prev + (current.info.isStream ? 0 : current.info.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (msg.guild.player && msg.guild.player.playing && !queue[0].info.isStream ? msg.guild.player.state.position : 0); // eslint-disable-line max-len
-                msg.send(queue.length >= 2 && (!msg.guild.player || (msg.guild.player && !msg.guild.player.playing)) ?
+                reply(msg, { content: queue.length >= 2 && (!msg.guild.player || (msg.guild.player && !msg.guild.player.playing)) ?
                     // eslint-disable-next-line max-len
                     `🔢  ::  There are songs in your queue from your previous session! You can run ${queue.length >= 3 ? `\`${msg.guild.settings.get('prefix')}remove 1${queue.length >= 4 ? `-${queue.length - 2}` : ''}\` then ` : ' '}\`${msg.guild.settings.get('prefix')}skip\` to start over.` :
-                    '', { embed: new MessageEmbed()
+                    '', embeds: [new MessageEmbed()
                     .setColor('RANDOM')
-                    .setAuthor(`Enqueued by ${msg.member.displayName} (${msg.author.tag})`, msg.author.displayAvatarURL({ dynamic: true }))
+                    .setAuthor({ name: `Enqueued by ${msg.member.displayName} (${msg.author.tag})`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                     .setTitle(title)
                     .setURL(uri)
                     .setDescription(`by ${author}`)
                     // eslint-disable-next-line max-len
-                    .setFooter(`For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.`)
+                    .setFooter({ text: `For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.` })
                     .addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1, true)
                     .addField('Duration', isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length), true)
-                    .addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true) });
+                    .addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)] });
             }
         }
         await this.container.databases.default.update('music', msg.guild.id, { queue }, true);

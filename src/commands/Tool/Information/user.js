@@ -1,6 +1,7 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const moment = require('moment-timezone');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -41,7 +42,7 @@ module.exports = class extends Command {
 
         const embed = new MessageEmbed()
             .setColor('RANDOM')
-            .setAuthor(player.tag, player.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: player.tag, iconURL: player.displayAvatarURL({ dynamic: true }) })
             .setThumbnail(player.displayAvatarURL({ dynamic: true }))
             .addField('ID', player.id, true)
             .addField('Server Nickname', nick, true);
@@ -49,27 +50,27 @@ module.exports = class extends Command {
         embed.addField('Joined Server', joined)
             .addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
             .addField(`Roles ${roleNum}`, roles)
-            .setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
             .setTimestamp();
-        return msg.sendEmbed(embed);
+        return reply(msg, { embeds: [embed] });
     }
 
     async roles(msg, [user = msg.author]) {
         const member = await msg.guild.members.fetch(user.id, { cache: false });
         if (member.roles.cache.size === 1) throw `**${user.username}** has no roles in this server!`;
-        return msg.send({
-            embed: new MessageEmbed()
+        return reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(`${user.username}'s Roles [${member.roles.cache.size}]`)
-                .setDescription(member.roles.cache.sort((a, b) => b.position - a.position).array().join(' | '))
+                .setDescription(member.roles.cache.sort((a, b) => b.position - a.position).array().join(' | '))]
         });
     }
 
     async avatar(msg, [user = msg.author]) {
-        return msg.send({
-            embed: new MessageEmbed()
+        return reply(msg, {
+            embeds: [new MessageEmbed()
                 .setTitle(`**${user.username}**'s avatar`)
-                .setImage(user.displayAvatarURL({ dynamic: true, size: 2048 }))
+                .setImage(user.displayAvatarURL({ dynamic: true, size: 2048 }))]
         });
     }
 

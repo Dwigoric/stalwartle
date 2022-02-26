@@ -20,20 +20,22 @@ module.exports = class extends Listener {
             return msg.sendMessage(error).catch(err => this.container.client.emit('wtf', err));
         }
         if (error.stack && this.container.client.application.botPublic) {
-            return this.hook.send(`${this.container.client.application.owner}, an error occured with **${this.container.client.user.tag}**!`, new MessageEmbed()
-                .setColor(0xE74C3C)
-                .setTitle(`Details of Error ID \`${errorID}\``)
-                .setDescription([
-                    `**Shard ID**: ${this.container.client.shard ? this.container.client.shard.id : 'N/A'}`,
-                    `**Trigerrer**: ${msg.author} (${msg.author.id})`,
-                    `**Guild**: ${msg.guild ? `${escapeMarkdown(msg.guild.name)} (${msg.guild.id})` : '[Direct Messages]'}`,
-                    `**Channel**: ${msg.guild ? `#${escapeMarkdown(msg.channel.name)}` : '[Direct Messages]'} (${msg.channel.id})`,
-                    `**Command**: \`${escapeMarkdown(msg.content)}\``,
-                    codeBlock('js', error.message),
-                    codeBlock('xl', error.stack)
-                ])
-                .setTimestamp()
-            );
+            return this.hook.send({
+                content: `${this.container.client.application.owner}, an error occured with **${this.container.client.user.tag}**!`,
+                embeds: [new MessageEmbed()
+                    .setColor(0xE74C3C)
+                    .setTitle(`Details of Error ID \`${errorID}\``)
+                    .setDescription([
+                        `**Shard ID**: ${this.container.client.shard ? this.container.client.shard.id : 'N/A'}`,
+                        `**Trigerrer**: ${msg.author} (${msg.author.id})`,
+                        `**Guild**: ${msg.guild ? `${escapeMarkdown(msg.guild.name)} (${msg.guild.id})` : '[Direct Messages]'}`,
+                        `**Channel**: ${msg.guild ? `#${escapeMarkdown(msg.channel.name)}` : '[Direct Messages]'} (${msg.channel.id})`,
+                        `**Command**: \`${escapeMarkdown(msg.content)}\``,
+                        codeBlock('js', error.message),
+                        codeBlock('xl', error.stack)
+                    ])
+                    .setTimestamp()]
+            });
         }
         return error.stack;
     }

@@ -1,4 +1,5 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -19,13 +20,13 @@ module.exports = class extends Command {
         const article = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`).then(res => res.json());
         if (!article.content_urls) throw `${this.container.constants.EMOTES.xmark}  ::  I couldn't find a wikipedia article with that title.`;
 
-        msg.send({
-            embed: await new MessageEmbed()
+        reply(msg, {
+            embeds: [await new MessageEmbed()
                 .setColor('RANDOM')
                 .setThumbnail((article.thumbnail && article.thumbnail.source) || 'https://i.imgur.com/fnhlGh5.png')
                 .setURL(article.content_urls.desktop.page)
                 .setTitle(article.title)
-                .setDescription(article.extract)
+                .setDescription(article.extract)]
         });
     }
 

@@ -1,4 +1,5 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -33,14 +34,15 @@ module.exports = class extends Command {
                 return res.data[0];
             });
 
-        return msg.sendEmbed(new MessageEmbed()
+        return reply(msg, { embeds: [new MessageEmbed()
             .setColor(6570406)
             .setThumbnail(channel.profile_image_url)
-            .setAuthor(channel.display_name, 'https://i.imgur.com/OQwQ8z0.jpg', `https://twitch.tv/${channel.display_name}`)
+            .setAuthor({ name: channel.display_name, iconURL: 'https://i.imgur.com/OQwQ8z0.jpg', url: `https://twitch.tv/${channel.display_name}` })
             .setDescription(channel.description)
-            .setFooter('Click at the account name above to go to the channel.')
+            .setFooter({ text: 'Click at the account name above to go to the channel.' })
             .addField('Account ID', channel.id, true)
-            .addField('Channel Views', channel.view_count, true));
+            .addField('Channel Views', channel.view_count, true)
+        ] });
     }
 
     async renewToken() {

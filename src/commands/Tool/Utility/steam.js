@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -64,7 +65,7 @@ module.exports = class extends Command {
 
             if (steamData.developers) embed.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers.join('\n').length ? steamData.developers : 'N/A', true);
             if (steamData.release_date.date) embed.addField('Date Released', steamData.release_date.date, true);
-            msg.send(embed);
+            reply(msg, { embeds: [embed] });
         }
     }
 

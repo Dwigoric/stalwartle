@@ -1,4 +1,5 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -37,11 +38,10 @@ module.exports = class extends Command {
         }[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
         if (guild.region.includes('vip')) region += ' [Partnered]';
 
-        const avatarURL = msg.author.displayAvatarURL({ dynamic: true });
-        return msg.send({
-            embed: new MessageEmbed()
+        return reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
-                .setAuthor(guild.name, guild.iconURL({ dynamic: true, format: 'png' }))
+                .setAuthor({ name: guild.name, iconURL: guild.iconURL({ dynamic: true, format: 'png' }) })
                 .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
                 .addField('ID', guild.id, true)
                 .addField('Owner', await guild.members.fetch(guild.ownerID).then(owner => `${owner.user.tag}\n(${owner})`), true)
@@ -64,31 +64,31 @@ module.exports = class extends Command {
                 .addField('Text Channel Count', guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').size, true)
                 .addField('Voice Channel Count', guild.channels.cache.filter(ch => ch.type === 'GUILD_VOICE').size, true)
                 .addField('Created', `${moment(guild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guild.createdAt).fromNow()}`)
-                .setFooter(`Information requested by ${msg.author.tag}`, avatarURL)
-                .setTimestamp()
+                .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
+                .setTimestamp()]
         });
     }
 
     async icon(msg, [guild = msg.guild]) {
-        return msg.send({
-            embed: new MessageEmbed()
+        return reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
-                .setImage(guild.iconURL({ dynamic: true, format: 'png', size: 2048 }))
+                .setImage(guild.iconURL({ dynamic: true, format: 'png', size: 2048 }))]
         });
     }
 
     async roles(msg, [guild = msg.guild]) {
         if (guild.roles.cache.size === 1) throw 'This server doesn\'t have any role yet!';
-        return msg.send({
-            embed: new MessageEmbed()
+        return reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(`${guild.name}'s Roles [${guild.roles.cache.size}]`)
-                .setDescription(guild.roles.cache.sort((a, b) => b.position - a.position).array().join(' | '))
+                .setDescription(guild.roles.cache.sort((a, b) => b.position - a.position).array().join(' | '))]
         });
     }
 
     async id(msg) {
-        msg.send(`The server ID of ${msg.guild} is \`${msg.guild.id}\`.`);
+        reply(msg, `The server ID of ${msg.guild} is \`${msg.guild.id}\`.`);
     }
 
 };

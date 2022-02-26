@@ -33,12 +33,12 @@ module.exports = class extends Command {
         }
 
         const poll = await chan.send({
-            embed: new MessageEmbed()
+            embeds: [new MessageEmbed()
                 .setColor(0x40E0D0)
-                .setAuthor(question, msg.author.displayAvatarURL({ dynamic: true }))
+                .setAuthor({ name: question, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setDescription(choices)
-                .setFooter(`Poll started by ${msg.author.tag}`)
-                .setTimestamp()
+                .setFooter({ text: `Poll started by ${msg.author.tag}` })
+                .setTimestamp()]
         });
         let i = 0;
         const loop = () => {

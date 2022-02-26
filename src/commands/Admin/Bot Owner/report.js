@@ -39,7 +39,7 @@ module.exports = class extends Command {
         if (!Object.keys(reportChans).includes(msg.channel.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
         const embed = new MessageEmbed()
             .setColor('RANDOM')
-            .setAuthor(repUser.tag, repUser.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: repUser.tag, iconURL: repUser.displayAvatarURL({ dynamic: true }) })
             .addField('Submission', repMsg.content)
             .addField("High Lord's Comments", repCom.join(' '))
             .setTimestamp();
@@ -52,7 +52,7 @@ module.exports = class extends Command {
         msg.delete();
         await msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => setTimeout(() => sent.delete(), 5000));
         repMsg.delete().catch(() => null);
-        return repUser.send('Your submission has been acknowledged by a high lord!', { embed }).catch(() => null);
+        return repUser.send({ content: 'Your submission has been acknowledged by a high lord!', embeds: [embed] }).catch(() => null);
     }
 
 };

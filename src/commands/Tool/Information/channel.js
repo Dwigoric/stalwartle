@@ -1,4 +1,5 @@
 const { Command, CommandOptionsRunTypeEnum, util: { toTitleCase } } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -21,11 +22,11 @@ module.exports = class extends Command {
 
         let embed = new MessageEmbed()
             .setColor('RANDOM')
-            .setAuthor(`Channel information for #${chan.name}`)
+            .setAuthor({ name: `Channel information for #${chan.name}` })
             .addField('ID', chan.id, true)
             .addField('Type', toTitleCase(chan.type), true)
             .addField('Category', chan.parent ? chan.parent.name : 'No Category', true)
-            .setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
             .setTimestamp();
         if (chan.type === 'GUILD_TEXT') {
             embed = embed
@@ -39,7 +40,7 @@ module.exports = class extends Command {
                 .addField('User Limit', chan.userLimit, true);
         }
         embed = embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`);
-        return msg.send({ embed });
+        return reply(msg, { embeds: [embed] });
     }
 
     async id(msg, [chan = msg.channel]) {

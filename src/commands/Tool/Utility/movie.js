@@ -2,6 +2,7 @@ const { Command } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
@@ -43,7 +44,7 @@ module.exports = class extends Command {
             .setTitle(`${tmdb.title} (${page} out of ${results.length} result${results.length === 1 ? '' : 's'})`)
             .setURL(url)
             .setDescription(`[Poster Here](${poster})  ::  ${trim(tmdb.overview, 1024)}`)
-            .setFooter(`${this.container.client.user.username} uses the TMDb API but is not endorsed nor certified by TMDb.`, 'https://www.themoviedb.org/assets/1/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png'); // eslint-disable-line max-len
+            .setFooter({ text: `${this.container.client.user.username} uses the TMDb API but is not endorsed nor certified by TMDb.`, iconURL: 'https://www.themoviedb.org/assets/1/v4/logos/208x226-stacked-green-9484383bd9853615c113f020def5cbe27f6d08a84ff834f41371f223ebad4a3c.png' }); // eslint-disable-line max-len
         if (tmdb.title !== tmdb.original_title) embed.addField('Original Title', tmdb.original_title, true);
         embed
             .addField('Language', tmdb.original_language.toUpperCase(), true)
@@ -57,7 +58,7 @@ module.exports = class extends Command {
         if (countries.length) embed.addField(`Production Countr${countries.length === 1 ? 'y' : 'ies'}`, countries.join(', '), true);
         if (genres.length) embed.addField(`Genre${genres.length === 1 ? '' : 's'}`, genres.join(', '), true);
 
-        msg.send(embed);
+        reply(msg, { embeds: [embed] });
     }
 
 };

@@ -53,7 +53,7 @@ module.exports = class extends Listener {
                 embed.addField('Channel', message.channel, true);
                 if (this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).modlogShowContent) embed.addField('Content', message.content > 900 ? `${message.content.substring(0, 900)}...` : message.content);
             }
-            logMessage = await channel.send(embed);
+            logMessage = await channel.send({ embeds: [embed] });
         }
 
         modlogs.push({

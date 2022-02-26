@@ -18,10 +18,10 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         this.container.client.channels.cache.get(this.container.client.settings.changelogs).send({
-            embed: new MessageEmbed()
+            embeds: [new MessageEmbed()
                 .setTitle(`<a:updating:417233654545383424> ${this.container.client.user.username}'s Changelog`)
                 .setDescription(await args.rest('string'))
-                .setTimestamp()
+                .setTimestamp()]
         });
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully posted changelog!`);
     }

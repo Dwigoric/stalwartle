@@ -15,7 +15,7 @@ module.exports = class extends Command {
     async messageRun(msg) {
         if (!this.container.client.application.botPublic) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`);
         return reply(msg, {
-            embed: new MessageEmbed()
+            embeds: [new MessageEmbed()
                 .setAuthor({ name: `Upvote ${this.container.client.user.username}`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
                 .setDescription([
                     'Aside from donations, you can support me by simply upvoting me on bot listing sites!',
@@ -24,7 +24,7 @@ module.exports = class extends Command {
                     `• [botlist.space](https://botlist.space/bot/${this.container.client.user.id})`,
                     `• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.container.client.user.id})`,
                     'Thank you!'
-                ])
+                ])]
         }
         );
     }

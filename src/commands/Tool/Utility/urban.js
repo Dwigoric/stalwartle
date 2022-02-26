@@ -1,4 +1,5 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
@@ -28,16 +29,16 @@ module.exports = class extends Command {
             `${this.splitText(result.definition, 1000)}...` :
             result.definition;
 
-        return msg.send({
-            embed: new MessageEmbed()
+        return reply(msg, {
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(`'${result.word}' as defined by ${result.author}`)
                 .setURL(result.permalink)
                 .setDescription(definition)
                 .addField('Example', result.example.split('\n')[0] || 'No example available.')
                 .addField('Rating', `**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`)
-                .setFooter('Definition from Urban Dictionary')
-                .setTimestamp()
+                .setFooter({ text: 'Definition from Urban Dictionary' })
+                .setTimestamp()]
         });
     }
 

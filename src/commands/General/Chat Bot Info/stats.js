@@ -20,7 +20,7 @@ module.exports = class extends Command {
     async messageRun(msg) {
         const now = Date.now();
         reply(msg, {
-            embed: new MessageEmbed()
+            embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setAuthor({ name: `${this.container.client.user.tag}'s Statistics 📟`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
                 .setFooter({ text: `Shard ${((msg.guild ? msg.guild.shard.id : msg.channel.shardID) || this.container.client.options.shardId) + 1} / ${this.container.client.options.shardCount}` })
@@ -39,7 +39,7 @@ module.exports = class extends Command {
                     `**CPU Load**: ${Math.round(loadavg()[0] * 1000) / 100}%`,
                     `**RAM Used**: ${Math.round(100 * (process.memoryUsage().heapUsed / 1048576)) / 100}MB`,
                     `**Node.js**: ${Math.round(100 * (process.memoryUsage().heapTotal / 1048576)) / 100}MB`
-                ], true)
+                ], true)]
         });
     }
 

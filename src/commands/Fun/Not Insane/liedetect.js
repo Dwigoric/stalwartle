@@ -37,7 +37,7 @@ module.exports = class extends Command {
             .setDescription(lie)
             .setFooter({ text: `It's ${gif[1] === 0x2ECC71 ? 'the truth' : 'a lie'}!` });
 
-        return reply(msg, { embed });
+        return reply(msg, { embeds: [embed] });
     }
 
 };
