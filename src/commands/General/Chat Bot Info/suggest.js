@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let suggestion = await args.restResult('string');
-        if (!suggestion.success) return send(`${this.container.constants.EMOTES.xmark}  ::  Please provide your suggestion for the bot!`);
+        if (!suggestion.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide your suggestion for the bot!`);
         suggestion = suggestion.value;
 
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Sending suggestion...`);

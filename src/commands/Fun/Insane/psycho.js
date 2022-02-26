@@ -30,7 +30,7 @@ module.exports = class extends Command {
             if (crimec >= 100 && crimec < 300) results = `🔫  ::  **${mentioned.tag}**'s Crime Coefficient is: **${crimec}/1000**.\n\nSuspect is classified as a latent criminal and is a target for enforcement action. Dominator is set to Non-Lethal Paralyzer mode. Suspect can then be knocked out using the Dominator.`; // eslint-disable-line max-len
             if (crimec >= 300) results = `🔫  ::  **${mentioned.tag}**'s Crime Coefficient is: **${crimec}/1000**.\n\nSuspect poses a serious threat to the society. Lethal force is authorized. Dominator will automatically switch to Lethal Eliminator. Suspect that is hit by Lethal Eliminator will bloat and explode.`; // eslint-disable-line max-len
         }
-        return send(results);
+        return reply(msg, results);
     }
 
 };
