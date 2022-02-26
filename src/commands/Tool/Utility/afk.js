@@ -25,9 +25,4 @@ module.exports = class extends Command {
         return msg.send(`${this.container.constants.EMOTES.tick}  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
     }
 
-    async init() {
-        const defProvider = this.container.databases.default;
-        if (!await defProvider.hasTable('afk')) defProvider.createTable('afk');
-    }
-
 };
