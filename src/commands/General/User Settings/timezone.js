@@ -24,7 +24,7 @@ module.exports = class extends Command {
         if (prompted.content.toLowerCase().split(' ').includes('cancel')) return send(msg, `${this.container.constants.EMOTES.tick}  ::  Alright! You don't want to change your timezone.`);
         if (!moment.tz.zone(prompted.content)) return send(msg, `${this.container.constants.EMOTES.xmark}  ::  **${prompted.content}** is not a valid timezone!`);
         container.stores.get('gateways').get('userGateway').update(msg.author.id, 'timezone', prompted.content);
-        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Your timezone has been changed to \`${prompted.content}\`.`);
+        return send(msg, `${this.container.constants.EMOTES.tick}  ::  Your timezone has been changed to \`${prompted.content}\`.`);
     }
 
 };
