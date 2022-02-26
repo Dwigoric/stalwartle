@@ -13,9 +13,9 @@ module.exports = class extends Listener {
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
 
-        if (this.container.client.cache.members.get(msg.member.id).messages.length <= this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSpam.limit) return null;
+        if (this.container.cache.members.get(msg.member.id).messages.length <= this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSpam.limit) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
-        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.client.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
+        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSpam;
         const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;

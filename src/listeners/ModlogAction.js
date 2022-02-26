@@ -73,7 +73,7 @@ module.exports = class extends Listener {
         if (!['unban', 'unmute'].includes(message.command.name) && message.author && !message.author.bot) member.addAction(message.command.name);
 
         const { limit, duration, action, within } = this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).automod.options.quota;
-        if (this.container.client.cache.members.get(member.id).actions.length >= limit) {
+        if (this.container.cache.members.get(member.id).actions.length >= limit) {
             if (message.channel.postable) message.channel.send(`${member.user} made ${limit} actions within ${within} minutes, which is punishable by a ${duration}-minute automated ${action}.`);
             await member.resetActions();
 
@@ -91,7 +91,7 @@ module.exports = class extends Listener {
                 case 'softban': return this.container.client.commands.get('softban').run(message, [member.user, null, ['Reached automod quota']]).catch(err => message.send(err));
             }
         }
-        return this.container.client.cache.members.get(member.id).length >= limit;
+        return this.container.cache.members.get(member.id).length >= limit;
     }
 
 };

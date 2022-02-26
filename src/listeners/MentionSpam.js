@@ -15,7 +15,7 @@ module.exports = class extends Listener {
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
 
-        if (this.container.client.cache.members.get(msg.member.id).messages.length && this.container.client.cache.members.get(msg.member.id).messages
+        if (this.container.cache.members.get(msg.member.id).messages.length && this.container.cache.members.get(msg.member.id).messages
             .map(message => message.mentions.users ? message.mentions.users.size : 0 + message.mentions.roles ? message.mentions.roles.size : 0)
             .reduce((prev, val) => prev + val) < 10) return null;
         if (msg.channel.postable) msg.channel.send(`Hey ${msg.author}! Don't spam mentions, ${msg.author}. Got it, ${msg.author}?`);
@@ -25,12 +25,12 @@ module.exports = class extends Listener {
                 channel: msg.channel,
                 guild: msg.guild,
                 content: msg.content.length > 900 ? [
-                    `**Roles**: ${this.container.client.cache.members.get(msg.member.id).messages.map(message => message.mentions.roles.map(rl => rl.toString()).join(', ')).join(', ')}`,
-                    `**Users**: ${this.container.client.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
+                    `**Roles**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.roles.map(rl => rl.toString()).join(', ')).join(', ')}`,
+                    `**Users**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
                 ].join('\n') : msg.content
             }, msg.author, 'Spamming mentions with the MentionSpam enabled (member has higher permissions so I could not ban them)', null);
         }
-        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.client.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
+        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.mentionSpam;
         const actionDuration = duration ? await this.container.client.arguments.get('time').run(`${duration}m`, '', msg) : null;
