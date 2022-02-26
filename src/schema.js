@@ -95,7 +95,7 @@ const guilds = {
         volume: 100
     },
     automod: {
-        ignoreBots: false,
+        ignoreBots: true,
         ignoreMods: false,
         antiInvite: false,
         quota: true,
