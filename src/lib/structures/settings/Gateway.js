@@ -21,9 +21,8 @@ class Gateway extends AliasPiece {
         if (typeof path !== 'string') throw new TypeError('Expected the string path of the object to update');
 
         const obj = makeObject(path, val);
-        const { value } = await this.container.database.update(this.collection, id, obj, true);
-        this.cache.set(id, value);
-        return value;
+        await this.container.database.update(this.collection, id, obj, true);
+        this.sync(id);
     }
 
     async sync(id) {
