@@ -1,5 +1,5 @@
 const { AliasPiece } = require('@sapphire/pieces');
-const { mergeObjects, makeObject } = require('@sapphire/utilities');
+const { mergeObjects, deepClone, makeObject } = require('@sapphire/utilities');
 
 class Gateway extends AliasPiece {
 
@@ -7,13 +7,13 @@ class Gateway extends AliasPiece {
         super(context, options);
 
         this.cache = new Map();
-        this.collection = 'collection' in options ? options.collection : new Error('The MongoDB collection was not supplied.');
-        Object.defineProperty(this, 'defaults', { value: options.defaults || {}, writable: false });
+        Object.defineProperty(this, 'collection', { value: options.collection, writable: false });
+        Object.defineProperty(this, 'defaults', { value: Object.freeze(options.defaults || {}), writable: false });
     }
 
     get(id, path) {
         if (typeof path === 'string') return objectValueByPath(this.get(id), path);
-        if (this.cache.has(id)) return mergeObjects(this.defaults, this.cache.get(id));
+        if (this.cache.has(id)) return mergeObjects(deepClone(this.defaults), this.cache.get(id));
         else return this.defaults;
     }
 
@@ -21,7 +21,7 @@ class Gateway extends AliasPiece {
         if (typeof path !== 'string') throw new TypeError('Expected the string path of the object to update');
 
         const obj = makeObject(path, val);
-        await this.container.database.update(this.collection, id, obj, true);
+        await this.container.database.update(this.collection, id, mergeObjects(obj, { id }), true);
         this.sync(id);
     }
 
@@ -29,6 +29,8 @@ class Gateway extends AliasPiece {
         const doc = await this.container.database.get(this.collection, id);
         if (!doc) return null;
 
+        delete doc._id;
+        delete doc.id;
         this.cache.set(id, doc);
         return doc;
     }
@@ -48,7 +50,12 @@ class Gateway extends AliasPiece {
         if (!await this.container.database.hasTable(this.collection)) await this.container.database.createTable(this.collection);
         const docs = await this.container.database.getAll(this.collection);
 
-        for (const doc of docs) this.cache.set(doc.id, doc);
+        for (const doc of docs) {
+            const { id } = doc;
+            delete doc._id;
+            delete doc.id;
+            this.cache.set(id, doc);
+        }
     }
 
 
