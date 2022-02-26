@@ -81,7 +81,7 @@ module.exports = class MemorySweeper extends Task {
         }
 
         // Emit a log
-        this.container.client.emit('log', [
+        console.log([
             this.header,
             `${guildMembers} [GuildMember]s`,
             `${users} [User]s`,
