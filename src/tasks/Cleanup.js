@@ -1,13 +1,5 @@
 const Task = require('../lib/structures/tasks/Task');
-const { Util: { binaryToID } } = require('discord.js');
-
-// THRESHOLD equals to 30 minutes in milliseconds:
-//     - 1000 milliseconds = 1 second
-//     - 60 seconds        = 1 minute
-//     - 30 minutes
-const THRESHOLD = 1000 * 60 * 30,
-    EPOCH = 1420070400000,
-    EMPTY = '0000100000000000000000';
+const { SnowflakeUtil } = require('discord.js');
 
 module.exports = class MemorySweeper extends Task {
 
@@ -20,7 +12,7 @@ module.exports = class MemorySweeper extends Task {
 
     /* eslint complexity: ['warn', 30] */
     async run() {
-        const OLD_SNOWFLAKE = binaryToID(((Date.now() - THRESHOLD) - EPOCH).toString(2).padStart(42, '0') + EMPTY);
+        const OLD_SNOWFLAKE = SnowflakeUtil.generate(Date.now());
         let guildMembers = 0,
             presences = 0,
             emojis = 0,
@@ -43,7 +35,7 @@ module.exports = class MemorySweeper extends Task {
                 if ([me, guild.owner].includes(member)) continue;
                 if (member.voice.channel) continue;
                 if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
-                if (member.user.settings.get('cookies')) continue;
+                if (this.container.stores.get('gateways').get('userGateway').get(member.user.id, 'cookies')) continue;
                 guildMembers++;
                 guild.members.cache.delete(id);
             }
@@ -63,7 +55,7 @@ module.exports = class MemorySweeper extends Task {
         // Per-User sweeper
         for (const user of this.container.client.users.cache.values()) {
             if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
-            if (user.settings.get('cookies')) continue;
+            if (this.container.stores.get('gateways').get('userGateway').get(user.id, 'cookies')) continue;
             this.container.client.users.cache.delete(user.id);
             users++;
         }
