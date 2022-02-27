@@ -16,7 +16,6 @@ const music = {
 const client = {
     userBlacklist: [],
     guildBlacklist: [],
-    schedules: [],
     changelogs: '',
     bugs: {
         reports: '',
