@@ -1,3 +1,4 @@
+const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { Command, container } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const moment = require('moment-timezone');
@@ -18,9 +19,9 @@ module.exports = class extends Command {
 
     async messageRun(msg) {
         const timezone = container.stores.get('gateways').get('userGateway').get(msg.author.id, 'timezone');
-        const prompted = await container.utils.messages.prompt(msg, `Current Timezone: \`${timezone}\`\n\n**I'm using the TZ format for timezones. You can view the valid timezones here: <http://bit.ly/2ySrZKP>**\n\nPlease **reply** with the timezone in the correct TZ format, or type \`cancel\` if you don't want me to change your timezone.`); // eslint-disable-line max-len
+        const handler = new MessagePrompter(`Current Timezone: \`${timezone}\`\n\n**I'm using the TZ format for timezones. You can view the valid timezones here: <http://bit.ly/2ySrZKP>**\n\nPlease **reply** with the timezone in the correct TZ format, or type \`cancel\` if you don't want me to change your timezone.`, 'message'); // eslint-disable-line max-len
+        const prompted = handler.run(msg.channel, msg.author).catch(() => ({ content: 'cancel' }));
 
-        if (prompted === null) return null;
         if (prompted.content.toLowerCase().split(' ').includes('cancel')) return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Alright! You don't want to change your timezone.`);
         if (!moment.tz.zone(prompted.content)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${prompted.content}** is not a valid timezone!`);
         container.stores.get('gateways').get('userGateway').update(msg.author.id, 'timezone', prompted.content);

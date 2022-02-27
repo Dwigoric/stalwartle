@@ -32,9 +32,6 @@ class Stalwartle extends SapphireClient {
         container.spotifyParser = null;
         container.constants = require('../util/constants');
         container.auth = require('../../auth');
-        container.utils = {
-            messages: require('../util/messageUtils')
-        };
 
         this.once('ready', this._initplayer.bind(this));
 
