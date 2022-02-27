@@ -20,11 +20,8 @@ const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
 
 // Imports for tasks
-const TaskStore = require('./tasks/TaskStore');
-const Task = require('./tasks/Task');
-
-// Imports for schedule
-const Schedule = require('./schedule/Schedule');
+// const TaskStore = require('./tasks/TaskStore');
+// const Task = require('./tasks/Task');
 
 class Stalwartle extends SapphireClient {
 
@@ -42,13 +39,12 @@ class Stalwartle extends SapphireClient {
         this.once('ready', this._initplayer.bind(this));
 
         container.database = new PersistenceManager();
-        container.schedule = new Schedule(this);
 
         this._intervals = new Set();
         this._timeouts = new Set();
 
         this.stores
-            .register(new TaskStore(Task).registerPath(join(__dirname, '..', '..', 'tasks')))
+            // .register(new TaskStore(Task).registerPath(join(__dirname, '..', '..', 'tasks')))
             .register(new GatewayStore(Gateway).registerPath(join(__dirname, '..', '..', 'gateways')));
 
         container.cache = {

@@ -38,7 +38,6 @@ module.exports = class extends Listener {
         }
         console.log('The gateways have been loaded.');
 
-        await this.container.schedule.init();
         await Promise.all(this.container.stores.map(async store => await Promise.all(store.map(async piece => { if (piece.init) await piece.init(); }))));
         if (this.container.client.application.botPublic) this.container.client.postStats().then(() => this.container.client.setInterval(() => this.container.client.postStats(), 1000 * 60 * 5));
         this.container.client.user.setPresence({ status: 'online' });

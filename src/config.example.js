@@ -1,4 +1,5 @@
 const { LogLevel } = require('@sapphire/framework');
+const { ScheduledTaskRedisStrategy } = require('@sapphire/plugin-scheduled-tasks/register-redis');
 
 exports.config = {
     /**
@@ -28,9 +29,14 @@ exports.config = {
     guardedCommands: [],
 
     // Schedule options
-    schedule: {
-        // The interval, in seconds, for Schedule to run due tasks
-        interval: 1
+    tasks: {
+        strategy: new ScheduledTaskRedisStrategy({
+            bull: {
+                redis: {
+                    host: 'localhost'
+                }
+            }
+        })
     },
 
     // Logger options

@@ -1,11 +1,14 @@
-const Task = require('../lib/structures/tasks/Task');
+const { ScheduledTask } = require('@sapphire/plugin-scheduled-tasks');
 const { SnowflakeUtil } = require('discord.js');
 const { LoggerStyle, LoggerStyleText } = require('@sapphire/plugin-logger');
 
-module.exports = class MemorySweeper extends Task {
+module.exports = class MemorySweeper extends ScheduledTask {
 
     constructor(context, options) {
-        super(context, options);
+        super(context, {
+            ...options,
+            cron: '*/30 * * * *'
+        });
 
         // The colors to stylize the console's logs
         this.colors = {

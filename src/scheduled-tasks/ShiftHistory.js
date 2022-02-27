@@ -1,6 +1,13 @@
-const Task = require('../lib/structures/tasks/Task');
+const { ScheduledTask } = require('@sapphire/plugin-scheduled-tasks');
 
-module.exports = class extends Task {
+module.exports = class extends ScheduledTask {
+
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            cron: '*/5 * * * *'
+        });
+    }
 
     async run() {
         for (const { history, id } of await this.container.database.getAll('music')) {

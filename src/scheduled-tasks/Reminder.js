@@ -1,6 +1,6 @@
-const Task = require('../lib/structures/tasks/Task');
+const { ScheduledTask } = require('@sapphire/plugin-scheduled-tasks');
 
-module.exports = class extends Task {
+module.exports = class extends ScheduledTask {
 
     async run({ channel, user, text, forceChannel }) {
         const _channel = this.container.client.channels.cache.get(channel);

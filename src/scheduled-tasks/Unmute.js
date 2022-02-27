@@ -1,6 +1,6 @@
-const Task = require('../lib/structures/tasks/Task');
+const { ScheduledTask } = require('@sapphire/plugin-scheduled-tasks');
 
-module.exports = class extends Task {
+module.exports = class extends ScheduledTask {
 
     async run({ user, guild, role }) {
         const _guild = this.container.client.guilds.cache.get(guild);
