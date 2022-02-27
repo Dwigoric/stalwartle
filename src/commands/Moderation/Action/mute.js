@@ -10,9 +10,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['MANAGE_ROLES', 'MANAGE_CHANNELS'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Mutes a mentioned user.',
-            detailedDescription: 'To mute a user indefinitely, simply do not provide the duration.',
-            usage: '<Member:member> [MuteDuration:time] [Reason:string] [...]',
-            usageDelim: ' '
+            detailedDescription: 'To mute a user indefinitely, simply do not provide the duration.'
         });
     }
 
@@ -20,7 +18,7 @@ module.exports = class extends Command {
         let member = await args.pickResult('member');
         if (!member.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be muted.`);
         member = member.value;
-        const duration = await args.pick('date').catch(() => Infinity);
+        const duration = await args.pick('duration').catch(() => Infinity);
         const reason = await args.rest('string').catch(() => null);
 
         if (!msg.guild.settings.get('muteRole')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The mute role has not yet been set up for this server. You can do so by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`); // eslint-disable-line max-len

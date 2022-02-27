@@ -23,7 +23,7 @@ module.exports = class extends Command {
         user = user.value;
         let days = await args.pick('integer').catch(() => 0);
         if (days < 0 || days > 7) days = 0;
-        const duration = await args.pick('date').catch(() => Infinity);
+        const duration = await args.pick('duration').catch(() => Infinity);
         const reason = await args.rest('string').catch(() => null);
 
         if (!force && user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you ban yourself?`);
