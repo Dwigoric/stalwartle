@@ -13,7 +13,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let question = args.pick('message').catch(() => args.pick('rest')).catch(() => null);
+        let question = await args.pick('message').catch(() => args.pick('rest')).catch(() => null);
         if (!question === null) return reply(msg, `${this.containter.constants.EMOTES.xmark}  ::  Please provide the message (ID/link) or the question to be answered.`);
 
         if (question instanceof Message) question = question.content;

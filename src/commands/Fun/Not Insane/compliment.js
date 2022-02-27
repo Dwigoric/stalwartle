@@ -11,7 +11,9 @@ module.exports = class extends Command {
         });
     }
 
-    messageRun(msg, [mentioned = msg.member]) {
+    async messageRun(msg, args) {
+        const mentioned = await args.pick('member').catch(() => msg.member);
+
         return reply(msg, `⭐  ::  ${mentioned}: ${compliments[Math.floor(Math.random() * compliments.length)]}`);
     }
 

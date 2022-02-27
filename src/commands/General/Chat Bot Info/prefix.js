@@ -13,7 +13,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const newPrefix = args.pick('string').catch(() => null);
+        const newPrefix = await args.pick('string').catch(() => null);
         const prefix = msg.guild.settings.get('prefix');
 
         if (!newPrefix) return reply(msg, `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`);

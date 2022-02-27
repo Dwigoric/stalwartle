@@ -20,7 +20,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let lie = args.restResult('string');
+        let lie = await args.restResult('string');
         if (!lie.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  \`Lie\` is a required argument.`);
         lie = lie.value;
 

@@ -12,7 +12,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let params = args.restResult('string');
+        let params = await args.restResult('string');
         if (!params.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the bug report!`);
         params = params.value;
 

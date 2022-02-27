@@ -15,7 +15,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let mentioned = args.pickResult('user');
+        let mentioned = await args.pickResult('user');
         if (mentioned.success) mentioned = mentioned.value;
         else mentioned = msg.author;
 

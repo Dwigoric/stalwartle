@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let person = args.pickResult('member');
+        let person = await args.pickResult('member');
         if (!person.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please mention who you want to hug.`);
         person = person.value;
 

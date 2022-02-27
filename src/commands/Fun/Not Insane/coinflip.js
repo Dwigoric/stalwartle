@@ -11,8 +11,8 @@ module.exports = class extends Command {
         });
     }
 
-    messageRun(msg, args) {
-        const coins = args.pick('integer').catch(() => 1);
+    async messageRun(msg, args) {
+        const coins = await args.pick('integer').catch(() => 1);
         if (coins < 1 || coins > 1000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Amount of coins must be 1 to 1000.`);
 
         if (coins > 1) {

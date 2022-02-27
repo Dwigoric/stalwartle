@@ -11,7 +11,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const ratething = args.restResult('string');
+        const ratething = await args.restResult('string');
         if (!ratething.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide what you want to rate.`);
 
         return reply(msg, `I would rate ${ratething.value} a **${Math.round(Math.random() * 100)}/100**!`, { disableMentions: 'everyone' });
