@@ -52,7 +52,7 @@ module.exports = class extends Command {
     async messageRun(msg, [when, ...text]) {
         if (when - new Date() >= 1577880000000) throw `${this.container.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 5 decades!`;
 
-        const reminder = await this.container.schedule.create('reminder', when, {
+        const reminder = await this.container.tasks.create('Reminder', when, {
             data: {
                 channel: msg.channel.id,
                 user: msg.author.id,
@@ -82,13 +82,13 @@ module.exports = class extends Command {
         const prompted = await msg.prompt(`Please give me the list number of the reminder you want to delete:\n${remList.list}`);
         const remNum = Number(prompted.content);
         if (isNaN(remNum)) throw `${this.container.constants.EMOTES.xmark}  ::  You didn't give a number!`;
-        if (!this.container.schedule.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?`; // eslint-disable-line max-len
-        this.container.schedule.delete(remList[remNum]);
+        if (!this.container.tasks.tasks.filter(tk => tk.id === remList[remNum] && tk.data.user === msg.author.id)[0]) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?`; // eslint-disable-line max-len
+        this.container.tasks.delete(remList[remNum]);
         return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully deleted reminder ID \`${remList[remNum]}\`.`);
     }
 
     async remlist(msg) {
-        const userRems = this.container.schedule.tasks.filter(tk => tk.taskName === 'reminder' && tk.data.user === msg.author.id);
+        const userRems = this.container.tasks.tasks.filter(tk => tk.taskName === 'reminder' && tk.data.user === msg.author.id);
         if (!userRems.length) throw `${this.container.constants.EMOTES.xmark}  ::  You do not have any reminder!`;
         const remList = { list: '' };
         userRems.forEach(rem => {

@@ -27,8 +27,8 @@ module.exports = class extends Command {
 
         await member.roles.remove(muteRole, 'Unmuted');
         await msg.guild.settings.update('muted', member.user.id, { arrayAction: 'remove' });
-        const task = this.container.schedule.tasks.filter(tk => tk.taskName === 'unmute' && tk.data.user === user.id)[0];
-        if (task) this.container.schedule.delete(task.id);
+        const task = this.container.tasks.tasks.filter(tk => tk.taskName === 'unmute' && tk.data.user === user.id)[0];
+        if (task) this.container.tasks.delete(task.id);
 
         msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', msg, user, reason);

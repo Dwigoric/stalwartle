@@ -34,9 +34,9 @@ module.exports = class extends Command {
         if (person.bot) throw `${this.container.constants.EMOTES.xmark}  ::  I wonder if bots can eat cookies... 🤔`;
         const cookies = person.settings.get('cookies');
         if (msg.flagArgs.check) return msg.send(`🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
-        const cookieTask = this.container.schedule.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
+        const cookieTask = this.container.tasks.tasks.filter(tk => tk.taskName === 'cookieReset' && tk.data.user === msg.author.id);
         if (cookieTask.length) throw `${this.container.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again in ${Duration.toNow(cookieTask[0].time)}.`;
-        await this.container.schedule.create('cookieReset', this.container.client.arguments.get('time').run('1h', 'time', msg), { data: { user: msg.author.id } });
+        await this.container.tasks.create('CookieReset', this.container.client.arguments.get('time').run('1h', 'time', msg), { data: { user: msg.author.id } });
         await person.settings.update('cookies', cookies + 1);
         return msg.send(`🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
     }

@@ -68,7 +68,7 @@ module.exports = class extends Command {
 
     async clear(msg) {
         if (!await msg.hasAtLeastPermissionLevel(5)) throw `${this.container.constants.EMOTES.xmark}  ::  Only DJs can clear the history!`;
-        this.container.schedule.tasks.filter(tk => tk.taskName === 'shiftHistory' && tk.data.guild === msg.guild.id).forEach(tk => tk.delete());
+        this.container.tasks.tasks.filter(tk => tk.taskName === 'shiftHistory' && tk.data.guild === msg.guild.id).forEach(tk => tk.delete());
         this.container.databases.default.update('music', msg.guild.id, { history: [] });
         msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully cleared the music history for this server.`);
     }

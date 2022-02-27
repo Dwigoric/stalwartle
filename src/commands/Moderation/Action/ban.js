@@ -32,7 +32,7 @@ module.exports = class extends Command {
         reason = reason.length ? reason.join(this.usageDelim) : null;
         if (reason) options.reason = reason;
         if (duration && duration !== Infinity) {
-            this.container.schedule.create('unban', duration, {
+            this.container.tasks.create('Unban', duration, {
                 data: {
                     user: user.id,
                     guild: msg.guild.id

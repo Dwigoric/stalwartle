@@ -34,7 +34,7 @@ module.exports = class extends Command {
         await member.roles.add(muteRole, 'Muted');
         await msg.guild.settings.update('muted', member.user.id, { arrayAction: 'add' });
         if (duration && duration !== Infinity) {
-            this.container.schedule.create('unmute', duration, {
+            this.container.tasks.create('Unmute', duration, {
                 data: {
                     user: user.id,
                     guild: msg.guild.id,
