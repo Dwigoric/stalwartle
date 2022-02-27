@@ -3,7 +3,7 @@ const { Command } = require('@sapphire/framework');
 const { codeBlock, isThenable } = require('@sapphire/utilities');
 const { Stopwatch } = require('@sapphire/stopwatch');
 const { Type } = require('@sapphire/type');
-const { MessagePrompter, MessagePrompterStrategies } = require('@sapphire/discord.js-utilities');
+const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
 const { inspect, promisify } = require('util');
@@ -98,10 +98,10 @@ module.exports = class extends Command {
         if (!options.hastebinUnavailable) _options.push('hastebin');
         let _choice;
         do {
-            const handler = new MessagePrompter(`Choose one of the following options: ${_options.join(', ')}`, MessagePrompterStrategies.Message);
-            _choice = await handler.run(msg.channel, msg.author).catch(() => ({ message: { content: 'none' } }));
-        } while (!['file', 'haste', 'hastebin', 'console', 'log', 'default', 'none', null].includes(_choice.message.content));
-        options.sendAs = _choice.message.content;
+            const handler = new MessagePrompter(`Choose one of the following options: ${_options.join(', ')}`, 'message');
+            _choice = await handler.run(msg.channel, msg.author).catch(() => ({ content: 'none' }));
+        } while (!['file', 'haste', 'hastebin', 'console', 'log', 'default', 'none', null].includes(_choice.content));
+        options.sendAs = _choice.content;
     }
 
     timedEval(args, code, flagTime) {
