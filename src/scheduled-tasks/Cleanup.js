@@ -92,7 +92,7 @@ module.exports = class MemorySweeper extends ScheduledTask {
         }
 
         // Emit a log
-        console.log([
+        this.container.logger.info([
             this.header,
             `${this.setColor(guildMembers)} [GuildMember]s`,
             `${this.setColor(users)} [User]s`,

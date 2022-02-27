@@ -77,7 +77,7 @@ module.exports = class extends Command {
             }
             case 'console':
             case 'log': {
-                console.log(result);
+                this.container.logger.debug(result);
                 return reply(msg, { content: `Sent the result to console.\n**Type**:${footer}\n${time}` });
             }
             case 'none':
