@@ -34,7 +34,7 @@ module.exports = class extends Command {
         muted.splice(muted.indexOf(member.user.id), 1);
         await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'muted', muted);
 
-        const task = this.container.tasks.tasks.filter(tk => tk.taskName === 'unmute' && tk.data.user === user.id)[0];
+        const task = (await this.container.tasks.list({})).filter(job => job.data.task === 'Unmute' && job.data.payload.user === user.id)[0];
         if (task) this.container.tasks.delete(task.id);
 
         msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
