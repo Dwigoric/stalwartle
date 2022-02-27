@@ -14,7 +14,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         const newPrefix = await args.pick('string').catch(() => null);
-        const prefix = msg.guild.settings.get('prefix');
+        const prefix = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix');
 
         if (!newPrefix) return reply(msg, `The prefix for this server is currently \`${prefix}\`. Please use \`${prefix}prefix <prefix>\` to change the server prefix.`);
         this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'prefix', newPrefix);
