@@ -12,7 +12,7 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',
             detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
-            subCommands: ['add', 'remove', { input: '', output: 'messageRun', default: true }]
+            subCommands: ['add', 'remove']
         });
     }
 
