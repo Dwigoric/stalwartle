@@ -8,7 +8,7 @@ module.exports = class extends Listener {
 
     /* eslint complexity: ['warn', 25] */
     async run(msg) {
-        if (!msg.guild) return null;
+        if (!msg.member) return null;
         if (!this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.mentionSpam) return null;
         if (msg.author.bot && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreBots) return null;
         if ((await this.container.stores.get('preconditions').get('ModsOnly').run(msg)).success && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;

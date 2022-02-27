@@ -7,7 +7,7 @@ module.exports = class extends Listener {
     }
 
     async run(msg) {
-        if (!msg.guild) return null;
+        if (!msg.member) return null;
         if (!this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.antiSpam) return null;
         if ((await this.container.stores.get('preconditions').get('ModsOnly').run(msg)).success && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
