@@ -4,9 +4,8 @@
         "node": true,
         "es6": true
     },
-    "parser": "@babel/eslint-parser",
     "parserOptions": {
-        "ecmaVersion": 2019,
+        "ecmaVersion": "latest",
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true
         }
