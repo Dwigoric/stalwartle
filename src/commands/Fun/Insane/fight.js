@@ -1,21 +1,18 @@
-const { Command, Timestamp } = require('@sapphire/framework');
+const { Command, Timestamp, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
 const currentFights = {};
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'A fight minigame between two Discord users.',
             usage: '[accept|deny|cancel] (Opponent:user)',
-            subcommands: true
-        });
-
-        this.createCustomResolver('user', (arg, possible, message, [action]) => {
-            if (!action && !arg) throw `${this.container.constants.EMOTES.xmark}  ::  Please tell me who you want to challenge to a fight.`;
-            if (action) return undefined;
-            return this.container.client.arguments.get('user').run(arg, possible, message);
+            subcommands: ['accept', 'deny', 'cancel']
         });
 
         this.getRandomInt = (min, max) => {
@@ -56,12 +53,16 @@ module.exports = class extends Command {
         };
     }
 
-    async messageRun(msg, [opponent]) {
+    async messageRun(msg, args) {
+        let opponent = await args.pickResult('member');
+        if (!opponent.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please tell me who among the people in this channel you want to fight.`);
+        opponent = opponent.value;
+
         // Restrictions
-        if (opponent.bot) throw `${this.container.constants.EMOTES.xmark}  ::  You cannot challenge bots to a fight. We will automatically win!`;
-        if (!opponent.settings.get('acceptFights')) throw `${this.container.constants.EMOTES.xmark}  ::  This person is currently not accepting fight requests.`;
-        if (msg.channel.id in currentFights) throw `${this.container.constants.EMOTES.xmark}  ::  There is a fight ongoing in this channel. Please wait until the fight is over.`;
-        if (opponent.equals(msg.author)) throw `${this.container.constants.EMOTES.xmark}  ::  You cannot fight against yourself.`;
+        if (opponent.bot) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You cannot challenge bots to a fight. We will automatically win!`);
+        if (!this.container.stores.get('gateways').get('userGateway').get(opponent.id, 'acceptFights')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This person is currently not accepting fight requests.`);
+        if (msg.channel.id in currentFights) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is a fight ongoing in this channel. Please wait until the fight is over.`);
+        if (opponent.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You cannot fight against yourself.`);
 
         currentFights[msg.channel.id] = {
             challenger: msg.author,
@@ -70,15 +71,15 @@ module.exports = class extends Command {
         this.container.client.setTimeout(() => {
             if (currentFights[msg.channel.id] && currentFights[msg.channel.id].challenger === msg.author && currentFights[msg.channel.id].opponent === opponent) {
                 delete currentFights[msg.channel.id];
-                return msg.send(`⚔  ::  Opponent has not replied within 30 seconds. The match is cancelled.`);
+                return reply(msg, `⚔  ::  Opponent has not replied within 30 seconds. The match is cancelled.`);
             }
             return null;
         }, 30000);
-        msg.send(`⚔  ::  Hey ${opponent}, **${msg.member.displayName}** wants to challenge you to a fight! Please accept or deny the request by \`${msg.guild.settings.get('prefix')}fight accept\` or \`${msg.guild.settings.get('prefix')}fight deny\`. You can disable future requests by \`${msg.guild.settings.get('prefix')}userconf set acceptFights false\`.`); // eslint-disable-line max-len
+        return reply(msg, `⚔  ::  Hey ${opponent}, **${msg.member.displayName}** wants to challenge you to a fight! Please accept or deny the request by \`${msg.guild.settings.get('prefix')}fight accept\` or \`${msg.guild.settings.get('prefix')}fight deny\`. You can disable future requests by \`${msg.guild.settings.get('prefix')}userconf set acceptFights false\`.`); // eslint-disable-line max-len
     }
 
     /* eslint-disable complexity */
-    async fight(channel, challenger, opponent) {
+    async #fight(channel, challenger, opponent) {
         // Initialize challenger's fight parameters
         const totalChHealth = 100 + (25 * challenger.settings.get('hpBoost'));
         currentFights[channel.id].challenger = {
@@ -140,7 +141,7 @@ module.exports = class extends Command {
                 responses = await channel.awaitMessages(msg => msg.author === (i % 2 ? challenger : opponent), { time: 30000, max: 1 });
                 if (responses.size === 0) {
                     delete currentFights[channel.id];
-                    throw '⚔  ::  No one is replying, so I am ending this fight!';
+                    return channel.send('⚔  ::  No one is replying, so I am ending this fight!');
                 }
                 if (responses.first() && responses.first().content.toLowerCase() in this.moves) {
                     if (this.moves[responses.first().content.toLowerCase()].stamina > currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina) {
@@ -246,22 +247,22 @@ module.exports = class extends Command {
 
     async accept(msg) {
         // eslint-disable-next-line max-len
-        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
-        await this.fight(msg.channel, currentFights[msg.channel.id].challenger, currentFights[msg.channel.id].opponent);
+        if (!(msg.channel.id in currentFights) || msg.author.id !== currentFights[msg.channel.id].opponent.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`);
+        await this.#fight(msg.channel, currentFights[msg.channel.id].challenger, currentFights[msg.channel.id].opponent);
         return delete currentFights[msg.channel.id];
     }
 
     async deny(msg) {
         // eslint-disable-next-line max-len
-        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].opponent)) throw `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
-        msg.send(`${this.container.constants.EMOTES.tick}  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
+        if (!(msg.channel.id in currentFights) || msg.author.id !== currentFights[msg.channel.id].opponent.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
         return delete currentFights[msg.channel.id];
     }
 
     async cancel(msg) {
         // eslint-disable-next-line max-len
-        if (!(msg.channel.id in currentFights) || !msg.author.equals(currentFights[msg.channel.id].challenger)) throw `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`;
-        msg.send(`⚔  ::  ${currentFights[msg.channel.id].challenger.tag} has cancelled their match with ${currentFights[msg.channel.id].opponent.tag}.`);
+        if (!(msg.channel.id in currentFights) || msg.author.id !== currentFights[msg.channel.id].opponent.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`);
+        reply(msg, `⚔  ::  ${currentFights[msg.channel.id].challenger.tag} has cancelled their match with ${currentFights[msg.channel.id].opponent.tag}.`);
         return delete currentFights[msg.channel.id];
     }
 
