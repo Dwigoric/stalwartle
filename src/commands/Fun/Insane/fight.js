@@ -1,11 +1,12 @@
-const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { Timestamp } = require('@sapphire/time-utilities');
 const { MessageEmbed } = require('discord.js');
 
 const currentFights = {};
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
         super(context, {
@@ -13,7 +14,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'A fight minigame between two Discord users.',
             usage: '[accept|deny|cancel] (Opponent:user)',
-            subcommands: ['accept', 'deny', 'cancel']
+            subCommands: ['accept', 'deny', 'cancel']
         });
 
         this.getRandomInt = (min, max) => {

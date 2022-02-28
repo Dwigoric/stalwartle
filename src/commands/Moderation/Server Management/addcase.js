@@ -9,7 +9,7 @@ module.exports = class extends SubCommandPluginCommand {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Adds cases to modlog in case of a manual action.',
-            subcommands: ['kick', 'ban', 'unban', 'softban', 'mute', 'unmute']
+            subCommands: ['kick', 'ban', 'unban', 'softban', 'mute', 'unmute']
         });
     }
 

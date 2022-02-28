@@ -1,8 +1,8 @@
-const { Command } = require('@sapphire/framework');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
         super(context, {
@@ -11,7 +11,7 @@ module.exports = class extends Command {
             description: 'Makes the bot say anything you want.',
             usage: '[delete|embed|anonymous] [Channel:channel] <Content:string{1,1000}> [...]',
             usageDelim: ' ',
-            subcommands: ['delete', 'embed', 'anonymous']
+            subCommands: ['delete', 'embed', 'anonymous']
         });
     }
 

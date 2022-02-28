@@ -1,7 +1,8 @@
-const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
         super(context, {
@@ -11,7 +12,7 @@ module.exports = class extends Command {
             requiredClientPermissions: 'MANAGE_ROLES',
             description: 'Sets the mute role for the server.',
             detailedDescription: 'Set the server\'s mute role using the name you provide.',
-            subcommands: ['reset']
+            subCommands: ['reset']
         });
     }
 
