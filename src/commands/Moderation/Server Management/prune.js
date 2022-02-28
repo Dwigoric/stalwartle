@@ -1,27 +1,32 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 const pruning = new Set();
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['purge'],
-            permissionLevel: 6,
-            requiredPermissions: ['MANAGE_MESSAGES'],
+            preconditions: ['ModsOnly'],
+            requiredClientPermissions: ['MANAGE_MESSAGES'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Prunes a certain amount of messages w/o filter.',
-            usage: '[Limit:integer{2,100}] [link|invite|bots|you|me|pinsonly|upload|user:user]',
-            usageDelim: ' ',
-            cooldown: 10
+            cooldownDelay: 10
         });
     }
 
-    async messageRun(msg, [limit = 50, filter = null]) {
-        let messages = await msg.channel.messages.fetch({ limit: 1 });
-        if (!messages.size) throw `${this.container.constants.EMOTES.xmark}  ::  The channel does not have any messages.`;
+    async messageRun(msg, args) {
+        if (pruning.has(msg.channel.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I am currently pruning messages from this channel. Please wait until the process is done.`);
 
-        if (pruning.has(msg.channel.id)) throw `${this.container.constants.EMOTES.xmark}  ::  I am currently pruning messages from this channel. Please wait until the process is done.`;
+        let limit = await args.pick('integer').catch(() => 50);
+        if (limit < 2 || limit > 100) limit = 50;
+        const filter = await args.pick('array', { array: ['link', 'invite', 'bots', 'you', 'me', 'pinsonly', 'upload'] }).catch(() => args.pick('user').catch(() => null));
+
+        let messages = await msg.channel.messages.fetch({ limit: 1 });
+        if (!messages.size) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The channel does not have any messages.`);
+
         pruning.add(msg.channel.id);
 
         messages = messages.concat(await msg.channel.messages.fetch({ limit, before: messages.last().id }));
@@ -31,7 +36,7 @@ module.exports = class extends Command {
         if (filter) {
             const user = typeof filter !== 'string' ? filter : null;
             const type = typeof filter === 'string' ? filter : 'user';
-            messages = messages.filter(this.getFilter(msg, type, user));
+            messages = messages.filter(this.#getFilter(msg, type, user));
         }
         if (!messages.size) {
             pruning.delete(msg.channel.id);
@@ -58,7 +63,7 @@ module.exports = class extends Command {
         });
     }
 
-    getFilter(msg, filter, user) {
+    #getFilter(msg, filter, user) {
         switch (filter) {
             case 'link':
                 return mes => /https?:\/\/[^ /.]+\.[^ /.]+/.test(mes.content);
