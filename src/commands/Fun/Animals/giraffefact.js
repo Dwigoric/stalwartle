@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const message = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading giraffe fact...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading giraffe fact...`);
 
         const { fact } = await fetch(`https://some-random-api.ml/facts/giraffe`)
             .then(res => res.json())
@@ -22,7 +22,6 @@ module.exports = class extends Command {
         if (!fact) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
         await reply(msg, `🦒  ::  ${fact}`);
 
-        message.delete();
         return true;
     }
 

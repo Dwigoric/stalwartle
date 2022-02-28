@@ -14,15 +14,14 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const message = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading kangaroo...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading kangaroo...`);
 
         const { image, fact } = await fetch(`https://some-random-api.ml/animal/kangaroo`)
             .then(res => res.json())
             .catch(() => ({ image: null, fact: null }));
         if (!image || !fact) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
-        await reply(message, { files: [{ attachment: image, name: 'kangaroo.jpg' }], content: `Random kangaroo fact: ${fact}` });
+        await reply(msg, { files: [{ attachment: image, name: 'kangaroo.jpg' }], content: `Random kangaroo fact: ${fact}` });
 
-        message.delete();
         return true;
     }
 

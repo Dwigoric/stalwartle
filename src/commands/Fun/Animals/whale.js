@@ -14,7 +14,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const message = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading whale...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading whale...`);
 
         const { link } = await fetch(`https://some-random-api.ml/img/whale`)
             .then(res => res.json())
@@ -25,9 +25,8 @@ module.exports = class extends Command {
             .catch(() => ({ fact: null }));
 
         if (!fact || !link) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
-        await reply(message, { files: [{ attachment: link, name: 'whale.gif' }], content: `Random whale fact: ${fact}` });
+        await reply(msg, { files: [{ attachment: link, name: 'whale.gif' }], content: `Random whale fact: ${fact}` });
 
-        message.delete();
         return true;
     }
 
