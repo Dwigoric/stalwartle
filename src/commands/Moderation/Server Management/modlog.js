@@ -37,7 +37,7 @@ module.exports = class extends Command {
             return reply(msg, {
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
-                    .setTitle(`<:blobBan:399433444670701568> Case #${modlog.id} | ${msg.guild.name}`)
+                    .setTitle(`${this.container.constants.EMOTES.blobban} Case #${modlog.id} | ${msg.guild.name}`)
                     .setDescription([
                         `Type: ${toTitleCase(modlog.type)}`,
                         `Moderator: ${moderator} (\`${modlog.moderator}\`)`,
@@ -55,7 +55,7 @@ module.exports = class extends Command {
         const message = await msg.channel.send(`${this.container.constants.EMOTES.loading}  ::  Loading moderation logs...`);
         const display = new RichDisplay(new MessageEmbed()
             .setColor('RANDOM')
-            .setTitle(`<:blobBan:399433444670701568> ${list.length} ${msg.flagArgs.type && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
+            .setTitle(`${this.container.constants.EMOTES.blobban} ${list.length} ${msg.flagArgs.type && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(msg.flagArgs.type) ? toTitleCase(msg.flagArgs.type) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)); // eslint-disable-line max-len
 
         await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
             const _user = this.container.client.users.cache.get(modlog.user) || await this.container.client.users.fetch(modlog.user).catch(() => null);

@@ -5,12 +5,12 @@ const { MessageEmbed } = require('discord.js');
 
 const configs = {
     kick: ['#FBA200', '👢'],
-    ban: ['#800000', '<:blobBan:399433444670701568>'],
+    ban: ['#800000', this.container.constants.EMOTES.blobban],
     softban: ['#3498DB', '❌💬'],
-    unban: ['#B5CD3B', '<:blobok:398843279665528843>'],
-    mute: ['#FFD700', '<:blobstop:446987757651361813>'],
-    unmute: ['#24E4D0', '<:blobgo:398843278243528707>'],
-    warn: ['#B2884D', '<:blobthinkstare:398843280135028738>']
+    unban: ['#B5CD3B', this.container.constants.EMOTES.blobok],
+    mute: ['#FFD700', this.container.constants.EMOTES.blobstop],
+    unmute: ['#24E4D0', this.container.constants.EMOTES.blobgo],
+    warn: ['#B2884D', this.container.constants.EMOTES.blobthinkstare]
 };
 
 module.exports = class extends Listener {

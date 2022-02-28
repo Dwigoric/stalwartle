@@ -3,7 +3,12 @@ exports.EMOTES = {
     xmark: '<:error:508595005481549846>',
     loading: '<a:loading:430269209415516160>',
     blobwave: '<:blobwave:447713448051081216>',
-    blobping: '<:blobping:449750900098203649>'
+    blobping: '<:blobping:449750900098203649>',
+    blobban: '<:blobBan:399433444670701568>',
+    blobok: '<:blobok:398843279665528843>',
+    blobstop: '<:blobstop:446987757651361813>',
+    blobgo: '<:blobgo:398843278243528707>',
+    blobthinkstare: '<:blobthinkstare:398843280135028738>'
 };
 
 exports.SWEAR_WORDS_REGEX = [
