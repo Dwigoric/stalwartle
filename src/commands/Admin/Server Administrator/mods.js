@@ -12,11 +12,11 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',
             detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
-            subCommands: ['add', 'remove']
+            subCommands: ['add', 'remove', { input: 'default', default: true }]
         });
     }
 
-    async messageRun(msg) {
+    async default(msg) {
         const { roles, users } = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
         const modRoles = roles.map(rl => {
             const modRole = msg.guild.roles.cache.get(rl);

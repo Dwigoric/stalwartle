@@ -12,11 +12,11 @@ module.exports = class extends SubCommandPluginCommand {
             requiredClientPermissions: 'MANAGE_ROLES',
             description: 'Sets the mute role for the server.',
             detailedDescription: 'Set the server\'s mute role using the name you provide.',
-            subCommands: ['reset']
+            subCommands: ['reset', { input: 'default', default: true }]
         });
     }
 
-    async messageRun(msg, args) {
+    async default(msg, args) {
         let role = await args.restResult('string');
         if (!role.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the role name of the mute role.`);
         role = role.value;

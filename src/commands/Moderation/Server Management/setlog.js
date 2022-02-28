@@ -18,7 +18,7 @@ module.exports = class extends SubCommandPluginCommand {
                 'If you want to reset the modlog channel for a specific moderation action, use `s.setlog <moderation action> reset`',
                 'If you want to list the modlog channels each moderation action is assigned to, use the `list` subcommand.'
             ].join('\n'),
-            subCommands: ['list', 'kick', 'ban', 'softban', 'unban', 'mute', 'unmute', 'reset']
+            subCommands: ['list', 'kick', 'ban', 'softban', 'unban', 'mute', 'unmute', 'reset', { input: 'default', default: true }]
         });
     }
 
@@ -31,7 +31,7 @@ module.exports = class extends SubCommandPluginCommand {
             .join('\n'));
     }
 
-    async messageRun(msg, args) {
+    async default(msg, args) {
         let modlog = await args.pickResult('guildTextChannel');
         if (!modlog.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the modlog channel.`);
         modlog = modlog.value;

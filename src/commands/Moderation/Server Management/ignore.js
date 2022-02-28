@@ -11,11 +11,11 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Makes me ignore channels or a channel category in the server.',
             detailedDescription: 'If you want to unignore channels or categories, simply reuse the command and give the channel you want to unignore.',
-            subCommands: ['list']
+            subCommands: ['list', { input: 'default', default: true }]
         });
     }
 
-    async messageRun(msg, args) {
+    async default(msg, args) {
         let channel = await args.pickResult('guildChannel');
         if (!channel.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the server channel by mentioning it or giving its ID.`);
         channel = channel.value;

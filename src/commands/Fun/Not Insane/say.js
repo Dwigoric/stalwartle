@@ -11,11 +11,11 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Makes the bot say anything you want.',
             usage: '[delete|embed|anonymous] [Channel:channel] <Content:string{1,1000}> [...]',
             usageDelim: ' ',
-            subCommands: ['delete', 'embed', 'anonymous']
+            subCommands: ['delete', 'embed', 'anonymous', { input: 'default', default: true }]
         });
     }
 
-    async messageRun(msg, args) {
+    async default(msg, args) {
         const chan = await args.pick('guildTextChannel').catch(() => msg.channel);
         let msgargs = await args.restResult('string');
         if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);

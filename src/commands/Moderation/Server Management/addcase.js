@@ -9,7 +9,7 @@ module.exports = class extends SubCommandPluginCommand {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Adds cases to modlog in case of a manual action.',
-            subCommands: ['kick', 'ban', 'unban', 'softban', 'mute', 'unmute']
+            subCommands: ['kick', 'ban', 'unban', 'softban', 'mute', 'unmute', { input: 'default', default: true }]
         });
     }
 
@@ -90,7 +90,7 @@ module.exports = class extends SubCommandPluginCommand {
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully added an unmute case for ${target.tag}! Check the modlogs via \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}modlogs\`.`);
     }
 
-    async messageRun(msg) {
+    async default(msg) {
         return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please state the audit log action you want to add.`);
     }
 

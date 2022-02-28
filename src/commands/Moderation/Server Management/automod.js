@@ -24,7 +24,7 @@ module.exports = class extends SubCommandPluginCommand {
                 'E.g. if `within` is `5` on antiSpam (`limit` set to `3`), it\'d mean "3 messages within 5 seconds". `s.conf set automod.options.antiSpam.within 5`',
                 'For quota, it\'d mean "3 offenses within 5 minutes". Please don\'t be confused. 😉'
             ].join('\n'),
-            subCommands: ['invite', 'swear', 'spam', 'mentionspam', 'quota', 'ignorebots', 'ignoremods']
+            subCommands: ['invite', 'swear', 'spam', 'mentionspam', 'quota', 'ignorebots', 'ignoremods', { input: 'default', default: true }]
         });
     }
 
@@ -148,7 +148,7 @@ module.exports = class extends SubCommandPluginCommand {
         this.container.stores.get('gateways').get('guildGateway').update(guild, `automod.options.${type}`, option);
     }
 
-    async messageRun(msg) {
+    async default(msg) {
         return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the automod module or filter you want to modify.`);
     }
 

@@ -14,7 +14,7 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'A fight minigame between two Discord users.',
             usage: '[accept|deny|cancel] (Opponent:user)',
-            subCommands: ['accept', 'deny', 'cancel']
+            subCommands: ['accept', 'deny', 'cancel', { input: 'default', default: true }]
         });
 
         this.getRandomInt = (min, max) => {
@@ -55,7 +55,7 @@ module.exports = class extends SubCommandPluginCommand {
         };
     }
 
-    async messageRun(msg, args) {
+    async default(msg, args) {
         let opponent = await args.pickResult('member');
         if (!opponent.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please tell me who among the people in this channel you want to fight.`);
         opponent = opponent.value;
