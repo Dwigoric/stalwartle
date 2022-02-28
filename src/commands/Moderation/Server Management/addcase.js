@@ -1,11 +1,13 @@
-const { reply } = require('@sapphire/plugin-editable-commands');
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { reply } = require('@sapphire/plugin-editable-commands');
+const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 
 module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
         super(context, {
             ...options,
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Adds cases to modlog in case of a manual action.',
             subcommands: ['kick', 'ban', 'unban', 'softban', 'mute', 'unmute']
         });
