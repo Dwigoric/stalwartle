@@ -44,7 +44,7 @@ module.exports = class extends Command {
             case 'haste':
             case 'hastebin': {
                 if (!options.url) options.url = await this.#getHaste(result).catch(() => null);
-                if (options.url) return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Sent the ban list to hastebin: ${options.url}`);
+                if (options.url) return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Sent the ban list to hastebin: <${options.url}>`);
                 options.hastebinUnavailable = true;
                 options.sendAs = 'file';
                 return this.#handleMessage(msg, options, result);

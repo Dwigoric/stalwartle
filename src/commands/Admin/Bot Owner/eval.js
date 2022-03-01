@@ -70,7 +70,7 @@ module.exports = class extends Command {
             case 'haste':
             case 'hastebin': {
                 if (!options.url) options.url = await this.getHaste(result, language).catch(() => null);
-                if (options.url) return reply(msg, { content: `Sent the result to hastebin: ${options.url}\n**Type**:${footer}\n${time}` });
+                if (options.url) return reply(msg, { content: `Sent the result to hastebin: <${options.url}>\n**Type**:${footer}\n${time}` });
                 options.hastebinUnavailable = true;
                 await this.getTypeOutput(msg, options);
                 return this.handleMessage(msg, options, { success, result, time, footer, language });
