@@ -46,7 +46,6 @@ module.exports = class MemorySweeper extends ScheduledTask {
                 if ([me, guild.owner].includes(member)) continue;
                 if (member.voice.channel) continue;
                 if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
-                if (this.container.stores.get('gateways').get('userGateway').get(member.user.id, 'cookies')) continue;
                 guildMembers++;
                 guild.members.cache.delete(id);
             }
