@@ -21,7 +21,7 @@ module.exports = class extends SubCommandPluginCommand {
                 '\nTo look for the leaderboard, use the `lb` subcommand, e.g. `s.cookie lb`.',
                 'To get the global leaderboard, use the flag `--global`, e.g. `s.cookie lb --global`'
             ].join('\n'),
-            flags: ['check', 'global'],
+            flags: ['check'],
             subCommands: ['lb', { input: 'default', default: true }]
         });
     }
@@ -43,11 +43,11 @@ module.exports = class extends SubCommandPluginCommand {
         return reply(msg, `🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
     }
 
-    async lb(msg, args) {
+    async lb(msg) {
         if (!msg.channel.permissionsFor(this.container.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).`); // eslint-disable-line max-len
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading leaderboard...`);
         let list = await this.container.database.getAll('users').then(usr => usr.filter(us => us.cookies).sort((a, b) => b.cookies > a.cookies ? 1 : -1));
-        if (!args.getFlags('global')) list = Array.from((await msg.guild.members.fetch()).values()).filter(member => list.findIndex(user => user.id === member.id) !== -1);
+        list = Array.from((await msg.guild.members.fetch()).values()).filter(member => list.findIndex(user => user.id === member.id) !== -1);
         if (!list.length) return message.edit('🍪  ::  Whoops! It seems no one in this server has any cookie yet!');
 
         const authorPos = list.findIndex(ckU => ckU.id === msg.author.id) + 1;
@@ -59,7 +59,7 @@ module.exports = class extends SubCommandPluginCommand {
             embedFooterSeparator: '|',
             template: new MessageEmbed()
                 .setColor('RANDOM')
-                .setTitle(`🍪 ${args.getFlags('global') ? 'Global ' : ''}Stalkie Leaderboard`)
+                .setTitle(`🍪 Stalkie Leaderboard`)
                 .setFooter({ text: `Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${userCookies} Stalkie${userCookies === 1 ? '' : 's'}.` })
         });
 
