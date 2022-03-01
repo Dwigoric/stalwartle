@@ -77,8 +77,8 @@ module.exports = class extends Command {
     }
 
     async #getHaste(body) {
-        const { key } = await fetch(`https://hastebin.com/documents?`, { method: 'POST', body }).then(res => res.json());
-        return `https://hastebin.com/${key}.txt`;
+        const { key } = await fetch('https://www.toptal.com/developers/hastebin/documents', { method: 'POST', body }).then(res => res.json());
+        return `https://www.toptal.com/developers/hastebin/${key}.txt`;
     }
 
 };
