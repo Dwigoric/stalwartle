@@ -87,7 +87,7 @@ module.exports = class extends Command {
                     await this.getTypeOutput(msg, options);
                     return this.handleMessage(msg, options, { success, result, time, footer, language });
                 }
-                return reply(msg, { content: `**${success ? 'Output' : 'Error'}**:${codeBlock(language, result)}\n**Type**:${footer}\n${time}` });
+                return reply(msg, { content: `**${success ? 'Output' : 'Error'}**:${codeBlock(success ? language : 'xl', result)}\n**Type**:${footer}\n${time}` });
             }
         }
     }
