@@ -19,10 +19,6 @@ const CacheManager = require('./cache/CacheManager');
 const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
 
-// Imports for tasks
-// const TaskStore = require('./tasks/TaskStore');
-// const Task = require('./tasks/Task');
-
 class Stalwartle extends SapphireClient {
 
     constructor(clientOptions) {
