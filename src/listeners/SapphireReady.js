@@ -30,10 +30,10 @@ module.exports = class extends Listener {
     }
 
     async run() {
-        await this.container.database.init().catch(() => new Error('Could not establish connection to MongoDB.'));
+        await this.container.database.init().catch(() => { throw new Error('Could not establish connection to MongoDB.'); });
         console.log('Connection to MongoDB has been established.');
         for (const gateway of this.container.stores.get('gateways').values()) {
-            await gateway.init().catch(() => new Error(`Could not load Collection ${gateway.name} to cache.`));
+            await gateway.init().catch(() => { throw new Error(`Could not load Collection ${gateway.name} to cache.`); });
             console.log(`Loaded Collection ${gateway.name} to cache.`);
         }
         console.log('The gateways have been loaded.');
