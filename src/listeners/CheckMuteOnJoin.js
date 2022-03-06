@@ -16,7 +16,7 @@ module.exports = class extends Listener {
         const muteRole = member.guild.roles.cache.get(this.container.stores.get('gateways').get('guildGateway').get(member.guild.id).muteRole);
         if (!muteRole) {
             member.guild.owner.user.send('⚠  ::  Whoops! The mute role has been deleted. The muterole setting has been reset.').catch(() => null);
-            this.container.stores.get('gateways').get('guildGateway').update(member.guild.id, { muteRole: this.container.stores.get('gateways').get('guildGateway').defaults.muteRole });
+            this.container.stores.get('gateways').get('guildGateway').reset(member.guild.id, 'muteRole');
         } else if (muteRole.position >= member.guild.me.roles.highest.position) {
             member.guild.owner.user.send(`⚠  ::  The mute role **${muteRole.name}** is higher than me, so I couldn't give ${member.user.tag} the mute role.`);
         } else {
