@@ -14,7 +14,7 @@ module.exports = class extends Command {
         });
     }
 
-    async messageRun(msg, args, force) {
+    async messageRun(msg, args) {
         let member = await args.pickResult('member');
         if (!member.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be muted.`);
         member = member.value;
@@ -22,8 +22,8 @@ module.exports = class extends Command {
         const reason = await args.rest('string').catch(() => null);
 
         if (!msg.guild.settings.get('muteRole')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The mute role has not yet been set up for this server. You can do so by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`); // eslint-disable-line max-len
-        if (!force && member.user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you mute yourself?`);
-        if (!force && member.user.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);
+        if (member.user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you mute yourself?`);
+        if (member.user.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);
 
         const user = await this.container.client.users.fetch(member.id).catch(() => null);
         const muteRole = msg.guild.roles.cache.get(msg.guild.settings.get('muteRole'));
