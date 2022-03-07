@@ -1,12 +1,12 @@
 const { Listener, Events } = require('@sapphire/framework');
 
-const autopaused = new Set();
-
 module.exports = class extends Listener {
 
     constructor(context, options) {
         super(context, { ...options, event: Events.VoiceStateUpdate });
     }
+
+    #autopaused = new Set();
 
     async run(oldState, newState) {
         if (!this.container.lavacord) return null;
@@ -20,14 +20,14 @@ module.exports = class extends Listener {
             this.container.client.commands.get('play').timeouts.delete(newState.guild.id);
             return this.container.lavacord.leave(newState.guild.id);
         }
-        if (newState.guild.me.voice.channel && channelMembers.size && this.autopaused.has(newState.guild.id)) {
-            this.autopaused.delete(newState.guild.id);
+        if (newState.guild.me.voice.channel && channelMembers.size && this.#autopaused.has(newState.guild.id)) {
+            this.#autopaused.delete(newState.guild.id);
             return this.container.lavacord.players.get(newState.guild.id).pause(false);
         }
         if (channelMembers.size) return null;
-        const { queue = [] } = await this.container.stores.get('gateways').get('musicGateway').get(newState.guild.id) || {};
+        const { queue } = await this.container.stores.get('gateways').get('musicGateway').get(newState.guild.id);
         if (!queue[0].info.isStream) {
-            this.autopaused.add(newState.guild.id);
+            this.#autopaused.add(newState.guild.id);
             this.container.lavacord.players.get(newState.guild.id).pause(true);
         }
         if (this.container.stores.get('gateways').get('guildGateway').get(newState.guild.id).donation >= 10) return null;
@@ -37,10 +37,6 @@ module.exports = class extends Listener {
             if (queue[0].requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').update(newState.guild.id, { queue: this.container.stores.get('gateways').get('musicGateway').defaults.queue });
             return null;
         }, 30000, newState.guild);
-    }
-
-    get autopaused() {
-        return autopaused;
     }
 
 };

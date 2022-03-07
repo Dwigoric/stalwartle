@@ -1,4 +1,5 @@
 const { Listener, Events } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { codeBlock } = require('@sapphire/utilities');
 const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
@@ -9,15 +10,12 @@ module.exports = class extends Listener {
         this.hook = null;
     }
 
-    async run(msg, command, params, error) {
+    async run(error, context) {
         const errorID = (this.container.client.shard ? this.container.client.shard.id.toString(36) : '') + Date.now().toString(36);
-        if (error instanceof Error) this.container.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
+        if (error instanceof Error) this.container.logger.error(`[COMMAND] ${context.command.path}\n${error.stack || error}`);
         if (error.message) {
-            msg
-                .send(`⚠ Whoa! You found a bug! Please catch this bug and send it with the **error ID \`${errorID}\`** using the \`bug\` command!${codeBlock('xl', error.message)}`)
-                .catch(err => this.container.client.emit('wtf', err));
-        } else {
-            return msg.sendMessage(error).catch(err => this.container.client.emit('wtf', err));
+            reply(context.message, `⚠ Whoa! You found a bug! Please catch this bug and send it with the **error ID \`${errorID}\`** using the \`bug\` command!${codeBlock('xl', error.message)}`)
+                .catch(err => this.container.logger.error(err));
         }
         if (error.stack && this.container.client.application.botPublic) {
             return this.hook.send({
@@ -27,10 +25,10 @@ module.exports = class extends Listener {
                     .setTitle(`Details of Error ID \`${errorID}\``)
                     .setDescription([
                         `**Shard ID**: ${this.container.client.shard ? this.container.client.shard.id : 'N/A'}`,
-                        `**Trigerrer**: ${msg.author} (${msg.author.id})`,
-                        `**Guild**: ${msg.guild ? `${escapeMarkdown(msg.guild.name)} (${msg.guild.id})` : '[Direct Messages]'}`,
-                        `**Channel**: ${msg.guild ? `#${escapeMarkdown(msg.channel.name)}` : '[Direct Messages]'} (${msg.channel.id})`,
-                        `**Command**: \`${escapeMarkdown(msg.content)}\``,
+                        `**Trigerrer**: ${context.message.author} (${context.message.author.id})`,
+                        `**Guild**: ${context.message.guild ? `${escapeMarkdown(context.message.guild.name)} (${context.message.guild.id})` : '[Direct Messages]'}`,
+                        `**Channel**: ${context.message.guild ? `#${escapeMarkdown(context.message.channel.name)}` : '[Direct Messages]'} (${context.message.channel.id})`,
+                        `**Command**: \`${escapeMarkdown(context.message.content)}\``,
                         codeBlock('js', error.message),
                         codeBlock('xl', error.stack)
                     ])

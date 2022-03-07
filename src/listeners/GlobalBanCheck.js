@@ -10,7 +10,7 @@ module.exports = class extends Listener {
     async run(member) {
         if (!this.container.stores.get('gateways').get('guildGateway').get(member.guild.id).globalBans) return null;
         if (!member.guild.me.permissions.has('BAN_MEMBERS')) {
-            member.guild.settings.reset('globalBans');
+            this.container.stores.get('gateways').get('guildGateway').reset(member.guild.id, 'globalBans');
             if (member.guild.owner.partial) await member.guild.owner.fetch();
             if (member.guild.owner.user.partial) await member.guild.owner.user.fetch();
             return member.guild.owner.user.send('⚠  ::  I do not have permission to ban. I\'ve disabled the global bans settings on your server.');
