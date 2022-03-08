@@ -17,6 +17,10 @@ class Gateway extends AliasPiece {
         else return this.defaults;
     }
 
+    has(id) {
+        return this.cache.has(id);
+    }
+
     async update(id, path, val) {
         const obj = typeof path === 'string' ? makeObject(path, val) : path;
         await this.container.database.update(this.collection, id, mergeObjects(obj, { id }), true);
