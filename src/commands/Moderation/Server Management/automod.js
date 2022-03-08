@@ -143,8 +143,6 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     #changeAction(guild, option, type) {
-        // eslint-disable-next-line max-len
-        if (!['antiInvite', 'antiSwear', 'antiSpam', 'mentionSpam', 'quota'].includes(type)) throw `${this.container.constants.EMOTES.xmark}  ::  The \`${option}\` option is only applicable for automod modules.`;
         this.container.stores.get('gateways').get('guildGateway').update(guild, `automod.options.${type}`, option);
     }
 

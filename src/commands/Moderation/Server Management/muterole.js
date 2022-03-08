@@ -26,7 +26,7 @@ module.exports = class extends SubCommandPluginCommand {
             color: 'DARKER_GREY',
             permissions: 0
         }).catch(() => null);
-        if (!newRole) throw `${this.container.constants.EMOTES.xmark}  ::  I cannot create the muted role. Please double-check my permissions.`;
+        if (!newRole) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot create the muted role. Please double-check my permissions.`);
         this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'muteRole', newRole.id);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully set this server's mute role to **${newRole.name}**.`);
     }

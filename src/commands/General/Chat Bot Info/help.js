@@ -38,7 +38,11 @@ module.exports = class extends Command {
         }
 
         if (!args.getFlags('all') && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
-            return (await this.buildDisplay(msg, [category, subcategory])).run(await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`), msg.author);
+            const display = await this.buildDisplay(msg, [category, subcategory]);
+
+            if (display === null) return null;
+
+            return display.run(await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`), msg.author);
         }
 
         return this.originalHelp(msg, args, [category, subcategory]);
@@ -109,11 +113,17 @@ module.exports = class extends Command {
         let cmds;
         if (!category && !subcategory) cmds = this.container.stores.get('commands');
         if (category) {
-            if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(category)) throw `${this.container.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
+            if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(category)) {
+                reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`);
+                return null;
+            }
             cmds = this.container.stores.get('commands').filter(cmd => cmd.category === category);
         }
         if (subcategory) {
-            if (!this.container.stores.get('commands').map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            if (!this.container.stores.get('commands').map(cmd => cmd.subCategory).includes(subcategory)) {
+                reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`);
+                return null;
+            }
             cmds = this.container.stores.get('commands').filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
         }
 
@@ -136,6 +146,7 @@ module.exports = class extends Command {
 
     async buildDisplay(message, [maincategory, subcategory]) {
         const commands = await this._fetchCommands(message, [maincategory ? toTitleCase(maincategory) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
+        if (commands === null) return null;
         const { prefix } = this.container.stores.get('gateways').get('guildGateway').get(message.guild.id);
         const display = new LazyPaginatedMessage({
             embedFooterSeparator: '|',
@@ -167,11 +178,17 @@ module.exports = class extends Command {
         let cmds;
         if (!maincategory && !subcategory) cmds = this.container.stores.get('commands');
         if (maincategory) {
-            if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(maincategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
+            if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(maincategory)) {
+                reply(message, `${this.container.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`);
+                return null;
+            }
             cmds = this.container.stores.get('commands').filter(cmd => cmd.category === maincategory);
         }
         if (subcategory) {
-            if (!this.container.stores.get('commands').map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            if (!this.container.stores.get('commands').map(cmd => cmd.subCategory).includes(subcategory)) {
+                reply(message, `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`);
+                return null;
+            }
             cmds = this.container.stores.get('commands').filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
         }
 

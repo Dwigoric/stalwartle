@@ -21,7 +21,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
-        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
+        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send(msgargs);
     }
@@ -32,8 +32,8 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
-        if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`;
-        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
+        if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`);
+        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         chan.send(msgargs);
         return msg.delete().catch(() => null);
@@ -45,7 +45,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
-        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
+        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send({
             embeds: [await new MessageEmbed()
@@ -63,8 +63,8 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
-        if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`;
-        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`;
+        if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`);
+        if (!chan.permissionsFor(this.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         chan.send({
             embeds: [await new MessageEmbed()
