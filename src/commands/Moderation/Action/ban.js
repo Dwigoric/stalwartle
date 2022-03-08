@@ -35,18 +35,8 @@ module.exports = class extends Command {
             if (!member.bannable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot ban this user.`);
         }
 
-        const options = { days };
-        if (reason) options.reason = reason;
-        if (duration && duration !== Infinity) {
-            this.container.tasks.create('Unban', {
-                user: user.id,
-                guild: msg.guild.id
-            }, duration.getTime() - Date.now());
-        }
-
-        await msg.guild.members.ban(user, options);
         msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
-        return this.container.client.emit('modlogAction', msg, user, reason, duration);
+        return this.container.client.emit('modlogAction', 'ban', msg.author, user, reason, msg.guild, { reason, duration, banDays: days });
     }
 
 };

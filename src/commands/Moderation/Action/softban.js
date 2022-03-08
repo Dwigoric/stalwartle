@@ -32,13 +32,8 @@ module.exports = class extends Command {
             if (!member.bannable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot ban this user.`);
         }
 
-        const options = { days };
-        if (reason) options.reason = reason;
-
-        await msg.guild.members.ban(user, options);
-        await msg.guild.members.unban(user, 'Softban released.');
         msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been softbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
-        return this.container.client.emit('modlogAction', msg, user, reason);
+        return this.container.client.emit('modlogAction', 'softban', msg.author, user, msg.guild, { reason });
     }
 
 };
