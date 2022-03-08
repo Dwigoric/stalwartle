@@ -18,7 +18,7 @@ module.exports = class extends SubCommandPluginCommand {
     async default(msg, args) {
         const chan = await args.pick('guildTextChannel').catch(() => msg.channel);
         let msgargs = await args.restResult('string');
-        if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
+        if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
         if (!chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
@@ -29,7 +29,7 @@ module.exports = class extends SubCommandPluginCommand {
     async delete(msg, args) {
         const chan = await args.pick('guildTextChannel').catch(() => msg.channel);
         let msgargs = await args.restResult('string');
-        if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
+        if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
         if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`);
@@ -42,7 +42,7 @@ module.exports = class extends SubCommandPluginCommand {
     async embed(msg, args) {
         const chan = await args.pick('guildTextChannel').catch(() => msg.channel);
         let msgargs = await args.restResult('string');
-        if (!msgargs) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
+        if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
         if (!chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
