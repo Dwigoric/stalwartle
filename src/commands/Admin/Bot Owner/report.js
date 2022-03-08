@@ -32,7 +32,7 @@ module.exports = class extends Command {
         repMsg = repMsg.value;
 
         let repCom = await args.rest('string');
-        if (!repUser.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
+        if (!repCom.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
         repCom = repCom.value;
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
