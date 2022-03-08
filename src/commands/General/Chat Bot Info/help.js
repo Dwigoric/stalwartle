@@ -31,7 +31,7 @@ module.exports = class extends Command {
                     .setTitle(`The \`${this.container.client.options.defaultPrefix}${category.name}\` command`)
                     .setDescription(category.description)
                     .addField('Usage', `\`${this.container.client.options.defaultPrefix}${category.usage}\``)
-                    .addField('Additional Information', category.detailedDescription)
+                    .addField('Additional Information', category.detailedDescription || 'No additional information.')
                     .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
                     .setFooter({ text: `Classification: ${category.category} → ${category.subCategory}` })]
             });
