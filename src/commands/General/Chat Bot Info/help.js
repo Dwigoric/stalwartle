@@ -1,73 +1,62 @@
-const { Command, RichDisplay } = require('@sapphire/framework');
-const { isFunction, toTitleCase } = require('@sapphire/utilities');
-const { MessageEmbed } = require('discord.js');
-
-const time = 1000 * 60 * 3;
+const { LazyPaginatedMessage } = require('@sapphire/discord.js-utilities');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
+const { toTitleCase } = require('@sapphire/utilities');
+const { MessageEmbed, Util: { splitMessage } } = require('discord.js');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['commands', 'cmds'],
             description: 'Sends the command list to our DMs. Make sure I can send you one!',
-            extendedHelp: [
+            detailedDescription: [
                 'If you want to get more information about a command, use `s.help <command>`.',
                 'If you want to get the commands for a specific category, use `s.help <category>`.',
                 'If you want to get the commands for a specific subcategory under a category, use `s.help <category>, <subcategory>`.'
             ].join('\n'),
-            guarded: true,
-            requiredPermissions: ['EMBED_LINKS'],
-            usage: '[Command:command|Category:string] [Subcategory:string]',
-            usageDelim: ', '
+            flags: ['all'],
+            requiredClientPermissions: ['EMBED_LINKS']
         });
-
-        // Cache the handlers
-        this.handlers = new Map();
     }
 
-    async messageRun(msg, [category, subcategory]) {
+    async messageRun(msg, args) {
+        const category = await args.pick('command').catch(() => args.pick('string').catch(() => null));
+        const subcategory = await args.pick('string').catch(() => null);
+
         if (category instanceof Command) {
-            return msg.send({
+            return reply(msg, {
                 embeds: [new MessageEmbed()
-                    .setTitle(`The \`${this.container.client.options.prefix}${category.name}\` command`)
-                    .setDescription(isFunction(category.description) ? category.description(msg.language) : category.description)
-                    .addField('Usage', `\`${this.container.client.options.prefix}${category.usage}\``)
-                    .addField('Additional Information', isFunction(category.extendedHelp) ? category.extendedHelp(msg.language) : category.extendedHelp)
+                    .setTitle(`The \`${this.container.client.options.defaultPrefix}${category.name}\` command`)
+                    .setDescription(category.description)
+                    .addField('Usage', `\`${this.container.client.options.defaultPrefix}${category.usage}\``)
+                    .addField('Additional Information', category.detailedDescription)
                     .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
                     .setFooter({ text: `Classification: ${category.category} → ${category.subCategory}` })]
             });
         }
 
-        if (!('all' in msg.flagArgs) && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
-            // Finish the previous handler
-            const previousHandler = this.handlers.get(msg.author.id);
-            if (previousHandler) previousHandler.stop();
-
-            const handler = await (await this.buildDisplay(msg, [category, subcategory])).run(await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`), {
-                filter: (reaction, user) => user.id === msg.author.id,
-                time
-            });
-            handler.on('end', () => this.handlers.delete(msg.author.id));
-            this.handlers.set(msg.author.id, handler);
-            return handler;
+        if (!args.getFlags('all') && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
+            return (await this.buildDisplay(msg, [category, subcategory])).run(await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`), msg.author);
         }
 
-        return this.originalHelp(msg, [category, subcategory]);
+        return this.originalHelp(msg, args, [category, subcategory]);
     }
 
-    async originalHelp(msg, [category, subcategory]) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
-        const method = this.container.client.user.bot ? 'author' : 'channel';
+    async originalHelp(msg, args, [category, subcategory]) {
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
         const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
+        if (help === null) return null;
         const categories = Object.keys(help);
         const helpMessage = [];
         for (let cat = 0; cat < categories.length; cat++) {
             helpMessage.push(`**↞――――― __${categories[cat]} Commands__ ―――――↠**\n`);
             const subCategories = Object.keys(help[categories[cat]]);
-            if (msg.flagArgs.all || subcategory || category) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
+            if (args.getFlags('all') || subcategory || category) for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇋ **[ ${subCategories[subCat]} ]** ⇋\n`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`, '\u200b'); // eslint-disable-line max-len
             else for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`⇒ ${subCategories[subCat]}`, '\u200b');
             if (cat === categories.length - 1) {
-                if (!msg.flagArgs.all) {
+                if (!args.getFlags('all')) {
                     helpMessage.push(
                         `\n**${'\\*'.repeat(75)}**`,
                         '***Say `s.help <category>` (e.g. `s.help Music`) to get the commands for that category.***',
@@ -106,82 +95,89 @@ module.exports = class extends Command {
             }
         }
 
-        return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-            .then(() => { if (msg.channel.type !== 'DM' && this.container.client.user.bot) msg.reply(msg.language.get('COMMAND_HELP_DM')); })
-            .catch(() => { if (msg.channel.type !== 'DM' && this.container.client.user.bot) msg.reply(msg.language.get('COMMAND_HELP_NODM')); });
+        return Promise.all(splitMessage(helpMessage.join('\n'), { char: '\u200b' }).map(helpMsgPart => msg.author.send(helpMsgPart)))
+            .then(() => { if (msg.channel.type !== 'DM') reply(msg, '📫  ::  The list of commands you have access to has been sent to our DMs!'); })
+            .catch(() => { if (msg.channel.type !== 'DM') reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You have DMs disabled, so I could not send you the command list in DMs.`); });
     }
 
     async buildHelp(msg, [category, subcategory]) {
         const help = {};
 
-        const commandNames = [...this.container.client.commands.keys()];
+        const commandNames = [...this.container.stores.get('commands').keys()];
         const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
         let cmds;
-        if (!category && !subcategory) cmds = this.container.client.commands;
+        if (!category && !subcategory) cmds = this.container.stores.get('commands');
         if (category) {
-            if (!this.container.client.commands.map(cmd => cmd.category).includes(category)) throw `${this.container.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
-            cmds = this.container.client.commands.filter(cmd => cmd.category === category);
+            if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(category)) throw `${this.container.constants.EMOTES.xmark}  ::  **${category}** is not a valid category!`;
+            cmds = this.container.stores.get('commands').filter(cmd => cmd.category === category);
         }
         if (subcategory) {
-            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
-            cmds = this.container.client.commands.filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
+            if (!this.container.stores.get('commands').map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            cmds = this.container.stores.get('commands').filter(cmd => cmd.category === category && cmd.subCategory === subcategory);
         }
 
         await Promise.all(cmds.map(async command => {
-            if (!await msg.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && ['General', 'Bot Owner'].includes(command.subCategory)) return null;
+            if (!(await this.container.stores.get('preconditions').get('DevsOnly').run(msg)).success && command.category === 'Admin' && command.subCategory === 'Bot Owner') return null;
             const cat = category || command.category;
             const subCat = subcategory || command.subCategory;
             if (!Object.prototype.hasOwnProperty.call(help, cat)) help[cat] = {};
             if (!Object.prototype.hasOwnProperty.call(help[cat], subCat)) help[cat][subCat] = [];
             const description = typeof command.description === 'function' ? command.description(msg.language) : command.description;
-            return help[cat][subCat].push(`\`${this.container.client.options.prefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
+            return help[cat][subCat].push(`\`${this.container.client.options.defaultPrefix}${command.name.padEnd(longest)}\` ⇒ ${description}`);
         }));
 
-        if (!Object.keys(help).length) throw `${this.container.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`;
+        if (!Object.keys(help).length) {
+            reply(msg, `${this.container.constants.EMOTES.xmark}  ::  It would seem that **${subcategory}** is not under **${category}**.`);
+            return null;
+        }
         return help;
     }
 
     async buildDisplay(message, [maincategory, subcategory]) {
         const commands = await this._fetchCommands(message, [maincategory ? toTitleCase(maincategory) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
-        const prefix = message.guildSettings.get('prefix');
-        const display = new RichDisplay();
+        const { prefix } = this.container.stores.get('gateways').get('guildGateway').get(message.guild.id);
+        const display = new LazyPaginatedMessage({
+            embedFooterSeparator: '|',
+            template: {
+                content: `${this.container.constants.EMOTES.tick}  ::  Command list loaded!`,
+                embeds: [new MessageEmbed().setFooter({ text: 'To know more about Donation Perks and ProTips from our developers, say `help` in DMs with Stalwartle!' })]
+            }
+        });
         const color = message.member.displayColor;
         for (const [category, list] of commands) {
-            display
-                .addPage(new MessageEmbed()
-                    .setTitle(`${category} Commands`)
-                    .setColor(color)
-                    .setDescription(list.map(this.formatCommand.bind(this, message, prefix, true)).join('\n')))
-                .setFooterSuffix(' | To know more about Donation Perks and ProTips from our developers, say `help` in DMs with Stalwartle!');
+            display.addPageEmbed(new MessageEmbed()
+                .setTitle(`${category} Commands`)
+                .setColor(color)
+                .setDescription(list.map(this.formatCommand.bind(this, prefix, true)).join('\n')));
         }
 
         return display;
     }
 
-    formatCommand(message, prefix, richDisplay, command) {
-        const description = isFunction(command.description) ? command.description(message.language) : command.description;
+    formatCommand(prefix, richDisplay, command) {
+        const { description } = command;
         return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
     }
 
     async _fetchCommands(message, [maincategory, subcategory]) {
-        const run = this.container.client.inhibitors.run.bind(this.container.client.inhibitors, message);
+        const run = this.container.stores.get('preconditions').run.bind(this.container.stores.get('preconditions'), message);
         const commands = new Map();
 
         let cmds;
-        if (!maincategory && !subcategory) cmds = this.container.client.commands;
+        if (!maincategory && !subcategory) cmds = this.container.stores.get('commands');
         if (maincategory) {
-            if (!this.container.client.commands.map(cmd => cmd.category).includes(maincategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
-            cmds = this.container.client.commands.filter(cmd => cmd.category === maincategory);
+            if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(maincategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${maincategory}** is not a valid category!`;
+            cmds = this.container.stores.get('commands').filter(cmd => cmd.category === maincategory);
         }
         if (subcategory) {
-            if (!this.container.client.commands.map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
-            cmds = this.container.client.commands.filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
+            if (!this.container.stores.get('commands').map(cmd => cmd.subCategory).includes(subcategory)) throw `${this.container.constants.EMOTES.xmark}  ::  **${subcategory}** is not a valid subcategory!`;
+            cmds = this.container.stores.get('commands').filter(cmd => cmd.category === maincategory && cmd.subCategory === subcategory);
         }
 
-        await Promise.all(cmds.map(command => run(command, true)
+        await Promise.all(cmds.map(command => run(command)
             .then(async () => {
-                if (!await message.hasAtLeastPermissionLevel(9) && command.category === 'Admin' && ['General', 'Bot Owner'].includes(command.subCategory)) return null;
+                if (!(await this.container.stores.get('preconditions').get('DevsOnly').run(message)).success && command.category === 'Admin' && command.subCategory === 'Bot Owner') return null;
                 const category = commands.get(`${command.category} - ${command.subCategory}`);
                 if (category) return category.push(command);
                 else return commands.set(`${command.category} - ${command.subCategory}`, [command]);
