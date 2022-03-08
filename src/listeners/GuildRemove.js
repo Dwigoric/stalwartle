@@ -38,7 +38,7 @@ module.exports = class extends Listener {
                 .setAuthor({ name: "I've been removed from a server" })
                 .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
                 .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
-                .addField('Guild Owner ID', guild.ownerID, true)
+                .addField('Guild Owner ID', guild.ownerId, true)
                 .addField('Guild Region', region, true)
                 .addField('Large Guild', guild.large ? '✅' : '❌', true)
                 .addField('Verified Guild', guild.verified ? '✅' : '❌', true)

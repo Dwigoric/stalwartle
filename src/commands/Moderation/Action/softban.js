@@ -24,7 +24,7 @@ module.exports = class extends Command {
 
         if (user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you ban yourself?`);
         if (user.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);
-        if (user.id === msg.guild.ownerID) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Pretty sure the server owner cannot be banned in the first place...`);
+        if (user.id === msg.guild.ownerId) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Pretty sure the server owner cannot be banned in the first place...`);
 
         const member = await msg.guild.members.fetch(user).catch(() => null);
         if (member) {

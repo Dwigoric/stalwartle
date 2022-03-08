@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
         if (member.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you kick yourself?`);
         if (member.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);
-        if (member.id === msg.guild.ownerID) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Pretty sure the server owner cannot be kicked...`);
+        if (member.id === msg.guild.ownerId) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Pretty sure the server owner cannot be kicked...`);
 
         if (msg.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You cannot kick this user.`);
         if (!member.kickable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot kick this user.`);

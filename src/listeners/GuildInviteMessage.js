@@ -10,7 +10,7 @@ module.exports = class extends Listener {
     async run(guild) {
         const message = new MessageEmbed()
             .setColor('#C62A29')
-            .setAuthor({ name: 'Thank you for having me!', iconURL: await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
+            .setAuthor({ name: 'Thank you for having me!', iconURL: await guild.members.fetch(guild.ownerId).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
             .setTitle(guild.name)
             .setFooter({ text: `${this.container.client.user.username} Added!`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
             .setThumbnail(guild.iconURL({ dynamic: true, size: 2048 }))

@@ -33,7 +33,7 @@ module.exports = class extends Listener {
         this.hook.send({
             embeds: [new MessageEmbed()
                 .setColor(0x2ECC71)
-                .setAuthor({ name: "I've been added to a new server!", iconURL: await guild.members.fetch(guild.ownerID).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
+                .setAuthor({ name: "I've been added to a new server!", iconURL: await guild.members.fetch(guild.ownerId).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
                 .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
                 .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
                 .addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
