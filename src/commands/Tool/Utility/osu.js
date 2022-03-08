@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
 const { reply } = require('@sapphire/plugin-editable-commands');
+require('dotenv').config();
 
 const MODS = Object.freeze({
     None: 0,

@@ -4,6 +4,7 @@ const SteamAPI = require('steamapi');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const { reply } = require('@sapphire/plugin-editable-commands');
+require('dotenv').config();
 
 module.exports = class extends Command {
 

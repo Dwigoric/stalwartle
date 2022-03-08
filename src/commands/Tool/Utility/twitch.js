@@ -2,6 +2,7 @@ const { Command } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
+require('dotenv').config();
 
 const TWITCH_CLIENT_ID = 'd7sds6f41zr45c3wxkqkkslpcjukig';
 let TWITCH_API_TOKEN = '';

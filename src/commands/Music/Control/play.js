@@ -3,6 +3,7 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { parse } = require('url');
+require('dotenv').config();
 
 const prompts = new Map();
 const timeouts = new Map();
