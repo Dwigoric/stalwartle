@@ -1,8 +1,8 @@
 const { Command } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { Duration } = require('@sapphire/time-utilities');
 const { MessageEmbed } = require('discord.js');
 const { uptime, loadavg } = require('os');
+const moment = require('moment-timezone');
 
 module.exports = class extends Command {
 
@@ -31,9 +31,9 @@ module.exports = class extends Command {
                     `**Voice Connections**: ${Array.from(this.container.lavacord.players.values()).filter(player => player.playing).length}`
                 ].join('\n'), true)
                 .addField('⏱ Uptime', [
-                    `**Host**: ${Duration.toNow(now - (uptime() * 1000))}`,
-                    `**Client**: ${Duration.toNow(now - this.container.client.uptime)}`,
-                    `**Total**: ${Duration.toNow(now - (process.uptime() * 1000))}`
+                    `**Host**: ${moment(now - (uptime() * 1000)).fromNow(true)}`,
+                    `**Client**: ${moment(now - this.container.client.uptime).fromNow(true)}`,
+                    `**Total**: ${moment(now - (process.uptime() * 1000)).fromNow(true)}`
                 ].join('\n'), true)
                 .addField('💾 Usage', [
                     `**CPU Load**: ${Math.round(loadavg()[0] * 1000) / 100}%`,

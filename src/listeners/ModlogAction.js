@@ -1,7 +1,7 @@
 const { Listener } = require('@sapphire/framework');
-const { Duration } = require('@sapphire/time-utilities');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
+const moment = require('moment-timezone');
 
 module.exports = class extends Listener {
 
@@ -74,7 +74,7 @@ module.exports = class extends Listener {
                 .addField('Moderator', moderator, true)
                 .addField(user.bot ? 'Bot' : 'User', user, true);
             if (reason) embed.addField('Reason', reason, true);
-            if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
+            if (duration) embed.addField('Duration', duration === Infinity ? '∞' : moment(duration).fromNow(true), true);
             if (moderator.id === this.container.client.user.id) {
                 embed.addField('Channel', channel, true);
                 if (this.container.stores.get('gateways').get('guildGateway').get(guild.id).modlogShowContent) embed.addField('Content', content > 900 ? `${content.substring(0, 900)}...` : content);

@@ -1,5 +1,4 @@
 const { Command } = require('@sapphire/framework');
-const { Duration } = require('@sapphire/time-utilities');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
@@ -61,7 +60,7 @@ module.exports = class extends Command {
 
         msg.send([
             `${this.container.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
-            `You will be reminded of this in approximately ${Duration.toNow(reminder.time)}.`,
+            `You will be reminded of this in approximately ${moment(reminder.time).fromNow(true)}.`,
             reminder.data.forceChannel ?
                 'The people of this channel will be reminded.' :
                 "I will first try to remind you in DMs. If I can't send you one, I will then try to remind you in the channel you run this command."
@@ -93,7 +92,7 @@ module.exports = class extends Command {
             const remPage = Object.values(userRems).map(rmd => rmd.id).indexOf(rem.id) + 1;
             remList[remPage] = rem.id;
             const text = rem.data.text ? `: ${escapeMarkdown(rem.data.text)}` : '.';
-            remList.list += `\`${remPage}\` (\`${rem.id}\`) | You'll be reminded in approximately **${Duration.toNow(rem.time)}**${text}\n`;
+            remList.list += `\`${remPage}\` (\`${rem.id}\`) | You'll be reminded in approximately **${moment(rem.time).fromNow(true)}**${text}\n`;
         });
         return remList;
     }
