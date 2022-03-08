@@ -60,8 +60,6 @@ const guilds = {
     ignored: [],
     logging: true,
     modlogShowContent: true,
-    muted: [],
-    muteRole: '',
     selfroles: [],
     autorole: {
         user: '',

@@ -27,7 +27,7 @@ module.exports = class extends Listener {
 
         switch (action) {
             case 'ban':
-                this.#ban(guild, user, banDays, { reason, duration });
+                this.#ban(guild, user, banDays, reason, duration);
                 break;
             case 'unban':
                 this.#unban(guild, user, reason);
@@ -40,10 +40,10 @@ module.exports = class extends Listener {
                 this.#kick(guild, user, reason);
                 break;
             case 'mute':
-                this.#mute();
+                this.#mute(guild, await guild.members.fetch(user.id, { cache: false }), reason, duration);
                 break;
             case 'unmute':
-                this.#unmute();
+                this.#unmute(await guild.members.fetch(user.id, { cache: false }), reason);
                 break;
         }
 
@@ -106,7 +106,7 @@ module.exports = class extends Listener {
         return this.container.cache.members.get(member.id).length >= limit;
     }
 
-    async #ban(guild, user, days, { reason, duration }) {
+    async #ban(guild, user, days, reason, duration) {
         const options = { days };
         if (reason) options.reason = reason;
         if (duration && duration !== Infinity) {
@@ -127,12 +127,19 @@ module.exports = class extends Listener {
         return guild.members.kick(user, reason);
     }
 
-    async #mute() {
-        // Placeholder.
+    async #mute(guild, member, reason, duration) {
+        if (duration && duration !== Infinity) {
+            this.container.tasks.create('Unmute', {
+                user: member.id,
+                guild: guild.id
+            }, duration.getTime() - Date.now());
+        }
+
+        return member.disableCommunicationUntil(duration, reason);
     }
 
-    async #unmute() {
-        // Placeholder.
+    async #unmute(member, reason) {
+        return member.disableCommunicationUntil(null, reason);
     }
 
 };
