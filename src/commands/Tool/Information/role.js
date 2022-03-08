@@ -1,27 +1,31 @@
-const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['ri', 'rinfo', 'roleinfo'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            requiredPermissions: ['EMBED_LINKS'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives information about a role.',
-            extendedHelp: "You can use the role's name in providing the role.",
-            usage: '[id] <Role:role>',
-            usageDelim: ' ',
-            subcommands: true
+            detailedDescription: "You can use the role's name in providing the role.",
+            subCommands: ['id', { input: 'default', default: true }]
         });
     }
 
-    async messageRun(msg, [role]) {
-        const timezone = msg.author.settings.get('timezone');
+    async messageRun(msg, args) {
+        let role = await args.pickResult('role');
+        if (!role.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the role.`);
+        role = role.value;
 
-        function hexToRgb(hex) {
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
+
+        const hexToRgb = hex => {
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, (mm, rd, gn, bl) => rd + rd + gn + gn + bl + bl);
             var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -32,16 +36,16 @@ module.exports = class extends Command {
             } : null;
 
             return [rgbObj.rd, rgbObj.gn, rgbObj.bl];
-        }
+        };
 
-        reply(msg, {
+        return reply(msg, {
             embeds: [new MessageEmbed()
                 .setColor(role.hexColor)
                 .setAuthor({ name: `Role information for ${role.name}` })
                 .addField('ID', role.id)
-                .addField('Hoisted', `${role.hoist}`.replace(/^./, i => i.toUpperCase()), true)
-                .addField('Managed', `${role.managed}`.replace(/^./, i => i.toUpperCase()), true)
-                .addField('Mentionable', `${role.mentionable}`.replace(/^./, i => i.toUpperCase()), true)
+                .addField('Hoisted', String(role.hoist).replace(/^./, i => i.toUpperCase()), true)
+                .addField('Managed', String(role.managed).replace(/^./, i => i.toUpperCase()), true)
+                .addField('Mentionable', String(role.mentionable).replace(/^./, i => i.toUpperCase()), true)
                 .addField('Color', `HEX: ${role.hexColor}\nRGB: ${hexToRgb(role.hexColor).join(', ')}`, true)
                 .addField('Position', `${msg.guild.roles.cache.size - role.position} out of ${msg.guild.roles.cache.size}`, true)
                 .addField('Created', `${moment(role.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(role.createdAt).fromNow()}`)
@@ -50,8 +54,12 @@ module.exports = class extends Command {
         });
     }
 
-    async id(msg, [role]) {
-        return msg.send(`The role ID of **${role.name}** is \`${role.id}\`.`);
+    async id(msg, args) {
+        let role = await args.pickResult('role');
+        if (!role.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the role.`);
+        role = role.value;
+
+        return reply(msg, `The role ID of **${role.name}** is \`${role.id}\`.`);
     }
 
 };

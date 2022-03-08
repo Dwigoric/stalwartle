@@ -5,17 +5,17 @@ const moment = require('moment-timezone');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['bot', 'bi', 'details', 'what'],
-            guarded: true,
-            requiredPermissions: ['EMBED_LINKS'],
-            description: language => language.get('COMMAND_INFO_DESCRIPTION')
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Provides some information about Stalwartle.'
         });
     }
 
     async messageRun(msg) {
-        const timezone = msg.author.settings.get('timezone');
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
         const owners = await Promise.all(require('../../../config').config.owners.map(owner => this.container.client.users.fetch(owner).then(own => own.tag)));
 
         reply(msg, {
