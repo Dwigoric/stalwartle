@@ -11,10 +11,10 @@ module.exports = class extends Listener {
         if (!newState.guild.me.permissions.has('MOVE_MEMBERS')) return null;
         if (!this.container.stores.get('gateways').get('guildGateway').get(newState.guild.id, 'afkChannelOnAfk')) return null;
         if (!newState.member.voice.channel) return null;
-        if (!newState.guild.afkChannelID) return null;
-        if (newState.channelID === newState.guild.afkChannelID) return null;
+        if (!newState.guild.afkChannelId) return null;
+        if (newState.channelID === newState.guild.afkChannelId) return null;
         if (!this.container.stores.get('gateways').get('afkGateway').get(newState.user.id).timestamp) return null;
-        return newState.setChannel(newState.guild.afkChannelID, 'Moved to AFK channel due to AFK status');
+        return newState.setChannel(newState.guild.afkChannelId, 'Moved to AFK channel due to AFK status');
     }
 
 };
