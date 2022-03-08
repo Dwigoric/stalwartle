@@ -13,8 +13,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let question = await args.pick('message').catch(() => args.pick('rest')).catch(() => null);
-        if (!question === null) return reply(msg, `${this.containter.constants.EMOTES.xmark}  ::  Please provide the message (ID/link) or the question to be answered.`);
+        let question = await args.pick('message').catch(() => args.rest('string')).catch(() => null);
+        if (question === null) return reply(msg, `${this.containter.constants.EMOTES.xmark}  ::  Please provide the message (ID/link) or the question to be answered.`);
 
         if (question instanceof Message) question = question.content;
         return reply(msg, `❓  ::  ${question}\n🎱  ::  ${answers[Math.floor(Math.random() * answers.length)]}`, { disableMentions: 'everyone' });
