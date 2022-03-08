@@ -12,7 +12,7 @@ exports.config = {
     // If the bot will be insensitive to the command case
     caseInsensitiveCommands: true,
     // If your bot should be able to mention
-    allowedMentions: ['roles', 'users'],
+    allowedMentions: { parse: ['roles', 'users'] },
     // The time in ms to add to ratelimits, to ensure you won't hit a 429 response
     restTimeOffset: 500,
     // A presence to login with
