@@ -18,7 +18,7 @@ module.exports = class extends Command {
         let member = await args.pickResult('member');
         if (!member.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be muted.`);
         member = member.value;
-        const duration = await args.pick('duration').catch(() => Infinity);
+        const duration = await args.pick('duration').catch(() => Date.now() + (1000 * 60 * 5));
         const reason = await args.rest('string').catch(() => null);
 
         if (member.user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you mute yourself?`);
