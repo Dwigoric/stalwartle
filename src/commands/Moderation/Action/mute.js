@@ -23,6 +23,7 @@ module.exports = class extends Command {
 
         if (member.user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you mute yourself?`);
         if (member.user.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);
+        if (!member.moderatable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot mute that user due to lacking permissions!`);
 
         msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.user.id}\`) has been muted. ${reason ? `**Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', 'mute', msg.author, member.user, msg.guild, { reason, duration });
