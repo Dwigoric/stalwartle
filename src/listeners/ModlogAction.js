@@ -41,7 +41,7 @@ module.exports = class extends Listener {
                 this.#kick(guild, user, reason);
                 break;
             case 'mute':
-                this.#mute(guild, await guild.members.fetch(user.id, { cache: false }), reason, duration);
+                this.#mute(await guild.members.fetch(user.id, { cache: false }), reason, duration);
                 break;
             case 'unmute':
                 this.#unmute(await guild.members.fetch(user.id, { cache: false }), reason);
@@ -128,14 +128,7 @@ module.exports = class extends Listener {
         return guild.members.kick(user, reason);
     }
 
-    async #mute(guild, member, reason, duration) {
-        if (duration && duration !== Infinity) {
-            this.container.tasks.create('Unmute', {
-                user: member.id,
-                guild: guild.id
-            }, duration.getTime() - Date.now());
-        }
-
+    async #mute(member, reason, duration) {
         return member.disableCommunicationUntil(duration, reason);
     }
 
