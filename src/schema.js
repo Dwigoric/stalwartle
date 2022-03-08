@@ -47,7 +47,7 @@ const users = {
     cookies: 0,
     hpBoost: 0,
     osu: '',
-    timezone: 'GMT'
+    timezone: 'UTC'
 };
 
 const guilds = {
