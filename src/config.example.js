@@ -72,6 +72,3 @@ exports.mongodb = {
     // Additional options for Mongo DB
     options: {}
 };
-
-// The token for this bot to login with
-exports.token = '';

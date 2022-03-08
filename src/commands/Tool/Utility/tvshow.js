@@ -24,7 +24,7 @@ module.exports = class extends Command {
         await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading TV show...`);
 
         const params = new URLSearchParams();
-        params.set('api_key', this.container.auth.tmdbAPIkey);
+        params.set('api_key', process.env.TMDB_API_KEY); // eslint-disable-line no-process-env
         params.set('query', query);
         const request = await fetch(`https://api.themoviedb.org/3/search/tv?${params}`).then(res => res.json());
         const short = request.results[page - 1];

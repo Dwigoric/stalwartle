@@ -17,7 +17,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading image...`);
-        const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${args.getFlags('gif')}`, { headers: { Authorization: `Bearer ${this.container.auth.ksoftAPIkey}` } }).then(res => res.json()); // eslint-disable-line max-len
+        const result = await fetch(`https://api.ksoft.si/images/random-nsfw?gifs=${args.getFlags('gif')}`, { headers: { Authorization: `Bearer ${process.env.KSOFT_API_KEY}` } }).then(res => res.json()); // eslint-disable-line max-len,no-process-env
         reply(msg, { files: [{ attachment: result.image_url }], content: `<${result.source}>` });
     }
 

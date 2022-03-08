@@ -27,7 +27,6 @@ class Stalwartle extends SapphireClient {
         container.lavacord = null;
         container.spotifyParser = null;
         container.constants = require('../util/constants');
-        container.auth = require('../../auth');
 
         this.once('ready', this._initplayer.bind(this));
 
@@ -49,21 +48,21 @@ class Stalwartle extends SapphireClient {
     }
 
     async postStats() {
-        if (container.auth.ctxAPIkey) {
+        if (process.env.CARBONITEX_API_KEY) { // eslint-disable-line no-process-env
             fetch('https://www.carbonitex.net/discord/data/botdata.php', {
                 method: 'POST',
-                body: JSON.stringify({ key: container.auth.ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
+                body: JSON.stringify({ key: process.env.CARBONITEX_API_KEY, server_count: await this.guildCount() }), // eslint-disable-line camelcase,no-process-env
                 headers: { 'Content-Type': 'application/json' }
             });
         }
-        if (container.auth.dblAPIkey) {
+        if (process.env.TOPGG_API_KEY) { // eslint-disable-line no-process-env
             fetch(`https://top.gg/api/bots/${this.user.id}/stats`, {
                 method: 'POST',
                 body: JSON.stringify({ server_count: await this.guildCount(), shard_count: this.options.shardCount }), // eslint-disable-line camelcase
-                headers: { Authorization: container.auth.dblAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: process.env.TOPGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             });
         }
-        if (container.auth.dbl2APIkey) {
+        if (process.env.DISCORDBOTLIST_API_KEY) { // eslint-disable-line no-process-env
             fetch(`https://discordbotlist.com/api/v1/bots/${this.user.id}/stats`, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -71,28 +70,28 @@ class Stalwartle extends SapphireClient {
                     users: await this.userCount(),
                     voice_connections: Array.from(container.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
                 }),
-                headers: { Authorization: `Bot ${container.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
+                headers: { Authorization: `Bot ${process.env.DISCORDBOTLIST_API_KEY}`, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             });
         }
-        if (container.auth.dcbAPIkey) {
+        if (process.env.DISCORDBOTSGG_API_KEY) { // eslint-disable-line no-process-env
             fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
                 method: 'POST',
                 body: JSON.stringify({ guildCount: await this.guildCount() }),
-                headers: { Authorization: container.auth.dcbAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: process.env.DISCORDBOTSGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             });
         }
-        if (container.auth.blsAPIkey) {
+        if (process.env.BOTLISTSPACE_API_KEY) { // eslint-disable-line no-process-env
             fetch(`https://api.botlist.space/v1/bots/${this.user.id}`, {
                 method: 'POST',
                 body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
-                headers: { Authorization: container.auth.blsAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: process.env.BOTLISTSPACE_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             });
         }
-        if (container.auth.bodAPIkey) {
+        if (process.env.BOTSONDISCORD_API_KEY) { // eslint-disable-line no-process-env
             fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
                 method: 'POST',
                 body: JSON.stringify({ guildCount: await this.guildCount() }),
-                headers: { Authorization: container.auth.bodAPIkey, 'Content-Type': 'application/json' }
+                headers: { Authorization: process.env.BOTSONDISCORD_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             });
         }
     }
@@ -124,7 +123,7 @@ class Stalwartle extends SapphireClient {
             user: this.user.id,
             shards: this.options.shardCount
         });
-        container.spotifyParser = new SpotifyParser(lavalinkNodes[0], container.auth.spotifyClientID, container.auth.spotifyClientSecret);
+        container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
         if (!container.lavacord.idealNodes.length) container.lavacord.connect();
         return true;
     }

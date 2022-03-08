@@ -48,7 +48,7 @@ module.exports = class extends Command {
     async renewToken() {
         const params = new URLSearchParams();
         params.set('client_id', TWITCH_CLIENT_ID);
-        params.set('client_secret', this.container.auth.twitchAPIkey);
+        params.set('client_secret', process.env.TWITCH_API_KEY); // eslint-disable-line no-process-env
         params.set('grant_type', 'client_credentials');
         const { access_token, expires_in } = await fetch(`https://id.twitch.tv/oauth2/token?${params}`, { method: 'POST' }).then(res => res.json()); // eslint-disable-line camelcase
 

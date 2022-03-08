@@ -93,7 +93,7 @@ module.exports = class extends Command {
         else mode = 0;
 
         const params = new URLSearchParams();
-        params.set('k', this.container.auth.osuAPIkey);
+        params.set('k', process.env.OSU_API_KEY); // eslint-disable-line no-process-env
         params.set('m', mode);
         params.set('u', username.join(this.usageDelim));
         params.set('type', 'string');
@@ -145,7 +145,7 @@ module.exports = class extends Command {
         await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading beatmap...`);
 
         const params = new URLSearchParams();
-        params.set('k', this.container.auth.osuAPIkey);
+        params.set('k', process.env.OSU_API_KEY); // eslint-disable-line no-process-env
         params.set('b', mapID[0]);
         params.set('m', mode);
         const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?${params}`).then(res => res.json());
@@ -210,7 +210,7 @@ module.exports = class extends Command {
         };
 
         const params = new URLSearchParams();
-        params.set('k', this.container.auth.osuAPIkey);
+        params.set('k', process.env.OSU_API_KEY); // eslint-disable-line no-process-env
         params.set('u', username);
         params.set('type', 'string');
         const userReq = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());

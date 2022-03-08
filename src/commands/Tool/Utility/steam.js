@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
         const params = new URLSearchParams();
         params.set('term', game);
-        const steam = new SteamAPI(this.container.auth.steamAPIkey),
+        const steam = new SteamAPI(process.env.STEAM_API_KEY), // eslint-disable-line no-process-env
             embed = new MessageEmbed(),
             steamSearch = await fetch(`http://store.steampowered.com/search?${params}`).then(res => res.text()).catch(() => null);
 

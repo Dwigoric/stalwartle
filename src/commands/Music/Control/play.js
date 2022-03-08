@@ -250,7 +250,7 @@ module.exports = class extends Command {
                 params.set('part', 'snippet');
                 params.set('relatedToVideoId', previous.info.identifier);
                 params.set('type', 'video');
-                params.set('key', this.container.auth.googleAPIkey);
+                params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
                 const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
                 if (items && items.length) {
                     const relatedVideo = items[Math.floor(Math.random() * items.length)];

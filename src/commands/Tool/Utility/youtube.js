@@ -35,7 +35,7 @@ module.exports = class extends Command {
         const timezone = msg.author.settings.get('timezone');
 
         const params = new URLSearchParams();
-        params.set('key', this.container.auth.googleAPIkey);
+        params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
         params.set('part', 'snippet');
         params.set('maxResults', 1);
         params.set('q', query.join(this.usageDelim));
