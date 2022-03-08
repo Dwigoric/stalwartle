@@ -25,7 +25,7 @@ module.exports = class extends Command {
         if (member.user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you mute yourself?`);
         if (member.user.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);
 
-        const user = await this.container.client.users.fetch(member.id).catch(() => null);
+        const { user } = member;
         const muteRole = msg.guild.roles.cache.get(msg.guild.settings.get('muteRole'));
         if (!muteRole) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! The mute role has been deleted. Please reconfigure this server's mute role by using the \`${msg.guild.settings.get('prefix')}muterole\` command.`); // eslint-disable-line max-len
         if (muteRole.position >= msg.guild.me.roles.highest.position) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The mute role **${muteRole.name}** is higher than me, so I can't give ${user.tag} the mute role.`); // eslint-disable-line max-len
@@ -36,8 +36,12 @@ module.exports = class extends Command {
             else if (channel.type === 'GUILD_VOICE') channel.updateOverwrite(muteRole, { SPEAK: false }, 'Muted');
             else channel.updateOverwrite(muteRole, { SEND_MESSAGES: false, SPEAK: false }, 'Muted');
         }
+
         await member.roles.add(muteRole, 'Muted');
-        await msg.guild.settings.update('muted', member.user.id, { arrayAction: 'add' });
+
+        const { muted } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
+        muted.push(member.id);
+        await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'muted', muted);
         if (duration && duration !== Infinity) {
             this.container.tasks.create('Unmute', {
                 user: user.id,
