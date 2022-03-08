@@ -12,7 +12,7 @@ module.exports = class extends Command {
             detailedDescription: [
                 'If you want a custom ASCII character width (e.g. to customize to your screen resolution) run `s.userconf set bannerWidth (integer)`.',
                 'By default, the character width is not set.'
-            ]
+            ].join('\n')
         });
     }
 

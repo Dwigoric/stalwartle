@@ -1,22 +1,25 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             description: 'Marks you as AFK. Supplying a reason is optional.',
-            extendedHelp: [
+            detailedDescription: [
                 "If someone mentions you, I will inform them that you are AFK (if you are), including how long you've been AFK.",
                 'If you want me to ignore a channel for you from AFK stuff, just use `s.userconf set afkIgnore <channel>`. Note that this applies only for you.'
-            ],
-            usage: '[Reason:string]'
+            ].join('\n')
         });
     }
 
-    async messageRun(msg, [reason = null]) {
-        if (await this.container.databases.default.has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
+    async messageRun(msg, args) {
+        const reason = await args.rest('string').catch(() => null);
+
+        if (await this.container.stores.get('gateways').get('afkGateway').has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
             await this.container.databases.default.delete('afk', msg.author.id);
-            return msg.send(`${this.container.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);
+            return reply(msg, `${this.container.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);
         }
 
         if (typeof reason === 'string' && reason.length > 1024) throw `${this.container.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`;
