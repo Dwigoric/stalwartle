@@ -60,11 +60,11 @@ module.exports = class extends Command {
                     true)
                 .addField(`Available Platform${platforms.length === 1 ? '' : 's'}`, platforms.join(', '), true)
                 .addField('Controller Support', steamData.controller_support ? toTitleCase(steamData.controller_support) : 'None', true)
-                .addField('Age Limit', steamData.required_age !== 0 ? steamData.required_age : 'Everyone', true)
-                .addField(`Genre${genres.length === 1 ? '' : 's'}`, genres.length ? genres.join(', ') : 'N/A')
-                .addField(`Publisher${steamData.publishers.length === 1 ? '' : 's'}`, steamData.publishers.join('\n').length ? steamData.publishers : 'N/A', true);
+                .addField('Age Limit', steamData.required_age !== 0 ? String(steamData.required_age) : 'Everyone', true)
+                .addField(`Genre${genres.length === 1 ? '' : 's'}`, String(genres.length) ? genres.join(', ') : 'N/A')
+                .addField(`Publisher${steamData.publishers.length === 1 ? '' : 's'}`, steamData.publishers.join('\n').length ? steamData.publishers.join('\n') : 'N/A', true);
 
-            if (steamData.developers) embed.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers.join('\n').length ? steamData.developers : 'N/A', true);
+            if (steamData.developers) embed.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers.join('\n').length ? steamData.developers.join('\n') : 'N/A', true);
             if (steamData.release_date.date) embed.addField('Date Released', steamData.release_date.date, true);
             reply(msg, { embeds: [embed] });
         }

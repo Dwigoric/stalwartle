@@ -35,9 +35,9 @@ module.exports = class extends Command {
                 .setThumbnail(manga.image_url)
                 .setDescription(manga.synopsis)
                 .setURL(manga.url)
-                .addField('Volumes', manga.volumes, true)
-                .addField('Chapters', manga.chapters, true)
-                .addField('Score', manga.score, true)]
+                .addField('Volumes', String(manga.volumes), true)
+                .addField('Chapters', String(manga.chapters), true)
+                .addField('Score', String(manga.score), true)]
         });
     }
 

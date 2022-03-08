@@ -29,17 +29,17 @@ module.exports = class extends Command {
                     `**Users**: ${(await this.container.client.userCount()).toLocaleString()}`,
                     `**Servers**: ${(await this.container.client.guildCount()).toLocaleString()}`,
                     `**Voice Connections**: ${Array.from(this.container.lavacord.players.values()).filter(player => player.playing).length}`
-                ], true)
+                ].join('\n'), true)
                 .addField('⏱ Uptime', [
                     `**Host**: ${Duration.toNow(now - (uptime() * 1000))}`,
                     `**Client**: ${Duration.toNow(now - this.container.client.uptime)}`,
                     `**Total**: ${Duration.toNow(now - (process.uptime() * 1000))}`
-                ], true)
+                ].join('\n'), true)
                 .addField('💾 Usage', [
                     `**CPU Load**: ${Math.round(loadavg()[0] * 1000) / 100}%`,
                     `**RAM Used**: ${Math.round(100 * (process.memoryUsage().heapUsed / 1048576)) / 100}MB`,
                     `**Node.js**: ${Math.round(100 * (process.memoryUsage().heapTotal / 1048576)) / 100}MB`
-                ], true)]
+                ].join('\n'), true)]
         });
     }
 

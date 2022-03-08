@@ -220,7 +220,7 @@ module.exports = class extends Command {
                     .setDescription(`by ${author}`)
                     // eslint-disable-next-line max-len
                     .setFooter({ text: `For various music settings, run \`${msg.guild.settings.get('prefix')}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.` })
-                    .addField('Queue Position', queue.length === 1 ? 'Now Playing' : queue.length - 1, true)
+                    .addField('Queue Position', queue.length === 1 ? 'Now Playing' : String(queue.length - 1), true)
                     .addField('Duration', isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length), true)
                     .addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)] });
             }

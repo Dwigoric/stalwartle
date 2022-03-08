@@ -35,9 +35,9 @@ module.exports = class extends Command {
                 .setThumbnail(anime.image_url)
                 .setDescription(anime.synopsis)
                 .setURL(anime.url)
-                .addField('Episodes', anime.episodes, true)
-                .addField('Rating', anime.rated, true)
-                .addField('Score', anime.score, true)]
+                .addField('Episodes', String(anime.episodes), true)
+                .addField('Rating', String(anime.rated), true)
+                .addField('Score', String(anime.score), true)]
         });
     }
 

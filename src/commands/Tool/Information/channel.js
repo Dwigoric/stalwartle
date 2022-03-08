@@ -39,7 +39,7 @@ module.exports = class extends SubCommandPluginCommand {
         } else if (chan.type === 'GUILD_VOICE') {
             embed
                 .addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
-                .addField('User Limit', chan.userLimit, true);
+                .addField('User Limit', String(chan.userLimit), true);
         }
         return reply(msg, { embeds: [embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`)] });
     }

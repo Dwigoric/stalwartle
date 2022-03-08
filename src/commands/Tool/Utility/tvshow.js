@@ -51,14 +51,14 @@ module.exports = class extends Command {
         if (tmdb.origin_country.length) embed.addField('Country', tmdb.origin_country[0], true);
         embed
             .addField('Language', tmdb.original_language.toUpperCase(), true)
-            .addField('Vote Count', tmdb.vote_count, true)
+            .addField('Vote Count', String(tmdb.vote_count), true)
             .addField('User Score', `${+`${`${Math.round(`${`${(tmdb.vote_average / 10) * 100}e+2`}`)}e-2`}`}%`, true)
-            .addField('Popularity', tmdb.popularity, true);
+            .addField('Popularity', String(tmdb.popularity), true);
         if (runtime.length) embed.addField(`Runtime${runtime.length === 1 ? '' : 's'}`, `${runtime.join(' | ')} minutes`, true);
         if (tmdb.first_air_date) embed.addField('First Air Date', moment(tmdb.first_air_date).tz(timezone).format('dddd, LL'), true);
         if (tmdb.last_air_date) embed.addField('Last Air Date', moment(tmdb.last_air_date).tz(timezone).format('dddd, LL'), true);
-        if (producers.length) embed.addField(`Production Compan${producers.length === 1 ? 'y' : 'ies'}`, producers, true);
-        if (networks.length) embed.addField(`Network${networks.length === 1 ? '' : 's'}`, networks, true);
+        if (producers.length) embed.addField(`Production Compan${producers.length === 1 ? 'y' : 'ies'}`, producers.join('\n'), true);
+        if (networks.length) embed.addField(`Network${networks.length === 1 ? '' : 's'}`, networks.join('\n'), true);
         embed
             .addField('Status', tmdb.status, true)
             .addField('In Production', tmdb.in_production ? 'Yep' : 'Nope', true);

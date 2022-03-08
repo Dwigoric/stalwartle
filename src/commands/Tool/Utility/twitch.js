@@ -42,7 +42,7 @@ module.exports = class extends Command {
             .setDescription(channel.description)
             .setFooter({ text: 'Click at the account name above to go to the channel.' })
             .addField('Account ID', channel.id, true)
-            .addField('Channel Views', channel.view_count, true)
+            .addField('Channel Views', String(channel.view_count), true)
         ] });
     }
 

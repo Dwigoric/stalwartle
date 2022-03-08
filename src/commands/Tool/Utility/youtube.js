@@ -65,7 +65,7 @@ module.exports = class extends Command {
                 .addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
         }
         embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS z'))
-            .addField('Description', request.snippet.description ? request.snippet.description : 'No Description');
+            .addField('Description', request.snippet.description || 'No Description');
 
         return reply(msg, { embeds: [embed] });
     }

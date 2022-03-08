@@ -118,8 +118,8 @@ module.exports = class extends Command {
             .setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
             .addField(`Country Rank (${user.country})`, Number(user.pp_country_rank).toLocaleString(), true)
             .addField(`Level ${parseInt(user.level)}`, `${+`${`${Math.round(`${`${(user.level - parseInt(user.level)) * 100}e+2`}`)}e-2`}`}% gained to level ${parseInt(user.level) + 1}`, true)
-            .addField('Hits', [`300s: ${Number(user.count300).toLocaleString()}`, `100s: ${Number(user.count100).toLocaleString()}`, `50s: ${Number(user.count50).toLocaleString()}`], true)
-            .addField('Accuracy', accuracy, true)
+            .addField('Hits', [`300s: ${Number(user.count300).toLocaleString()}`, `100s: ${Number(user.count100).toLocaleString()}`, `50s: ${Number(user.count50).toLocaleString()}`].join('\n'), true)
+            .addField('Accuracy', String(accuracy), true)
             .addField('Playcount', Number(user.playcount).toLocaleString(), true)
             .addField('Ranked Score', Number(user.ranked_score).toLocaleString(), true)
             .addField('Total Score', Number(user.total_score).toLocaleString(), true)
@@ -129,7 +129,7 @@ module.exports = class extends Command {
                 `S+ → ${user.count_rank_sh}`,
                 `S → ${user.count_rank_s}`,
                 `A → ${user.count_rank_a}`
-            ]);
+            ].join('\n'));
 
         reply(msg, { embeds: [embed] });
     }

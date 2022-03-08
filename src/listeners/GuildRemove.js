@@ -1,16 +1,6 @@
 const { Listener, Events } = require('@sapphire/framework');
 const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 
-const gregion = {
-    'eu-central': 'Central Europe',
-    'eu-west': 'Western Europe',
-    hongkong: 'Hong Kong',
-    'us-west': 'Western US',
-    'us-east': 'Eastern US',
-    'us-south': 'Southern US',
-    'us-central': 'Central US'
-};
-
 module.exports = class extends Listener {
 
     constructor(context, options) {
@@ -26,12 +16,6 @@ module.exports = class extends Listener {
             this.container.lavacord.players.delete(guild.id);
         }
 
-        const regionArr = guild.region.split('-');
-        if (regionArr.includes('vip')) regionArr.splice(regionArr.indexOf('vip'), 1);
-        const rawRegion = regionArr.join('-');
-        let region = gregion[rawRegion] || rawRegion.replace(/^./, i => i.toUpperCase());
-        if (guild.region.includes('vip')) region += ' [Partnered]';
-
         this.hook.send({
             embeds: [new MessageEmbed()
                 .setColor(0xE74C3C)
@@ -39,11 +23,10 @@ module.exports = class extends Listener {
                 .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
                 .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
                 .addField('Guild Owner ID', guild.ownerId, true)
-                .addField('Guild Region', region, true)
                 .addField('Large Guild', guild.large ? '✅' : '❌', true)
                 .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
-                .addField('Guild Members', guild.memberCount, true)
-                .addField('New Guild Count', await this.container.client.guildCount(), true)
+                .addField('Guild Members', String(guild.memberCount), true)
+                .addField('New Guild Count', String(await this.container.client.guildCount()), true)
                 .setTimestamp()]
         });
     }

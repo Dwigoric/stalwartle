@@ -49,13 +49,13 @@ module.exports = class extends Command {
         if (tmdb.title !== tmdb.original_title) embed.addField('Original Title', tmdb.original_title, true);
         embed
             .addField('Language', tmdb.original_language.toUpperCase(), true)
-            .addField('Vote Count', tmdb.vote_count, true)
+            .addField('Vote Count', String(tmdb.vote_count), true)
             .addField('User Score', `${+`${`${Math.round(`${`${(tmdb.vote_average / 10) * 100}e+2`}`)}e-2`}`}%`, true)
-            .addField('Popularity', tmdb.popularity, true)
-            .addField('Runtime', runtime, true)
+            .addField('Popularity', String(tmdb.popularity), true)
+            .addField('Runtime', String(runtime), true)
             .addField('Adult Content', tmdb.adult ? 'Yep' : 'Nope', true);
         if (tmdb.release_date) embed.addField('Release Date', moment(tmdb.release_date).tz(timezone).format('dddd, LL'), true);
-        if (producers.length) embed.addField(`Production Compan${producers.length === 1 ? 'y' : 'ies'}`, producers, true);
+        if (producers.length) embed.addField(`Production Compan${producers.length === 1 ? 'y' : 'ies'}`, producers.join('\n'), true);
         if (countries.length) embed.addField(`Production Countr${countries.length === 1 ? 'y' : 'ies'}`, countries.join(', '), true);
         if (genres.length) embed.addField(`Genre${genres.length === 1 ? '' : 's'}`, genres.join(', '), true);
 

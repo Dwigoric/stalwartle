@@ -23,7 +23,7 @@ module.exports = class extends Command {
                 .setColor('RANDOM')
                 .setAuthor({ name: `Information about ${this.container.client.user.username}`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
                 .setThumbnail(this.container.client.user.displayAvatarURL({ dynamic: true }))
-                .addField('Owners', owners, true)
+                .addField('Owners', owners.join(', '), true)
                 .addField('Support Server', `${this.container.client.guilds.cache.get('502895390807293963').name}\n(<https://discord.gg/KDWGvV8>)`, true)
                 .addField('Discord.js Version', `v${version}`, true)
                 .addField('Node.js Version', process.version, true)
