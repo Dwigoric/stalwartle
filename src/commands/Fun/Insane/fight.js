@@ -3,6 +3,7 @@ const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { Timestamp } = require('@sapphire/time-utilities');
 const { MessageEmbed } = require('discord.js');
+const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 
 const currentFights = {};
 
@@ -56,7 +57,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async default(msg, args) {
-        let opponent = await args.pickResult('member');
+        let opponent = await args.pickResult('user');
         if (!opponent.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please tell me who among the people in this channel you want to fight.`);
         opponent = opponent.value;
 
@@ -77,20 +78,20 @@ module.exports = class extends SubCommandPluginCommand {
             }
             return null;
         }, 30000);
-        return reply(msg, `⚔  ::  Hey ${opponent}, **${msg.member.displayName}** wants to challenge you to a fight! Please accept or deny the request by \`${msg.guild.settings.get('prefix')}fight accept\` or \`${msg.guild.settings.get('prefix')}fight deny\`. You can disable future requests by \`${msg.guild.settings.get('prefix')}userconf set acceptFights false\`.`); // eslint-disable-line max-len
+        return reply(msg, `⚔  ::  Hey ${opponent}, **${msg.member.displayName}** wants to challenge you to a fight! Please accept or deny the request by \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}fight accept\` or \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}fight deny\`. You can disable future requests by \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}userconf set acceptFights false\`.`); // eslint-disable-line max-len
     }
 
     /* eslint-disable complexity */
     async #fight(channel, challenger, opponent) {
         // Initialize challenger's fight parameters
-        const totalChHealth = 100 + (25 * challenger.settings.get('hpBoost'));
+        const totalChHealth = 100 + (25 * this.container.stores.get('gateways').get('userGateway').get(challenger.id, 'hpBoost'));
         currentFights[channel.id].challenger = {
             health: totalChHealth,
             stamina: 20,
             bandaged: false
         };
         // Initialize opponent's fight parameters
-        const totalOpHealth = 100 + (25 * opponent.settings.get('hpBoost'));
+        const totalOpHealth = 100 + (25 * this.container.stores.get('gateways').get('userGateway').get(opponent.id, 'hpBoost'));
         currentFights[channel.id].opponent = {
             health: totalOpHealth,
             stamina: 20,
@@ -118,13 +119,13 @@ module.exports = class extends SubCommandPluginCommand {
             const moveDescriptions = [];
             for (const [move, data] of Object.entries(this.moves)) moveDescriptions.push(`**${move}**: ${data.description}`);
 
-            const message = await channel.send(`${i % 2 ? challenger : opponent}, it's your turn now`, { embeds: [new MessageEmbed()
+            const prompter = new MessagePrompter({ content: `${i % 2 ? challenger : opponent}, it's your turn now`, embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(`Round ${parseInt((i + 1) / 2)}: ${challenger.tag} vs ${opponent.tag}`)
                 .setDescription([
                     `Attacks available: ${Object.keys(this.moves).join(', ')}`,
                     moveDescriptions.join('\n')
-                ])
+                ].join('\n'))
                 .addField(challenger.tag, [
                     `Health: ${challengerData.health}/${totalChHealth}`,
                     chHealth.join(''),
@@ -136,36 +137,37 @@ module.exports = class extends SubCommandPluginCommand {
                     `Stamina: ${opponentData.stamina}`
                 ].join('\n'), true)
                 .setFooter({ text: `${(i % 2 ? challenger : opponent).tag}'s turn | Please reply how you want to attack.` })
-            ] });
-
-            let responses;
+            ] }, 'message', { timeout: 30000 });
+            let response;
             do {
-                responses = await channel.awaitMessages(msg => msg.author === (i % 2 ? challenger : opponent), { time: 30000, max: 1 });
-                if (responses.size === 0) {
+                if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
+                response = await prompter.run(channel, i % 2 ? challenger : opponent).catch(() => null);
+                if (response === null) {
                     delete currentFights[channel.id];
+                    prompter.strategy.appliedMessage.delete();
                     return channel.send('⚔  ::  No one is replying, so I am ending this fight!');
                 }
-                if (responses.first() && responses.first().content.toLowerCase() in this.moves) {
-                    if (this.moves[responses.first().content.toLowerCase()].stamina > currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina) {
+                if (response.content.toLowerCase() in this.moves) {
+                    if (this.moves[response.content.toLowerCase()].stamina > currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina) {
                         channel.send(`${this.container.constants.EMOTES.xmark}  ::  Your stamina is too low. Please choose another move.`);
-                        responses.first().content = false;
+                        response = false;
                         continue;
                     }
-                    if (responses.first().content.toLowerCase() === 'rest' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina === 20) {
+                    if (response.content.toLowerCase() === 'rest' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina === 20) {
                         channel.send(`${this.container.constants.EMOTES.xmark}  ::  You're too pumped up to rest! Spend your energy. Please choose another move.`);
-                        responses.first().content = false;
+                        response = false;
                         continue;
                     }
-                    if (responses.first().content.toLowerCase() === 'bandage' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health === 100) {
+                    if (response.content.toLowerCase() === 'bandage' && currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health === 100) {
                         channel.send(`${this.container.constants.EMOTES.xmark}  ::  You're at your best shape! Please choose another move.`);
-                        responses.first().content = false;
+                        response = false;
                         continue;
                     }
                 }
-            } while (responses.first().content === false || !Object.keys(this.moves).concat([null]).includes(responses.first().content.toLowerCase())); // eslint-disable-line max-len
-            message.delete();
+            } while (response === false || !Object.keys(this.moves).concat([null]).includes(response.content.toLowerCase())); // eslint-disable-line max-len
 
-            const move = responses.first().content.toLowerCase();
+            prompter.strategy.appliedMessage.delete();
+            const move = response.content.toLowerCase();
             let damage;
             let addedHp;
             let bandageSuccess;
@@ -241,7 +243,7 @@ module.exports = class extends SubCommandPluginCommand {
                 `Stamina: ${opponentData.stamina}`,
                 `\nMatch Duration: ${new Timestamp(`${Date.now() - start >= 3600000 ? 'HH:' : ''}mm:ss`).display(Date.now() - start)}`,
                 `Finishing Move: ${finishingMove}`
-            ])
+            ].join('\n'))
             .setFooter({ text: 'Ended' })
             .setTimestamp()] });
     }
