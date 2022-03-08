@@ -35,7 +35,7 @@ module.exports = class extends SubCommandPluginCommand {
         let modlog = await args.pickResult('guildTextChannel');
         if (!modlog.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the modlog channel.`);
         modlog = modlog.value;
-        if (!modlog.permissionsFor(this.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot post messages on that channel.`);
+        if (!modlog.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot post messages on that channel.`);
 
         this.container.stores.get('commands').filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').map(cd => cd.name).forEach(action => this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, `modlogs.${action}`, modlog.id)); // eslint-disable-line max-len
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for all moderation actions to ${modlog}.`);

@@ -74,7 +74,7 @@ module.exports = class extends Listener {
                 .addField(user.bot ? 'Bot' : 'User', user, true);
             if (reason) embed.addField('Reason', reason, true);
             if (duration) embed.addField('Duration', duration === Infinity ? '∞' : Duration.toNow(duration), true);
-            if (moderator.id === this.client.user.id) {
+            if (moderator.id === this.container.client.user.id) {
                 embed.addField('Channel', channel, true);
                 if (this.container.stores.get('gateways').get('guildGateway').get(guild.id).modlogShowContent) embed.addField('Content', content > 900 ? `${content.substring(0, 900)}...` : content);
             }
