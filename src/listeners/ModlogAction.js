@@ -25,6 +25,7 @@ module.exports = class extends Listener {
             if (['warn', 'kick', 'mute', 'ban', 'softban'].includes(automodAction)) this.container.client.emit('modlogAction', automodAction, this.container.client.user, user, guild, { channel, reason: 'Reached automod quota', duration, content });
         }
 
+        if (duration instanceof Date) duration = duration.getTime();
         switch (action) {
             case 'ban':
                 this.#ban(guild, user, banDays, reason, duration);
@@ -113,7 +114,7 @@ module.exports = class extends Listener {
             this.container.tasks.create('Unban', {
                 user: user.id,
                 guild: guild.id
-            }, duration.getTime() - Date.now());
+            }, duration - Date.now());
         }
 
         return guild.members.ban(user, options);
