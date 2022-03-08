@@ -57,10 +57,13 @@ module.exports = class extends SubCommandPluginCommand {
         const userCookies = this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'cookies');
         const display = new LazyPaginatedMessage({
             embedFooterSeparator: '|',
-            template: new MessageEmbed()
-                .setColor('RANDOM')
-                .setTitle(`🍪 Stalkie Leaderboard`)
-                .setFooter({ text: `Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${userCookies} Stalkie${userCookies === 1 ? '' : 's'}.` })
+            template: {
+                content: `${this.container.constants.EMOTES.tick}  ::  Leaderboard loaded!`,
+                embeds: [new MessageEmbed()
+                    .setColor('RANDOM')
+                    .setTitle(`🍪 Stalkie Leaderboard`)
+                    .setFooter({ text: `Your Position: ${authorPos ? `#${authorPos}` : 'None'} | You have ${userCookies} Stalkie${userCookies === 1 ? '' : 's'}.` })]
+            }
         });
 
         list.forEach((top, tenPower) =>
@@ -76,7 +79,6 @@ module.exports = class extends SubCommandPluginCommand {
             })
         );
 
-        await message.edit(`${this.container.constants.EMOTES.tick}  ::  Leaderboard loaded!`);
         return display.run(message, msg.author);
     }
 
