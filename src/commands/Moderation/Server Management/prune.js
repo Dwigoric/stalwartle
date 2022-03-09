@@ -22,7 +22,7 @@ module.exports = class extends Command {
 
         let limit = await args.pick('integer').catch(() => 50);
         if (limit < 2 || limit > 100) limit = 50;
-        const filter = await args.pick('array', { array: ['link', 'invite', 'bots', 'you', 'me', 'pinsonly', 'upload'] }).catch(() => args.pick('user').catch(() => null));
+        const filter = await args.pick('enum', { enum: ['link', 'invite', 'bots', 'you', 'me', 'pinsonly', 'upload'] }).catch(() => args.pick('user').catch(() => null));
 
         let messages = await msg.channel.messages.fetch({ limit: 1 });
         if (!messages.size) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The channel does not have any messages.`);
