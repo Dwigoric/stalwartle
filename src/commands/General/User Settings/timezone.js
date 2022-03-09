@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
     async messageRun(msg) {
         const timezone = container.stores.get('gateways').get('userGateway').get(msg.author.id, 'timezone');
-        const handler = new MessagePrompter(`Current Timezone: \`${timezone}\`\n\n**I'm using the TZ format for timezones. You can view the valid timezones here: <http://bit.ly/2ySrZKP>**\n\nPlease **reply** with the timezone in the correct TZ format, or type \`cancel\` if you don't want me to change your timezone.`, 'message'); // eslint-disable-line max-len
+        const handler = new MessagePrompter(`Current Timezone: \`${timezone}\`\n\n**I'm using the TZ format for timezones. You can view the valid timezones here: <http://bit.ly/2ySrZKP>**\n\nPlease **reply** with the timezone in the correct TZ format, or type \`cancel\` if you don't want me to change your timezone.`, 'message', { timeout: 30000 }); // eslint-disable-line max-len
         const prompted = await handler.run(msg.channel, msg.author).catch(() => ({ content: 'cancel' }));
         handler.strategy.appliedMessage.delete();
 
