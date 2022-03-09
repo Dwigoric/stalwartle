@@ -23,9 +23,9 @@ module.exports = class extends Command {
             .setAuthor({ name: 'FML Stories' })
             .setColor('RANDOM')
             .setTimestamp()
-            .setDescription(`_${$('.article-contents .article-link').eq(0).text().trim()}\n\n_`)
-            .addField('I agree, your life sucks:', $('.vote-brick').eq(1).text() || 'N/A', true)
-            .addField('You deserved it:', $('.vote-brick').eq(3).text() || 'N/A', true);
+            .setDescription(`_${$('a.block.text-blue-500').eq(0).text().trim()}\n\n_`)
+            .addField('I agree, your life sucks:', $('.vote-btn-count').eq(0).text() || 'N/A', true)
+            .addField('You deserved it:', $('.vote-btn-count').eq(1).text() || 'N/A', true);
 
         if ($('.article-contents .article-link').length < 5) return reply(msg, '<:akcry:333597917342466048>  ::  Today, something went wrong, so you will have to try again in a few moments. FML again.');
 
