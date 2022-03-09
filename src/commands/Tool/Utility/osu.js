@@ -98,7 +98,7 @@ module.exports = class extends SubCommandPluginCommand {
         const request = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
         if (!request.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`);
 
-        const user = request.json()[0];
+        const user = request[0];
         const accuracy = `${+`${`${Math.round(`${`${Number(user.accuracy)}e+2`}`)}e-2`}`}%`;
         const thumbnails = [
             'https://syrin.me/static/img/osu!next_icons/mode-0-sm.png',
