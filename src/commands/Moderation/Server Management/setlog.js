@@ -75,9 +75,9 @@ module.exports = class extends SubCommandPluginCommand {
         if (!modlog.success) modlog = await args.pickResult('enum', { enum: ['reset'] });
         if (!modlog.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the text channel to log, or type \`reset\` in its place to reset logs for this type.`);
         modlog = modlog.value;
-        if (!modlog.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot post messages on that channel.`);
 
         if (modlog === 'reset') this.container.stores.get('gateways').get('guildGateway').reset(msg.guild.id, `modlogs.${action}`);
+        else if (!modlog.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot post messages on that channel.`);
         else this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, `modlogs.${action}`, modlog.id);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the modlog channel for member ${action}s to ${modlog}.`);
     }
