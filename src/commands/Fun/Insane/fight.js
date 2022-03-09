@@ -14,7 +14,6 @@ module.exports = class extends SubCommandPluginCommand {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'A fight minigame between two Discord users.',
-            usage: '[accept|deny|cancel] (Opponent:user)',
             subCommands: ['accept', 'deny', 'cancel', { input: 'default', default: true }]
         });
 

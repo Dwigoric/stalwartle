@@ -14,8 +14,7 @@ module.exports = class extends Command {
             detailedDescription: [
                 'To detect a lie, provide a text.',
                 '\nIf you want to force the results, use the `--force` flag. To use the flag, put `--force=lie` or `--force=truth`.'
-            ].join('\n'),
-            usage: '<Lie:string>'
+            ].join('\n')
         });
     }
 

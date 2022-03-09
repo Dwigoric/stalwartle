@@ -9,9 +9,7 @@ module.exports = class extends Command {
             preconditions: ['ModsOnly'],
             requiredClientPermissions: ['BAN_MEMBERS'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            description: 'Unbans a user from their ID.',
-            usage: '<Member:user> [Reason:string] [...]',
-            usageDelim: ' '
+            description: 'Unbans a user from their ID.'
         });
     }
 

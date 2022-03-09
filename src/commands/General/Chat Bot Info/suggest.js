@@ -7,8 +7,7 @@ module.exports = class extends Command {
         super(context, {
             ...options,
             description: 'This command is used to give suggestions for the bot.',
-            usage: '<Suggestion:string>',
-            extendedHelp: [
+            detailedDescription: [
                 'Suggestions include basically anything except anything silly AND suggesting something against the [Discord Guidelines](https://discordapp.com/guidelines).',
                 '**These will lead to a ban from the bot.**',
                 'Your suggestion is sent to my dev server that is heavily guarded by a samurai.',

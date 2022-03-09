@@ -9,8 +9,6 @@ module.exports = class extends SubCommandPluginCommand {
             ...options,
             requiredClientPermissions: 'EMBED_LINKS',
             description: 'Makes the bot say anything you want.',
-            usage: '[delete|embed|anonymous] [Channel:channel] <Content:string{1,1000}> [...]',
-            usageDelim: ' ',
             subCommands: ['delete', 'embed', 'anonymous', { input: 'default', default: true }]
         });
     }
