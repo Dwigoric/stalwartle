@@ -1,19 +1,23 @@
 const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['pick'],
-            description: 'Chooses between two or more choices. Use ` | ` (two spaces, mind you!) to separate each choice.',
-            usage: '<Choices:string> [...]',
-            usageDelim: ' | '
+            description: 'Chooses between two or more choices. Use ` | ` (two spaces, mind you!) to separate each choice.'
         });
     }
 
-    async messageRun(msg, [...choices]) {
-        if (choices.length === 1) throw '🤔  ::  I don\'t think there\'s a sense in having only one choice...';
-        msg.send(`🤔  ::  I choose... **${choices[Math.floor(Math.random() * choices.length)]}**!`, { disableMentions: 'everyone' });
+    async messageRun(msg, args) {
+        let choices = await args.restResult('string');
+        if (!choices.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me something to choose from!`);
+        choices = choices.value.split(' | ');
+
+        if (choices.length < 2) return reply(msg, '🤔  ::  I don\'t think there\'s a sense in having less than two choices...');
+        return reply(msg, `🤔  ::  I choose... **${choices[Math.floor(Math.random() * choices.length)].trim()}**!`);
     }
 
 };

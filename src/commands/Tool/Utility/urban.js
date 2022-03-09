@@ -5,25 +5,31 @@ const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['ud'],
-            requiredPermissions: ['EMBED_LINKS'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Searches the Urban Dictionary library for a definition to the search term.',
-            usage: '<SearchTerm:string> [resultNum:integer]',
-            usageDelim: ', '
+            detailedDescription: 'You can use e.g. `--result=2` to get the second result for the word.',
+            options: ['result']
         });
     }
 
-    async messageRun(msg, [search, index = 1]) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading Urban definition...`);
+    async messageRun(msg, args) {
+        let search = await args.restResult('string');
+        if (!search.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the term to search in the Urban Dictionary.`);
+        search = search.value;
+        const index = parseInt(args.getOption('result')) || 1;
+
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
         const params = new URLSearchParams();
         params.set('term', search);
         const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
 
         const result = body.list[index - 1];
-        if (!result) throw `${this.container.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`;
+        if (!result) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`);
 
         const definition = result.definition.length > 1000 ?
             `${this.splitText(result.definition, 1000)}...` :

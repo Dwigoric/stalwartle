@@ -1,8 +1,9 @@
-const { Command, util: { toTitleCase } } = require('@sapphire/framework');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
-const { reply } = require('@sapphire/plugin-editable-commands');
 require('dotenv').config();
 
 const MODS = Object.freeze({
@@ -58,50 +59,46 @@ const MODS = Object.freeze({
     '2K': 268435456
 });
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
-    constructor(...args) {
-        super(...args, {
-            requiredPermissions: ['EMBED_LINKS'],
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gets information about an osu! user.',
-            extendedHelp: [
+            detailedDescription: [
                 'If you want to have a default osu! username every query, use the `s.userconf` command.\n',
                 '- If you want to change the mode, use the flags `--taiko`, `--catch`, or `--mania`. Do not supply a flag if you want osu! standard mode. The default mode is osu! standard.',
                 "- If you want to get information about a beatmap, use the `beatmap` subcommand and supply the beatmap's ID. Be reminded that the beatmap ID varies from difficulty to difficulty.",
                 "- If you want to get a user's best/recent plays, use the `best` or `recent` subcommands and supply the username.",
-                '- If you simply want to get information about a user, do not use any subcommand and supply the username. (e.g. `s.osu dwigoric`)'
+                '- If you simply want to get information about a user, do not use any subcommand and supply the username.'
             ].join('\n'),
-            usage: '[best|recent|beatmap] (BeatmapID|Username:string) [...]',
-            usageDelim: ' ',
-            subcommands: true
-        });
-
-        this.createCustomResolver('string', (arg, possible, msg) => {
-            const osu = msg.author.settings.get('osu');
-            if (osu && !arg) return osu;
-            if (!arg) throw `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`;
-            return arg;
+            flags: ['mania', 'catch', 'taiko'],
+            subCommands: ['best', 'recent', 'beatmap', { input: 'default', default: true }]
         });
     }
 
-    async messageRun(msg, [...username]) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading user information...`);
+    async default(msg, args) {
+        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
+
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading user information...`);
 
         let mode;
-        if (msg.flagArgs.mania) mode = 3;
-        else if (msg.flagArgs.catch) mode = 2;
-        else if (msg.flagArgs.taiko) mode = 1;
+        if (args.getFlags('mania')) mode = 3;
+        else if (args.getFlags('catch')) mode = 2;
+        else if (args.getFlags('taiko')) mode = 1;
         else mode = 0;
 
         const params = new URLSearchParams();
         params.set('k', process.env.OSU_API_KEY); // eslint-disable-line no-process-env
         params.set('m', mode);
-        params.set('u', username.join(this.usageDelim));
+        params.set('u', username);
         params.set('type', 'string');
         const request = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
-        if (!request.length) throw `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
+        if (!request.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`);
 
-        const user = request[0];
+        const user = request.json()[0];
         const accuracy = `${+`${`${Math.round(`${`${Number(user.accuracy)}e+2`}`)}e-2`}`}%`;
         const thumbnails = [
             'https://syrin.me/static/img/osu!next_icons/mode-0-sm.png',
@@ -113,7 +110,7 @@ module.exports = class extends Command {
         const embed = new MessageEmbed()
             .setColor(0xF462A3)
             .setThumbnail(thumbnails[mode])
-            .setAuthor({ name: 'User Information', iconURL: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png' })
+            .setAuthor({ name: 'User Information', iconURL: `http://s.ppy.sh/a/${user.user_id}` })
             .setTitle(`${user.username} (PP Rank #${Number(user.pp_rank).toLocaleString()})`)
             .setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
             .addField(`Country Rank (${user.country})`, Number(user.pp_country_rank).toLocaleString(), true)
@@ -131,26 +128,30 @@ module.exports = class extends Command {
                 `A → ${user.count_rank_a}`
             ].join('\n'));
 
-        reply(msg, { embeds: [embed] });
+        return reply(msg, { embeds: [embed] });
     }
 
-    async beatmap(msg, [...mapID]) {
-        const timezone = msg.author.settings.get('timezone');
+    async beatmap(msg, args) {
+        let mapID = await args.pickResult('string');
+        if (!mapID.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the beatmap ID.`);
+        mapID = mapID.value;
+
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
 
         let mode;
-        if (msg.flagArgs.mania) mode = 3;
-        else if (msg.flagArgs.catch) mode = 2;
-        else if (msg.flagArgs.taiko) mode = 1;
+        if (args.getFlags('mania')) mode = 3;
+        else if (args.getFlags('catch')) mode = 2;
+        else if (args.getFlags('taiko')) mode = 1;
         else mode = 0;
 
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading beatmap...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading beatmap...`);
 
         const params = new URLSearchParams();
         params.set('k', process.env.OSU_API_KEY); // eslint-disable-line no-process-env
-        params.set('b', mapID[0]);
+        params.set('b', mapID);
         params.set('m', mode);
         const request = await fetch(`https://osu.ppy.sh/api/get_beatmaps?${params}`).then(res => res.json());
-        if (!request.length) throw `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.`;
+        if (!request.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! beatmap ID, or the beatmap does not support that mode.`);
 
         const beatmap = request[0];
         const genres = ['Any', 'Unspecified', 'Video Game', 'Anime', 'Rock', 'Pop', 'Other', 'Novelty', null, 'Hip-Hop', 'Electronic'];
@@ -164,7 +165,7 @@ module.exports = class extends Command {
 
         const embed = new MessageEmbed()
             .setColor(0xF462A3)
-            .setAuthor({ name: 'Beatmap Information', iconURL: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png' })
+            .setAuthor({ name: 'Beatmap Information', iconURL: 'https://vectorified.com/images/osu-icon-maker-13.png' })
             .setThumbnail(thumbnails[Number(beatmap.mode)])
             .setTitle(`Mapped by ${beatmap.creator}`)
             .setURL(`https://osu.ppy.sh/beatmaps/${beatmap.beatmap_id}`)
@@ -182,27 +183,40 @@ module.exports = class extends Command {
         if (beatmap.tags.length) embed.addField('Tags', beatmap.tags.split(' ').join(', '), true);
         embed.addField('Approved', moment(beatmap.approved_date).tz(timezone).format('dddd, LL | LTS'), true);
 
-        reply(msg, { embeds: [embed] });
+        return reply(msg, { embeds: [embed] });
     }
 
-    async best(msg, [...username]) {
-        return await this.top(msg, username.join(this.usageDelim), 'best');
-    }
-
-    async recent(msg, [...username]) {
-        return await this.top(msg, username.join(this.usageDelim), 'recent');
-    }
-
-    async top(msg, username, type) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading ${type} plays...`);
-
-        const timezone = msg.author.settings.get('timezone');
+    async best(msg, args) {
+        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
 
         let mode;
-        if (msg.flagArgs.mania) mode = 3;
-        else if (msg.flagArgs.catch) mode = 2;
-        else if (msg.flagArgs.taiko) mode = 1;
+        if (args.getFlags('mania')) mode = 3;
+        else if (args.getFlags('catch')) mode = 2;
+        else if (args.getFlags('taiko')) mode = 1;
         else mode = 0;
+
+        return await this.#top(msg, username, 'best', mode);
+    }
+
+    async recent(msg, args) {
+        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
+
+        let mode;
+        if (args.getFlags('mania')) mode = 3;
+        else if (args.getFlags('catch')) mode = 2;
+        else if (args.getFlags('taiko')) mode = 1;
+        else mode = 0;
+
+        return await this.#top(msg, username, 'recent', mode);
+    }
+
+    async #top(msg, username, type, mode) {
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading ${type} plays...`);
+
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
+
         const osumode = [' Standard', 'taiko', 'catch', 'mania'];
 
         const errString = {
@@ -215,7 +229,7 @@ module.exports = class extends Command {
         params.set('u', username);
         params.set('type', 'string');
         const userReq = await fetch(`https://osu.ppy.sh/api/get_user?${params}`).then(res => res.json());
-        if (!userReq.length) throw `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`;
+        if (!userReq.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! You supplied an invalid osu! username.`);
         const user = userReq[0];
 
         params.set('u', user.user_id);
@@ -223,7 +237,7 @@ module.exports = class extends Command {
         params.set('m', mode);
         params.set('limit', 5);
         const request = await fetch(`https://osu.ppy.sh/api/get_user_${type}?${params}`).then(res => res.json());
-        if (!request.length) throw `${this.container.constants.EMOTES.xmark}  ::  Whoops! ${errString[type](user)}`;
+        if (!request.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! ${errString[type](user)}`);
 
         const top = await Promise.all(request.map(async list => {
             let urank;
@@ -272,12 +286,12 @@ module.exports = class extends Command {
 
         const embed = new MessageEmbed()
             .setColor(0xF462A3)
-            .setAuthor({ name: `${toTitleCase(type)} Plays on osu!${osumode[mode]}`, iconURL: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Osu%21Logo_%282015%29.png' })
+            .setAuthor({ name: `${toTitleCase(type)} Plays on osu!${osumode[mode]}`, iconURL: `http://s.ppy.sh/a/${user.user_id}` })
             .setTitle(user.username)
             .setURL(`https://osu.ppy.sh/users/${user.user_id}/`)
             .setDescription(top.join('\n\n'));
 
-        return reply(msg, { embeds: [embed] }).catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  **${user.username}** hasn't played **osu!${osumode[mode]}** yet!`; });
+        return reply(msg, { embeds: [embed] });
     }
 
 };

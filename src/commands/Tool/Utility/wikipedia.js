@@ -5,22 +5,26 @@ const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['wiki'],
-            requiredPermissions: ['EMBED_LINKS'],
-            description: 'Finds a Wikipedia Article by title.',
-            usage: '<Query:string>'
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Finds a Wikipedia Article by title.'
         });
     }
 
-    async messageRun(msg, [query]) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading Wikipedia article...`);
+    async messageRun(msg, args) {
+        let query = await args.restResult('string');
+        if (!query.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the title of the Wikipedia article you want to search.`);
+        query = query.value;
+
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading Wikipedia article...`);
 
         const article = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`).then(res => res.json());
-        if (!article.content_urls) throw `${this.container.constants.EMOTES.xmark}  ::  I couldn't find a wikipedia article with that title.`;
+        if (!article.content_urls) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I couldn't find a wikipedia article with that title.`);
 
-        reply(msg, {
+        return reply(msg, {
             embeds: [await new MessageEmbed()
                 .setColor('RANDOM')
                 .setThumbnail((article.thumbnail && article.thumbnail.source) || 'https://i.imgur.com/fnhlGh5.png')

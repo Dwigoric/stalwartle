@@ -5,23 +5,28 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['sub'],
-            requiredPermissions: ['EMBED_LINKS'],
-            description: 'Returns information on a subreddit.',
-            usage: '<Subreddit:str>'
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Returns information on a subreddit.'
         });
     }
 
-    async messageRun(msg, [subredditName]) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading subreddit...`);
+    async messageRun(msg, args) {
+        let subredditName = await args.pickResult('string');
+        if (!subredditName.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the subreddit you want to get information about.`);
+        subredditName = subredditName.value;
+
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading subreddit...`);
 
         let subreddit = await fetch(`https://www.reddit.com/r/${subredditName}/about.json`)
             .then(res => res.json())
-            .catch(() => { throw 'There was an error. Reddit may be down, or the subreddit doesn\'t exist.'; });
+            .catch(() => null);
+        if (subreddit === null) return reply(msg, 'There was an error. Reddit may be down, or the subreddit doesn\'t exist.');
 
-        if (subreddit.kind !== 't5') throw `Subreddit ${subredditName} doesn't exist.`;
+        if (subreddit.kind !== 't5') return reply(msg, `Subreddit ${subredditName} doesn't exist.`);
         else subreddit = subreddit.data;
 
         return reply(msg, { embeds: [new MessageEmbed()

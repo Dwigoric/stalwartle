@@ -17,15 +17,15 @@ module.exports = class extends Command {
     async messageRun(msg, args) {
         const reason = await args.rest('string').catch(() => null);
 
-        if (await this.container.stores.get('gateways').get('afkGateway').has('afk', msg.author.id) && msg.author.settings.get('afktoggle')) {
-            await this.container.databases.default.delete('afk', msg.author.id);
+        if (await this.container.stores.get('gateways').get('afkGateway').has(msg.author.id) && this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'afktoggle')) {
+            await this.container.stores.get('gateways').get('afkGateway').delete(msg.author.id);
             return reply(msg, `${this.container.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`);
         }
 
-        if (typeof reason === 'string' && reason.length > 1024) throw `${this.container.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`;
-        await this.container.databases.default.create('afk', msg.author.id, { reason, timestamp: Date.now() });
-        if (msg.guild && msg.guild.me.permissions.has('MOVE_MEMBERS') && msg.member.voice.channel && msg.guild.settings.get('afkChannelOnAfk') && msg.guild.afkChannelID) msg.member.voice.setChannel(msg.guild.afkChannelID, 'Moved to AFK channel due to AFK status'); // eslint-disable-line max-len
-        return msg.send(`${this.container.constants.EMOTES.tick}  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
+        if (typeof reason === 'string' && reason.length > 1024) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Your AFK reason is too long! Please try to shorten it.`);
+        await this.container.stores.get('gateways').get('afkGateway').update(msg.author.id, { reason, timestamp: Date.now() });
+        if (msg.guild && msg.guild.me.permissions.has('MOVE_MEMBERS') && msg.member.voice.channel && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'afkChannelOnAfk') && msg.guild.afkChannelId) msg.member.voice.setChannel(msg.guild.afkChannelId, 'Moved to AFK channel due to AFK status'); // eslint-disable-line max-len
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  ${msg.author}, I've set you as AFK. ${reason ? `**Reason**: ${reason}` : ''}`);
     }
 
 };

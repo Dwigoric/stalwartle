@@ -7,29 +7,34 @@ require('dotenv').config();
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['tvshows', 'tv', 'tvseries'],
-            requiredPermissions: ['EMBED_LINKS'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Finds a TV show on TMDB.org',
-            extendedHelp: 'e.g. `s.tvshow universe, 2`',
-            usage: '<Query:string> [Page:number]',
-            usageDelim: ', '
+            detailedDescription: 'To search from a different page, use e.g. `--page=5` to search from page 5.',
+            options: ['page']
         });
     }
 
-    async messageRun(msg, [query, page = 1]) {
-        const timezone = msg.author.settings.get('timezone');
+    async messageRun(msg, args) {
+        let query = await args.restResult('string');
+        if (!query.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the TV show query.`);
+        query = query.value;
+        const page = parseInt(args.getOption('page')) || 1;
+
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
         const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
 
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading TV show...`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading TV show...`);
 
         const params = new URLSearchParams();
         params.set('api_key', process.env.TMDB_API_KEY); // eslint-disable-line no-process-env
         params.set('query', query);
         const request = await fetch(`https://api.themoviedb.org/3/search/tv?${params}`).then(res => res.json());
         const short = request.results[page - 1];
-        if (!short) throw `${this.container.constants.EMOTES.xmark}  ::  I couldn't find a TV show with title **${query}** in page ${page}.`;
+        if (!short) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I couldn't find a TV show with title **${query}** in page ${page}.`);
         params.delete('query');
         const tmdb = await fetch(`https://api.themoviedb.org/3/tv/${short.id}?${params}`).then(res => res.json());
 
@@ -65,7 +70,7 @@ module.exports = class extends Command {
         if (genres.length) embed.addField(`Genre${genres.length === 1 ? '' : 's'}`, genres.join(', '), true);
         if (seasons.length) embed.addField(`Season${seasons.length === 1 ? '' : 's'}`, seasons.join('\n'));
 
-        reply(msg, { embeds: [embed] });
+        return reply(msg, { embeds: [embed] });
     }
 
 };

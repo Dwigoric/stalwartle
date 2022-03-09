@@ -1,25 +1,26 @@
 const { Command } = require('@sapphire/framework');
-const { Util: { escapeMarkdown } } = require('discord.js');
+const { reply } = require('@sapphire/plugin-editable-commands');
+const { Util: { escapeMarkdown, splitMessage } } = require('discord.js');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             aliases: ['ly'],
-            description: 'Searches song lyrics using your search query.',
-            usage: '<Query:string>'
+            description: 'Searches song lyrics using your search query.'
         });
         this.NO_LYRICS_FOUND = `${this.container.constants.EMOTES.xmark}  ::  No song lyrics found.`;
     }
 
     async messageRun(msg, [query]) {
-        const message = await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading lyrics...`);
+        const message = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading lyrics...`);
 
         const params = new URLSearchParams();
         params.set('title', query);
         const metadata = await fetch(`https://some-random-api.ml/lyrics?${params}`).then(res => res.json());
-        if (metadata.error) throw `${this.container.constants.EMOTES.xmark}  ::  ${metadata.error}`;
+        if (metadata.error) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${metadata.error}`);
         const lyrics = metadata.lyrics.split('\n');
         while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
 
@@ -31,14 +32,14 @@ module.exports = class extends Command {
             escapeMarkdown(lyrics.join('\n'))
         ].join('\n');
 
-        const swearArray = (msg.guild ? msg.guild.settings.get('automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : [])
+        const swearArray = (msg.guild ? this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'automod.swearWords').map(word => `(?:^|\\W)${word}(?:$|\\W)`) : [])
             .concat(this.container.constants.SWEAR_WORDS_REGEX)
             .map(word => `(?:^|\\W)${word}(?:$|\\W)`);
         const swearRegex = new RegExp(swearArray.join('|'), 'im');
-        if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) throw `${this.container.constants.EMOTES.xmark}  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.`;
+        if (swearRegex.test(fullLyrics) && msg.guild && !msg.channel.nsfw) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The song contains NSFW lyrics and this channel is not marked as NSFW.`);
 
-        await msg.channel.send(fullLyrics, { split: { char: '\u200b' } }).catch(() => msg.channel.send(fullLyrics, { split: true }));
-        message.delete();
+        await Promise.all(splitMessage(fullLyrics, { char: '\u200b' }).map(lyricPart => msg.channel.send(lyricPart))).catch(() => splitMessage(fullLyrics).map(lyricPart => msg.channel.send(lyricPart)));
+        return message.delete();
     }
 
 };

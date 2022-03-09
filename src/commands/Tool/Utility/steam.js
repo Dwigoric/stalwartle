@@ -1,23 +1,28 @@
-const { Command, util: { toTitleCase } } = require('@sapphire/framework');
+const { Command } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const { reply } = require('@sapphire/plugin-editable-commands');
+const { toTitleCase } = require('@sapphire/utilities');
 require('dotenv').config();
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            requiredPermissions: ['EMBED_LINKS'],
-            description: 'Gives information about a game on Steam.',
-            usage: '<Game:string>'
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Gives information about a game on Steam.'
         });
     }
 
-    async messageRun(msg, [game]) {
-        await msg.send(`${this.container.constants.EMOTES.loading}  ::  Loading game from Steam...`);
+    async messageRun(msg, args) {
+        let game = await args.restResult('string');
+        if (!game.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the game title you want to search for.`);
+        game = game.value;
+
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading game from Steam...`);
 
         const params = new URLSearchParams();
         params.set('term', game);
@@ -28,10 +33,11 @@ module.exports = class extends Command {
         if (steamSearch) {
             const hrefData = cheerio.load(steamSearch)('#search_result_container > #search_resultsRows > .search_result_row').attr('href');
 
-            if (!hrefData) throw `${this.container.constants.EMOTES.xmark}  ::  Steam game not found!`;
+            if (!hrefData) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Steam game not found!`);
 
             const gameID = hrefData.split('/')[4],
-                steamData = await steam.getGameDetails(gameID).catch(() => { throw `${this.container.constants.EMOTES.xmark}  ::  Sorry! I could not find that game in Steam.`; });
+                steamData = await steam.getGameDetails(gameID).catch(() => null);
+            if (steamData === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I could not find that game in Steam.`);
 
             const genres = [],
                 platforms = [];
@@ -66,8 +72,10 @@ module.exports = class extends Command {
 
             if (steamData.developers) embed.addField(`Developer${steamData.developers.length === 1 ? '' : 's'}`, steamData.developers.join('\n').length ? steamData.developers.join('\n') : 'N/A', true);
             if (steamData.release_date.date) embed.addField('Date Released', steamData.release_date.date, true);
-            reply(msg, { embeds: [embed] });
+            return reply(msg, { embeds: [embed] });
         }
+
+        return null;
     }
 
 };
