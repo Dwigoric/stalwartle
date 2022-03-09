@@ -53,20 +53,8 @@ module.exports = class extends SubCommandPluginCommand {
                 hourly: '0 */1 * * *'
             };
 
-            if (parameter in cron) {
-                return Args.ok(cron[parameter]);
-            } else {
-                const duration = this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
-                if (!duration.success) {
-                    return Args.error({
-                        argument: argCtx.argument,
-                        parameter: argCtx.parameter,
-                        identifier: 'DurationError',
-                        message: 'An error occured when running the Duration argument.'
-                    });
-                }
-                return Args.ok(duration.value);
-            }
+            if (parameter in cron) return Args.ok(cron[parameter]);
+            else return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
         });
     }
 
