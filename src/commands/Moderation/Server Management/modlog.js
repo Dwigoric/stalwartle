@@ -92,6 +92,7 @@ module.exports = class extends SubCommandPluginCommand {
     async reset(msg) {
         const handler = new MessagePrompter('⚠ Are you sure you want to reset **all** modlogs?', 'confirm');
         const prompt = await handler.run(msg.channel, msg.author).catch(() => null);
+        handler.strategy.appliedMessage.delete();
 
         if (prompt) {
             await this.container.stores.get('gateways').get('modlogGateway').reset(msg.guild.id, 'modlogs');

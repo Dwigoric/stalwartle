@@ -98,7 +98,7 @@ module.exports = class extends SubCommandPluginCommand {
         const prompter = new MessagePrompter(`Please give me the list number of the reminder you want to delete:\n${remList.list}`, 'message');
         const prompted = await prompter.run(msg.channel, msg.author);
         const remNum = parseInt(prompted.content);
-        prompter.strategy.appliedMessage.delete().catch(() => null);
+        prompter.strategy.appliedMessage.delete();
         if (isNaN(remNum)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You didn't give a number!`);
 
         if (!(await this.container.tasks.list({})).filter(job => job.id === remList[remNum] && job.data.payload.user === msg.author.id).length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I couldn't find a reminder with that number. Are you sure you're giving the correct number?`); // eslint-disable-line max-len

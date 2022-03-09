@@ -96,11 +96,13 @@ module.exports = class extends Command {
         const _options = ['log'];
         if (msg.channel.attachable) _options.push('file');
         if (!options.hastebinUnavailable) _options.push('hastebin');
+        const handler = new MessagePrompter(`Choose one of the following options: ${_options.join(', ')}`, 'message');
         let _choice;
         do {
-            const handler = new MessagePrompter(`Choose one of the following options: ${_options.join(', ')}`, 'message');
+            if (handler.strategy.appliedMessage) handler.strategy.appliedMessage.delete();
             _choice = await handler.run(msg.channel, msg.author).catch(() => ({ content: 'none' }));
-        } while (!['file', 'haste', 'hastebin', 'console', 'log', 'default', 'none', null].includes(_choice.content));
+        } while (!['file', 'haste', 'hastebin', 'console', 'log', 'default', 'none'].includes(_choice.content));
+        handler.strategy.appliedMessage.delete();
         options.sendAs = _choice.content;
     }
 
