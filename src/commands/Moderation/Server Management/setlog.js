@@ -72,7 +72,7 @@ module.exports = class extends SubCommandPluginCommand {
 
     async #indivSet(msg, args, action) {
         let modlog = await args.pickResult('guildTextChannel');
-        if (!modlog.success) modlog = await args.pickResult('array', { array: ['reset'] });
+        if (!modlog.success) modlog = await args.pickResult('enum', { enum: ['reset'] });
         if (!modlog.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the text channel to log, or type \`reset\` in its place to reset logs for this type.`);
         modlog = modlog.value;
         if (!modlog.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot post messages on that channel.`);
