@@ -9,6 +9,7 @@ module.exports = class extends Listener {
     async run(msg) {
         if (!msg.member) return null;
         if (!this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.antiSpam) return null;
+        if (msg.author.bot && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreBots) return null;
         if ((await this.container.stores.get('preconditions').get('ModsOnly').run(msg)).success && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.antiSpam.includes(msg.channel.id)) return null;
         if (msg.author.equals(this.container.client.user)) return null;
