@@ -9,6 +9,8 @@ module.exports = class extends Listener {
     }
 
     async run(msg) {
+        if (msg.author.id === this.container.client.user.id) return;
+
         if (this.container.stores.get('gateways').get('userGateway').get(msg.author.id).afkIgnore.includes(msg.channel.id)) return;
         if (this.container.stores.get('gateways').get('afkGateway').get(msg.author.id).timestamp && !this.container.stores.get('gateways').get('userGateway').get(msg.author.id).afktoggle) {
             const wbMsg = `${this.container.constants.EMOTES.blobwave}  ::  Welcome back, **${msg.author}**! I've removed your AFK status.`;
