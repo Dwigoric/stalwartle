@@ -30,7 +30,7 @@ module.exports = class extends Command {
         const channel = msg.guild.channels.cache.get(this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, `modlogs.${modlog.type}`));
         let message;
         if (channel) message = await channel.messages.fetch(modlog.message).catch(() => null);
-        if (message === null) return reply(msg, `⚠  ::  I've updated the modlog in \`${msg.guild.settings.get('prefix')}modlogs\`, however either the message has been deleted or the modlog message is not in ${channel}.`);
+        if (message === null) return reply(msg, `⚠  ::  I've updated the modlog in \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}modlogs\`, however either the message has been deleted or the modlog message is not in ${channel}.`); // eslint-disable-line max-len
         const embed = message.embeds[0];
         const index = embed.fields.findIndex(field => field.name === 'Reason');
         embed.fields.splice(index >= 0 ? index : 2, index >= 0 ? 1 : 0, { inline: true, name: 'Reason', value: reason });
