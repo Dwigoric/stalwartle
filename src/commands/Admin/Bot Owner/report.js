@@ -48,7 +48,7 @@ module.exports = class extends Command {
             return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
         }) : null;
         if (attachments && attachments.size) embed.setImage(attachments.first().url);
-        if (!msg.flagArgs.deny) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
+        if (!args.getFlag('deny')) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
         msg.delete();
         await msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => setTimeout(() => sent.delete(), 5000));
         repMsg.delete().catch(() => null);

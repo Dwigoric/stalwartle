@@ -15,7 +15,8 @@ module.exports = class extends Command {
             aliases: ['execute'],
             cooldownDelay: 5000,
             description: 'Execute commands in the terminal, use with EXTREME CAUTION.',
-            preconditions: ['OwnersOnly']
+            preconditions: ['OwnersOnly'],
+            options: ['timeout']
         });
     }
 
@@ -24,7 +25,7 @@ module.exports = class extends Command {
         if (!input.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
         input = input.value;
         const stopwatch = new Stopwatch().start();
-        const result = await execute(input, { timeout: 'timeout' in msg.flagArgs ? Number(msg.flagArgs.timeout) : 60000 })
+        const result = await execute(input, { timeout: args.getOption('timeout') ? Number(args.getOption('timeout')) : 60000 })
             .catch(error => ({ error }));
         const results = [];
         if (result.stdout) results.push(`**\`OUTPUT\`**${codeBlock('', result.stdout)}`);
