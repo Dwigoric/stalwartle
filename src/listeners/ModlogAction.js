@@ -65,7 +65,7 @@ module.exports = class extends Listener {
 
         let message = null;
         if (this.container.stores.get('gateways').get('guildGateway').get(guild.id).logging && modlogChannel) {
-            if (!channel.postable) return channel.send(`${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${modlogChannel}.`);
+            if (!modlogChannel.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return channel.send(`${this.container.constants.EMOTES.xmark}  ::  It seems that I cannot send messages in ${modlogChannel}.`);
             const embed = new MessageEmbed()
                 .setColor(this.configs[action][0])
                 .setTitle(`Case #${modlogs.length + 1}: ${toTitleCase(action)} ${this.configs[action][1]}`)
