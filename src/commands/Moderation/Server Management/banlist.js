@@ -36,7 +36,7 @@ module.exports = class extends Command {
     async #handleMessage(msg, options, result) {
         switch (options.sendAs) {
             case 'file': {
-                if (msg.channel.attachable) return msg.channel.sendFile(Buffer.from(result), 'banlist.txt', `${this.container.constants.EMOTES.tick}  ::  Sent the ban list as a file.`);
+                if (msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) return reply(msg, { files: [{ attachment: Buffer.from(result), name: 'banlist.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Sent the ban list as a file.` }); // eslint-disable-line max-len
                 options = await this.#getTypeOutput(msg, options);
                 if (options === null) return null;
                 return this.#handleMessage(msg, options, result);
