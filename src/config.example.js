@@ -33,7 +33,8 @@ exports.config = {
         strategy: new ScheduledTaskRedisStrategy({
             bull: {
                 redis: {
-                    host: 'localhost'
+                    host: 'localhost',
+                    port: 6379
                 }
             }
         })
