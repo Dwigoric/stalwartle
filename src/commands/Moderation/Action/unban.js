@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
         if (!await msg.guild.fetchBans().then(bans => bans.has(user.id))) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This user isn't banned from this server.`);
 
-        msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been unbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', 'unban', msg.author, user, msg.guild, { reason });
     }
 

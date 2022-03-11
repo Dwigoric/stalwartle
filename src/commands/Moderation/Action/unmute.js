@@ -25,7 +25,7 @@ module.exports = class extends Command {
         const task = (await this.container.tasks.list({})).filter(job => job.data.task === 'Unmute' && job.data.payload.user === member.id)[0];
         if (task) this.container.tasks.delete(task.id);
 
-        msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been unmuted. ${reason ? `**Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', msg, member.user, reason);
     }
 

@@ -43,7 +43,7 @@ module.exports = class extends Command {
             return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No message matches the \`${filter}\` filter from the last \`${limit}\` messages.`);
         }
         // eslint-disable-next-line max-len
-        const loadingMessage = await msg.channel.send(`${this.container.constants.EMOTES.loading}  ::  Deleting messages... Please note that messages older than 14 days will take time to be deleted. If possible, please refrain from deleting them manually until the purging process is complete.`);
+        const loadingMessage = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Deleting messages... Please note that messages older than 14 days will take time to be deleted. If possible, please refrain from deleting them manually until the purging process is complete.`);
         let deleted = 0;
         const bulkDeleted = await msg.channel.bulkDelete(messages, true);
         deleted += bulkDeleted.size;

@@ -35,7 +35,7 @@ module.exports = class extends Command {
             if (!member.bannable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot ban this user.`);
         }
 
-        msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', 'ban', msg.author, user, reason, msg.guild, { reason, duration, banDays: days });
     }
 

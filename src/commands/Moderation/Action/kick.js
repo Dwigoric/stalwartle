@@ -26,7 +26,7 @@ module.exports = class extends Command {
         if (msg.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You cannot kick this user.`);
         if (!member.kickable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot kick this user.`);
 
-        msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been kicked.${reason ? ` **Reason**: ${reason}` : ''}`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been kicked.${reason ? ` **Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', 'kick', msg.author, member.user, msg.guild, { reason });
     }
 

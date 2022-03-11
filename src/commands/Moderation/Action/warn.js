@@ -21,7 +21,7 @@ module.exports = class extends Command {
         if (member.user.id === msg.author.id) return reply(msg, 'Why would you warn yourself?');
         if (member.user.id === this.container.client.user.id) return reply(msg, 'Have I done something wrong?');
 
-        msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been warned.${reason ? ` **Reason**: ${reason}` : ''}`);
         return this.container.client.emit('modlogAction', 'warn', msg.author, member.user, msg.guild, { reason });
     }
 
