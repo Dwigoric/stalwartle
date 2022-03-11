@@ -8,7 +8,7 @@ module.exports = class ModsOnlyPrecondition extends Precondition {
         const guildGateway = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         if (guildGateway.moderators.roles.some(role => Array.from(msg.member.roles.cache.keys()).includes(role))) return this.ok();
         if (guildGateway.moderators.users.includes(msg.author.id)) return this.ok();
-        return this.error();
+        return this.error({ message: 'Only moderators are allowed to use this command.' });
     }
 
 };

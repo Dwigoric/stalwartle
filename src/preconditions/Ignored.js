@@ -2,6 +2,13 @@ const { Precondition } = require('@sapphire/framework');
 
 module.exports = class IgnoredPrecondition extends Precondition {
 
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            position: 0
+        });
+    }
+
     async run(msg, cmd) {
         if (!msg.guild) return this.ok();
         if (cmd.name === 'ignore') return this.ok();
