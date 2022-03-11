@@ -11,6 +11,7 @@ module.exports = class PreconditionMessage extends Listener {
     }
 
     async run(error, payload) {
+        if (!error.message) return;
         const message = error.message.includes('  ::  ') ? error.message : `${this.container.constants.EMOTES.xmark}  ::  ${error.message}`;
         reply(payload.message, message);
     }
