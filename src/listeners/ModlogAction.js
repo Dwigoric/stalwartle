@@ -19,10 +19,10 @@ module.exports = class extends Listener {
         };
     }
 
-    async run(action, moderator, user, guild, { reason, content = '', channel, duration, banDays = 0 } = {}) {
+    async run(action, moderator, user, guild, { reason, channel, duration, banDays = 0 } = {}) {
         if (this.container.stores.get('gateways').get('guildGateway').get(guild.id).automod.quota) {
             const automodAction = this.checkAutomodQuota(action, moderator, await guild.members.fetch(user.id).catch(() => null), channel);
-            if (['warn', 'kick', 'mute', 'ban', 'softban'].includes(automodAction)) this.container.client.emit('modlogAction', automodAction, this.container.client.user, user, guild, { channel, reason: 'Reached automod quota', duration, content });
+            if (['warn', 'kick', 'mute', 'ban', 'softban'].includes(automodAction)) this.container.client.emit('modlogAction', automodAction, this.container.client.user, user, guild, { channel, reason: 'Reached automod quota', duration });
         }
 
         if (duration instanceof Date) duration = duration.getTime();
@@ -75,10 +75,7 @@ module.exports = class extends Listener {
                 .addField(user.bot ? 'Bot' : 'User', user, true);
             if (reason) embed.addField('Reason', reason, true);
             if (duration) embed.addField('Duration', duration === Infinity ? '∞' : moment(duration).fromNow(true), true);
-            if (moderator.id === this.container.client.user.id) {
-                embed.addField('Channel', channel, true);
-                if (this.container.stores.get('gateways').get('guildGateway').get(guild.id).modlogShowContent) embed.addField('Content', content > 900 ? `${content.substring(0, 900)}...` : content);
-            }
+            if (moderator.id === this.container.client.user.id) embed.addField('Channel', channel, true);
             message = (await modlogChannel.send({ embeds: [embed] })).id;
         }
 

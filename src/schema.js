@@ -59,7 +59,6 @@ const guilds = {
     globalBans: false,
     ignored: [],
     logging: true,
-    modlogShowContent: true,
     selfroles: [],
     autorole: {
         user: '',

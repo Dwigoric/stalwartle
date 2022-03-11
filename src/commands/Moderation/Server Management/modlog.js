@@ -23,7 +23,7 @@ module.exports = class extends SubCommandPluginCommand {
                 'To get the modlogs of a certain type, you can use the `--type` flag, e.g. `--type=warn`, `--type=kick`, `ban`, etc.'
             ].join('\n'),
             options: ['type'],
-            subCommands: ['reset', 'showcontent', { input: 'default', default: true }]
+            subCommands: ['reset', { input: 'default', default: true }]
         });
     }
 
@@ -81,12 +81,6 @@ module.exports = class extends SubCommandPluginCommand {
 
         message.edit(`${this.container.constants.EMOTES.tick}  ::  Moderation logs loaded!`);
         return display.run(message, msg.author);
-    }
-
-    async showcontent(msg) {
-        const { modlogShowContent } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
-        this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'modlogShowContent', !modlogShowContent);
-        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Content is now ${modlogShowContent ? 'not ' : ''}modlogged.`);
     }
 
     async reset(msg) {
