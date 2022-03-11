@@ -23,18 +23,18 @@ module.exports = class extends SubCommandPluginCommand {
         if (!['GUILD_TEXT', 'GUILD_CATEGORY'].includes(channel.type)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Only channel categories and text channels are supported.`);
         if (channel.type === 'GUILD_CATEGORY') channel = msg.guild.channels.cache.filter(chan => chan.parentID === channel.id && chan.type === 'GUILD_TEXT');
         else channel = [channel];
-        const ignored = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'ignored');
+        const { ignored } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         const added = [],
             removed = [];
         channel.forEach(chan => {
             if (ignored.includes(chan.id)) {
-                removed.push(...ignored.splice(ignored.indexOf(chan.id), 1));
+                removed.push(this.container.client.channels.cache.get(...ignored.splice(ignored.indexOf(chan.id), 1)) || chan.id);
             } else {
-                ignored.push(chan);
+                ignored.push(chan.id);
                 added.push(chan);
             }
         });
-        await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'ignored', ignored);
+        await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { ignored });
         return reply(msg, [
             `🔇 Ignored  ::  ${added.length ? added.join(', ') : 'None'}`,
             `🔈 Unignored  ::  ${removed.length ? removed.join(', ') : 'None'}`
@@ -49,7 +49,7 @@ module.exports = class extends SubCommandPluginCommand {
             else ignored.splice(ignored.indexOf(ign), 1);
             return null;
         });
-        await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, 'ignored', ignored);
+        await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { ignored });
         channels = channels.filter(chan => chan !== null);
         const isSingular = channels.length === 1;
         const ignoredChanCount = `There ${isSingular ? 'is' : 'are'} **${channels.length}** ignored channel${isSingular ? '' : 's'} in this server:`;
