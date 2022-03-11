@@ -58,16 +58,30 @@ module.exports = class extends Command {
         const { playlist } = musicData;
         let { queue } = musicData;
 
+        let joinResult;
         if (!query) {
             if (player && player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${guildGateway.get(msg.guild.id, 'prefix')}leave\` or \`${guildGateway.get(msg.guild.id, 'prefix')}stop\` command.`); // eslint-disable-line max-len
+
             if (queue.length) {
                 reply(msg, '🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
-                await this.#join(msg);
+                joinResult = await this.#join(msg).catch(error => {
+                    reply(msg, error.message);
+                    return null;
+                });
+                if (joinResult === null) return null;
+
                 return this.#play(msg, queue[0]);
             }
             // eslint-disable-next-line max-len
             if (!playlist.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the queue. You can use the playlist feature or add one using \`${guildGateway.get(msg.guild.id, 'prefix')}play\`.`);
-            if (!player) await this.#join(msg);
+            if (!player) {
+                joinResult = await this.#join(msg).catch(error => {
+                    reply(msg, error.message);
+                    return null;
+                });
+            }
+            if (joinResult === null) return null;
+
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Queue is empty. The playlist has been added to the queue.`);
             return this.#addToQueue(args, playlist)
                 .then(() => {
@@ -97,7 +111,12 @@ module.exports = class extends Command {
         });
         if (queue === null) return null;
 
-        if (!player) await this.#join(msg);
+        if (!player) {
+            joinResult = await this.#join(msg).catch(error => {
+                reply(msg, error.message);
+                return null;
+            });
+        }
 
         if (args.getFlags('force') && queue.length > 1 && player.playing && (await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) {
             player.stop();
@@ -108,7 +127,7 @@ module.exports = class extends Command {
     }
 
     async #join({ guild, channel, member }) {
-        if (!member.voice.channel) throw `${this.container.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`;
+        if (!member.voice.channel) throw new Error(`${this.container.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`);
 
         await this.container.lavacord.join({
             node: this.container.lavacord.idealNodes[0].id,
