@@ -16,7 +16,7 @@ module.exports = class extends Listener {
 
         if (this.container.cache.members.get(msg.member.id).messages.length <= this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSpam.limit) return null;
         if (msg.channel.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) msg.channel.send(`Hey ${msg.author}! No spamming allowed, or I'll punish you!`);
-        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) this.container.cache.members.get(msg.member.id).messages.forEach(message => message.delete().catch(() => null));
+        this.container.cache.members.get(msg.member.id).messages.forEach(message => { if (message.deletable) message.delete().catch(() => null); });
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSpam;
 

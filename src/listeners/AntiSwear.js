@@ -19,7 +19,7 @@ module.exports = class extends Listener {
         const swearRegex = new RegExp(swearArray.join('|'), 'im');
         if (!swearArray.length || !swearRegex.test(msg.content)) return null;
         if (msg.channel.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) msg.channel.send(`Hey ${msg.author}! No swearing allowed, or I'll punish you!`);
-        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) msg.delete();
+        if (msg.deletable) msg.delete();
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSwear;
 

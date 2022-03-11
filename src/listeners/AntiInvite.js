@@ -17,7 +17,7 @@ module.exports = class extends Listener {
         const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;
         if (!inviteRegex.test(msg.content)) return null;
         if (msg.channel.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) msg.channel.send(`Hey ${msg.author}! No sending invites allowed, or I'll punish you!`);
-        if (msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) msg.delete().catch(() => null);
+        if (msg.deletable) msg.delete().catch(() => null);
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiInvite;
 
