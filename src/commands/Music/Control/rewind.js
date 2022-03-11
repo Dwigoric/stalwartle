@@ -1,24 +1,31 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
-            permissionLevel: 5,
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            preconditions: ['DJOnly'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Rewinds the current song to the specified time.',
-            extendedHelp: 'To use this command use e.g. `22m 29s` to rewind the song by 22 minutes and 29 seconds',
-            usage: '<SeekTime:time>'
+            detailedDescription: 'To use this command use e.g. `22m 29s` to rewind the song by 22 minutes and 29 seconds'
         });
     }
 
-    async messageRun(msg, [seek]) {
+    async messageRun(msg, args) {
+        let seek = await args.pickResult('duration');
+        if (!seek.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  How far from the track should I rewind the song to?`);
+        seek = seek.value;
+
         seek -= Date.now();
-        const song = ((await this.container.databases.default.get('music', msg.guild.id) || {}).queue || [])[0];
-        if (!msg.guild.me.voice.channel) throw `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${msg.guild.settings.get('prefix')}play\``;
-        if (!song.info.isSeekable) throw `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be rewinded.`;
-        msg.guild.player.seek(msg.guild.player.state.position - seek);
-        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully rewinded the music.`);
+        const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];
+        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`);
+        if (!song.info.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be rewinded.`);
+
+        const player = this.container.lavacord.players.get(msg.guild.id);
+        player.seek(player.state.position - seek);
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully rewinded the music.`);
     }
 
 };
