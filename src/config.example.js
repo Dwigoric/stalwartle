@@ -45,7 +45,7 @@ exports.config = {
     /**
      * Caching Options
      */
-    partials: ['GUILD_MEMBER', 'USER'],
+    partials: ['GUILD_MEMBER', 'USER', 'CHANNEL'],
     sweepers: {
         messages: {
             interval: 30,
