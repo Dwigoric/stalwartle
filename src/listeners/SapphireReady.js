@@ -38,7 +38,10 @@ module.exports = class extends Listener {
         }
         console.log('The gateways have been loaded.');
 
-        this.container.client.fetchPrefix = message => this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).prefix;
+        this.container.client.fetchPrefix = message => {
+            if (message.guild) return this.container.stores.get('gateways').get('guildGateway').get(message.guild.id).prefix;
+            return this.container.client.options.defaultPrefix;
+        };
 
         await Promise.all(this.container.stores.map(async store => await Promise.all(store.map(async piece => { if (piece.init) await piece.init(); }))));
         if (this.container.client.application.botPublic) this.container.client.postStats().then(() => this.container.client.setInterval(() => this.container.client.postStats(), 1000 * 60 * 5));
