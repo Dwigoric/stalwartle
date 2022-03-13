@@ -18,7 +18,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let type = await args.pickResult('string');
-        if (!role.success || !['bot', 'user'].includes(type.value)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the scope of the autorole.`);
+        if (!type.success || !['bot', 'user'].includes(type.value)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the scope of the autorole.`);
         type = type.value;
 
         let role = await args.pickResult('role');
