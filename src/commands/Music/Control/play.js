@@ -329,7 +329,7 @@ module.exports = class extends Command {
         }
 
         const announceChannel = guild.channels.cache.get(guildGateway.get(guild.id, 'music.announceChannel')) || channel;
-        if (guildGateway.get(guild.id, 'music.announceSongs') && announceChannel.postable) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.container.client.users.fetch(song.requester).then(user => user.tag)))}** - more info on \`${guildGateway.get(guild.id, 'prefix')}np\`).`); // eslint-disable-line max-len
+        if (guildGateway.get(guild.id, 'music.announceSongs') && announceChannel.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(song.info.title)}** by ${escapeMarkdown(song.info.author)} (Requested by **${escapeMarkdown(await guild.members.fetch(song.requester).then(req => req.displayName).catch(() => this.container.client.users.fetch(song.requester).then(user => user.tag)))}** - more info on \`${guildGateway.get(guild.id, 'prefix')}np\`).`); // eslint-disable-line max-len
     }
 
 };
