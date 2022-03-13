@@ -145,7 +145,7 @@ function isValidSchemaType(type) {
 
 function isConfigurableSchema(type) {
     if (!isValidSchemaType(type)) return false;
-    return Boolean(getRegex().exec(type)[1]);
+    return Boolean(getRegex().exec(type)[1] !== '!');
 }
 
 function getBaseSchemaType(type) {
