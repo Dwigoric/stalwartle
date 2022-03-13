@@ -22,8 +22,8 @@ module.exports = class extends Command {
         type = type.value;
 
         let role = await args.pickResult('role');
-        if (!role.success) role = await args.pickResult('string');
-        if (!role.success || role.value !== 'remove') return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply a role or the word \`remove\`.`);
+        if (!role.success) role = await args.pickResult('enum', { enum: 'remove' });
+        if (!role.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply a role or the word \`remove\`.`);
         role = role.value;
 
         if (role === 'remove') {
