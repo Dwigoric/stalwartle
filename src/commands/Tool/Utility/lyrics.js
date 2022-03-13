@@ -14,7 +14,10 @@ module.exports = class extends Command {
         this.NO_LYRICS_FOUND = `${this.container.constants.EMOTES.xmark}  ::  No song lyrics found.`;
     }
 
-    async messageRun(msg, [query]) {
+    async messageRun(msg, args) {
+        const query = await args.rest('string').catch(() => null);
+        if (query === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide your lyric query.`);
+
         const message = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading lyrics...`);
 
         const params = new URLSearchParams();
