@@ -26,7 +26,7 @@ module.exports = class extends Command {
         params.set('limit', 1);
         const search = await fetch(`https://api.jikan.moe/v3/search/manga?${params}`)
             .then(res => res.json())
-            .then(body => body.results[0])
+            .then(body => body.results)
             .catch(() => null);
         if (search === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There was an error searching for a manga series.`);
         if (!search || !search.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Manga not found!`);
