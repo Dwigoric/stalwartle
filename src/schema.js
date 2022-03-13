@@ -1,19 +1,19 @@
-const afk = {
+const afk = Object.freeze({
     reason: null,
     timestamp: null
-};
+});
 
-const modlogs = {
+const modlogs = Object.freeze({
     modlogs: []
-};
+});
 
-const music = {
+const music = Object.freeze({
     queue: [],
     history: [],
     playlist: []
-};
+});
 
-const client = {
+const client = Object.freeze({
     userBlacklist: [],
     guildBlacklist: [],
     changelogs: '',
@@ -37,9 +37,9 @@ const client = {
         channel: '',
         timestamp: ''
     }
-};
+});
 
-const users = {
+const users = Object.freeze({
     acceptFights: true,
     afkIgnore: [],
     afktoggle: false,
@@ -48,9 +48,9 @@ const users = {
     hpBoost: 0,
     osu: '',
     timezone: 'UTC'
-};
+});
 
-const guilds = {
+const guilds = Object.freeze({
     prefix: 's.',
     disableNaturalPrefix: false,
     disabledCommands: [],
@@ -133,7 +133,7 @@ const guilds = {
             }
         }
     }
-};
+});
 
 module.exports = {
     afk,
