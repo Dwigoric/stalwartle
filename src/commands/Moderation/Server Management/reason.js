@@ -24,7 +24,7 @@ module.exports = class extends Command {
         if (!modlog) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You provided an invalid modlog ID.`);
         modlog.reason = reason;
         modlogs.splice(Number(modlog.id) - 1, 1, modlog);
-        this.container.stores.get('gateways').get('modlogGateway').update(msg.guild.id, 'modlogs', modlogs);
+        this.container.stores.get('gateways').get('modlogGateway').update(msg.guild.id, { modlogs });
 
         if (!modlog.message) return reply(msg, `⚠  ::  I've updated the modlog in \`${this.container.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}modlogs\`, however the one sent in the modlog channel is not edited.`);
         const channel = msg.guild.channels.cache.get(this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, `modlogs.${modlog.type}`));

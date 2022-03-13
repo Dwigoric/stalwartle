@@ -88,7 +88,7 @@ module.exports = class extends Listener {
             type: action,
             user: user.id
         });
-        return this.container.stores.get('gateways').get('modlogGateway').update(guild.id, 'modlogs', modlogs);
+        return this.container.stores.get('gateways').get('modlogGateway').update(guild.id, { modlogs });
     }
 
     checkAutomodQuota(actionDone, actionDoer, member, channel) {

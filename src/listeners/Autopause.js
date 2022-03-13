@@ -34,7 +34,7 @@ module.exports = class extends Listener {
         return this.container.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
             this.container.lavacord.leave(guild.id);
-            if (queue[0].requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').update(newState.guild.id, { queue: this.container.stores.get('gateways').get('musicGateway').defaults.queue });
+            if (queue[0].requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').reset(newState.guild.id, 'queue');
             return null;
         }, 30000, newState.guild);
     }
