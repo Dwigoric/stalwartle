@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
     async messageRun(msg) {
         const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
-        const owners = await Promise.all(require('../../../config').config.owners.map(owner => this.container.client.users.fetch(owner).then(own => own.tag)));
+        const owners = await Promise.all(this.container.client.options.developers.map(owner => this.container.client.users.fetch(owner).then(own => own.tag)));
 
         reply(msg, {
             embeds: [new MessageEmbed()
@@ -27,7 +27,7 @@ module.exports = class extends Command {
                 .addField('Support Server', `${this.container.client.guilds.cache.get('502895390807293963').name}\n(<https://discord.gg/KDWGvV8>)`, true)
                 .addField('Discord.js Version', `v${version}`, true)
                 .addField('Node.js Version', process.version, true)
-                .addField('Bot Creator', this.container.client.application.owner.tag, true)
+                .addField('Bot Creator', (await this.container.client.users.fetch(this.container.client.options.ownerID)).tag, true)
                 .addField('Created', `${moment(this.container.client.user.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(this.container.client.user.createdAt).fromNow()}`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
