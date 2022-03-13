@@ -268,7 +268,7 @@ module.exports = class extends Command {
                     .addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)] });
             }
         }
-        await this.container.stores.get('gateways').get('musicGateway').update(args.message.guild.id, { queue }, true);
+        await this.container.stores.get('gateways').get('musicGateway').update(args.message.guild.id, { queue });
         return queue;
     }
 
