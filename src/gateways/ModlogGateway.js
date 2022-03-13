@@ -1,5 +1,6 @@
 const Gateway = require('../lib/structures/settings/Gateway');
 const schema = require('../schema');
+const schemaTypes = require('../schemaTypes');
 
 class ModlogGateway extends Gateway {
 
@@ -7,7 +8,8 @@ class ModlogGateway extends Gateway {
         super(context, {
             name: 'modlogGateway',
             collection: 'modlogs',
-            defaults: schema.modlogs
+            defaults: schema.modlogs,
+            defaultsTypes: schemaTypes.modlogs
         });
     }
 

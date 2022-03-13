@@ -1,5 +1,6 @@
 const Gateway = require('../lib/structures/settings/Gateway');
 const schema = require('../schema');
+const schemaTypes = require('../schemaTypes');
 
 class AFKGateway extends Gateway {
 
@@ -7,7 +8,8 @@ class AFKGateway extends Gateway {
         super(context, {
             name: 'afkGateway',
             collection: 'afk',
-            defaults: schema.afk
+            defaults: schema.afk,
+            defaultsTypes: schemaTypes.afk
         });
     }
 

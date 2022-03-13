@@ -1,5 +1,6 @@
 const Gateway = require('../lib/structures/settings/Gateway');
 const schema = require('../schema');
+const schemaTypes = require('../schemaTypes');
 
 class ClientGateway extends Gateway {
 
@@ -7,7 +8,8 @@ class ClientGateway extends Gateway {
         super(context, {
             name: 'clientGateway',
             collection: 'clientStorage',
-            defaults: schema.client
+            defaults: schema.client,
+            defaultsTypes: schemaTypes.client
         });
     }
 
