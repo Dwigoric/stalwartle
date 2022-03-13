@@ -5,7 +5,7 @@ module.exports = class extends Precondition {
     constructor(context, options) {
         super(context, {
             ...options,
-            position: 1
+            position: 2
         });
     }
 

@@ -5,7 +5,7 @@ module.exports = class IgnoredPrecondition extends Precondition {
     constructor(context, options) {
         super(context, {
             ...options,
-            position: 3
+            position: 4
         });
     }
 
