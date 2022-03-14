@@ -70,7 +70,9 @@ module.exports = class extends SubCommandPluginCommand {
         const type = this.container.stores.get('gateways').get('userGateway').getType(key);
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
-        const resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, this.#getResolverOptions(type, message))).value;
+        const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, this.#getResolverOptions(type, message));
+        if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+        const resolvedValue = resolved.value;
 
         if (Array.isArray(path) && type.isArray) {
             if (path.indexOf(resolvedValue.id || resolvedValue) !== -1) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Value already included in key.`);
@@ -98,7 +100,9 @@ module.exports = class extends SubCommandPluginCommand {
         const type = this.container.stores.get('gateways').get('userGateway').getType(key);
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
-        const resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message))).value;
+        const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message));
+        if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+        const resolvedValue = resolved.value;
 
         if (Array.isArray(path) && type.isArray) {
             if (path.indexOf(resolvedValue.id || resolvedValue) === -1) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Value already not included in key.`);
