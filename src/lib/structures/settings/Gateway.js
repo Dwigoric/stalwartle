@@ -59,7 +59,8 @@ class Gateway extends AliasPiece {
     async reset(id, path) {
         if (typeof path !== 'string') throw new TypeError('Expected the path to be a string');
 
-        return this.container.database.reset(this.collection, id, makeObject(path, 1));
+        await this.container.database.reset(this.collection, id, makeObject(path, 1));
+        return this.sync(id);
     }
 
     async delete(id) {
