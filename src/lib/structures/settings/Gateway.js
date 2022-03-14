@@ -1,5 +1,5 @@
 const { AliasPiece } = require('@sapphire/pieces');
-const { mergeObjects, deepClone, makeObject } = require('@sapphire/utilities');
+const { mergeObjects, deepClone, makeObject, isObject } = require('@sapphire/utilities');
 const { isConfigurableSchema, isSchemaArray, getSchemaMinimum, getSchemaMaximum, getBaseSchemaType } = require('../../../schemaTypes');
 
 class Gateway extends AliasPiece {
@@ -14,18 +14,18 @@ class Gateway extends AliasPiece {
     }
 
     get(id, path, filterUnconfigurable = false) {
-        if (typeof path === 'string') {
-            const type = this.getType(path);
-            if (type === null || (filterUnconfigurable && !type.isConfigurable)) return null;
-            return objectValueByPath(this.get(id), path);
-        }
-        if (this.cache.has(id)) return mergeObjects(deepClone(this.defaults), this.cache.get(id));
-        else return this.defaults;
+        let obj;
+
+        if (typeof path === 'string') obj = objectValueByPath(this.get(id, undefined, filterUnconfigurable), path);
+        else if (this.cache.has(id)) obj = mergeObjects(deepClone(this.defaults), this.cache.get(id));
+        else obj = this.defaults;
+
+        return filterUnconfigurable ? this.#filterUnconfigurable(obj, path) : obj;
     }
 
     getType(path) {
         const type = objectValueByPath(this.defaultsTypes, path);
-        if (type instanceof ReferenceError) return null;
+        if (!type) return null;
         return {
             type: getBaseSchemaType(type),
             isConfigurable: isConfigurableSchema(type),
@@ -39,13 +39,8 @@ class Gateway extends AliasPiece {
         return this.cache.has(id);
     }
 
-    async update(id, path, val, filterUnconfigurable = false) {
-        let obj = path;
-        if (typeof path === 'string') {
-            const type = this.getType(path);
-            if (type === null || (filterUnconfigurable && !type.isConfigurable)) return null;
-            obj = makeObject(path, val);
-        }
+    async update(id, path, val) {
+        const obj = typeof path === 'string' ? makeObject(path, val) : path;
 
         await this.container.database.update(this.collection, id, mergeObjects(obj, { id }), true);
         return this.sync(id);
@@ -84,6 +79,23 @@ class Gateway extends AliasPiece {
         }
     }
 
+    #filterUnconfigurable(obj, path) {
+        if (!obj) return null;
+        if (!isObject(obj)) {
+            if (!this.getType(path).isConfigurable) return null;
+            return obj;
+        }
+
+        const configurableObj = {};
+
+        for (const [key, value] of Object.entries(obj)) {
+            const type = this.getType(`${path || ''}.${key}`);
+            if (type && type.isConfigurable) configurableObj[key] = value;
+        }
+
+        return configurableObj;
+    }
+
 
 }
 
@@ -96,7 +108,7 @@ function objectValueByPath(obj, path) {
     const keys = path.split('.');
     for (const key of keys) {
         if (key in obj) obj = obj[key];
-        else return new ReferenceError('Path does not exist in object');
+        else return null;
     }
     return obj;
 }
