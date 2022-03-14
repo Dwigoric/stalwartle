@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
     async messageRun(msg, args) {
         let seek = await args.pickResult('duration');
-        if (!seek.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  How far from the track should I rewind the song to?`);
+        if (!seek.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  What timestamp should I seek? (e.g. 1m5s for 01:05)`);
         seek = seek.value;
 
         seek -= Date.now();
