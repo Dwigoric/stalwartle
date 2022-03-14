@@ -79,7 +79,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async default(msg, args) {
-        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        const username = await args.rest('string').then(uname => uname.trim()).catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
         if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
 
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading user information...`);
