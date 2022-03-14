@@ -20,7 +20,7 @@ module.exports = class extends Command {
 
         seek -= Date.now();
 
-        const song = ((await this.container.databases.default.get('music', msg.guild.id) || {}).queue || [])[0];
+        const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];
         if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\``);
         if (!song.info.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be forwarded.`);
 
