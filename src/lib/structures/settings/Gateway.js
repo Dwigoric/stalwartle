@@ -82,8 +82,8 @@ class Gateway extends AliasPiece {
     #filterUnconfigurable(obj, path) {
         if (!obj) return null;
         if (!isObject(obj)) {
-            if (!this.getType(path).isConfigurable) return null;
-            return obj;
+            if (this.getType(path).isConfigurable) return obj;
+            return null;
         }
 
         const configurableObj = {};
