@@ -67,6 +67,10 @@ class PersistenceManager {
         return this.db.collection(table).updateOne(resolveQuery(id), { $set: isObject(doc) ? flatten(doc) : parseEngineInput(doc) }, { upsert: Boolean(upsert) });
     }
 
+    reset(table, id, doc) {
+        return this.db.collection(table).updateOne(resolveQuery(id), { $unset: isObject(doc) ? flatten(doc) : parseEngineInput(doc) });
+    }
+
     replace(table, id, doc) {
         return this.db.collection(table).replaceOne(resolveQuery(id), parseUpdateInput(doc));
     }

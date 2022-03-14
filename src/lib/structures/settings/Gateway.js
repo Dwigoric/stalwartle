@@ -56,10 +56,10 @@ class Gateway extends AliasPiece {
         return doc;
     }
 
-    async reset(id, path, filterUnconfigurable = false) {
+    async reset(id, path) {
         if (typeof path !== 'string') throw new TypeError('Expected the path to be a string');
 
-        return this.update(id, path, objectValueByPath(this.defaults, path), filterUnconfigurable);
+        return this.container.database.reset(this.collection, id, makeObject(path, 1));
     }
 
     async delete(id) {
