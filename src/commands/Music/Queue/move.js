@@ -4,8 +4,9 @@ const { Util: { escapeMarkdown } } = require('discord.js');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Moves a queue entry to a specified position in the queue.',
             detailedDescription: 'If you want to move e.g. entry #3 to position #7, do `s.move 3 7`'
