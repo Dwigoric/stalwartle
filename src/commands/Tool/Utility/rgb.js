@@ -41,7 +41,7 @@ module.exports = class extends Command {
 
             return [rgbObj.rd, rgbObj.gn, rgbObj.bl];
         }
-        return reply(msg, `\`${hexColor}\` is equivalent to \`rgb(${hexToRgb(hexColor.substring(0, 9)).join(', ')})\`.`);
+        return reply(msg, `\`#${hexColor}\` is equivalent to \`rgb(${hexToRgb(hexColor.substring(0, 9)).join(', ')})\`.`);
     }
 
 };
