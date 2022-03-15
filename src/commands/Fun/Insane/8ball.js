@@ -10,6 +10,7 @@ module.exports = class extends Command {
             aliases: ['8b', 'eightballball'],
             description: 'Magic 8-Ball, does exactly what the toy does.'
         });
+        this.usage = '<Message:message|Question:string>';
     }
 
     async messageRun(msg, args) {

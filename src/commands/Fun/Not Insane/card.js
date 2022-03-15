@@ -9,6 +9,7 @@ module.exports = class extends Command {
             aliases: ['carddraw', 'drawcard'],
             description: 'Draws some random cards from a deck.'
         });
+        this.usage = '[Num:integer{1,10}]';
     }
 
     async messageRun(msg, args) {

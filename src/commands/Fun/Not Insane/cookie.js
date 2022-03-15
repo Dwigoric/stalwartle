@@ -24,6 +24,7 @@ module.exports = class extends SubCommandPluginCommand {
             flags: ['check'],
             subCommands: ['lb', { input: 'default', default: true }]
         });
+        this.usage = '[lb]|(Person:user)';
     }
 
     async default(msg, args) {

@@ -8,6 +8,7 @@ module.exports = class extends Command {
             ...options,
             description: 'Reverses any word/phrase you give me.'
         });
+        this.usage = '<StringToReverse:string>';
     }
 
     async messageRun(msg, args) {

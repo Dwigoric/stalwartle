@@ -9,6 +9,7 @@ module.exports = class extends Command {
             aliases: ['jumble'],
             description: 'Shuffles any word or phrase you give.'
         });
+        this.usage = '<PhraseToShuffle:string>';
     }
 
     async messageRun(msg, args) {

@@ -26,6 +26,7 @@ module.exports = class extends SubCommandPluginCommand {
             ].join('\n'),
             subCommands: ['invite', 'swear', 'spam', 'mentionspam', 'quota', 'ignorebots', 'ignoremods', { input: 'default', default: true }]
         });
+        this.usage = '<invite|swear|spam|mentionspam|quota|ignorebots|ignoremods> (enable|disable|actionType:string)';
     }
 
     async invite(msg, args) {

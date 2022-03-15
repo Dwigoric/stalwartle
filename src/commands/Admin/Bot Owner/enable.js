@@ -9,6 +9,7 @@ module.exports = class extends Command {
             preconditions: ['OwnersOnly'],
             description: 'Re-enables or temporarily enables a piece. Default state restored on reboot.'
         });
+        this.usage = '<Piece:piece>';
     }
 
     async messageRun(message, args) {

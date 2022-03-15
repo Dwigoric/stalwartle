@@ -16,6 +16,7 @@ module.exports = class extends Command {
                 'e.g. to remove songs #3 to #5, use `s.remove 3-5`'
             ].join('\n')
         });
+        this.usage = '<QueueItems:string>';
     }
 
     async messageRun(msg, args) {

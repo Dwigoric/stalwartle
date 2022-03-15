@@ -8,6 +8,7 @@ module.exports = class extends Command {
             ...options,
             description: "Rates anything you want from 0-10. Either 10 being the worst or the best -- it's really up to you."
         });
+        this.usage = '<RateThing:string>';
     }
 
     async messageRun(msg, args) {

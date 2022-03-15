@@ -10,6 +10,7 @@ module.exports = class extends Command {
             ...options,
             description: 'Returns a random reddit post on a given subreddit.'
         });
+        this.usage = '<Subreddit:string>';
     }
 
     async messageRun(msg, args) {

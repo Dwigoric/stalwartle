@@ -11,6 +11,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Kicks a mentioned user.'
         });
+        this.usage = '<Member:member> [Reason:...string]';
     }
 
     async messageRun(msg, args) {

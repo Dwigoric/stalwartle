@@ -16,6 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
             detailedDescription: 'You can setup selfroles via `s.conf set selfroles`',
             subCommands: ['list', { input: 'default', default: true }]
         });
+        this.usage = '[list],(SelfAssignableRole:string)';
     }
 
     async default(msg, args) {

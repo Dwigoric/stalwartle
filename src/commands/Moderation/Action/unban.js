@@ -11,6 +11,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Unbans a user from their ID.'
         });
+        this.usage = '<Member:user> [Reason:...string]';
     }
 
     async messageRun(msg, args) {

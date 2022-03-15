@@ -11,6 +11,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Changes the volume for music sessions in the server.'
         });
+        this.usage = '[Volume:integer{1,300}]';
     }
 
     async messageRun(msg, args) {

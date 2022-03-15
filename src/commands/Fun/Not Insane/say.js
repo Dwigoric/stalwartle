@@ -11,6 +11,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Makes the bot say anything you want.',
             subCommands: ['delete', 'embed', 'anonymous', { input: 'default', default: true }]
         });
+        this.usage = '[Channel:channel] <Content:string{1,1000}> [...]';
     }
 
     async default(msg, args) {

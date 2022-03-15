@@ -11,6 +11,7 @@ module.exports = class extends Command {
             preconditions: ['OwnersOnly'],
             description: 'Reloads a piece, or all pieces of a store.'
         });
+        this.usage = '<Store:store|Piece:piece|everything:default>';
     }
 
     async messageRun(message, args) {

@@ -9,6 +9,7 @@ module.exports = class extends Command {
             aliases: ['coin'],
             description: 'Flips one or more coins'
         });
+        this.usage = '[Coins:integer{0,1000}]';
     }
 
     async messageRun(msg, args) {

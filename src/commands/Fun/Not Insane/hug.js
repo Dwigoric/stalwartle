@@ -11,6 +11,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives a random hugging GIF.'
         });
+        this.usage = '<Person:member>';
     }
 
     async messageRun(msg, args) {

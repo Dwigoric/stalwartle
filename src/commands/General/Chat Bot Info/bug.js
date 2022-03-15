@@ -9,6 +9,7 @@ module.exports = class extends Command {
             description: 'This command is used to report bugs.',
             detailedDescription: 'Those who submit silly bug reports will be banned from the bot. Your bug report is escorted by a samurai to my dev server where my developers can fix the bug as soon as they can.' // eslint-disable-line max-len
         });
+        this.usage = '<BugReport:string>';
     }
 
     async messageRun(msg, args) {

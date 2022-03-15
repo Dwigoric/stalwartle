@@ -8,6 +8,7 @@ module.exports = class extends Command {
             ...options,
             description: 'Converts your RGB value to its HEX code equivalent.'
         });
+        this.usage = '<R:integer> <G:integer> <B:integer>';
     }
 
     async messageRun(msg, args) {

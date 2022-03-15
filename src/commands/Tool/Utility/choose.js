@@ -9,6 +9,7 @@ module.exports = class extends Command {
             aliases: ['pick'],
             description: 'Chooses between two or more choices. Use ` | ` (two spaces, mind you!) to separate each choice.'
         });
+        this.usage = '<Choices:string> | [...]';
     }
 
     async messageRun(msg, args) {

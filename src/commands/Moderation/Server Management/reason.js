@@ -9,6 +9,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Change/update reason for a specific modlog given its ID.'
         });
+        this.usage = '<ModlogID:integer> <Reason:...string>';
     }
 
     async messageRun(msg, args) {

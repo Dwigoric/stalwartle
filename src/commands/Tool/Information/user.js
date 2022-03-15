@@ -16,6 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Gives information about you or another user (mention, tag, or ID).',
             subCommands: ['rawavatar', 'avatar', 'roles', 'id', { input: 'default', default: true }]
         });
+        this.usage = '[rawavatar|avatar|roles|id] [User:user]';
     }
 
     async default(msg, args) {

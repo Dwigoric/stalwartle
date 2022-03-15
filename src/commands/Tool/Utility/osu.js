@@ -76,6 +76,7 @@ module.exports = class extends SubCommandPluginCommand {
             flags: ['mania', 'catch', 'taiko'],
             subCommands: ['best', 'recent', 'beatmap', { input: 'default', default: true }]
         });
+        this.usage = '[best|recent|beatmap] (BeatmapID|Username:...string)';
     }
 
     async default(msg, args) {

@@ -15,6 +15,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             runIn: [CommandOptionsRunTypeEnum.GuildText]
         });
+        this.usage = '<User:user> <Message:message> <Comment:...string>';
     }
 
     async messageRun(msg, args) {

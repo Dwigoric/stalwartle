@@ -16,6 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
             detailedDescription: "You can use the role's name in providing the role.",
             subCommands: ['id', { input: 'default', default: true }]
         });
+        this.usage = '[id] <Role:role>';
     }
 
     async messageRun(msg, args) {

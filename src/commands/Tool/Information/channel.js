@@ -16,6 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: "Gives information about the channel you're on or the channel you provided.",
             subCommands: ['id', { input: 'default', default: true }]
         });
+        this.usage = '[id] [Channel:channel]';
     }
 
     async default(msg, args) {

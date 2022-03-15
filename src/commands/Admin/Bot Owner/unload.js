@@ -11,6 +11,7 @@ module.exports = class extends Command {
             preconditions: ['OwnersOnly'],
             description: 'Unloads a piece.'
         });
+        this.usage = '<Piece:piece>';
     }
 
     async messageRun(message, args) {

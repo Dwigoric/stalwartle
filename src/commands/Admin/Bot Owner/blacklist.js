@@ -11,7 +11,7 @@ module.exports = class extends Command {
             preconditions: ['OwnersOnly'],
             description: 'Blacklists or un-blacklists users and guilds from the bot.'
         });
-
+        this.usage = '<User:user|Guild:guild|guild:str> [...]';
         this.terms = ['usersAdded', 'usersRemoved', 'guildsAdded', 'guildsRemoved'];
     }
 

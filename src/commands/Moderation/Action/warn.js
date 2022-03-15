@@ -10,6 +10,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Warns a mentioned user.'
         });
+        this.usage = '<Member:member> [Reason:...string]';
     }
 
     async messageRun(msg, args) {

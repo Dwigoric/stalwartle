@@ -11,6 +11,7 @@ module.exports = class extends Command {
             description: 'Moves a queue entry to a specified position in the queue.',
             detailedDescription: 'If you want to move e.g. entry #3 to position #7, do `s.move 3 7`'
         });
+        this.usage = '<QueueEntry:integer{1}> <NewPosition:integer{1}>';
     }
 
     async messageRun(msg, args) {

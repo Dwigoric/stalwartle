@@ -33,7 +33,7 @@ module.exports = class extends Command {
                 'To enable autoplay, use `s.conf set music.autoplay true`. This is only applicable for $8+ donators.'
             ].join('\n')
         });
-
+        this.usage = '[TracksURL:url|Query:string]';
         Object.defineProperty(this, 'timeouts', { value: new Map(), writable: false });
     }
 

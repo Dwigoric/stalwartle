@@ -14,6 +14,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['MANAGE_ROLES'],
             runIn: [CommandOptionsRunTypeEnum.GuildText]
         });
+        this.usage = '<user|bot> <remove|Role:role> [...]';
     }
 
     async messageRun(msg, args) {

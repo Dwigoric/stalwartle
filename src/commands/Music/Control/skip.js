@@ -14,6 +14,7 @@ module.exports = class extends Command {
             ].join('\n'),
             flags: ['force']
         });
+        this.usage = '[QueueEntry:integer]';
     }
 
     async messageRun(msg, args) {

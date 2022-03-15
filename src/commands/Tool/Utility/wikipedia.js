@@ -12,6 +12,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Finds a Wikipedia Article by title.'
         });
+        this.usage = '<Query:string>';
     }
 
     async messageRun(msg, args) {

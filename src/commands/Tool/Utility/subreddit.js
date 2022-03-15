@@ -12,6 +12,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Returns information on a subreddit.'
         });
+        this.usage = '<Subreddit:string>';
     }
 
     async messageRun(msg, args) {

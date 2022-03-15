@@ -33,7 +33,7 @@ module.exports = class extends Command {
             options: ['depth', 'lang', 'language', 'output', 'output-to', 'wait'],
             preconditions: ['DevsOnly']
         });
-
+        this.usage = '<expression:string>';
         this.timeout = 30000;
     }
 

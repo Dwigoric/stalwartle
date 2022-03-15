@@ -20,6 +20,7 @@ module.exports = class extends SubCommandPluginCommand {
             ].join('\n'),
             subCommands: ['list', 'kick', 'ban', 'softban', 'unban', 'mute', 'unmute', 'reset', { input: 'default', default: true }]
         });
+        this.usage = '[list|kick|ban|softban|unban|mute|unmute|reset] (reset|Modlog:channel)';
     }
 
     async list(msg) {

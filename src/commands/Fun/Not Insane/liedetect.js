@@ -16,6 +16,7 @@ module.exports = class extends Command {
                 '\nIf you want to force the results, use the `--force` flag. To use the flag, put `--force=lie` or `--force=truth`.'
             ].join('\n')
         });
+        this.usage = '<Lie:string>';
     }
 
     async messageRun(msg, args) {

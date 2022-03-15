@@ -15,6 +15,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives information about a game on Steam.'
         });
+        this.usage = '<Game:string>';
     }
 
     async messageRun(msg, args) {

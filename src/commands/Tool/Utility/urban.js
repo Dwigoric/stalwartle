@@ -14,6 +14,7 @@ module.exports = class extends Command {
             detailedDescription: 'You can use e.g. `--result=2` to get the second result for the word.',
             options: ['result']
         });
+        this.usage = '<SearchTerm:string>';
     }
 
     async messageRun(msg, args) {

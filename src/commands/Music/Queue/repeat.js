@@ -12,6 +12,7 @@ module.exports = class extends Command {
             description: 'Sets if the current song will be repeated or the whole queue.',
             detailedDescription: 'Supply `song` if you want to repeat the song, or `queue` if you want the queue to repeat.'
         });
+        this.usage = '[song|queue|none]';
         this.symbols = {
             song: '🔂',
             queue: '🔁',

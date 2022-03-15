@@ -25,6 +25,7 @@ module.exports = class extends SubCommandPluginCommand {
             options: ['type'],
             subCommands: ['reset', { input: 'default', default: true }]
         });
+        this.usage = '[reset|User:user|CaseNumber:integer]';
     }
 
     async default(msg, args) {

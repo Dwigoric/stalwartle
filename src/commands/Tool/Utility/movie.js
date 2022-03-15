@@ -16,6 +16,7 @@ module.exports = class extends Command {
             detailedDescription: 'To search from a different page, use e.g. `--page=5` to search from page 5.',
             options: ['page']
         });
+        this.usage = '<Query:string>';
     }
 
     async messageRun(msg, args) {

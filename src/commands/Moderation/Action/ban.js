@@ -15,6 +15,7 @@ module.exports = class extends Command {
                 'If you want to ban a user indefinitely, simply do not provide the duration.'
             ].join('\n')
         });
+        this.usage = '<Member:user> [MessageDaysToDelete:integer{1,7}] [Duration:time] [Reason:...string]';
     }
 
     async messageRun(msg, args) {

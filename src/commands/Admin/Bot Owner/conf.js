@@ -13,6 +13,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Define per-server settings.',
             subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
         });
+        this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
     }
 
     default(message) {

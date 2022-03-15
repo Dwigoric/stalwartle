@@ -13,6 +13,7 @@ module.exports = class extends SubCommandPluginCommand {
             detailedDescription: 'If you want to unignore channels or categories, simply reuse the command and give the channel you want to unignore.',
             subCommands: ['list', { input: 'default', default: true }]
         });
+        this.usage = '[list]|(ChannelOrCategory:channel)';
     }
 
     async default(msg, args) {

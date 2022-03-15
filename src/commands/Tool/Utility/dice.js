@@ -14,6 +14,7 @@ module.exports = class extends Command {
                 'Ex. `s.dice 2d20` or `s.dice 3d10 + 6d12`'
             ].join('\n')
         });
+        this.usage = '[Rolled:string]';
     }
 
     async messageRun(msg, args) {

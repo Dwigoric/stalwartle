@@ -12,6 +12,7 @@ module.exports = class extends Command {
             preconditions: ['OwnersOnly'],
             description: 'Loads a piece from the bot.'
         });
+        this.usage = '<Store:store> <path:string>';
         this.regExp = /\\\\?|\//g;
     }
 

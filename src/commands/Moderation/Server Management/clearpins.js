@@ -10,6 +10,7 @@ module.exports = class extends Command {
             requiredUserPermissions: ['MANAGE_GUILD'],
             description: 'Unpins all pinned messages in the text channel.'
         });
+        this.usage = '[TextChannel:channel]';
     }
 
     async messageRun(msg, args) {

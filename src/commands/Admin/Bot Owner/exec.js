@@ -18,6 +18,7 @@ module.exports = class extends Command {
             preconditions: ['OwnersOnly'],
             options: ['timeout']
         });
+        this.usage = '<expression:string>';
     }
 
     async messageRun(msg, args) {

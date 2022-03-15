@@ -11,6 +11,7 @@ module.exports = class extends Command {
             aliases: ['ly'],
             description: 'Searches song lyrics using your search query.'
         });
+        this.usage = '<Query:string>';
         this.NO_LYRICS_FOUND = `${this.container.constants.EMOTES.xmark}  ::  No song lyrics found.`;
     }
 

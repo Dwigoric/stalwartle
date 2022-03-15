@@ -12,6 +12,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gets information of a manga series from MyAnimeList.'
         });
+        this.usage = '<Manga:string>';
     }
 
     async messageRun(msg, args) {

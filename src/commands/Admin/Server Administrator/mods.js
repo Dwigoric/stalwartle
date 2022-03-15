@@ -14,6 +14,7 @@ module.exports = class extends SubCommandPluginCommand {
             detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
             subCommands: ['add', 'remove', { input: 'default', default: true }]
         });
+        this.usage = '[add|remove] (Member:member|Role:role) [...]';
     }
 
     async default(msg) {

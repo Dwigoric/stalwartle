@@ -12,6 +12,7 @@ module.exports = class extends Command {
             description: 'Mutes a mentioned user.',
             detailedDescription: 'To mute a user indefinitely, simply do not provide the duration.'
         });
+        this.usage = '<Member:member> [MuteDuration:time] [Reason:...string]';
     }
 
     async messageRun(msg, args) {

@@ -14,6 +14,7 @@ module.exports = class extends Command {
                 "My high lords will look into your suggestion as soon as they can and may send you a DM after it's checked."
             ].join('\n')
         });
+        this.usage = '<Suggestion:string>';
     }
 
     async messageRun(msg, args) {

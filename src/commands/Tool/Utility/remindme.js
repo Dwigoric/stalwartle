@@ -29,7 +29,7 @@ module.exports = class extends SubCommandPluginCommand {
             flags: ['channel'],
             subCommands: ['list', 'remove', { input: 'default', default: true }]
         });
-
+        this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {
             if (moment(parameter, true).isValid()) {
                 const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);

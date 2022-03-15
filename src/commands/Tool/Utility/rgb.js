@@ -8,7 +8,7 @@ module.exports = class extends Command {
             ...options,
             description: 'Converts your HEX code to its RGB equivalent. The `#` at the beginning of the HEX code is optional.'
         });
-
+        this.usage = '<HexColor:hexcode>';
         this.resolver = Args.make((parameter, { argument }) => {
             const regex = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/i;
             if (regex.test(parameter)) {

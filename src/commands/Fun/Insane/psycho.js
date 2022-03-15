@@ -12,6 +12,7 @@ module.exports = class extends Command {
                 "It is one part of a person's overall [Psycho-Pass](http://bit.ly/2CdrwCL)."
             ].join('\n')
         });
+        this.usage = '[User:user]';
     }
 
     async messageRun(msg, args) {

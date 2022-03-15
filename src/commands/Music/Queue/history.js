@@ -22,6 +22,7 @@ module.exports = class extends SubCommandPluginCommand {
             ].join('\n'),
             subCommands: ['export', 'clear', { input: 'default', default: true }]
         });
+        this.usage = '[export|clear]';
     }
 
     async default(msg) {

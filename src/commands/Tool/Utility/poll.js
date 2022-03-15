@@ -13,6 +13,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             flags: ['no-default']
         });
+        this.usage = '[Channel:channel] <Question:string> | <Choices:string> | [...]';
     }
 
     async messageRun(msg, args) {

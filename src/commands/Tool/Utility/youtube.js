@@ -16,6 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Finds a video, channel, or playlist from YouTube.',
             subCommands: ['channel', 'playlist', { input: 'video', default: true }]
         });
+        this.usage = '[channel|playlist] <VideoOrQuery:...string>';
     }
 
     async video(msg, args) {

@@ -14,35 +14,39 @@ module.exports = class extends Command {
             detailedDescription: [
                 'If you want to get more information about a command, use `s.help <command>`.',
                 'If you want to get the commands for a specific category, use `s.help <category>`.',
-                'If you want to get the commands for a specific subcategory under a category, use `s.help <category>, <subcategory>`.'
+                'If you want to get the commands for a specific subcategory under a category, use `s.help <category> <subcategory>`.'
             ].join('\n'),
             flags: ['all'],
             requiredClientPermissions: ['EMBED_LINKS']
         });
+        this.usage = '[Command:command|Category:string], [Subcategory:string]';
     }
 
     async messageRun(msg, args) {
-        const category = await args.pick('command').catch(() => args.pick('string').catch(() => null));
-        const subcategory = await args.pick('string').catch(() => null);
+        const command = await args.pick('command').catch(() => args.rest('string').then(cats => cats.split(', ')).catch(() => null));
 
-        if (category instanceof Command) {
+        if (command instanceof Command) {
             return reply(msg, {
                 embeds: [new MessageEmbed()
-                    .setTitle(`The \`${this.container.client.options.defaultPrefix}${category.name}\` command`)
-                    .setDescription(category.description)
-                    .addField('Usage', `\`${this.container.client.options.defaultPrefix}${category.usage}\``)
-                    .addField('Additional Information', category.detailedDescription || 'No additional information.')
-                    .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type`')
-                    .setFooter({ text: `Classification: ${category.category} → ${category.subCategory}` })]
+                    .setTitle(`The \`${this.container.client.options.defaultPrefix}${command.name}\` command`)
+                    .setDescription(command.description)
+                    .addField('Usage', `\`${this.container.client.options.defaultPrefix}${this.getUsage(command)}\``)
+                    .addField('Additional Information', command.detailedDescription || 'No additional information.')
+                    .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type{min,max}`')
+                    .setFooter({ text: `Classification: ${command.category} → ${command.subCategory}` })]
             });
         }
 
+        const category = Array.isArray(command) ? command[0] : null;
+        const subcategory = Array.isArray(command) ? command[1] : null;
+
         if (!args.getFlags('all') && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
+            const myMsg = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
             const display = await this.buildDisplay(msg, [category, subcategory]);
 
             if (display === null) return null;
 
-            return display.run(await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`), msg.author);
+            return display.run(myMsg, msg.author);
         }
 
         return this.originalHelp(msg, args, [category, subcategory]);
@@ -168,6 +172,11 @@ module.exports = class extends Command {
     formatCommand(prefix, richDisplay, command) {
         const { description } = command;
         return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
+    }
+
+    getUsage(command) {
+        const names = [command.name].concat(command.aliases);
+        return `${names.length === 1 ? names.join('') : `《${names.join('|')}》`}${command.usage ? ` ${command.usage}` : ''}`;
     }
 
     async _fetchCommands(message, [maincategory, subcategory]) {

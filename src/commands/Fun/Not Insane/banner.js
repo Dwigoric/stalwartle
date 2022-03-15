@@ -14,6 +14,7 @@ module.exports = class extends Command {
                 'By default, the character width is not set.'
             ].join('\n')
         });
+        this.usage = '<Banner:string{1,50}>';
     }
 
     async messageRun(msg, args) {

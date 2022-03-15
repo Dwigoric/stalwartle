@@ -10,6 +10,7 @@ module.exports = class extends Command {
             preconditions: ['DJOnly'],
             description: 'Clears the music queue for the server, optionally those requested by a specified user.'
         });
+        this.usage = '[Requester:user]';
     }
 
     async messageRun(msg, args) {

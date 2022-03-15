@@ -10,6 +10,7 @@ module.exports = class extends Command {
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Puts a certain message (given the message ID or link) in an embed, as if "quoting" the message.'
         });
+        this.usage = '<MessageID:string> [Channel:channel]';
     }
 
     async messageRun(msg, args) {

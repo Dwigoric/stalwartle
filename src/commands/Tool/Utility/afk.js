@@ -12,6 +12,7 @@ module.exports = class extends Command {
                 'If you want me to ignore a channel for you from AFK stuff, just use `s.userconf set afkIgnore <channel>`. Note that this applies only for you.'
             ].join('\n')
         });
+        this.usage = '[Reason:string]';
     }
 
     async messageRun(msg, args) {

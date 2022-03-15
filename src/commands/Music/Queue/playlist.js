@@ -30,6 +30,7 @@ module.exports = class extends SubCommandPluginCommand {
             ].join('\n'),
             subCommands: ['add', 'remove', 'clear', 'export', 'move', 'shuffle', { input: 'default', default: true }]
         });
+        this.usage = '[add|remove|clear|export|move|shuffle] (TracksURLOrPlaylistItems:string)';
     }
 
     async default(msg) {

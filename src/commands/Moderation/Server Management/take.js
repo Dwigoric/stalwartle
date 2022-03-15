@@ -11,6 +11,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Takes a role from a member.'
         });
+        this.usage = '<User:member> <Role:role>';
     }
 
     async messageRun(msg, args) {

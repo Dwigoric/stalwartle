@@ -9,6 +9,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Compliments a user.'
         });
+        this.usage = '[UserToCompliment:member]';
     }
 
     async messageRun(msg, args) {

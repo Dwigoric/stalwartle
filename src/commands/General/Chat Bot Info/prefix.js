@@ -9,6 +9,7 @@ module.exports = class extends Command {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Changes the bot prefix server-wide, or simply displays the current prefix.'
         });
+        this.usage = '[Prefix:string]';
     }
 
     async messageRun(msg, args) {

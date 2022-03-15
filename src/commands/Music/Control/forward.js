@@ -11,6 +11,7 @@ module.exports = class extends Command {
             description: 'Forwards the current song by the specified time.',
             detailedDescription: 'To use this command use e.g. `22m 29s` to forward the song by 22 minutes and 29 seconds.'
         });
+        this.usage = '<SeekTime:time>';
     }
 
     async messageRun(msg, args) {

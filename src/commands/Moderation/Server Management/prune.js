@@ -15,6 +15,7 @@ module.exports = class extends Command {
             description: 'Prunes a certain amount of messages w/o filter.',
             cooldownDelay: 10
         });
+        this.usage = '[Limit:integer{2,100}] [link|invite|bots|you|me|pinsonly|upload|user:user]';
     }
 
     async messageRun(msg, args) {

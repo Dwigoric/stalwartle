@@ -16,7 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'A fight minigame between two Discord users.',
             subCommands: ['accept', 'deny', 'cancel', { input: 'default', default: true }]
         });
-
+        this.usage = '[accept|deny|cancel]|(Opponent:user)';
         this.getRandomInt = (min, max) => {
             min = Math.ceil(min);
             max = Math.floor(max);

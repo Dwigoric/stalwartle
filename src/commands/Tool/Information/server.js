@@ -15,6 +15,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Gives information about the current server.',
             subCommands: ['icon', 'roles', 'id', { input: 'default', default: true }]
         });
+        this.usage = '[icon|roles|id]';
     }
 
     async default(msg) {

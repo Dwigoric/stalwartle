@@ -12,6 +12,7 @@ module.exports = class extends Command {
             description: 'Softbans (bans then automatically unbans) a mentioned user.',
             detailedDescription: 'The default age of messages to delete is `1` day.'
         });
+        this.usage = '<Member:user> [MessageDaysToDelete:integer{1,7}] [Reason:...string]';
     }
 
     async messageRun(msg, args) {

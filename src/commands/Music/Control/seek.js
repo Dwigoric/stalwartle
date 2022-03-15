@@ -11,6 +11,7 @@ module.exports = class extends Command {
             description: 'Seeks the current song to the specified time.',
             detailedDescription: 'To use this command use e.g. `22m 29s` or `1h 24m 42s`'
         });
+        this.usage = '<SeekTime:time>';
     }
 
     async messageRun(msg, args) {

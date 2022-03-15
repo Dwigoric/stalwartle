@@ -18,6 +18,7 @@ module.exports = class extends Command {
                 '\nTo set gain for all bands, replace the `band` with `setall`, e.g. `s.eq setall 0`.'
             ].join('\n')
         });
+        this.usage = '<setall|Band:integer{0,14}> <Gain:number{-0.25,1.0}>';
     }
 
     async messageRun(msg, args) {
