@@ -48,7 +48,7 @@ module.exports = class extends Command {
         })) : 'No upcoming tracks.'))).then(musicList => musicList.forEach(queue10 => display.addPageEmbed(template => template.setDescription(queue10.join('\n')))));
 
         display.template.embeds[0].setFooter({ text: [
-            `[${queue.length - 1} Queue Entr${queue.length === 1 ? 'y' : 'ies'}]`,
+            `[${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}]`,
             `Queue Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`
         ].join(' - ') });
 
