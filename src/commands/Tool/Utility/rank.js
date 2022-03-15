@@ -20,12 +20,12 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async default(msg, args) {
-        let sar = await args.restResult();
-        if (!sar.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the name of the selfrole you want to assign yourself.`);
-        sar = sar.value;
-
         const { selfroles } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         if (!selfroles.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Selfrole is not yet implemented in this server.`);
+
+        let sar = await args.restResult('string');
+        if (!sar.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the name of the selfrole you want to assign yourself.`);
+        sar = sar.value;
 
         const role = selfroles.map(_sar => msg.guild.roles.cache.get(_sar)).find(rl => new RegExp(regExpEsc(sar), 'i').test(rl.name));
         if (!role) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Invalid selfrole. Check all available selfroles in this server by using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}rank list\`.`); // eslint-disable-line max-len
