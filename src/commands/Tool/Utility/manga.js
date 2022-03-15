@@ -25,9 +25,9 @@ module.exports = class extends Command {
         const params = new URLSearchParams();
         params.set('q', keyword);
         params.set('limit', 1);
-        const search = await fetch(`https://api.jikan.moe/v3/search/manga?${params}`)
+        const search = await fetch(`https://api.jikan.moe/v4/manga?${params}`)
             .then(res => res.json())
-            .then(body => body.results)
+            .then(body => body.data)
             .catch(() => null);
         if (search === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There was an error searching for a manga series.`);
         if (!search || !search.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Manga not found!`);
@@ -38,12 +38,12 @@ module.exports = class extends Command {
             embeds: [new MessageEmbed()
                 .setColor('RANDOM')
                 .setTitle(manga.title)
-                .setThumbnail(manga.image_url)
+                .setThumbnail(manga.images.webp.image_url)
                 .setDescription(manga.synopsis)
                 .setURL(manga.url)
                 .addField('Volumes', String(manga.volumes), true)
                 .addField('Chapters', String(manga.chapters), true)
-                .addField('Score', String(manga.score), true)]
+                .addField('Score', String(manga.scored), true)]
         });
     }
 
