@@ -18,7 +18,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const { queue } = await this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
+        const { queue } = JSON.parse(JSON.stringify(this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id)));
         if (!queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the queue yet! Add one with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`);
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading the music queue...`);
         const np = queue[0];
