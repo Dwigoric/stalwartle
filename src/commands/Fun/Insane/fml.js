@@ -27,7 +27,7 @@ module.exports = class extends Command {
             .addField('I agree, your life sucks:', $('.vote-btn-count').eq(0).text() || 'N/A', true)
             .addField('You deserved it:', $('.vote-btn-count').eq(1).text() || 'N/A', true);
 
-        if ($('.article-contents .article-link').length < 5) return reply(msg, '<:akcry:333597917342466048>  ::  Today, something went wrong, so you will have to try again in a few moments. FML again.');
+        if ($('a.block.text-blue-500').length < 5) return reply(msg, '<:akcry:333597917342466048>  ::  Today, something went wrong, so you will have to try again in a few moments. FML again.');
 
         return reply(msg, { embeds: [embed], content: 'FML story loaded!' });
     }
