@@ -18,9 +18,11 @@ module.exports = class extends Command {
         let entry = await args.pickResult('integer');
         if (!entry.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me which queue entry you want to move.`);
         entry = entry.value;
+        if (entry < 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You provided an invalid value.`);
         let position = await args.pickResult('integer');
         if (!position.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me to which position you want to move the entry to.`);
         position = position.value;
+        if (position < 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You provided an invalid value.`);
 
         const { queue } = await this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
         if (queue.length <= 2) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no queue entry to move.`);
