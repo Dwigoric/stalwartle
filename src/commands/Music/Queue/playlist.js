@@ -39,7 +39,7 @@ module.exports = class extends SubCommandPluginCommand {
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading the music playlist...`);
         const display = new LazyPaginatedMessage({
             template: {
-                content: `${this.container.constants.EMOTES.xmark}  ::  Server music playlist has been loaded!`,
+                content: `${this.container.constants.EMOTES.tick}  ::  Server music playlist has been loaded!`,
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
                     .setAuthor({ name: `Server Music Playlist: ${msg.guild.name}`, iconURL: msg.guild.iconURL({ dynamic: true }) })
