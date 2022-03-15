@@ -42,11 +42,10 @@ module.exports = class extends Command {
         const subcategory = Array.isArray(command) ? command[1] : null;
 
         if (!args.getFlags('all') && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
-            const myMsg = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
             const display = await this.buildDisplay(msg, [category, subcategory]);
-
             if (display === null) return null;
 
+            const myMsg = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
             return display.run(myMsg, msg.author);
         }
 
@@ -54,9 +53,9 @@ module.exports = class extends Command {
     }
 
     async originalHelp(msg, args, [category, subcategory]) {
-        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
         const help = await this.buildHelp(msg, [category ? toTitleCase(category) : undefined, subcategory ? toTitleCase(subcategory) : undefined]);
         if (help === null) return null;
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
         const categories = Object.keys(help);
         const helpMessage = [];
         for (let cat = 0; cat < categories.length; cat++) {
