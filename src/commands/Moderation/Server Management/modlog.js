@@ -62,9 +62,12 @@ module.exports = class extends SubCommandPluginCommand {
         if (!list.length) return reply(msg, `${this.container.constants.EMOTES.blobstop}  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`);
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading moderation logs...`);
         const display = new LazyPaginatedMessage({
-            template: new MessageEmbed()
-                .setColor('RANDOM')
-                .setTitle(`${this.container.constants.EMOTES.blobban} ${list.length} ${args.getOption('type') && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(args.getOption('type')) ? toTitleCase(args.getOption('type')) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`) // eslint-disable-line max-len
+            template: {
+                content: `${this.container.constants.EMOTES.tick}  ::  Moderation logs loaded!`,
+                embeds: [new MessageEmbed()
+                    .setColor('RANDOM')
+                    .setTitle(`${this.container.constants.EMOTES.blobban} ${list.length} ${args.getOption('type') && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(args.getOption('type')) ? toTitleCase(args.getOption('type')) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)] // eslint-disable-line max-len
+            }
         });
 
         await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
@@ -80,7 +83,6 @@ module.exports = class extends SubCommandPluginCommand {
             ].join('\n');
         })))).then(logs => logs.forEach(modlog5 => display.addPageEmbed(template => template.setDescription(modlog5.join('\n\n')))));
 
-        message.edit(`${this.container.constants.EMOTES.tick}  ::  Moderation logs loaded!`);
         return display.run(message, msg.author);
     }
 
