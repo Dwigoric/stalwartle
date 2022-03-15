@@ -89,7 +89,7 @@ module.exports = class extends SubCommandPluginCommand {
         }
 
         const status = await this.container.stores.get('gateways').get('guildGateway').update(message.guild.id, key, type.isArray ? path : resolvedValue.id || resolvedValue).catch(error => error);
-        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully ${type.isArray ? 'added to' : 'updated'} the key **${key}**: \`${await this.#resolveString(message, type, resolvedValue)}\``);
+        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await this.#resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
         return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status.message}`);
     }
 
@@ -119,7 +119,7 @@ module.exports = class extends SubCommandPluginCommand {
         }
 
         const status = await this.container.stores.get('gateways').get('guildGateway').update(message.guild.id, key, type.isArray ? path : resolvedValue.id || resolvedValue).catch(error => error);
-        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully ${type.isArray ? 'removed from' : 'updated'} the key **${key}**: \`${await this.#resolveString(message, type, resolvedValue)}\``);
+        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await this.#resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
         return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status.message}`);
     }
 
