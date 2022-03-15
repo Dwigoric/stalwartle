@@ -15,6 +15,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Provides some details about the bot and stats.'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

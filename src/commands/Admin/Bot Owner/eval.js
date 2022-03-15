@@ -35,6 +35,7 @@ module.exports = class extends Command {
         });
         this.usage = '<expression:string>';
         this.timeout = 30000;
+        this.guarded = true;
     }
 
     async messageRun(msg, args) {

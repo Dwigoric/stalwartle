@@ -9,6 +9,7 @@ module.exports = class extends Command {
             aliases: ['changelogs', 'cl'],
             description: 'Gives you my latest changelog to keep you updated!'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

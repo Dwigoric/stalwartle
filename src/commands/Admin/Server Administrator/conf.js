@@ -14,6 +14,7 @@ module.exports = class extends SubCommandPluginCommand {
             subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
+        this.guarded = true;
     }
 
     default(message) {
@@ -73,9 +74,17 @@ module.exports = class extends SubCommandPluginCommand {
         const type = this.container.stores.get('gateways').get('guildGateway').getType(key);
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
-        const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, this.#getResolverOptions(type, message));
-        if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
-        const resolvedValue = resolved.value;
+        let resolvedValue;
+        if (type.type === 'command') {
+            const command = this.store.get(valueToSet);
+            if (!command) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Not a valid command name.`);
+            if (command.guarded) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  That command is guarded and cannot be disabled.`);
+            resolvedValue = command.name;
+        } else {
+            const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, this.#getResolverOptions(type, message));
+            if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+            resolvedValue = resolved.value;
+        }
 
         if (Array.isArray(path) && type.isArray) {
             if (path.indexOf(resolvedValue.id || resolvedValue) !== -1) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Value already included in key.`);
@@ -103,9 +112,17 @@ module.exports = class extends SubCommandPluginCommand {
         const type = this.container.stores.get('gateways').get('guildGateway').getType(key);
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
-        const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message));
-        if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
-        const resolvedValue = resolved.value;
+        let resolvedValue;
+        if (type.type === 'command') {
+            const command = this.store.get(valueToRemove);
+            if (!command) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Not a valid command name.`);
+            if (command.guarded) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  That command is guarded and cannot be disabled.`);
+            resolvedValue = command.name;
+        } else {
+            const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message));
+            if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+            resolvedValue = resolved.value;
+        }
 
         if (Array.isArray(path) && type.isArray) {
             if (path.indexOf(resolvedValue.id || resolvedValue) === -1) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Value already not included in key.`);
@@ -164,7 +181,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (value === null) return 'Not set';
         let resolvedValue;
         if (Array.isArray(value)) {
-            return value.length ? `[ ${await Promise.all(value.map(async val => {
+            return value.length ? type.type === 'command' ? `[ ${value.join(' | ')} ]` : `[ ${await Promise.all(value.map(async val => {
                 resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](val, this.#getResolverOptions(type, message))).value;
                 if (resolvedValue) return resolvedValue.name || resolvedValue;
                 return val;

@@ -11,6 +11,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives you the invite link to my server where you can view the changelog and hang out with us!'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

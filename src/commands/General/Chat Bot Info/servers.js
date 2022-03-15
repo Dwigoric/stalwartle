@@ -9,6 +9,7 @@ module.exports = class extends Command {
             guarded: true,
             description: 'Gives the amount of servers the bot is in.'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

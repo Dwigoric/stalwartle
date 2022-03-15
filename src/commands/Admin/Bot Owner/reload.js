@@ -12,6 +12,7 @@ module.exports = class extends Command {
             description: 'Reloads a piece, or all pieces of a store.'
         });
         this.usage = '<Store:store|Piece:piece|everything:default>';
+        this.guarded = true;
     }
 
     async messageRun(message, args) {

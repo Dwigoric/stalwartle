@@ -12,6 +12,7 @@ module.exports = class extends SubCommandPluginCommand {
             subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
+        this.guarded = true;
     }
 
     default(message) {

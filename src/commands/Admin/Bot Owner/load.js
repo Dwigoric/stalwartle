@@ -13,6 +13,7 @@ module.exports = class extends Command {
             description: 'Loads a piece from the bot.'
         });
         this.usage = '<Store:store> <path:string>';
+        this.guarded = true;
         this.regExp = /\\\\?|\//g;
     }
 

@@ -10,6 +10,7 @@ module.exports = class extends Command {
             detailedDescription: 'Those who submit silly bug reports will be banned from the bot. Your bug report is escorted by a samurai to my dev server where my developers can fix the bug as soon as they can.' // eslint-disable-line max-len
         });
         this.usage = '<BugReport:string>';
+        this.guarded = true;
     }
 
     async messageRun(msg, args) {

@@ -9,6 +9,7 @@ module.exports = class extends Command {
             ...options,
             description: 'Gives the amount of time the bot has been online.'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

@@ -8,6 +8,7 @@ module.exports = class extends Command {
             ...options,
             description: "Displays the bot's latency in terms of a ping-pong game. API latency is the ping for the Discord's API so please ignore that."
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

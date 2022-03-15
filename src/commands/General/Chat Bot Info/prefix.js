@@ -10,6 +10,7 @@ module.exports = class extends Command {
             description: 'Changes the bot prefix server-wide, or simply displays the current prefix.'
         });
         this.usage = '[Prefix:string]';
+        this.guarded = true;
     }
 
     async messageRun(msg, args) {

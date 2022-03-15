@@ -12,6 +12,7 @@ module.exports = class extends Command {
             description: 'Blacklists or un-blacklists users and guilds from the bot.'
         });
         this.usage = '<User:user|Guild:guild|guild:str> [...]';
+        this.guarded = true;
         this.terms = ['usersAdded', 'usersRemoved', 'guildsAdded', 'guildsRemoved'];
     }
 

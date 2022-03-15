@@ -12,6 +12,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Provides some information about Stalwartle.'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {

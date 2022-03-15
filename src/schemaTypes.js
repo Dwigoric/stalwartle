@@ -53,7 +53,7 @@ const users = Object.freeze({
 const guilds = Object.freeze({
     prefix: 'string',
     disableNaturalPrefix: 'boolean',
-    disabledCommands: 'command',
+    disabledCommands: 'command[]',
     afkChannelOnAfk: 'boolean',
     donation: '!integer',
     globalBans: 'boolean',

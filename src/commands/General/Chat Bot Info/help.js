@@ -20,6 +20,7 @@ module.exports = class extends Command {
             requiredClientPermissions: ['EMBED_LINKS']
         });
         this.usage = '[Command:command|Category:string], [Subcategory:string]';
+        this.guarded = true;
     }
 
     async messageRun(msg, args) {

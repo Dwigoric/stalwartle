@@ -15,6 +15,7 @@ module.exports = class extends Command {
             ].join('\n')
         });
         this.usage = '<Suggestion:string>';
+        this.guarded = true;
     }
 
     async messageRun(msg, args) {

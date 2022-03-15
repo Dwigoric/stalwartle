@@ -10,6 +10,7 @@ module.exports = class extends Command {
             description: 'Re-enables or temporarily disables a piece. Default state restored on reboot.'
         });
         this.usage = '<Piece:piece>';
+        this.guarded = true;
     }
 
     async messageRun(message, args) {

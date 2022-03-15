@@ -8,6 +8,7 @@ module.exports = class extends Command {
             ...options,
             description: 'Displays the join server link of the bot.'
         });
+        this.guarded = true;
     }
 
     async messageRun(msg) {
