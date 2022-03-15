@@ -2,6 +2,13 @@ const { Precondition } = require('@sapphire/framework');
 
 module.exports = class MusicControlPrecondition extends Precondition {
 
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            position: 5
+        });
+    }
+
     async run(msg, command) {
         if (!msg.guild) return this.ok();
         if (command.category !== 'Music' || (command.category === 'Music' && command.subCategory !== 'Control')) return this.ok();
