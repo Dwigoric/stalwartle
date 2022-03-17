@@ -65,7 +65,6 @@ module.exports = class MemorySweeper extends ScheduledTask {
         // Per-User sweeper
         for (const user of this.container.client.users.cache.values()) {
             if (user.lastMessageID && user.lastMessageID > OLD_SNOWFLAKE) continue;
-            if (this.container.stores.get('gateways').get('userGateway').get(user.id, 'cookies')) continue;
             this.container.client.users.cache.delete(user.id);
             users++;
         }
