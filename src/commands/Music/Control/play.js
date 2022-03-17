@@ -134,7 +134,6 @@ module.exports = class extends Command {
             guild: guild.id,
             channel: member.voice.channelId
         }, { selfdeaf: true });
-        if (member.voice.channel.type === 'GUILD_STAGE_VOICE') guild.me.voice.setSuppressed(false).catch(() => channel.send(`⚠ It looks like you invited me to a stage channel, but I cannot speak. Make sure to invite me to speak!`));
 
         this.container.lavacord.players.get(guild.id).on('error', error => {
             channel.send(`${this.container.constants.EMOTES.xmark}  ::  ${error.error || error.reason || 'An unknown error has occurred.'}`);
