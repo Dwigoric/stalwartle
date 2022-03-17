@@ -30,8 +30,8 @@ module.exports = class extends Listener {
                     `**Users**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
                 ].join('\n') : msg.content,
                 channel: msg.channel,
-                reason: 'Spamming mentions with MentionSpam enabled'
-            }, msg.author, 'Spamming mentions with the MentionSpam enabled (member has higher permissions so I could not ban them)', null);
+                reason: 'Spamming mentions with MentionSpam enabled (member has higher permissions so I could not ban them)'
+            });
         }
 
         return this.container.client.emit('modlogAction', action, this.container.client.user, msg.author, msg.guild, {
