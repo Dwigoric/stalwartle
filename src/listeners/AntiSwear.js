@@ -12,7 +12,7 @@ module.exports = class extends Listener {
         if (msg.author.bot && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreBots) return null;
         if ((await this.container.stores.get('preconditions').get('ModsOnly').run(msg)).success && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.antiSwear.includes(msg.channel.id)) return null;
-        if (msg.author.equals(this.container.client.user)) return null;
+        if (msg.author.id === this.container.client.user.id) return null;
 
         let swearArray = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.swearWords.map(word => `(?:^|\\W)${word}(?:$|\\W)`);
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.globalSwears) swearArray = swearArray.concat(this.container.constants.SWEAR_WORDS_REGEX).map(word => `(?:^|\\W)${word}(?:$|\\W)`);

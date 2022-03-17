@@ -12,7 +12,7 @@ module.exports = class extends Listener {
         if (msg.author.bot && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreBots) return null;
         if ((await this.container.stores.get('preconditions').get('ModsOnly').run(msg)).success && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.antiInvite.includes(msg.channel.id)) return null;
-        if (msg.author.equals(this.container.client.user)) return null;
+        if (msg.author.id === this.container.client.user.id) return null;
 
         const inviteRegex = /(https?:\/\/)?(www\.)?(discord\.(gg|li|me|io)|discordapp\.com\/invite)\/.+/i;
         if (!inviteRegex.test(msg.content)) return null;

@@ -13,7 +13,7 @@ module.exports = class extends Listener {
         if (msg.author.bot && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreBots) return null;
         if ((await this.container.stores.get('preconditions').get('ModsOnly').run(msg)).success && this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.ignoreMods) return null;
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.filterIgnore.mentionSpam.includes(msg.channel.id)) return null;
-        if (msg.author.equals(this.container.client.user)) return null;
+        if (msg.author.id === this.container.client.user.id) return null;
 
         if (this.container.cache.members.get(msg.member.id).messages.length && this.container.cache.members.get(msg.member.id).messages
             .map(message => message.mentions.users ? message.mentions.users.size : 0 + message.mentions.roles ? message.mentions.roles.size : 0)
