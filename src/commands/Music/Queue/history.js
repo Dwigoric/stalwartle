@@ -53,7 +53,7 @@ module.exports = class extends SubCommandPluginCommand {
             `History Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`
         ].join(' - ') });
 
-        return display.run(message, msg.author);
+        return display.run(message, msg.author).catch(err => this.container.logger.error(err));
     }
 
     async export(msg) {

@@ -57,7 +57,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         display.template.embeds[0].setFooter({ text: `[${playlist.length} Playlist Item${playlist.length === 1 ? '' : 's'}] - Playlist Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}` }); // eslint-disable-line max-len
 
-        return display.run(message, msg.author);
+        return display.run(message, msg.author).catch(err => this.container.logger.error(err));
     }
 
     async add(msg, args) {

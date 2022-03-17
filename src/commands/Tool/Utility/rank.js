@@ -65,7 +65,7 @@ module.exports = class extends SubCommandPluginCommand {
             return `\`${currentPos}\`. ${msg.guild.roles.cache.get(selfrole).name}`;
         }).join('\n'))));
 
-        return display.run(message, { filter: (reaction, author) => author === msg.author });
+        return display.run(message, msg.author).catch(err => this.container.logger.error(err));
     }
 
 };

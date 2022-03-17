@@ -38,8 +38,8 @@ module.exports = class extends SubCommandPluginCommand {
         const cookies = this.container.stores.get('gateways').get('userGateway').get(person.id, 'cookies');
         if (args.getFlags('check')) return reply(msg, `🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
         const cookieTask = (await this.container.tasks.list({})).filter(job => job.data.task === 'CookieReset' && job.data.payload.user === msg.author.id);
-        if (cookieTask.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again ${moment(cookieTask[0].delay).fromNow()}.`);
-        await this.container.tasks.create('CookieReset', { user: msg.author.id }, Date.now() + (1000 * 60 * 60));
+        if (cookieTask.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again ${moment(cookieTask[0].timestamp + cookieTask[0].delay).fromNow()}.`);
+        await this.container.tasks.create('CookieReset', { user: msg.author.id }, 1000 * 60 * 60);
         await this.container.stores.get('gateways').get('userGateway').update(person.id, 'cookies', cookies + 1);
         return reply(msg, `🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
     }
@@ -80,7 +80,7 @@ module.exports = class extends SubCommandPluginCommand {
             })
         );
 
-        return display.run(message, msg.author);
+        return display.run(message, msg.author).catch(err => this.container.logger.error(err));
     }
 
 };

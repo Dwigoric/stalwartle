@@ -120,8 +120,12 @@ module.exports = class extends SubCommandPluginCommand {
             resolvedValue = command.name;
         } else {
             const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message));
-            if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
-            resolvedValue = resolved.value;
+            if (!resolved.success) {
+                if (type.isArray && path.includes(valueToRemove)) resolvedValue = valueToRemove;
+                else return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+            } else {
+                resolvedValue = resolved.value;
+            }
         }
 
         if (Array.isArray(path) && type.isArray) {

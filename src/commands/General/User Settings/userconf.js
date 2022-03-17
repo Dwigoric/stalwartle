@@ -103,7 +103,10 @@ module.exports = class extends SubCommandPluginCommand {
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
         const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message));
-        if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+        if (!resolved.success) {
+            if (type.isArray && path.includes(valueToRemove)) resolved.value = valueToRemove;
+            return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+        }
         const resolvedValue = resolved.value;
 
         if (Array.isArray(path) && type.isArray) {
