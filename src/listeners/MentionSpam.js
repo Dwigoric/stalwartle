@@ -22,22 +22,15 @@ module.exports = class extends Listener {
         this.container.cache.members.get(msg.member.id).messages.forEach(message => { if (message.deletable) message.delete().catch(() => null); });
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.mentionSpam;
+        const doable = this.container.stores.get('listeners').get('ModlogAction').doable(action, msg.member);
 
-        if (!msg.member.bannable && action === 'ban') {
-            return this.container.client.emit('modlogAction', 'warn', this.container.client.user, msg.author, msg.guild, {
-                content: msg.content.length > 900 ? [
-                    `**Roles**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.roles.map(rl => rl.toString()).join(', ')).join(', ')}`,
-                    `**Users**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
-                ].join('\n') : msg.content,
-                channel: msg.channel,
-                reason: 'Spamming mentions with MentionSpam enabled (member has higher permissions so I could not ban them)'
-            });
-        }
-
-        return this.container.client.emit('modlogAction', action, this.container.client.user, msg.author, msg.guild, {
-            content: msg.content,
+        return this.container.client.emit('modlogAction', doable ? action : 'warn', this.container.client.user, msg.author, msg.guild, {
+            content: msg.content.length > 900 ? [
+                `**Roles**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.roles.map(rl => rl.toString()).join(', ')).join(', ')}`,
+                `**Users**: ${this.container.cache.members.get(msg.member.id).messages.map(message => message.mentions.users.map(us => us.toString()).join(', ')).join(', ')}`
+            ].join('\n') : msg.content,
             channel: msg.channel,
-            reason: 'Spamming mentions with MentionSpam enabled',
+            reason: `Spamming mentions with MentionSpam enabled${doable ? ' (member has higher permissions)' : ''}`,
             duration: Date.now() + (1000 * 60 * duration)
         });
     }

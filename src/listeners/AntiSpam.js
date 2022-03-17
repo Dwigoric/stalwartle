@@ -19,11 +19,12 @@ module.exports = class extends Listener {
         this.container.cache.members.get(msg.member.id).messages.forEach(message => { if (message.deletable) message.delete().catch(() => null); });
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiSpam;
+        const doable = this.container.stores.get('listeners').get('ModlogAction').doable(action, msg.member);
 
-        return this.container.client.emit('modlogAction', action, this.container.client.user, msg.author, msg.guild, {
+        return this.container.client.emit('modlogAction', doable ? action : 'warn', this.container.client.user, msg.author, msg.guild, {
             content: msg.content,
             channel: msg.channel,
-            reason: 'Spamming with AntiSpam enabled',
+            reason: `Spamming with AntiSpam enabled${doable ? ' (member has higher permissions)' : ''}`,
             duration: Date.now() + (1000 * 60 * duration)
         });
     }

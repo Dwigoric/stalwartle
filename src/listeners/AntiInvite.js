@@ -20,11 +20,12 @@ module.exports = class extends Listener {
         if (msg.deletable) msg.delete().catch(() => null);
 
         const { duration, action } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).automod.options.antiInvite;
+        const doable = this.container.stores.get('listeners').get('ModlogAction').doable(action, msg.member);
 
-        return this.container.client.emit('modlogAction', action, this.container.client.user, msg.author, msg.guild, {
+        return this.container.client.emit('modlogAction', doable ? action : 'warn', this.container.client.user, msg.author, msg.guild, {
             content: msg.content,
             channel: msg.channel,
-            reason: 'Sending invites with AntiInvite enabled',
+            reason: `Sending invites with AntiInvite enabled${doable ? ' (member has higher permissions)' : ''}`,
             duration: Date.now() + (1000 * 60 * duration)
         });
     }

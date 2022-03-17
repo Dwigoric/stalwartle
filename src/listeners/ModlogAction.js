@@ -104,6 +104,21 @@ module.exports = class extends Listener {
         return this.container.cache.members.get(member.id).length >= limit;
     }
 
+    doable(action, payload) {
+        switch (action) {
+            case 'ban':
+            case 'softban':
+                return Boolean(payload.bannable);
+            case 'unban':
+                return payload.permissions.has('BAN_MEMBERS');
+            case 'kick': return Boolean(payload.kickable);
+            case 'mute':
+            case 'unmute':
+                return Boolean(payload.moderatable);
+            default: return false;
+        }
+    }
+
     async #ban(guild, user, days, reason, duration) {
         const options = { days };
         if (reason) options.reason = reason;
