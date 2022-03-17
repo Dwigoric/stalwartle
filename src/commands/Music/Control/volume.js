@@ -6,7 +6,7 @@ module.exports = class extends Command {
     constructor(context, options) {
         super(context, {
             ...options,
-            preconditions: ['DJOnly'],
+            preconditions: ['DJOnly', 'MusicControl'],
             aliases: ['vol'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Changes the volume for music sessions in the server.'

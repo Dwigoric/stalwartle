@@ -6,6 +6,7 @@ module.exports = class extends Command {
     constructor(context, options) {
         super(context, {
             ...options,
+            preconditions: ['MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Skips current song playing in the voice channel.',
             detailedDescription: [

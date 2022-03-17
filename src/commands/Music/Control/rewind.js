@@ -6,7 +6,7 @@ module.exports = class extends Command {
     constructor(context, options) {
         super(context, {
             ...options,
-            preconditions: ['DJOnly'],
+            preconditions: ['DJOnly', 'MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Rewinds the current song to the specified time.',
             detailedDescription: 'To use this command use e.g. `22m 29s` to rewind the song by 22 minutes and 29 seconds'

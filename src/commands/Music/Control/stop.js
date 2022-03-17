@@ -6,7 +6,7 @@ module.exports = class extends Command {
     constructor(context, options) {
         super(context, {
             ...options,
-            preconditions: ['DJOnly'],
+            preconditions: ['DJOnly', 'MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Stops the music session in the server and empties the music queue.'
         });

@@ -17,7 +17,7 @@ module.exports = class extends Command {
         super(context, {
             ...options,
             aliases: ['p'],
-            preconditions: ['DJOnly'],
+            preconditions: ['DJOnly', 'MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
             flags: ['force', 'incognito', 'soundcloud'],
