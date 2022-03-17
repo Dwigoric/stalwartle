@@ -1,71 +1,86 @@
-const { Command, util: { toTitleCase } } = require('klasa');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
+const { reply } = require('@sapphire/plugin-editable-commands');
+const { toTitleCase } = require('@sapphire/utilities');
+require('dotenv').config();
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
-	constructor(...args) {
-		super(...args, {
-			aliases: ['yt', 'ytsearch', 'yts'],
-			requiredPermissions: ['EMBED_LINKS'],
-			description: 'Finds a video, channel, or playlist from YouTube.',
-			usage: '[channel|playlist] <VideoOrQuery:string> [...]',
-			usageDelim: ' ',
-			subcommands: true
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            aliases: ['yt', 'ytsearch', 'yts'],
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Finds a video, channel, or playlist from YouTube.',
+            subCommands: ['channel', 'playlist', { input: 'video', default: true }]
+        });
+        this.usage = '[channel|playlist] <VideoOrQuery:...string>';
+    }
 
-	async run(msg, [...query]) {
-		return await this.query(msg, query, 'video', 'watch?v=');
-	}
+    async video(msg, args) {
+        let query = await args.restResult('string');
+        if (!query.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply your YouTube query.`);
+        query = query.value;
 
-	async channel(msg, [...query]) {
-		return await this.query(msg, query, 'channel', 'channel/');
-	}
+        return await this.#query(msg, query, 'video', 'watch?v=');
+    }
 
-	async playlist(msg, [...query]) {
-		return await this.query(msg, query, 'playlist', 'playlist?list=');
-	}
+    async channel(msg, args) {
+        let query = await args.restResult('string');
+        if (!query.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply your YouTube query.`);
+        query = query.value;
 
-	async query(msg, query, type, url) {
-		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading YouTube information...`);
+        return await this.#query(msg, query, 'channel', 'channel/');
+    }
 
-		const timezone = msg.author.settings.get('timezone');
+    async playlist(msg, args) {
+        let query = await args.restResult('string');
+        if (!query.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply your YouTube query.`);
+        query = query.value;
 
-		const params = new URLSearchParams();
-		params.set('key', this.client.auth.googleAPIkey);
-		params.set('part', 'snippet');
-		params.set('maxResults', 1);
-		params.set('q', query.join(this.usageDelim));
-		params.set('type', type);
-		const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(result => result.json());
+        return await this.#query(msg, query, 'playlist', 'playlist?list=');
+    }
 
-		if (!res || !res.items || !res.items.length) throw `${this.client.constants.EMOTES.xmark}  ::  YouTube query not found!`;
+    async #query(msg, query, type, url) {
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading YouTube information...`);
 
-		const embed = new MessageEmbed(),
-			request = res.items[0];
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
 
-		embed
-			.setAuthor(`YouTube ${toTitleCase(type)}`, 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png')
-			.setTitle(request.snippet.title)
-			.setURL(`https://www.youtube.com/${url}${request.id[`${type}Id`]}`)
-			.setColor('RANDOM');
-		if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
-		if (type !== 'channel') {
-			params.set('id', request.snippet.channelId);
-			params.delete('q');
-			params.delete('type');
-			embed
-				.setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?${params}`)
-					.then(result => result.json())
-					.then(result => result.items.length ? result.items[0].snippet.thumbnails.high.url : undefined))
-				.addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
-		}
-		embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS z'))
-			.addField('Description', request.snippet.description ? request.snippet.description : 'No Description');
+        const params = new URLSearchParams();
+        params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
+        params.set('part', 'snippet');
+        params.set('maxResults', 1);
+        params.set('q', query);
+        params.set('type', type);
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(result => result.json());
 
-		return msg.send(embed);
-	}
+        if (!res || !res.items || !res.items.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  YouTube query not found!`);
+
+        const embed = new MessageEmbed(),
+            request = res.items[0];
+
+        embed
+            .setAuthor({ name: `YouTube ${toTitleCase(type)}`, iconURL: 'https://cdn0.iconfinder.com/data/icons/social-flat-rounded-rects/512/youtube-512.png' })
+            .setTitle(request.snippet.title)
+            .setURL(`https://www.youtube.com/${url}${request.id[`${type}Id`]}`)
+            .setColor('RANDOM');
+        if (request.snippet.thumbnails) embed.setImage(request.snippet.thumbnails.high.url);
+        if (type !== 'channel') {
+            params.set('id', request.snippet.channelId);
+            params.delete('q');
+            params.delete('type');
+            embed
+                .setThumbnail(await fetch(`https://www.googleapis.com/youtube/v3/channels?${params}`)
+                    .then(result => result.json())
+                    .then(result => result.items.length ? result.items[0].snippet.thumbnails.high.url : undefined))
+                .addField('Channel', `[${request.snippet.channelTitle}](https://www.youtube.com/channel/${request.snippet.channelId})`, true);
+        }
+        embed.addField('Published', moment(request.snippet.publishedAt).tz(timezone).format('dddd, LL | LTS z'))
+            .addField('Description', request.snippet.description || 'No Description');
+
+        return reply(msg, { embeds: [embed] });
+    }
 
 };

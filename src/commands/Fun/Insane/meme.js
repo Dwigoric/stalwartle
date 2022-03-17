@@ -1,25 +1,29 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			cooldown: 10,
-			requiredPermissions: ['ATTACH_FILES'],
-			description: 'Gives a random meme.'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            cooldownDelay: 10,
+            requiredClientPermissions: ['ATTACH_FILES'],
+            description: 'Gives a random meme.'
+        });
+    }
 
-	async run(msg) {
-		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading meme...`);
+    async messageRun(msg) {
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading meme...`);
 
-		const meme = await fetch(`https://some-random-api.ml/meme`)
-			.then(res => res.json())
-			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
-		msg.channel.sendFile(meme.image, 'meme.png', meme.caption);
+        const meme = await fetch(`https://some-random-api.ml/meme`)
+            .then(res => res.json())
+            .catch(() => null);
 
-		message.delete();
-	}
+        if (meme === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        reply(msg, { files: [{ attachment: meme.image, name: 'meme.png' }], content: meme.caption });
+
+        return true;
+    }
 
 };

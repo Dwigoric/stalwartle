@@ -1,26 +1,31 @@
-const { Command } = require('klasa');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			runIn: ['text'],
-			requiredPermissions: ['EMBED_LINKS'],
-			description: 'Gives a random hugging GIF.',
-			usage: '<Person:member>'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Gives a random hugging GIF.'
+        });
+        this.usage = '<Person:member>';
+    }
 
-	async run(msg, [person]) {
-		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading GIF...`);
+    async messageRun(msg, args) {
+        let person = await args.pickResult('member');
+        if (!person.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please mention who you want to hug.`);
+        person = person.value;
 
-		const { link } = await fetch(`https://some-random-api.ml/animu/hug`)
-			.then(res => res.json())
-			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
-		msg.channel.sendFile(link, 'hug.gif', `🤗  ::  **${msg.member.displayName}** wants to hug ${person}!`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
 
-		message.delete();
-	}
+        const { link } = await fetch(`https://some-random-api.ml/animu/hug`)
+            .then(res => res.json())
+            .catch(() => ({ link: null }));
+        if (!link) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        return reply(msg, { content: `🤗  ::  **${msg.member.displayName}** wants to hug ${person}!`, files: [{ attachment: link, name: 'hug.gif' }] });
+    }
 
 };

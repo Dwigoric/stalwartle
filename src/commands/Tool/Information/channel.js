@@ -1,49 +1,53 @@
-const { Command, util: { toTitleCase } } = require('klasa');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
+const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 const moment = require('moment-timezone');
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
-	constructor(...args) {
-		super(...args, {
-			aliases: ['ci', 'cinfo', 'channelinfo'],
-			runIn: ['text'],
-			requiredPermissions: ['EMBED_LINKS'],
-			description: "Gives information about the channel you're on or the channel you provided.",
-			usage: '[id] [Channel:channel]',
-			usageDelim: ' ',
-			subcommands: true
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            aliases: ['ci', 'cinfo', 'channelinfo'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: "Gives information about the channel you're on or the channel you provided.",
+            subCommands: ['id', { input: 'default', default: true }]
+        });
+        this.usage = '[id] [Channel:channel]';
+    }
 
-	async run(msg, [chan = msg.channel]) {
-		const timezone = msg.author.settings.get('timezone');
+    async default(msg, args) {
+        const chan = await args.pick('channel').catch(() => msg.channel);
+        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
 
-		let embed = new MessageEmbed()
-			.setColor('RANDOM')
-			.setAuthor(`Channel information for #${chan.name}`)
-			.addField('ID', chan.id, true)
-			.addField('Type', toTitleCase(chan.type), true)
-			.addField('Category', chan.parent ? chan.parent.name : 'No Category', true)
-			.setFooter(`Information requested by ${msg.author.tag}`, msg.author.displayAvatarURL({ dynamic: true }))
-			.setTimestamp();
-		if (chan.type === 'text') {
-			embed = embed
-				.setDescription(chan.topic || 'No topic set.')
-				.addField('Position', chan.position, true)
-				.addField('NSFW', chan.nsfw ? 'Enabled' : 'Disabled', true)
-				.addField('Ratelimit', chan.rateLimitPerUser ? `1 msg/${chan.rateLimitPerUser} second${chan.rateLimitPerUser === 1 ? '' : 's'}` : 'Disabled', true);
-		} else if (chan.type === 'voice') {
-			embed = embed
-				.addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
-				.addField('User Limit', chan.userLimit, true);
-		}
-		embed = embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`);
-		return msg.send({ embed });
-	}
+        const embed = new MessageEmbed()
+            .setColor('RANDOM')
+            .setAuthor({ name: `Channel information for #${chan.name}` })
+            .addField('ID', chan.id, true)
+            .addField('Type', toTitleCase(chan.type), true)
+            .addField('Category', chan.parent ? chan.parent.name : 'No Category', true)
+            .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
+            .setTimestamp();
+        if (chan.type === 'GUILD_TEXT') {
+            embed
+                .setDescription(chan.topic || 'No topic set.')
+                .addField('Position', String(chan.position), true)
+                .addField('NSFW', chan.nsfw ? 'Enabled' : 'Disabled', true)
+                .addField('Ratelimit', chan.rateLimitPerUser ? `1 msg/${chan.rateLimitPerUser} second${chan.rateLimitPerUser === 1 ? '' : 's'}` : 'Disabled', true);
+        } else if (chan.type === 'GUILD_VOICE') {
+            embed
+                .addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
+                .addField('User Limit', String(chan.userLimit), true);
+        }
+        return reply(msg, { embeds: [embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`)] });
+    }
 
-	async id(msg, [chan = msg.channel]) {
-		msg.send(`The channel ID of **#${chan.name}** is \`${chan.id}\`.`);
-	}
+    async id(msg, args) {
+        const chan = await args.pick('channel').catch(() => msg.channel);
+        reply(msg, `The channel ID of **#${chan.name}** is \`${chan.id}\`.`);
+    }
 
 };

@@ -1,22 +1,26 @@
-const { Command } = require('klasa');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			runIn: ['text'],
-			permissionLevel: 7,
-			description: 'Unpins all pinned messages in the text channel.',
-			usage: '[TextChannel:channel]'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
+            requiredUserPermissions: ['MANAGE_GUILD'],
+            description: 'Unpins all pinned messages in the text channel.'
+        });
+        this.usage = '[TextChannel:channel]';
+    }
 
-	async run(msg, [channel = msg.channel]) {
-		const pinnedMessages = await channel.messages.fetchPinned(false);
-		if (!pinnedMessages.size) throw `${this.client.constants.EMOTES.xmark}  ::  There are no pinned messages in ${channel}.`;
-		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Unpinning messages...`);
-		pinnedMessages.each(pinned => pinned.unpin());
-		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully unpinned messages from ${channel}!`);
-	}
+    async messageRun(msg, args) {
+        const channel = await args.pick('guildTextChannel').catch(() => msg.channel);
+
+        const pinnedMessages = await channel.messages.fetchPinned(false);
+        if (!pinnedMessages.size) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There are no pinned messages in ${channel}.`);
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Unpinning messages...`);
+        pinnedMessages.each(pinned => pinned.unpin());
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully unpinned messages from ${channel}!`);
+    }
 
 };

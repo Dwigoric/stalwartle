@@ -1,25 +1,28 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			cooldown: 10,
-			requiredPermissions: ['ATTACH_FILES'],
-			description: 'Grabs a random panda image and fact.'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            cooldownDelay: 10,
+            requiredClientPermissions: ['ATTACH_FILES'],
+            description: 'Grabs a random panda image and fact.'
+        });
+    }
 
-	async run(msg) {
-		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading panda...`);
+    async messageRun(msg) {
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading panda...`);
 
-		const { image, fact } = await fetch(`https://some-random-api.ml/animal/panda`)
-			.then(res => res.json())
-			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
-		await msg.channel.sendFile(image, 'panda.jpg', `Random panda fact: ${fact}`);
+        const { image, fact } = await fetch(`https://some-random-api.ml/animal/panda`)
+            .then(res => res.json())
+            .catch(() => ({ image: null, fact: null }));
+        if (!image || !fact) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        await reply(msg, { files: [{ attachment: image, name: 'panda.jpg' }], content: `Random panda fact: ${fact}` });
 
-		message.delete();
-	}
+        return true;
+    }
 
 };

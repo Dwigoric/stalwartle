@@ -1,67 +1,67 @@
-const { Command } = require('klasa');
+const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { GuildMember } = require('discord.js');
 
-module.exports = class extends Command {
+module.exports = class extends SubCommandPluginCommand {
 
-	constructor(...args) {
-		super(...args, {
-			permissionLevel: 8,
-			runIn: ['text'],
-			description: 'Sets a moderator user/role.',
-			extendedHelp: 'If no argument is provided, this will list the moderator roles and members.',
-			usage: '[add|remove] (Member:member|Role:role) [...]',
-			usageDelim: ' ',
-			subcommands: true
-		});
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            requiredUserPermissions: ['ADMINISTRATOR'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
+            description: 'Sets a moderator user/role.',
+            detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
+            subCommands: ['add', 'remove', { input: 'default', default: true }]
+        });
+        this.usage = '[add|remove] (Member:member|Role:role) [...]';
+    }
 
-		this
-			.createCustomResolver('member', (arg, possible, msg, [action]) => {
-				if (['add', 'remove'].includes(action) && !arg) throw `${this.client.constants.EMOTES.xmark}  ::  Please provide the user/role.`;
-				if (arg && !['add', 'remove'].includes(action)) throw `${this.client.constants.EMOTES.xmark}  ::  Please specify if the role/user should be added or removed.`;
-				if (!arg) return undefined;
-				return this.client.arguments.get('member').run(arg, possible, msg);
-			})
-			.createCustomResolver('role', (arg, possible, msg, [action]) => {
-				if (['add', 'remove'].includes(action) && !arg) throw `${this.client.constants.EMOTES.xmark}  ::  Please provide the user/role.`;
-				if (arg && !['add', 'remove'].includes(action)) throw `${this.client.constants.EMOTES.xmark}  ::  Please specify if the role/user should be added or removed.`;
-				if (!arg) return undefined;
-				return this.client.arguments.get('role').run(arg, possible, msg);
-			});
-	}
+    async default(msg) {
+        const { roles, users } = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
+        const modRoles = roles.map(rl => {
+            const modRole = msg.guild.roles.cache.get(rl);
+            if (modRole) {
+                return modRole.name;
+            } else {
+                const dummyArray = roles.concat([]).splice(roles.findIndex(rl), 1);
+                this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { roles: dummyArray } });
+            }
+            return null;
+        });
+        const modUsers = await Promise.all(users.map(async us => {
+            const modUser = await msg.guild.members.fetch(us);
+            if (modUser) {
+                return modUser.user.tag;
+            } else {
+                const dummyArray = users.concat([]).splice(users.findIndex(us), 1);
+                this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { users: dummyArray } });
+            }
+            return null;
+        }));
+        [modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));
+        reply(msg, `**Roles**:${modRoles.length ? `\n${modRoles.join(' **|** ')}` : ' ***None***'}\n**Users**:${modUsers.length ? `\n${modUsers.join(' **|** ')}` : ' ***None***'}`);
+    }
 
-	async run(msg) {
-		const { roles, users } = await msg.guild.settings.get('moderators');
-		const modRoles = roles.map(rl => {
-			const modRole = msg.guild.roles.cache.get(rl);
-			if (modRole) return modRole.name;
-			else msg.guild.settings.update('moderators.roles', rl, msg.guild, { arrayAction: 'remove' });
-			return null;
-		});
-		const modUsers = await Promise.all(users.map(async us => {
-			const modUser = await msg.guild.members.fetch(us);
-			if (modUser) return modUser.user.tag;
-			else msg.guild.settings.update('moderators.users', us, msg.guild, { arrayAction: 'remove' });
-			return null;
-		}));
-		[modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));
-		msg.send(`**Roles**:${modRoles.length ? `\n${modRoles.join(' **|** ')}` : ' ***None***'}\n**Users**:${modUsers.length ? `\n${modUsers.join(' **|** ')}` : ' ***None***'}`);
-	}
+    async add(msg, args) {
+        return this.toggle(msg, args, 'add');
+    }
 
-	async add(msg, [mod]) {
-		return this.toggle(msg, mod, 'add');
-	}
+    async remove(msg, args) {
+        return this.toggle(msg, args, 'remove');
+    }
 
-	async remove(msg, [mod]) {
-		return this.toggle(msg, mod, 'remove');
-	}
+    async toggle(msg, args, action) {
+        const mod = args.pick('member').catch(() => args.pick('role')).catch(() => null);
+        if (mod === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the user/role.`);
 
-	async toggle(msg, mod, arrayAction) {
-		const type = mod instanceof GuildMember ? 'users' : 'roles';
-		const guildMods = await msg.guild.settings.get('moderators');
-		if (arrayAction === 'add' && guildMods[type].includes(mod.id)) throw `${this.client.constants.EMOTES.xmark}  ::  This role/user is already a moderator!`;
-		if (arrayAction === 'remove' && !guildMods[type].includes(mod.id)) throw `${this.client.constants.EMOTES.xmark}  ::  This role/user is already not a moderator!`;
-		msg.guild.settings.update(`moderators.${type}`, mod.id, msg.guild, { arrayAction });
-		msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully ${arrayAction}${arrayAction.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
-	}
+        const type = mod instanceof GuildMember ? 'users' : 'roles';
+        const guildMods = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
+        if (action === 'add' && guildMods[type].includes(mod.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already a moderator!`);
+        if (action === 'remove' && !guildMods[type].includes(mod.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already not a moderator!`);
+
+        this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { [type]: mod.id } });
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
+    }
 
 };

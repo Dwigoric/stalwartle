@@ -1,213 +1,160 @@
-const { Client } = require('klasa');
+const { SapphireClient, container } = require('@sapphire/framework');
 const { Manager } = require('@lavacord/discord.js');
 const { SpotifyParser } = require('spotilink');
-const { config: { lavalinkNodes } } = require('../../config');
-const constants = require('../util/constants');
-const auth = require('../../auth');
+const { join } = require('path');
 const fetch = require('node-fetch');
 
-require('./StalwartleGuild');
-require('./StalwartleGuildMember');
+const { config: { lavalinkNodes } } = require('../../config');
 
-module.exports = class Stalwartle extends Client {
+// Register editable-commands plugin
+require('@sapphire/plugin-editable-commands/register');
 
-	constructor(clientOptions) {
-		super(clientOptions);
+// Imports for data persistence
+const PersistenceManager = require('./settings/PersistenceManager');
+const GatewayStore = require('./settings/GatewayStore');
+const Gateway = require('./settings/Gateway');
 
-		this.playerManager = null;
-		this.spotifyParser = null;
-		this.constants = constants;
-		this.auth = auth;
+// Imports for cached data
+const CacheManager = require('./cache/CacheManager');
+const GuildCacheData = require('./cache/GuildCacheData');
+const MemberCacheData = require('./cache/MemberCacheData');
 
-		this.once('ready', this._initplayer.bind(this));
+require('dotenv').config();
 
-		Stalwartle.defaultClientSchema
-			.add('changelogs', 'textchannel')
-			.add('bugs', bugs => bugs
-				.add('reports', 'textchannel')
-				.add('processed', 'textchannel'))
-			.add('errorHook', errorHook => errorHook
-				.add('id', 'string')
-				.add('token', 'string'))
-			.add('guildHook', guildHook => guildHook
-				.add('id', 'string')
-				.add('token', 'string'))
-			.add('restart', restart => restart
-				.add('channel', 'textchannel')
-				.add('timestamp', 'number'))
-			.add('suggestions', suggestions => suggestions
-				.add('reports', 'textchannel')
-				.add('processed', 'textchannel'));
+class Stalwartle extends SapphireClient {
 
-		Stalwartle.defaultUserSchema
-			.add('acceptFights', 'boolean', { default: true })
-			.add('afkIgnore', 'channel', { array: true })
-			.add('afktoggle', 'boolean', { default: false })
-			.add('bannerWidth', 'integer', { default: 0 })
-			.add('cookies', 'integer', { default: 0, configurable: false })
-			.add('hpBoost', 'integer', { default: 0, configurable: false })
-			.add('osu', 'string', { max: 20 })
-			.add('timezone', 'string', { default: 'GMT', configurable: false });
+    constructor(clientOptions) {
+        super(clientOptions);
 
-		Stalwartle.defaultGuildSchema
-			.add('afkChannelOnAfk', 'boolean', { default: false })
-			.add('donation', 'number', { default: 0, configurable: false })
-			.add('globalBans', 'boolean', { default: false })
-			.add('ignored', 'channel', { array: true })
-			.add('logging', 'boolean', { default: true })
-			.add('muted', 'user', { array: true, configurable: false })
-			.add('muteRole', 'role', { configurable: false })
-			.add('selfroles', 'role', { array: true })
-			.add('autorole', autorole => autorole
-				.add('user', 'role')
-				.add('bot', 'role'))
-			.add('moderators', moderators => moderators
-				.add('users', 'user', { array: true })
-				.add('roles', 'role', { array: true }))
-			.add('modlogs', modlogs => modlogs
-				.add('ban', 'channel')
-				.add('kick', 'channel')
-				.add('mute', 'channel')
-				.add('softban', 'channel')
-				.add('unban', 'channel')
-				.add('unmute', 'channel')
-				.add('warn', 'channel'))
-			.add('music', music => music
-				.add('limitToChannel', 'channel', { array: true })
-				.add('announceChannel', 'textchannel')
-				.add('announceSongs', 'boolean', { default: true })
-				.add('autoplay', 'boolean', { default: false })
-				.add('dj', 'role', { array: true })
-				.add('maxPlaylist', 'integer', { min: 1, max: 1000, default: 1000 })
-				.add('maxQueue', 'integer', { min: 1, max: 1000, default: 1000 })
-				.add('maxUserRequests', 'integer', { min: 1, max: 1000, default: 250 })
-				.add('noDuplicates', 'boolean', { default: false })
-				.add('repeat', 'string', { default: 'none', configurable: false })
-				.add('volume', 'integer', { min: 1, max: 300, default: 100, configurable: false }))
-			.add('automod', automod => automod
-				.add('ignoreBots', 'boolean', { default: false })
-				.add('ignoreMods', 'boolean', { default: false })
-				.add('antiInvite', 'boolean', { default: false })
-				.add('quota', 'boolean', { default: true })
-				.add('antiSpam', 'boolean', { default: false })
-				.add('antiSwear', 'boolean', { default: false })
-				.add('mentionSpam', 'boolean', { default: false })
-				.add('globalSwears', 'boolean', { default: true })
-				.add('swearWords', 'string', { array: true })
-				.add('filterIgnore', filterIgnore => filterIgnore
-					.add('antiInvite', 'channel', { array: true })
-					.add('antiSpam', 'channel', { array: true })
-					.add('antiSwear', 'channel', { array: true })
-					.add('mentionSpam', 'channel', { array: true }))
-				.add('options', options => options
-					.add('antiInvite', antiInvite => antiInvite
-						.add('action', 'string', { default: 'warn', configurable: false })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
-					.add('quota', quota => quota
-						.add('action', 'string', { default: 'mute', configurable: false })
-						.add('limit', 'integer', { default: 3, min: 3, max: 50 })
-						.add('within', 'integer', { default: 5, min: 1, max: 1440 })
-						.add('duration', 'integer', { default: 10, min: 1, max: 43200 }))
-					.add('antiSpam', antiSpam => antiSpam
-						.add('action', 'string', { default: 'mute', configurable: false })
-						.add('limit', 'integer', { default: 5, min: 5, max: 50 })
-						.add('within', 'integer', { default: 5, min: 3, max: 600 })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
-					.add('antiSwear', antiSwear => antiSwear
-						.add('action', 'string', { default: 'warn', configurable: false })
-						.add('duration', 'integer', { default: 5, min: 1, max: 43200 }))
-					.add('mentionSpam', mentionSpam => mentionSpam
-						.add('action', 'string', { default: 'ban', configurable: false })
-						.add('duration', 'integer', { default: 30, min: 1, max: 43200 }))));
+        container.lavacord = null;
+        container.spotifyParser = null;
+        container.constants = require('../util/constants');
 
-		Stalwartle.defaultPermissionLevels
-			.add(5, ({ guild, member }) => guild && (!guild.settings.get('music.dj').length || guild.settings.get('music.dj').some(role => member.roles.cache.keyArray().includes(role))))
-			.add(6, ({ guild, member }) => guild && (guild.settings.get('moderators.roles').some(role => member.roles.cache.keyArray().includes(role)) || guild.settings.get('moderators.users').includes(member.id))) // eslint-disable-line max-len
-			.add(7, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'))
-			.add(8, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'))
-			.add(9, ({ author }) => clientOptions.owners.includes(author.id))
-			.add(10, ({ author }) => clientOptions.ownerID === author.id, { break: true });
-	}
+        this.once('ready', this._initplayer.bind(this));
 
-	async postStats() {
-		if (this.auth.ctxAPIkey) {
-			fetch('https://www.carbonitex.net/discord/data/botdata.php', {
-				method: 'POST',
-				body: JSON.stringify({ key: this.auth.ctxAPIkey, server_count: await this.guildCount() }), // eslint-disable-line camelcase
-				headers: { 'Content-Type': 'application/json' }
-			});
-		}
-		if (this.auth.dblAPIkey) {
-			fetch(`https://top.gg/api/bots/${this.user.id}/stats`, {
-				method: 'POST',
-				body: JSON.stringify({ server_count: await this.guildCount(), shard_count: this.options.shardCount }), // eslint-disable-line camelcase
-				headers: { Authorization: this.auth.dblAPIkey, 'Content-Type': 'application/json' }
-			});
-		}
-		if (this.auth.dbl2APIkey) {
-			fetch(`https://discordbotlist.com/api/v1/bots/${this.user.id}/stats`, {
-				method: 'POST',
-				body: JSON.stringify({
-					guilds: await this.guildCount(),
-					users: await this.userCount(),
-					voice_connections: Array.from(this.playerManager.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
-				}),
-				headers: { Authorization: `Bot ${this.auth.dbl2APIkey}`, 'Content-Type': 'application/json' }
-			});
-		}
-		if (this.auth.dcbAPIkey) {
-			fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
-				method: 'POST',
-				body: JSON.stringify({ guildCount: await this.guildCount() }),
-				headers: { Authorization: this.auth.dcbAPIkey, 'Content-Type': 'application/json' }
-			});
-		}
-		if (this.auth.blsAPIkey) {
-			fetch(`https://api.botlist.space/v2/bots/${this.user.id}`, {
-				method: 'POST',
-				body: JSON.stringify({ serverCount: await this.guildCount() }),
-				headers: { Authorization: this.auth.blsAPIkey, 'Content-Type': 'application/json' }
-			});
-		}
-		if (this.auth.bodAPIkey) {
-			fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
-				method: 'POST',
-				body: JSON.stringify({ guildCount: await this.guildCount() }),
-				headers: { Authorization: this.auth.bodAPIkey, 'Content-Type': 'application/json' }
-			});
-		}
-	}
+        container.database = new PersistenceManager();
 
-	async guildCount() {
-		let guilds = 0;
-		if (this.shard) {
-			const results = await this.shard.broadcastEval('this.guilds.cache.size');
-			for (const result of results) guilds += result;
-		} else {
-			guilds = this.guilds.cache.size;
-		}
-		return guilds;
-	}
+        this._intervals = new Set();
+        this._timeouts = new Set();
 
-	async userCount() {
-		let users = 0;
-		if (this.shard) {
-			const results = await this.shard.broadcastEval('this.guilds.cache.reduce((a, b) => a + b.memberCount, 0)');
-			for (const result of results) users += result;
-		} else {
-			users = this.guilds.cache.reduce((a, b) => a + b.memberCount, 0);
-		}
-		return users;
-	}
+        this.stores.register(new GatewayStore(Gateway).registerPath(join(__dirname, '..', '..', 'gateways')));
 
-	_initplayer() {
-		this.playerManager = this.playerManager || new Manager(this, lavalinkNodes, {
-			user: this.user.id,
-			shards: this.options.shardCount
-		});
-		this.spotifyParser = new SpotifyParser(lavalinkNodes[0], this.auth.spotifyClientID, this.auth.spotifyClientSecret);
-		if (!this.playerManager.idealNodes.length) this.playerManager.connect();
-		return true;
-	}
+        container.cache = {
+            guilds: new CacheManager(this, GuildCacheData),
+            members: new CacheManager(this, MemberCacheData)
+        };
+    }
 
-};
+    get settings() {
+        return container.stores.get('gateways').get('clientGateway').get(this.user.id);
+    }
+
+    async postStats() {
+        if (process.env.CARBONITEX_API_KEY) { // eslint-disable-line no-process-env
+            fetch('https://www.carbonitex.net/discord/data/botdata.php', {
+                method: 'POST',
+                body: JSON.stringify({ key: process.env.CARBONITEX_API_KEY, server_count: await this.guildCount() }), // eslint-disable-line camelcase,no-process-env
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        if (process.env.TOPGG_API_KEY) { // eslint-disable-line no-process-env
+            fetch(`https://top.gg/api/bots/${this.user.id}/stats`, {
+                method: 'POST',
+                body: JSON.stringify({ server_count: await this.guildCount(), shard_count: this.options.shardCount }), // eslint-disable-line camelcase
+                headers: { Authorization: process.env.TOPGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
+            });
+        }
+        if (process.env.DISCORDBOTLIST_API_KEY) { // eslint-disable-line no-process-env
+            fetch(`https://discordbotlist.com/api/v1/bots/${this.user.id}/stats`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    guilds: await this.guildCount(),
+                    users: await this.userCount(),
+                    voice_connections: Array.from(container.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
+                }),
+                headers: { Authorization: `Bot ${process.env.DISCORDBOTLIST_API_KEY}`, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
+            });
+        }
+        if (process.env.DISCORDBOTSGG_API_KEY) { // eslint-disable-line no-process-env
+            fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
+                method: 'POST',
+                body: JSON.stringify({ guildCount: await this.guildCount() }),
+                headers: { Authorization: process.env.DISCORDBOTSGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
+            });
+        }
+        if (process.env.BOTLISTSPACE_API_KEY) { // eslint-disable-line no-process-env
+            fetch(`https://api.botlist.space/v2/bots/${this.user.id}`, {
+                method: 'POST',
+                body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+                headers: { Authorization: process.env.BOTLISTSPACE_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
+            });
+        }
+        if (process.env.BOTSONDISCORD_API_KEY) { // eslint-disable-line no-process-env
+            fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
+                method: 'POST',
+                body: JSON.stringify({ guildCount: await this.guildCount() }),
+                headers: { Authorization: process.env.BOTSONDISCORD_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
+            });
+        }
+    }
+
+    async guildCount() {
+        let guilds = 0;
+        if (this.shard) {
+            const results = await this.shard.broadcastEval('this.guilds.cache.size');
+            for (const result of results) guilds += result;
+        } else {
+            guilds = this.guilds.cache.size;
+        }
+        return guilds;
+    }
+
+    async userCount() {
+        let users = 0;
+        if (this.shard) {
+            const results = await this.shard.broadcastEval('this.guilds.cache.reduce((a, b) => a + b.memberCount, 0)');
+            for (const result of results) users += result;
+        } else {
+            users = this.guilds.cache.reduce((a, b) => a + b.memberCount, 0);
+        }
+        return users;
+    }
+
+    _initplayer() {
+        container.lavacord = container.lavacord || new Manager(this, lavalinkNodes, {
+            user: this.user.id,
+            shards: this.options.shardCount
+        });
+        container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
+        if (!container.lavacord.idealNodes.length) container.lavacord.connect();
+        return true;
+    }
+
+    setTimeout(fn, delay, ...args) {
+        const timeout = setTimeout(() => {
+            fn(...args);
+            this._timeouts.delete(timeout);
+        }, delay);
+        this._timeouts.add(timeout);
+        return timeout;
+    }
+
+    clearTimeout(timeout) {
+        clearTimeout(timeout);
+        this._timeouts.delete(timeout);
+    }
+
+    setInterval(fn, delay, ...args) {
+        const interval = setInterval(fn, delay, ...args);
+        this._intervals.add(interval);
+        return interval;
+    }
+
+    clearInterval(interval) {
+        clearInterval(interval);
+        this._intervals.delete(interval);
+    }
+
+}
+
+module.exports = Stalwartle;

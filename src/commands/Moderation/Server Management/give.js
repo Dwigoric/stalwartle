@@ -1,25 +1,33 @@
-const { Command } = require('klasa');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			permissionLevel: 6,
-			requiredPermissions: ['MANAGE_ROLES'],
-			runIn: ['text'],
-			description: 'Gives a role to a member.',
-			usage: '<User:member> <Role:role>',
-			usageDelim: ' '
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            preconditions: ['ModsOnly'],
+            requiredClientPermissions: ['MANAGE_ROLES'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
+            description: 'Gives a role to a member.'
+        });
+        this.usage = '<User:member> <Role:role>';
+    }
 
-	async run(msg, [member, role]) {
-		if (!role) throw `${this.client.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`;
-		if (member.roles.highest.position >= msg.guild.me.roles.highest.position) throw `${this.client.constants.EMOTES.xmark}  ::  ${role.name} has higher or equal position to my highest role!`;
-		if (member.roles.highest.position >= msg.guild.me.roles.highest.position) throw `${this.client.constants.EMOTES.xmark}  ::  I cannot give ${role.name} to this user.`;
-		if (member.roles.cache.has(role.id)) throw `${this.client.constants.EMOTES.xmark}  ::  ${member} already has **${role.name}**! I mean, what's the point of giving someone something they already have?`; // eslint-disable-line max-len
-		await member.roles.add(role, `Given using ${this.client.user.username}'s Give Role feature`);
-		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully given ${member} the role **${role.name}**.`);
-	}
+    async messageRun(msg, args) {
+        let member = await args.pickResult('member');
+        if (!member.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member who you want to give a role.`);
+        member = member.value;
+        let role = await args.pickResult('role');
+        if (!role.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the role you want to give.`);
+        role = role.value;
+
+        if (!role) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Whoops! I think **${role}** doesn't exist... Maybe use the role's ID instead?`);
+        if (member.roles.highest.position >= msg.guild.me.roles.highest.position) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${role.name} has higher or equal position to my highest role!`);
+        if (member.roles.highest.position >= msg.guild.me.roles.highest.position) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot give ${role.name} to this user.`);
+        if (member.roles.cache.has(role.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${member} already has **${role.name}**! I mean, what's the point of giving someone something they already have?`); // eslint-disable-line max-len
+        await member.roles.add(role, `Given using ${this.container.client.user.username}'s Give Role feature`);
+        return msg.send(`${this.container.constants.EMOTES.tick}  ::  Successfully given ${member} the role **${role.name}**.`);
+    }
 
 };

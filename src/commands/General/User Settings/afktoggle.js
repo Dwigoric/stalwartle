@@ -1,15 +1,16 @@
-const { Command } = require('klasa');
+const { Command, container } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, { description: 'Toggle whether your AFK status will be removed either when you talk or when you run the `s.afk` command.' });
-	}
+    constructor(context, options) {
+        super(context, { ...options, description: 'Toggle whether your AFK status will be removed either when you talk or when you run the `s.afk` command.' });
+    }
 
-	async run(msg) {
-		const afkSet = msg.author.settings.get('afktoggle') ? ['talk', false] : [`run the \`s.afk\` command`, true];
-		msg.send(`${this.client.constants.EMOTES.tick}  ::  Your AFK status will now be removed **when you ${afkSet[0]}**.`);
-		msg.author.settings.update('afktoggle', afkSet[1]);
-	}
+    async messageRun(msg) {
+        const afkSet = container.stores.get('gateways').get('userGateway').get(msg.author.id, 'afktoggle') ? ['talk', false] : [`run the \`s.afk\` command`, true];
+        reply(msg, `${this.container.constants.EMOTES.tick}  ::  Your AFK status will now be removed **when you ${afkSet[0]}**.`);
+        container.stores.get('gateways').get('userGateway').update(msg.author.id, 'afktoggle', afkSet[1]);
+    }
 
 };

@@ -1,23 +1,25 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			aliases: ['hub'],
-			guarded: true,
-			requiredPermissions: ['EMBED_LINKS'],
-			description: 'Gives you the invite link to my server where you can view the changelog and hang out with us!'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            aliases: ['hub'],
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Gives you the invite link to my server where you can view the changelog and hang out with us!'
+        });
+        this.guarded = true;
+    }
 
-	async run(msg) {
-		msg.send({
-			embed: await new MessageEmbed()
-				.setColor('RANDOM')
-				.setDescription('Please visit my dev server (<https://discord.gg/KDWGvV8>) and go to the questions and support channel so we can give you the utmost support.')
-		});
-	}
+    async messageRun(msg) {
+        reply(msg, {
+            embeds: [await new MessageEmbed()
+                .setColor('RANDOM')
+                .setDescription('Please visit my dev server (<https://discord.gg/KDWGvV8>) and go to the questions and support channel so we can give you the utmost support.')]
+        });
+    }
 
 };

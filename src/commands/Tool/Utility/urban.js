@@ -1,50 +1,58 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			aliases: ['ud'],
-			requiredPermissions: ['EMBED_LINKS'],
-			description: 'Searches the Urban Dictionary library for a definition to the search term.',
-			usage: '<SearchTerm:string> [resultNum:integer]',
-			usageDelim: ', '
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            aliases: ['ud'],
+            requiredClientPermissions: ['EMBED_LINKS'],
+            description: 'Searches the Urban Dictionary library for a definition to the search term.',
+            detailedDescription: 'You can use e.g. `--result=2` to get the second result for the word.',
+            options: ['result']
+        });
+        this.usage = '<SearchTerm:string>';
+    }
 
-	async run(msg, [search, index = 1]) {
-		await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading Urban definition...`);
+    async messageRun(msg, args) {
+        let search = await args.restResult('string');
+        if (!search.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the term to search in the Urban Dictionary.`);
+        search = search.value;
+        const index = parseInt(args.getOption('result')) || 1;
 
-		const params = new URLSearchParams();
-		params.set('term', search);
-		const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
-		const result = body.list[index - 1];
-		if (!result) throw `${this.client.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`;
+        const params = new URLSearchParams();
+        params.set('term', search);
+        const body = await fetch(`http://api.urbandictionary.com/v0/define?${params}`).then(res => res.json());
 
-		const definition = result.definition.length > 1000 ?
-			`${this.splitText(result.definition, 1000)}...` :
-			result.definition;
+        const result = body.list[index - 1];
+        if (!result) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`);
 
-		return msg.send({
-			embed: new MessageEmbed()
-				.setColor('RANDOM')
-				.setTitle(`'${result.word}' as defined by ${result.author}`)
-				.setURL(result.permalink)
-				.setDescription(definition)
-				.addField('Example', result.example.split('\n')[0] || 'No example available.')
-				.addField('Rating', `**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`)
-				.setFooter('Definition from Urban Dictionary')
-				.setTimestamp()
-		});
-	}
+        const definition = result.definition.length > 1000 ?
+            `${this.splitText(result.definition, 1000)}...` :
+            result.definition;
 
-	splitText(string, length, endBy = ' ') {
-		const a = string.substring(0, length).lastIndexOf(endBy);
-		const pos = a === -1 ? length : a;
-		return string.substring(0, pos);
-	}
+        return reply(msg, {
+            embeds: [new MessageEmbed()
+                .setColor('RANDOM')
+                .setTitle(`'${result.word}' as defined by ${result.author}`)
+                .setURL(result.permalink)
+                .setDescription(definition)
+                .addField('Example', result.example.split('\n')[0] || 'No example available.')
+                .addField('Rating', `**${result.thumbs_up}** 👍 | **${result.thumbs_down}** 👎`)
+                .setFooter({ text: 'Definition from Urban Dictionary' })
+                .setTimestamp()]
+        });
+    }
+
+    splitText(string, length, endBy = ' ') {
+        const a = string.substring(0, length).lastIndexOf(endBy);
+        const pos = a === -1 ? length : a;
+        return string.substring(0, pos);
+    }
 
 };

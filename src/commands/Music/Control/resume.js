@@ -1,20 +1,23 @@
-const { Command } = require('klasa');
+const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			permissionLevel: 5,
-			runIn: ['text'],
-			description: 'Resumes paused music in the server.'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            preconditions: ['DJOnly', 'MusicControl'],
+            runIn: [CommandOptionsRunTypeEnum.GuildText],
+            description: 'Resumes paused music in the server.'
+        });
+    }
 
-	async run(msg) {
-		if (!msg.guild.me.voice.channel) throw `${this.client.constants.EMOTES.xmark}  ::  There is no music playing in this server!`;
-		if (!msg.guild.player.paused) throw `${this.client.constants.EMOTES.xmark}  ::  Music is already playing! Pause it with \`${msg.guild.settings.get('prefix')}pause\``;
-		msg.guild.player.pause(false);
-		return msg.send(`${this.client.constants.EMOTES.tick}  ::  Successfully resumed the music for this server.`);
-	}
+    async messageRun(msg) {
+        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
+        if (!this.container.lavacord.players.get(msg.guild.id).paused) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Music is already playing! Pause it with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}pause\`.`); // eslint-disable-line max-len
+
+        this.container.lavacord.players.get(msg.guild.id).pause(false);
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully resumed the music for this server.`);
+    }
 
 };

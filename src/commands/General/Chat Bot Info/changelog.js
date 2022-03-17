@@ -1,17 +1,19 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			aliases: ['changelogs', 'cl'],
-			guarded: true,
-			description: 'Gives you my latest changelog to keep you updated!'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            aliases: ['changelogs', 'cl'],
+            description: 'Gives you my latest changelog to keep you updated!'
+        });
+        this.guarded = true;
+    }
 
-	async run(msg) {
-		msg.send({ embed: await this.client.channels.cache.get(this.client.settings.get('changelogs')).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
-	}
+    async messageRun(msg) {
+        reply(msg, { embed: await this.container.client.channels.cache.get(this.container.client.settings.changelogs).messages.fetch({ limit: 1 }).then(messages => messages.first().embeds[0]) });
+    }
 
 };

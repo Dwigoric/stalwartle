@@ -5,7 +5,7 @@
         "es6": true
     },
     "parserOptions": {
-        "ecmaVersion": 2019,
+        "ecmaVersion": "latest",
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true
         }
@@ -94,7 +94,7 @@
         "func-names": "error",
         "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
         "id-length": ["error", { "exceptions": ["i", "j", "a", "b"] }],
-        "indent": ["error", "tab", { "SwitchCase": 1 }],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "key-spacing": "error",
         "keyword-spacing": ["error", {
             "overrides": {
@@ -106,7 +106,7 @@
             }
         }],
         "max-depth": "error",
-        "max-len": ["error", 200, 2],
+        "max-len": ["error", 250, 2],
         "max-nested-callbacks": ["error", { "max": 4 }],
         "max-statements-per-line": ["error", { "max": 2 }],
         "new-cap": "error",

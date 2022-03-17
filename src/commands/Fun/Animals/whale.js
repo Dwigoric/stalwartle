@@ -1,29 +1,33 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			cooldown: 10,
-			requiredPermissions: ['ATTACH_FILES'],
-			description: 'Grabs a random whale image and fact.'
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            cooldownDelay: 10,
+            requiredClientPermissions: ['ATTACH_FILES'],
+            description: 'Grabs a random whale image and fact.'
+        });
+    }
 
-	async run(msg) {
-		const message = await msg.send(`${this.client.constants.EMOTES.loading}  ::  Loading whale...`);
+    async messageRun(msg) {
+        await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading whale...`);
 
-		const { link } = await fetch(`https://some-random-api.ml/img/whale`)
-			.then(res => res.json())
-			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
+        const { link } = await fetch(`https://some-random-api.ml/img/whale`)
+            .then(res => res.json())
+            .catch(() => ({ link: null }));
 
-		const { fact } = await fetch(`https://some-random-api.ml/facts/whale`)
-			.then(res => res.json())
-			.catch(() => { throw `${this.client.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`; });
-		await msg.channel.sendFile(link, 'whale.gif', `Random whale fact: ${fact}`);
+        const { fact } = await fetch(`https://some-random-api.ml/facts/whale`)
+            .then(res => res.json())
+            .catch(() => ({ fact: null }));
 
-		message.delete();
-	}
+        if (!fact || !link) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
+        await reply(msg, { files: [{ attachment: link, name: 'whale.gif' }], content: `Random whale fact: ${fact}` });
+
+        return true;
+    }
 
 };

@@ -1,28 +1,32 @@
-const { Command } = require('klasa');
+const { Command } = require('@sapphire/framework');
+const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
-	constructor(...args) {
-		super(...args, {
-			description: 'Sends upvote links of listing sites.',
-			requiredPermissions: ['EMBED_LINKS']
-		});
-	}
+    constructor(context, options) {
+        super(context, {
+            ...options,
+            description: 'Sends upvote links of listing sites.',
+            requiredClientPermissions: ['EMBED_LINKS']
+        });
+    }
 
-	async run(msg) {
-		if (!this.client.application.botPublic) throw `${this.client.constants.EMOTES.xmark}  ::  **${this.client.user.tag}** is not public.`;
-		return msg.sendEmbed(new MessageEmbed()
-			.setAuthor(`Upvote ${this.client.user.username}`, this.client.user.displayAvatarURL({ dynamic: true }))
-			.setDescription([
-				'Aside from donations, you can support me by simply upvoting me on bot listing sites!',
-				`• [DiscordBotList.org](https://discordbots.org/bot/${this.client.user.id}/vote)`,
-				`• [DiscordBotList.com](https://discordbotlist.com/bots/${this.client.user.id}/upvote)`,
-				`• [botlist.space](https://botlist.space/bot/${this.client.user.id})`,
-				`• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.client.user.id})`,
-				'Thank you!'
-			])
-		);
-	}
+    async messageRun(msg) {
+        if (!this.container.client.application.botPublic) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${this.container.client.user.tag}** is not public.`);
+        return reply(msg, {
+            embeds: [new MessageEmbed()
+                .setAuthor({ name: `Upvote ${this.container.client.user.username}`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
+                .setDescription([
+                    'Aside from donations, you can support me by simply upvoting me on bot listing sites!',
+                    `• [DiscordBotList.org](https://discordbots.org/bot/${this.container.client.user.id}/vote)`,
+                    `• [DiscordBotList.com](https://discordbotlist.com/bots/${this.container.client.user.id}/upvote)`,
+                    `• [botlist.space](https://botlist.space/bot/${this.container.client.user.id})`,
+                    `• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.container.client.user.id})`,
+                    'Thank you!'
+                ])]
+        }
+        );
+    }
 
 };
