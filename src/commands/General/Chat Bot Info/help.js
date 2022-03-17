@@ -46,7 +46,7 @@ module.exports = class extends Command {
             if (display === null) return null;
 
             const myMsg = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading commands...`);
-            return display.run(myMsg, msg.author);
+            return display.run(myMsg, msg.author).catch(err => this.container.logger.error(err));
         }
 
         return this.originalHelp(msg, args, [category, subcategory]);

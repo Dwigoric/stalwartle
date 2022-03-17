@@ -83,7 +83,7 @@ module.exports = class extends SubCommandPluginCommand {
             ].join('\n');
         })))).then(logs => logs.forEach(modlog5 => display.addPageEmbed(template => template.setDescription(modlog5.join('\n\n')))));
 
-        return display.run(message, msg.author);
+        return display.run(message, msg.author).catch(err => this.container.logger.error(err));
     }
 
     async reset(msg) {

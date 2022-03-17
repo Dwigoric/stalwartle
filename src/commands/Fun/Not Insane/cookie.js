@@ -80,7 +80,7 @@ module.exports = class extends SubCommandPluginCommand {
             })
         );
 
-        return display.run(message, msg.author);
+        return display.run(message, msg.author).catch(err => this.container.logger.error(err));
     }
 
 };
