@@ -39,7 +39,7 @@ module.exports = class extends Command {
             .setColor('RANDOM')
             .setAuthor({ name: repUser.tag, iconURL: repUser.displayAvatarURL({ dynamic: true }) })
             .addField('Submission', repMsg.content)
-            .addField("High Lord's Comments", repCom.join(' '))
+            .addField("High Lord's Comments", repCom)
             .setTimestamp();
         const attachments = repMsg.attachments.size ? repMsg.attachments.filter(atch => {
             const filename = atch.name;
