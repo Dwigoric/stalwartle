@@ -1,23 +1,23 @@
-const { AliasPiece } = require('@sapphire/pieces');
-const { mergeObjects, deepClone, makeObject, isObject } = require('@sapphire/utilities');
+const { Piece } = require('@sapphire/pieces');
+const { deepClone, makeObject, isObject, mergeDefault } = require('@sapphire/utilities');
 const { isConfigurableSchema, isSchemaArray, getSchemaMinimum, getSchemaMaximum, getBaseSchemaType } = require('../../../schemaTypes');
 
-class Gateway extends AliasPiece {
+class Gateway extends Piece {
 
     constructor(context, options) {
         super(context, options);
 
         this.cache = new Map();
         Object.defineProperty(this, 'collection', { value: options.collection, writable: false });
-        Object.defineProperty(this, 'defaults', { value: Object.freeze(options.defaults || {}), writable: false });
-        Object.defineProperty(this, 'defaultsTypes', { value: Object.freeze(options.defaultsTypes || {}), writable: false });
+        Object.defineProperty(this, 'defaults', { value: options.defaults || {}, writable: false });
+        Object.defineProperty(this, 'defaultsTypes', { value: options.defaultsTypes || {}, writable: false });
     }
 
     get(id, path, filterUnconfigurable = false) {
         let obj;
 
         if (typeof path === 'string') obj = objectValueByPath(this.get(id, undefined, filterUnconfigurable), path);
-        else if (this.cache.has(id)) obj = mergeObjects(deepClone(this.defaults), this.cache.get(id));
+        else if (this.cache.has(id)) obj = mergeDefault(deepClone(this.defaults), this.cache.get(id));
         else obj = this.defaults;
 
         return filterUnconfigurable ? this.#filterUnconfigurable(obj, path) : obj;
@@ -42,7 +42,7 @@ class Gateway extends AliasPiece {
     async update(id, path, val) {
         const obj = typeof path === 'string' ? makeObject(path, val) : path;
 
-        await this.container.database.update(this.collection, id, mergeObjects(obj, { id }), true);
+        await this.container.database.update(this.collection, id, mergeDefault(obj, { id }), true);
         return this.sync(id);
     }
 
