@@ -33,7 +33,7 @@ module.exports = class extends Command {
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
                     .setAuthor({ name: `Server Music Queue: ${msg.guild.name}`, iconURL: msg.guild.iconURL({ dynamic: true }) })
-                    .setTitle('Use reactions to go to next/previous page, go to specific page, or stop the reactions.')
+                    .setTitle('Use the buttons to go navigate the pages.')
                     .setTimestamp()]
             }
         });
