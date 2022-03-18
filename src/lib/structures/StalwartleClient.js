@@ -1,7 +1,8 @@
 const { SapphireClient, container } = require('@sapphire/framework');
-const { Manager } = require('@lavacord/discord.js');
+const { Manager } = require('erela.js');
 const { SpotifyParser } = require('spotilink');
 const { join } = require('path');
+const { Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
@@ -18,6 +19,7 @@ const Gateway = require('./settings/Gateway');
 const CacheManager = require('./cache/CacheManager');
 const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
+const { mergeObjects } = require('@sapphire/utilities');
 
 require('dotenv').config();
 
@@ -26,7 +28,7 @@ class Stalwartle extends SapphireClient {
     constructor(clientOptions) {
         super(clientOptions);
 
-        container.lavacord = null;
+        container.erela = null;
         container.spotifyParser = null;
         container.constants = require('../util/constants');
 
@@ -70,7 +72,7 @@ class Stalwartle extends SapphireClient {
                 body: JSON.stringify({
                     guilds: await this.guildCount(),
                     users: await this.userCount(),
-                    voice_connections: Array.from(container.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
+                    voice_connections: Array.from(container.erela.players.size).filter(player => player.playing).length // eslint-disable-line camelcase
                 }),
                 headers: { Authorization: `Bot ${process.env.DISCORDBOTLIST_API_KEY}`, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             }).catch(err => container.logger.error(err));
@@ -121,12 +123,48 @@ class Stalwartle extends SapphireClient {
     }
 
     _initplayer() {
-        container.lavacord = container.lavacord || new Manager(this, lavalinkNodes, {
-            user: this.user.id,
-            shards: this.options.shardCount
-        });
+        container.erela = container.erela || new Manager({
+            autoPlay: true,
+            nodes: lavalinkNodes,
+            clientId: this.user.id,
+            shards: this.options.shardCount,
+            trackPartial: ['author', 'duration', 'isSeekable', 'isStream', 'requester', 'title', 'uri', 'incognito'],
+            send(id, payload) {
+                const guild = container.client.guilds.cache.get(id);
+                if (guild) guild.shard.send(payload);
+            }
+        })
+            .on('nodeCreate', node => container.logger.info(`Node ${node.options.identifier} connected.`))
+            .on('nodeError', (node, error) => container.logger.error(`Node ${node.options.identifier} had an error: ${error.message}`))
+            .on('trackStart', async (player, track) => {
+                const guildGateway = container.stores.get('gateways').get('guildGateway');
+
+                if (guildGateway.get(player.guild, 'donation') >= 3 && !track.incognito) {
+                    const { history } = this.container.stores.get('gateways').get('musicGateway').get(player.guild);
+                    history.unshift(mergeObjects(track, { timestamp: Date.now() }));
+                    this.container.stores.get('gateways').get('musicGateway').update(player.guild, { history });
+                }
+
+                const announceChannel = this.channels.cache.get(player.textChannel);
+                // eslint-disable-next-line max-len
+                if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(await this.users.fetch(track.requester).then(req => req.displayName).catch(() => this.container.client.users.fetch(track.requester).then(user => user.tag)))}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
+            })
+            .on('queueEnd', player => {
+                const guildGateway = container.stores.get('gateways').get('guildGateway');
+
+                if (guildGateway.get(player.guild, 'donation') < 10) {
+                    this.timeouts.set(player.guild, setTimeout(((guildID) => {
+                        this.erela.destroy(guildID);
+                        clearTimeout(this.timeouts.get(guildID));
+                        this.timeouts.delete(guildID);
+                    }).bind(this), 1000 * 60 * 5, player.guild));
+                }
+
+                const channel = this.channels.cache.get(player.textChannel);
+                if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guildGateway.get(player.guild, 'prefix')}play <song search>\`!`);
+            });
         container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
-        if (!container.lavacord.idealNodes.length) container.lavacord.connect();
+        if (!container.erela.nodes.size) container.erela.createNode(lavalinkNodes[0]);
         return true;
     }
 
