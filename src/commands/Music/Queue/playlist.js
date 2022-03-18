@@ -43,7 +43,7 @@ module.exports = class extends SubCommandPluginCommand {
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
                     .setAuthor({ name: `Server Music Playlist: ${msg.guild.name}`, iconURL: msg.guild.iconURL({ dynamic: true }) })
-                    .setTitle('Use the buttons to go navigate the pages.')
+                    .setTitle('Use the buttons to navigate the pages.')
                     .setTimestamp()]
             }
         });

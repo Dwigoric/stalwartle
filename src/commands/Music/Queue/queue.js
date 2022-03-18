@@ -33,7 +33,7 @@ module.exports = class extends Command {
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
                     .setAuthor({ name: `Server Music Queue: ${msg.guild.name}`, iconURL: msg.guild.iconURL({ dynamic: true }) })
-                    .setTitle('Use the buttons to go navigate the pages.')
+                    .setTitle('Use the buttons to navigate the pages.')
                     .setTimestamp()]
             }
         });
