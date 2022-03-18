@@ -24,17 +24,14 @@ module.exports = class extends Command {
             [this.container.client.settings.suggestions.reports]: this.container.client.settings.suggestions.processed
         };
 
-        let repUser = await args.pick('user');
-        if (!repUser.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
-        repUser = repUser.value;
+        const repUser = await args.pick('user').catch(() => null);
+        if (repUser === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
 
-        let repMsg = await args.pick('message');
-        if (!repMsg.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
-        repMsg = repMsg.value;
+        const repMsg = await args.pick('message').catch(() => null);
+        if (repMsg === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
 
-        let repCom = await args.rest('string');
-        if (!repCom.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
-        repCom = repCom.value;
+        const repCom = await args.rest('string').catch(() => null);
+        if (repCom === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
         if (!Object.keys(reportChans).includes(msg.channel.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
