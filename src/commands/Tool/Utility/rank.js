@@ -54,7 +54,7 @@ module.exports = class extends SubCommandPluginCommand {
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
                     .setAuthor({ name: `Selfroles for ${msg.guild.name}`, iconURL: msg.guild.iconURL({ dynamic: true }) })
-                    .setTitle('Use reactions to go to next/previous page, go to specific page, or stop the reactions.')
+                    .setTitle('Use the buttons to navigate the pages.')
                     .setFooter({ text: `[${selfroles.length} Selfrole${selfroles.length === 1 ? '' : 's'}]` })
                     .setTimestamp()]
             }

@@ -24,17 +24,14 @@ module.exports = class extends Command {
             [this.container.client.settings.suggestions.reports]: this.container.client.settings.suggestions.processed
         };
 
-        let repUser = await args.pick('user');
-        if (!repUser.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
-        repUser = repUser.value;
+        const repUser = await args.pick('user').catch(() => null);
+        if (repUser === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the user/reporter of the report.`);
 
-        let repMsg = await args.pick('message');
-        if (!repMsg.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
-        repMsg = repMsg.value;
+        const repMsg = await args.pick('message').catch(() => null);
+        if (repMsg === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
 
-        let repCom = await args.rest('string');
-        if (!repCom.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
-        repCom = repCom.value;
+        const repCom = await args.rest('string').catch(() => null);
+        if (repCom === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
         if (!Object.keys(reportChans).includes(msg.channel.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This command can only be run in bug and suggestions channels.`);
@@ -42,14 +39,14 @@ module.exports = class extends Command {
             .setColor('RANDOM')
             .setAuthor({ name: repUser.tag, iconURL: repUser.displayAvatarURL({ dynamic: true }) })
             .addField('Submission', repMsg.content)
-            .addField("High Lord's Comments", repCom.join(' '))
+            .addField("High Lord's Comments", repCom)
             .setTimestamp();
         const attachments = repMsg.attachments.size ? repMsg.attachments.filter(atch => {
             const filename = atch.name;
             return /.(png|gif|jpe?g|webp)/i.test(filename.slice(-1 * (filename.length - filename.lastIndexOf('.'))));
         }) : null;
         if (attachments && attachments.size) embed.setImage(attachments.first().url);
-        if (!args.getFlag('deny')) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
+        if (!args.getFlags('deny')) this.container.client.channels.cache.get(reportChans[msg.channel.id]).send(embed).catch();
         msg.delete();
         await msg.channel.send(`${this.container.constants.EMOTES.tick}  ::  Report sent to **${repUser.tag}**.`).then(sent => setTimeout(() => sent.delete(), 5000));
         repMsg.delete().catch(() => null);

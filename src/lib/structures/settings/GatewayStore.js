@@ -1,6 +1,6 @@
-const { AliasStore } = require('@sapphire/pieces');
+const { Store } = require('@sapphire/pieces');
 
-class GatewayStore extends AliasStore {
+class GatewayStore extends Store {
 
     constructor(Gateway) {
         super(Gateway, { name: 'gateways' });

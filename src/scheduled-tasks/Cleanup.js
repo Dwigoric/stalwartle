@@ -75,17 +75,40 @@ module.exports = class MemorySweeper extends ScheduledTask {
         // ----- PERSISTENT DATA SWEEPERS ----- //
 
         // Music database sweeper
-        for (const { history, id, playlist, queue } of await this.container.database.getAll('music')) {
-            if ((history && history.length) || (playlist && playlist.length)) continue;
-            if (this.container.client.guilds.cache.has(id) && queue && queue.length) continue;
-            this.container.stores.get('gateways').get('musicGateway').delete(id);
+        for (const music of await this.container.database.getAll('music')) {
+            let queue, playlist, history;
+            const gateway = this.container.stores.get('gateways').get('musicGateway');
+
+            if (this.container.client.guilds.cache.has(music.id)) {
+                if (music.queue && !music.queue.length) {
+                    queue = true;
+                    await gateway.reset(music.id, 'queue');
+                } else if (!music.queue) { queue = true; }
+
+                if (music.playlist && !music.playlist.length) {
+                    playlist = true;
+                    await gateway.reset(music.id, 'playlist');
+                } else if (!music.playlist) { playlist = true; }
+
+                if (music.history && !music.history.length) {
+                    history = true;
+                    await gateway.reset(music.id, 'history');
+                } else if (!music.history) { history = true; }
+            } else {
+                queue = true;
+                playlist = true;
+                history = true;
+            }
+
+            if (queue && playlist && history) await gateway.delete(music.id);
+            else if (!queue && !playlist && !history) continue;
             musicDBs++;
         }
 
         // Modlog database sweeper
-        for (const { id, modlogs } of await this.container.database.getAll('modlogs')) {
-            if (modlogs && modlogs.length) continue;
-            this.container.stores.get('gateways').get('modlogGateway').delete(id);
+        for (const guildlogs of await this.container.database.getAll('modlogs')) {
+            if (guildlogs.modlogs && guildlogs.modlogs.length) continue;
+            this.container.stores.get('gateways').get('modlogGateway').delete(guildlogs.id);
             modlogDBs++;
         }
 
