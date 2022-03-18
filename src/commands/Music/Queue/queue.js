@@ -22,7 +22,7 @@ module.exports = class extends Command {
         if (!queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the queue yet! Add one with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`);
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading the music queue...`);
         const np = queue[0];
-        const npStatus = msg.guild.me.voice.channel ?
+        const npStatus = this.container.erela.players.has(msg.guild.id) ?
             this.container.erela.get(msg.guild.id).paused ?
                 '⏸' :
                 '▶' :
