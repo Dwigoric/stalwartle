@@ -1,5 +1,5 @@
 const { Piece } = require('@sapphire/pieces');
-const { deepClone, makeObject, isObject, mergeDefault } = require('@sapphire/utilities');
+const { deepClone, makeObject, isObject, mergeDefault, mergeObjects } = require('@sapphire/utilities');
 const { isConfigurableSchema, isSchemaArray, getSchemaMinimum, getSchemaMaximum, getBaseSchemaType } = require('../../../schemaTypes');
 
 class Gateway extends Piece {
@@ -42,7 +42,7 @@ class Gateway extends Piece {
     async update(id, path, val) {
         const obj = typeof path === 'string' ? makeObject(path, val) : path;
 
-        await this.container.database.update(this.collection, id, mergeDefault(obj, { id }), true);
+        await this.container.database.update(this.collection, id, mergeObjects(obj, { id }), true);
         return this.sync(id);
     }
 
