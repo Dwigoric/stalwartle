@@ -147,18 +147,38 @@ class Stalwartle extends SapphireClient {
 
                 const announceChannel = this.channels.cache.get(player.textChannel);
                 // eslint-disable-next-line max-len
-                if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(await this.users.fetch(track.requester).then(req => req.displayName).catch(() => this.container.client.users.fetch(track.requester).then(user => user.tag)))}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
+                if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(await this.guilds.cache.get(player.guild).members.fetch(track.requester.id).then(req => req.displayName).catch(() => track.requester.tag))}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
+            })
+            .on('trackEnd', async (player, track) => {
+                const guildGateway = container.stores.get('gateways').get('guildGateway');
+                const { queue } = container.stores.get('gateways').get('musicGateway').get(player.guild);
+
+                if (guildGateway.get(player.guild, 'music.repeat') === 'queue') queue.push(queue[0]);
+                if (guildGateway.get(player.guild, 'music.repeat') !== 'song') queue.shift();
+                if (guildGateway.get(player.guild, 'donation') >= 8 && guildGateway.get(player.guild, 'music.autoplay') && !queue.length) {
+                    const params = new URLSearchParams();
+                    params.set('part', 'snippet');
+                    params.set('relatedToVideoId', track.identifier);
+                    params.set('type', 'video');
+                    params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
+                    const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
+                    if (items && items.length) {
+                        const relatedVideo = items[Math.floor(Math.random() * items.length)];
+                        const songResult = relatedVideo ? await player.search(`https://youtu.be/${relatedVideo.id.videoId}`, this.user).catch(error => {
+                            this.channels.cache.get(player.textChannel).send(error.message);
+                            return null;
+                        }) : null;
+
+                        if (songResult) queue.push(mergeObjects(songResult.tracks[0], { requester: this.container.client.user.id, incognito: false }));
+                    }
+                }
+
+                await this.container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
             })
             .on('queueEnd', player => {
                 const guildGateway = container.stores.get('gateways').get('guildGateway');
 
-                if (guildGateway.get(player.guild, 'donation') < 10) {
-                    this.timeouts.set(player.guild, setTimeout(((guildID) => {
-                        this.erela.destroy(guildID);
-                        clearTimeout(this.timeouts.get(guildID));
-                        this.timeouts.delete(guildID);
-                    }).bind(this), 1000 * 60 * 5, player.guild));
-                }
+                if (guildGateway.get(player.guild, 'donation') < 10) this.setTimeout((guildID) => container.erela.destroy(guildID), 1000 * 60 * 5, player.guild);
 
                 const channel = this.channels.cache.get(player.textChannel);
                 if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guildGateway.get(player.guild, 'prefix')}play <song search>\`!`);
