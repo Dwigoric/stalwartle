@@ -26,7 +26,7 @@ module.exports = class extends Command {
         const { queue } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
         if (!queue.length || !msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
         const { length } = queue[0].info;
-        const { position } = this.container.lavacord.players.get(msg.guild.id).state;
+        const { position } = this.container.erela.get(msg.guild.id).state;
         const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`);
 
         const progress = '░'.repeat(35).split('');
@@ -43,7 +43,7 @@ module.exports = class extends Command {
                 .setFooter({ text: `Requested by ${await msg.guild.members.fetch(queue[0].requester).then(mb => `${mb.displayName} (${mb.user.tag})`).catch(() => this.container.client.users.fetch(queue[0].requester).then(user => user.tag))}` }) // eslint-disable-line max-len
                 .setDescription(`by ${queue[0].info.author}\n\n\`${progress.join('')}\` ${queue[0].info.isStream ? 'N/A' : `${parseInt((position / length) * 100)}%`}`)
                 .addField('Time', queue[0].info.isStream ? 'N/A - Online Stream' : `\`${timestamp.display(position)} / ${timestamp.display(length)}\``, true)
-                .addField('Volume', `${this.container.lavacord.players.get(msg.guild.id).state.volume}%`, true)
+                .addField('Volume', `${this.container.erela.get(msg.guild.id).state.volume}%`, true)
                 .addField('Repeat', `${symbols[guildGateway.get(msg.guild.id, 'music.repeat')]} ${toTitleCase(guildGateway.get(msg.guild.id, 'music.repeat'))}`, true)
                 .setTimestamp()]
         });

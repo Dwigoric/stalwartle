@@ -25,7 +25,7 @@ module.exports = class extends Command {
         if (!queue[0].info.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`);
         if (queue[0].info.length < seek) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`);
 
-        this.container.lavacord.players.get(msg.guild.id).seek(seek);
+        this.container.erela.get(msg.guild.id).seek(seek);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully seeked the music.`);
     }
 

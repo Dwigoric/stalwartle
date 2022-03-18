@@ -27,7 +27,7 @@ module.exports = class extends Command {
         if (entry && isDJ) return this.#skipToEntry(msg, entry);
         if (args.getFlags('force') && isDJ) {
             this.container.cache.guilds.get(msg.guild.id).clearVoteskips();
-            this.container.lavacord.players.get(msg.guild.id).stop();
+            this.container.erela.get(msg.guild.id).stop();
             return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully forcibly skipped the music for this server.`);
         }
 
@@ -47,7 +47,7 @@ module.exports = class extends Command {
         }
 
         this.container.cache.guilds.get(msg.guild.id).clearVoteskips();
-        this.container.lavacord.players.get(msg.guild.id).stop();
+        this.container.erela.get(msg.guild.id).stop();
 
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully skipped the music for this server.`);
     }
@@ -61,7 +61,7 @@ module.exports = class extends Command {
         await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue });
 
         this.container.cache.guilds.get(msg.guild.id).clearVoteskips();
-        this.container.lavacord.players.get(msg.guild.id).stop();
+        this.container.erela.get(msg.guild.id).stop();
 
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully skipped to entry \`#${entry}\`.`);
     }
