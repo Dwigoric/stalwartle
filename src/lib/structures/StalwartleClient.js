@@ -134,7 +134,7 @@ class Stalwartle extends SapphireClient {
                 if (guild) guild.shard.send(payload);
             }
         })
-            .on('nodeCreate', node => container.logger.info(`Node ${node.options.identifier} connected.`))
+            .on('nodeConnect', node => container.logger.info(`Node ${node.options.identifier} connected.`))
             .on('nodeError', (node, error) => container.logger.error(`Node ${node.options.identifier} had an error: ${error.message}`))
             .on('trackStart', async (player, track) => {
                 const guildGateway = container.stores.get('gateways').get('guildGateway');
@@ -164,7 +164,7 @@ class Stalwartle extends SapphireClient {
                 if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guildGateway.get(player.guild, 'prefix')}play <song search>\`!`);
             });
         container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
-        if (!container.erela.nodes.size) container.erela.createNode(lavalinkNodes[0]);
+        container.erela.nodes.forEach(node => node.connect());
         return true;
     }
 
