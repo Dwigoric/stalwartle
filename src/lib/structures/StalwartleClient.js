@@ -140,9 +140,9 @@ class Stalwartle extends SapphireClient {
                 const guildGateway = container.stores.get('gateways').get('guildGateway');
 
                 if (guildGateway.get(player.guild, 'donation') >= 3 && !track.incognito) {
-                    const { history } = this.container.stores.get('gateways').get('musicGateway').get(player.guild);
+                    const { history } = container.stores.get('gateways').get('musicGateway').get(player.guild);
                     history.unshift(mergeObjects(track, { timestamp: Date.now() }));
-                    this.container.stores.get('gateways').get('musicGateway').update(player.guild, { history });
+                    container.stores.get('gateways').get('musicGateway').update(player.guild, { history });
                 }
 
                 const announceChannel = this.channels.cache.get(player.textChannel);
