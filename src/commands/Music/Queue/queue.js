@@ -12,7 +12,7 @@ module.exports = class extends Command {
             ...options,
             aliases: ['q'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            requiredClientPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Shows the queue for the server.'
         });
     }
