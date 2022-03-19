@@ -150,31 +150,10 @@ class Stalwartle extends SapphireClient {
                 // eslint-disable-next-line max-len
                 if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(requester.displayName)}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
             })
-            .on('trackEnd', async (player, track) => {
-                const guildGateway = container.stores.get('gateways').get('guildGateway');
-                const { queue } = container.stores.get('gateways').get('musicGateway').get(player.guild);
-
-                if (guildGateway.get(player.guild, 'music.repeat') === 'queue') queue.push(queue[0]);
-                if (guildGateway.get(player.guild, 'music.repeat') !== 'song') queue.shift();
-                if (guildGateway.get(player.guild, 'donation') >= 8 && guildGateway.get(player.guild, 'music.autoplay') && !queue.length) {
-                    const params = new URLSearchParams();
-                    params.set('part', 'snippet');
-                    params.set('relatedToVideoId', track.identifier);
-                    params.set('type', 'video');
-                    params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
-                    const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
-                    if (items && items.length) {
-                        const relatedVideo = items[Math.floor(Math.random() * items.length)];
-                        const songResult = relatedVideo ? await player.search(`https://youtu.be/${relatedVideo.id.videoId}`, this.user).catch(error => {
-                            this.channels.cache.get(player.textChannel).send(error.message);
-                            return null;
-                        }) : null;
-
-                        if (songResult) queue.push(mergeObjects(songResult.tracks[0], { requester: this.container.client.user.id, incognito: false }));
-                    }
-                }
-
-                await container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
+            .on('trackEnd', player => {
+                const queue = Array.from(player.queue);
+                queue.unshift(player.queue.current);
+                container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
             })
             .on('trackError', (player, track, payload) => {
                 const channel = this.channels.cache.get(player.textChannel);
@@ -184,13 +163,35 @@ class Stalwartle extends SapphireClient {
                 const channel = this.channels.cache.get(player.textChannel);
                 channel.send(`${this.container.constants.EMOTES.loading}  ::  It seems that the player is stuck! It could be buffering.`);
             })
-            .on('queueEnd', player => {
-                const guildGateway = container.stores.get('gateways').get('guildGateway');
+            .on('queueEnd', async (player, track) => {
+                const { music, donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
 
-                if (guildGateway.get(player.guild, 'donation') < 10) this.setTimeout((guildID) => container.erela.players.get(guildID).destroy(), 1000 * 60 * 5, player.guild);
+                if (donation >= 8 && music.autoplay) {
+                    const params = new URLSearchParams();
+                    params.set('part', 'snippet');
+                    params.set('relatedToVideoId', track.identifier);
+                    params.set('type', 'video');
+                    params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
+                    const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
+                    if (items && items.length) {
+                        const relatedVideo = items[Math.floor(Math.random() * items.length)];
+                        const songResult = relatedVideo ? await player.search(`https://youtu.be/${relatedVideo.id.videoId}`, this.user.id).catch(error => {
+                            this.channels.cache.get(player.textChannel).send(error.message);
+                            return null;
+                        }) : null;
+
+                        if (songResult) {
+                            player.queue.add(mergeObjects(songResult, { incognito: false }));
+                            return player.play();
+                        }
+                    }
+                }
+
+                if (donation < 10) this.setTimeout((guildID) => container.erela.players.get(guildID).destroy(), 1000 * 60 * 5, player.guild);
 
                 const channel = this.channels.cache.get(player.textChannel);
-                if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guildGateway.get(player.guild, 'prefix')}play <song search>\`!`);
+                if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${prefix}play <song search>\`!`);
+                return null;
             });
         container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
         container.erela.nodes.forEach(node => node.connect());
