@@ -41,7 +41,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async list(msg) {
-        if (!msg.channel.permissionsFor(this.container.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).`); // eslint-disable-line max-len
+        if (!msg.channel.permissionsFor(this.container.client.user).has('EMBED_LINKS')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** (permissions).`); // eslint-disable-line max-len
 
         const { selfroles } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         if (!selfroles.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Selfrole is not yet implemented in this server.`);

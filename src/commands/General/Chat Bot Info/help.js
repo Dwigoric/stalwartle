@@ -41,7 +41,7 @@ module.exports = class extends Command {
         const category = Array.isArray(command) ? command[0] : null;
         const subcategory = Array.isArray(command) ? command[1] : null;
 
-        if (!args.getFlags('all') && msg.guild && msg.channel.permissionsFor(this.container.client.user).has(['MANAGE_MESSAGES', 'ADD_REACTIONS', 'EMBED_LINKS'])) {
+        if (!args.getFlags('all') && msg.guild && msg.channel.permissionsFor(this.container.client.user).has('EMBED_LINKS')) {
             const display = await this.buildDisplay(msg, [category, subcategory]);
             if (display === null) return null;
 
