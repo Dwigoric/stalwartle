@@ -8,15 +8,17 @@ module.exports = class extends Listener {
     }
 
     async run(guild) {
+        const owner = await this.container.client.users.fetch(guild.ownerId, { cache: false });
+
         const message = new MessageEmbed()
             .setColor('#C62A29')
-            .setAuthor({ name: 'Thank you for having me!', iconURL: await guild.members.fetch(guild.ownerId).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
+            .setAuthor({ name: 'Thank you for having me!', iconURL: owner.displayAvatarURL({ dynamic: true }) })
             .setTitle(guild.name)
             .setFooter({ text: `${this.container.client.user.username} Added!`, iconURL: this.container.client.user.displayAvatarURL({ dynamic: true }) })
             .setThumbnail(guild.iconURL({ dynamic: true, size: 2048 }))
             .setTimestamp()
             .setDescription([
-                `Hey there ${guild.owner}! Thank you for having me in **${guild.name}**. It is an honor to serve you.`,
+                `Hey there ${owner}! Thank you for having me in **${guild.name}**. It is an honor to serve you.`,
                 `\nTo get started, please use \`${this.container.stores.get('gateways').get('guildGateway').get(guild.id).prefix}help\` here or on any text channel. You will be given a list of commands.`,
                 `Please feel free to look at the command list. If you want me to serve more Discord users, just use the \`${this.container.stores.get('gateways').get('guildGateway').get(guild.id).prefix}invite\` command!`,
                 '\nI can play music, moderate users, search lyrics, search Steam, search a lot more other stuff, and more!',
@@ -24,7 +26,7 @@ module.exports = class extends Listener {
                 `\nBy **${this.container.client.application.owner.members.map(tm => tm.user.tag).join(', ')}**, from 🇵🇭 with ❤`
             ].join('\n'));
         const postableChannel = guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT' && ch.permissionsFor(guild.me).has(['SEND_MESSAGES', 'EMBED_LINKS'])).first();
-        if (!postableChannel) return guild.owner.user.send({ embeds: [message] }).catch(() => null);
+        if (!postableChannel) return owner.send({ embeds: [message] }).catch(() => null);
         return postableChannel.send({ embeds: [message] });
     }
 

@@ -43,7 +43,7 @@ module.exports = class MemorySweeper extends ScheduledTask {
             // Clear members that haven't send a message in the last 30 minutes
             const { me } = guild;
             for (const [id, member] of guild.members.cache) {
-                if ([me, guild.owner].includes(member)) continue;
+                if ([me.id, guild.ownerId].includes(id)) continue;
                 if (member.voice.channel) continue;
                 if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
                 guildMembers++;
