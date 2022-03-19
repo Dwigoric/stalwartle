@@ -15,7 +15,7 @@ module.exports = class extends SubCommandPluginCommand {
         super(context, {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            requiredClientPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Configures server playlist, which plays when queue is empty. More at `s.help playlist`',
             detailedDescription: [
                 '***Prompts are not supported when adding tracks to the playlist.***',

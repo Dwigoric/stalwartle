@@ -45,7 +45,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async lb(msg) {
-        if (!msg.channel.permissionsFor(this.container.client.user).has(['EMBED_LINKS', 'MANAGE_MESSAGES'])) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** and **Manage Messages** (permissions).`); // eslint-disable-line max-len
+        if (!msg.channel.permissionsFor(this.container.client.user).has('EMBED_LINKS')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I need to be able to **Embed Links** (permissions).`); // eslint-disable-line max-len
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading leaderboard...`);
         let list = await this.container.database.getAll('users').then(usr => usr.filter(us => us.cookies).sort((a, b) => b.cookies > a.cookies ? 1 : -1));
         list = Array.from((await msg.guild.members.fetch()).values()).filter(member => list.findIndex(user => user.id === member.id) !== -1);

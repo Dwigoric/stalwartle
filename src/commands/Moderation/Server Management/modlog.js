@@ -14,7 +14,7 @@ module.exports = class extends SubCommandPluginCommand {
             preconditions: ['ModsOnly'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             aliases: ['modlogs', 'log', 'logs'],
-            requiredClientPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives the modlogs for a certain person or the server, or the details of a specific case number.',
             detailedDescription: [
                 'If you want to get the modlogs for the server and not for a user, simple do not provide a user.',

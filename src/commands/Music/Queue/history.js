@@ -14,7 +14,7 @@ module.exports = class extends SubCommandPluginCommand {
         super(context, {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            requiredClientPermissions: ['EMBED_LINKS', 'MANAGE_MESSAGES'],
+            requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Shows the songs played in the server in the last 24 hours.',
             detailedDescription: [
                 'Export the history by using `s.history export`, clear it with `s.history clear`',
