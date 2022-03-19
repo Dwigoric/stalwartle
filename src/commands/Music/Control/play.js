@@ -116,6 +116,11 @@ module.exports = class extends Command {
 
         await this.#addToQueue(msg, resolved ? song : Array.isArray(song) ? song.map(track => buildUnresolved(track)) : buildUnresolved(song), { force, incognito });
 
+        switch (music.repeat) {
+            case 'queue': player.setQueueRepeat(true); break;
+            case 'song': player.setTrackRepeat(true);
+        }
+
         if (force) return player.stop();
         if (!player.playing && !player.paused) return player.play();
         return null;
