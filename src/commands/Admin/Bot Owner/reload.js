@@ -36,6 +36,7 @@ module.exports = class extends Command {
 
         try {
             const itm = await piece.reload().then(() => piece.store.get(piece.name));
+            if (itm.init) await itm.init();
             const timer = new Stopwatch();
             if (this.container.client.shard) {
                 await this.client.shard.broadcastEval(`

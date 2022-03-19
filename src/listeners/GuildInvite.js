@@ -13,14 +13,15 @@ module.exports = class extends Listener {
         guild.members.cache.clear();
         guild.presences.cache.clear();
         guild.emojis.cache.clear();
+        const owner = await this.container.client.users.fetch(guild.ownerId, { cache: false });
 
         this.hook.send({
             embeds: [new MessageEmbed()
                 .setColor(0x2ECC71)
-                .setAuthor({ name: "I've been added to a new server!", iconURL: await guild.members.fetch(guild.ownerId).then(owner => owner.user.displayAvatarURL({ dynamic: true })) })
+                .setAuthor({ name: "I've been added to a new server!", iconURL: owner.displayAvatarURL({ dynamic: true }) })
                 .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
                 .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
-                .addField('Guild Owner', `${guild.owner.user.tag}\n(${guild.owner.user})`, true)
+                .addField('Guild Owner', `${owner.tag}\n(${guild.ownerId})`, true)
                 .addField('Large Guild', guild.large ? '✅' : '❌', true)
                 .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
                 .addField('Guild Members', String(guild.memberCount), true)

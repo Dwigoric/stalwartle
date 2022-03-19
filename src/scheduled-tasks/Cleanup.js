@@ -43,7 +43,7 @@ module.exports = class MemorySweeper extends ScheduledTask {
             // Clear members that haven't send a message in the last 30 minutes
             const { me } = guild;
             for (const [id, member] of guild.members.cache) {
-                if ([me, guild.owner].includes(member)) continue;
+                if ([me.id, guild.ownerId].includes(id)) continue;
                 if (member.voice.channel) continue;
                 if (member.lastMessageID && member.lastMessageID > OLD_SNOWFLAKE) continue;
                 guildMembers++;
@@ -76,33 +76,36 @@ module.exports = class MemorySweeper extends ScheduledTask {
 
         // Music database sweeper
         for (const music of await this.container.database.getAll('music')) {
-            let queue, playlist, history;
+            let queue, playlist, history, changed = false;
             const gateway = this.container.stores.get('gateways').get('musicGateway');
 
             if (this.container.client.guilds.cache.has(music.id)) {
                 if (music.queue && !music.queue.length) {
+                    changed = true;
                     queue = true;
                     await gateway.reset(music.id, 'queue');
                 } else if (!music.queue) { queue = true; }
 
                 if (music.playlist && !music.playlist.length) {
+                    changed = true;
                     playlist = true;
                     await gateway.reset(music.id, 'playlist');
                 } else if (!music.playlist) { playlist = true; }
 
                 if (music.history && !music.history.length) {
+                    changed = true;
                     history = true;
                     await gateway.reset(music.id, 'history');
                 } else if (!music.history) { history = true; }
             } else {
+                changed = true;
                 queue = true;
                 playlist = true;
                 history = true;
             }
 
             if (queue && playlist && history) await gateway.delete(music.id);
-            else if (!queue && !playlist && !history) continue;
-            musicDBs++;
+            if (changed) musicDBs++;
         }
 
         // Modlog database sweeper
