@@ -190,14 +190,8 @@ module.exports = class extends Command {
 
             if (donation < 5) song = song.filter(track => track.duration <= 18_000_000);
             if (music.noDuplicates) song = song.filter(trackToAdd => queue.some(track => track.track !== trackToAdd.track));
-            if (song.length + player.queue.filter(track => track.requester === msg.author.id).length > music.maxUserRequests) {
-                const retainedAmount = music.maxUserRequests - player.queue.filter(track => track.requester === msg.author.id).length;
-                song.splice(retainedAmount - 1, song.length - retainedAmount);
-            }
-            if (player.queue.length + song.length > music.maxQueue) {
-                const retainedAmount = music.maxQueue - player.queue.length;
-                song.splice(retainedAmount - 1, song.length - retainedAmount);
-            }
+            if (song.length + player.queue.filter(track => track.requester === msg.author.id).length > music.maxUserRequests) song.splice(music.maxUserRequests - player.queue.filter(track => track.requester === msg.author.id).length - 1);
+            if (player.queue.length + song.length > music.maxQueue) song.splice(music.maxQueue - player.queue.length - 1);
 
             queue.add(song.map(track => mergeObjects(track, { incognito })));
 
