@@ -13,7 +13,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const player = this.container.erela.get(msg.guild.id);
+        const player = this.container.erela.players.get(msg.guild.id);
         if (!player || !player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\``);
 
         const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];

@@ -16,7 +16,7 @@ module.exports = class extends Command {
         if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music session in this server.`);
         this.store.get('play').timeouts.delete(msg.guild.id);
 
-        const player = this.container.erela.get(msg.guild.id);
+        const player = this.container.erela.players.get(msg.guild.id);
         if (player) player.destroy();
         else msg.guild.me.voice.disconnect();
 

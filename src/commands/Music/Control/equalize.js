@@ -22,7 +22,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const player = this.container.erela.get(msg.guild.id);
+        const player = this.container.erela.players.get(msg.guild.id);
         if (!player) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing on this server.`);
 
         let band = await args.pickResult('integer');

@@ -24,7 +24,7 @@ module.exports = class extends Command {
         if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`);
         if (!song.info.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be rewinded.`);
 
-        const player = this.container.erela.get(msg.guild.id);
+        const player = this.container.erela.players.get(msg.guild.id);
         player.seek(player.state.position - seek);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully rewinded the music.`);
     }
