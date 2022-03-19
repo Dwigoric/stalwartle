@@ -175,6 +175,14 @@ class Stalwartle extends SapphireClient {
 
                 await this.container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
             })
+            .on('trackError', (player, track, payload) => {
+                const channel = this.channels.cache.get(player.textChannel);
+                channel.send(`${this.container.constants.EMOTES.xmark}  ::  An error occurred while playing the track: ${payload.exception.message} (${payload.exception.severity})`);
+            })
+            .on('trackStuck', player => {
+                const channel = this.channels.cache.get(player.textChannel);
+                channel.send(`${this.container.constants.EMOTES.loading}  ::  It seems that the player is stuck! It could be buffering.`);
+            })
             .on('queueEnd', player => {
                 const guildGateway = container.stores.get('gateways').get('guildGateway');
 
