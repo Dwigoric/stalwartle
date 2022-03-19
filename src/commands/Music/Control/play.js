@@ -213,7 +213,10 @@ module.exports = class extends Command {
             queue.add(mergeObjects(song, { incognito }));
 
             if (this.container.client.channels.cache.get(player.textChannel).permissionsFor(this.container.client.user).has('EMBED_LINKS')) {
-                const duration = queue.reduce((prev, current) => prev + (current.isStream ? 0 : current.length), 0) - (queue[queue.length - 1].info.isStream ? 0 : queue[queue.length - 1].info.length) - (player && player.playing && !queue[0].info.isStream ? player.state.position : 0); // eslint-disable-line max-len
+                const duration = queue.reduce((prev, current) => prev + (current.isStream ? 0 : current.duration), 0) -
+                    song.duration +
+                    (player.playing && player.queue.current.isStream ? 0 : player.queue.current.duration) -
+                    (player.playing && player.queue.current.isStream ? 0 : player.position);
                 reply(msg, {
                     content: queue.length >= 2 && (!player || !player.playing) ?
                         `🔢  ::  There are songs in your queue from your previous session! You can run ${queue.length >= 3 ? `\`${prefix}remove 1${queue.length >= 4 ? `-${queue.length - 2}` : ''}\` then ` : ' '}\`${prefix}skip\` to start over.` :
@@ -226,7 +229,7 @@ module.exports = class extends Command {
                         .setDescription(`by ${song.author}`)
                         // eslint-disable-next-line max-len
                         .setFooter({ text: `For various music settings, run \`${prefix}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.` })
-                        .addField('Queue Position', queue.length === 1 ? 'Now Playing' : String(queue.length - 1), true)
+                        .addField('Queue Position', queue.current === song ? 'Now Playing' : String(queue.length), true)
                         .addField('Duration', song.isStream ? 'Livestream' : new Timestamp(`${song.duration >= 86400000 ? 'DD:' : ''}${song.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(song.duration), true)
                         .addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)]
                 });
