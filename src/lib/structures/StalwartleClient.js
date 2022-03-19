@@ -3,6 +3,7 @@ const { Manager } = require('erela.js');
 const { SpotifyParser } = require('spotilink');
 const { join } = require('path');
 const { Util: { escapeMarkdown } } = require('discord.js');
+const { mergeObjects } = require('@sapphire/utilities');
 const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
@@ -19,7 +20,6 @@ const Gateway = require('./settings/Gateway');
 const CacheManager = require('./cache/CacheManager');
 const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
-const { mergeObjects } = require('@sapphire/utilities');
 
 require('dotenv').config();
 
@@ -128,7 +128,7 @@ class Stalwartle extends SapphireClient {
             nodes: lavalinkNodes,
             clientId: this.user.id,
             shards: this.options.shardCount,
-            trackPartial: ['author', 'duration', 'isSeekable', 'isStream', 'requester', 'title', 'uri', 'incognito'],
+            trackPartial: ['author', 'duration', 'isSeekable', 'isStream', 'requester', 'title', 'uri', 'identifier', 'incognito'],
             send(id, payload) {
                 const guild = container.client.guilds.cache.get(id);
                 if (guild) guild.shard.send(payload);
@@ -164,7 +164,9 @@ class Stalwartle extends SapphireClient {
                 channel.send(`${this.container.constants.EMOTES.loading}  ::  It seems that the player is stuck! It could be buffering.`);
             })
             .on('queueEnd', async (player, track) => {
+                await container.stores.get('gateways').get('musicGateway').reset(player.guild, 'queue');
                 const { music, donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
+                const channel = this.channels.cache.get(player.textChannel);
 
                 if (donation >= 8 && music.autoplay) {
                     const params = new URLSearchParams();
@@ -176,23 +178,26 @@ class Stalwartle extends SapphireClient {
                     if (items && items.length) {
                         const relatedVideo = items[Math.floor(Math.random() * items.length)];
                         const songResult = relatedVideo ? await player.search(`https://youtu.be/${relatedVideo.id.videoId}`, this.user.id).catch(error => {
-                            this.channels.cache.get(player.textChannel).send(error.message);
+                            if (channel) channel.send(`${container.constants.EMOTES.xmark}  ::  ${error.message}`);
                             return null;
                         }) : null;
 
                         if (songResult) {
-                            player.queue.add(mergeObjects(songResult, { incognito: false }));
-                            return player.play();
+                            if (!songResult.exception) {
+                                player.queue.add(mergeObjects(songResult.tracks[0], { incognito: false }));
+                                return player.play();
+                            }
+                            if (channel) channel.send(`${container.constants.EMOTES.xmark}  ::  ${songResult.exception.message} (Severity: ${songResult.exception.severity})`);
                         }
                     }
                 }
 
                 if (donation < 10) this.setTimeout((guildID) => container.erela.players.get(guildID).destroy(), 1000 * 60 * 5, player.guild);
 
-                const channel = this.channels.cache.get(player.textChannel);
                 if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${prefix}play <song search>\`!`);
                 return null;
             });
+
         container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
         container.erela.nodes.forEach(node => node.connect());
         return true;

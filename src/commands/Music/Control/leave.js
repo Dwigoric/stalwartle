@@ -20,9 +20,6 @@ module.exports = class extends Command {
         if (player) player.destroy();
         else msg.guild.me.voice.disconnect();
 
-        const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];
-        if (song && song.requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').reset(msg.guild.id, 'queue');
-
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully left the voice channel.`);
     }
 
