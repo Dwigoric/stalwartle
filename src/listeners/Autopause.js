@@ -15,10 +15,10 @@ module.exports = class extends Listener {
         if (oldState.channel && newState.channel && (oldState.channel.id === newState.channel.id || ![oldState.channel.id, newState.channel.id].includes(newState.guild.me.voice.channel))) return null;
 
         const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
-        if (this.container.erela.get(newState.guild.id) && !this.container.erela.get(newState.guild.id).playing && !channelMembers.size) {
+        if (this.container.erela.players.has(newState.guild.id) && !this.container.erela.get(newState.guild.id).playing && !channelMembers.size) {
             clearTimeout(this.container.client.commands.get('play').timeouts.get(newState.guild.id));
             this.container.client.commands.get('play').timeouts.delete(newState.guild.id);
-            return this.container.erela.destroy(newState.guild.id);
+            return this.container.erela.players.get(newState.guild.id).destroy();
         }
         if (newState.guild.me.voice.channel && channelMembers.size && this.#autopaused.has(newState.guild.id)) {
             this.#autopaused.delete(newState.guild.id);
@@ -33,7 +33,7 @@ module.exports = class extends Listener {
         if (this.container.stores.get('gateways').get('guildGateway').get(newState.guild.id).donation >= 10) return null;
         return this.container.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
-            this.container.erela.destroy(guild.id);
+            this.container.erela.players.get(guild.id).destroy();
             if (queue[0].requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').reset(newState.guild.id, 'queue');
             return null;
         }, 30000, newState.guild);

@@ -17,9 +17,8 @@ module.exports = class extends Command {
         this.store.get('play').timeouts.delete(msg.guild.id);
 
         const player = this.container.erela.get(msg.guild.id);
-        if (player) player.disconnect();
+        if (player) player.destroy();
         else msg.guild.me.voice.disconnect();
-        this.container.erela.destroy(msg.guild.id);
 
         const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];
         if (song && song.requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').reset(msg.guild.id, 'queue');

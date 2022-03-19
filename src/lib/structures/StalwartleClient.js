@@ -173,7 +173,7 @@ class Stalwartle extends SapphireClient {
                     }
                 }
 
-                await this.container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
+                await container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
             })
             .on('trackError', (player, track, payload) => {
                 const channel = this.channels.cache.get(player.textChannel);
@@ -186,7 +186,7 @@ class Stalwartle extends SapphireClient {
             .on('queueEnd', player => {
                 const guildGateway = container.stores.get('gateways').get('guildGateway');
 
-                if (guildGateway.get(player.guild, 'donation') < 10) this.setTimeout((guildID) => container.erela.destroy(guildID), 1000 * 60 * 5, player.guild);
+                if (guildGateway.get(player.guild, 'donation') < 10) this.setTimeout((guildID) => container.players.get(guildID).destroy(), 1000 * 60 * 5, player.guild);
 
                 const channel = this.channels.cache.get(player.textChannel);
                 if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${guildGateway.get(player.guild, 'prefix')}play <song search>\`!`);
