@@ -146,8 +146,9 @@ class Stalwartle extends SapphireClient {
                 }
 
                 const announceChannel = this.channels.cache.get(player.textChannel);
+                const requester = await this.guilds.cache.get(player.guild).members.fetch(track.requester, { cache: false }).catch(async () => ({ displayName: await this.users.fetch(track.requester, { cache: false }).then(user => user.tag) }));
                 // eslint-disable-next-line max-len
-                if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(await this.guilds.cache.get(player.guild).members.fetch(track.requester.id).then(req => req.displayName).catch(() => track.requester.tag))}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
+                if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(requester.displayName)}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
             })
             .on('trackEnd', async (player, track) => {
                 const guildGateway = container.stores.get('gateways').get('guildGateway');
