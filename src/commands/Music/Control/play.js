@@ -72,7 +72,7 @@ module.exports = class extends Command {
             if (player.state === 'DISCONNECTED') player.connect();
 
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Queue is empty. The playlist has been added to the queue.`);
-            return this.#play(msg, playlist, { incognito: args.getFlags('incognito'), unresolved: false });
+            return this.#play(msg, playlist, { incognito: args.getFlags('incognito'), resolved: false });
         }
 
         player = this.#createPlayer(msg);
