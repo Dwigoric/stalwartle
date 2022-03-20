@@ -1,3 +1,5 @@
+const { config: { defaultPrefix } } = require('./config');
+
 const afk = Object.freeze({
     reason: null,
     timestamp: null
@@ -51,7 +53,7 @@ const users = Object.freeze({
 });
 
 const guilds = Object.freeze({
-    prefix: 's.',
+    prefix: defaultPrefix,
     disableNaturalPrefix: false,
     disabledCommands: [],
     afkChannelOnAfk: false,
