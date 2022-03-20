@@ -18,8 +18,8 @@ module.exports = class extends Command {
 
         const player = this.container.erela.players.get(msg.guild.id);
         const { queue } = player || { queue: [] };
-        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: Array.from(queue).concat(user ? Array.from(queue.filter((track, index) => index && track.requester !== user.id)) : []) });
         if (queue.length) queue.clear();
+        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: Array.from(queue).concat(user ? Array.from(queue.filter((track, index) => index && track.requester !== user.id)) : []) });
 
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully cleared the music queue for this server${user ? ` of ${user.tag}'s requests` : ''}.`);
     }
