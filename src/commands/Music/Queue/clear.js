@@ -16,9 +16,10 @@ module.exports = class extends Command {
     async messageRun(msg, args) {
         const user = await args.pick('user').catch(() => null);
 
-        const { queue } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
         const player = this.container.erela.players.get(msg.guild.id);
-        this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: (player && player.playing ? queue.slice(0, 1) : []).concat(user ? queue.filter((track, index) => index && track.requester !== user.id) : []) });
+        const { queue } = player || { queue: [] };
+        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: Array.from(queue).concat(user ? Array.from(queue.filter((track, index) => index && track.requester !== user.id)) : []) });
+        if (queue.length) queue.clear();
 
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully cleared the music queue for this server${user ? ` of ${user.tag}'s requests` : ''}.`);
     }

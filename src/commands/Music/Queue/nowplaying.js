@@ -23,28 +23,26 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const { queue } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
-        if (!queue.length || !msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
-        const { length } = queue[0].info;
-        const { position } = this.container.erela.players.get(msg.guild.id).state;
-        const timestamp = new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`);
+        const { queue, position, volume } = this.container.erela.players.get(msg.guild.id);
+        if (!queue.current) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
+        const timestamp = new Timestamp(`${queue.current.duration >= 86400000 ? 'DD:' : ''}${queue.current.duration >= 3600000 ? 'HH:' : ''}mm:ss`);
 
         const progress = '░'.repeat(35).split('');
-        const count = Math.ceil(((position / length)) * progress.length);
+        const count = Math.ceil(((position / queue.current.duration)) * progress.length);
         progress.splice(0, count, '▓'.repeat(count));
 
-        const guildGateway = this.container.stores.get('gateways').get('guildGateway');
+        const { music: { repeat } } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         return reply(msg, {
             embeds: [new MessageEmbed()
-                .setTitle(queue[0].info.title)
-                .setURL(queue[0].info.uri)
+                .setTitle(queue.current.title)
+                .setURL(queue.current.uri)
                 .setColor('RANDOM')
                 .setAuthor({ name: `🎶 Now Playing on ${msg.guild.name}` })
-                .setFooter({ text: `Requested by ${await msg.guild.members.fetch(queue[0].requester).then(mb => `${mb.displayName} (${mb.user.tag})`).catch(() => this.container.client.users.fetch(queue[0].requester).then(user => user.tag))}` }) // eslint-disable-line max-len
-                .setDescription(`by ${queue[0].info.author}\n\n\`${progress.join('')}\` ${queue[0].info.isStream ? 'N/A' : `${parseInt((position / length) * 100)}%`}`)
-                .addField('Time', queue[0].info.isStream ? 'N/A - Online Stream' : `\`${timestamp.display(position)} / ${timestamp.display(length)}\``, true)
-                .addField('Volume', `${this.container.erela.players.get(msg.guild.id).state.volume}%`, true)
-                .addField('Repeat', `${symbols[guildGateway.get(msg.guild.id, 'music.repeat')]} ${toTitleCase(guildGateway.get(msg.guild.id, 'music.repeat'))}`, true)
+                .setFooter({ text: `Requested by ${await msg.guild.members.fetch(queue.current.requester, { cache: false }).then(mb => `${mb.displayName} (${mb.user.tag})`).catch(() => this.container.client.users.fetch(queue.current.requester, { cache: false }).then(user => user.tag))}` }) // eslint-disable-line max-len
+                .setDescription(`by ${queue.current.author}\n\n\`${progress.join('')}\` ${queue.current.isStream ? 'N/A' : `${parseInt((position / queue.current.duration) * 100)}%`}`)
+                .addField('Time', queue.current.isStream ? 'N/A - Online Stream' : `\`${timestamp.display(position)} / ${timestamp.display(queue.current.duration)}\``, true)
+                .addField('Volume', `${volume}%`, true)
+                .addField('Repeat', `${symbols[repeat]} ${toTitleCase(repeat)}`, true)
                 .setTimestamp()]
         });
     }

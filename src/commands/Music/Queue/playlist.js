@@ -4,8 +4,8 @@ const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-
 const { Timestamp } = require('@sapphire/time-utilities');
 const { chunk, mergeObjects } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
-const fetch = require('node-fetch');
 const { reply } = require('@sapphire/plugin-editable-commands');
+const fetch = require('node-fetch');
 
 const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/;
 
@@ -50,9 +50,8 @@ module.exports = class extends SubCommandPluginCommand {
 
         let duration = 0;
         chunk(playlist, 10).forEach((music10, tenPower) => display.addPageEmbed(template => template.setDescription(music10.map((music, onePower) => {
-            const { length } = music.info;
-            duration += music.info.isStream ? 0 : length;
-            return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)}](${music.info.uri}) \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\``; // eslint-disable-line max-len
+            duration += music.isStream ? 0 : music.duration;
+            return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.title)}** by ${escapeMarkdown(music.author)}](${music.uri}) \`${music.isStream ? 'Livestream' : new Timestamp(`${music.duration >= 86400000 ? 'DD:' : ''}${music.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(music.duration)}\``; // eslint-disable-line max-len
         }).join('\n'))));
 
         display.template.embeds[0].setFooter({ text: `[${playlist.length} Playlist Item${playlist.length === 1 ? '' : 's'}] - Playlist Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}` }); // eslint-disable-line max-len
@@ -64,10 +63,8 @@ module.exports = class extends SubCommandPluginCommand {
         if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'donation') < 3) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! This feature is limited to servers which have donated $3 or more.`);
         if (!(await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Only DJs can configure the playlist!`);
 
-        let songs = await args.pickResult('url');
-        if (!songs.success) songs = await args.pickResult('enum', { enum: ['queue', 'queuereplace'] });
-        if (!songs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the URL of the song(s) you want to add to the playlist.`);
-        songs = songs.value instanceof URL ? songs.value.toString() : songs.value;
+        const songs = await args.pick('url').then(url => url.toString()).catch(() => args.pick('enum', { enum: ['queue', 'queuereplace'] }).catch(() => null));
+        if (songs === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the URL of the song(s) you want to add to the playlist.`);
 
         if (!URL_REGEX.test(songs) && !['.m3u', '.pls'].includes(songs.slice(-4))) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Unsupported URL.`);
 
@@ -83,7 +80,7 @@ module.exports = class extends SubCommandPluginCommand {
             return null;
         }
 
-        const { loadType, tracks } = await this.store.get('play').getSongs(songs, songs.includes('soundcloud.com')).catch(error => {
+        const { loadType, tracks } = await this.container.erela.search(songs, msg.author.id).catch(error => {
             reply(msg, error.message);
             return { loadType: null, tracks: null };
         });
@@ -147,13 +144,13 @@ module.exports = class extends SubCommandPluginCommand {
         switch (choice.content) {
             case 'file': {
                 if (!msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I do not have the permissions to attach files to this channel.`);
-                return reply(msg, { files: [{ attachment: Buffer.from(playlist.map(track => track.info.uri).join('\r\n')), name: 'output.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Exported the playlist as file.` });
+                return reply(msg, { files: [{ attachment: Buffer.from(playlist.map(track => track.uri).join('\r\n')), name: 'output.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Exported the playlist as file.` });
             }
             case 'haste':
             case 'hastebin': {
                 const { key } = await fetch('https://www.toptal.com/developers/hastebin/documents', {
                     method: 'POST',
-                    body: playlist.map(track => track.info.uri).join('\r\n')
+                    body: playlist.map(track => track.uri).join('\r\n')
                 }).then(res => res.json()).catch(() => ({ key: null }));
                 if (key === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! An unknown error occurred.`);
                 return reply(`${this.container.constants.EMOTES.tick}  ::  Exported the playlist to hastebin: <https://www.toptal.com/developers/hastebin/${key}.stalwartle>`);
@@ -186,7 +183,7 @@ module.exports = class extends SubCommandPluginCommand {
         positionPrompter.strategy.appliedMessage.delete();
         position = parseInt(position) - 1;
 
-        if (entry > playlist.length - 1 || position > playlist.length - 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The playlist only has ${playlist.length - 1} entr${playlist.length - 1 === 1 ? 'y' : 'ies'}.`); // eslint-disable-line max-len
+        if (entry > playlist.length - 1 || position > playlist.length - 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The playlist only has ${playlist.length - 1} entr${playlist.length - 1 === 1 ? 'y' : 'ies'}.`);
         if (entry === position) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  What's the point of moving a playlist to the same position?`);
 
         playlist.splice(position, 0, playlist.splice(entry, 1)[0]);
@@ -199,7 +196,12 @@ module.exports = class extends SubCommandPluginCommand {
         if (!(await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Only DJs can configure the playlist!`);
 
         const { playlist } = await this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
-        if (!playlist.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the playlist. Add one with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}playlist add\`.`); // eslint-disable-line max-len
+        if (!playlist.length) {
+            return reply(msg, [
+                `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the playlist.`,
+                `Add one with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}playlist add\`.`
+            ].join(' '));
+        }
         if (playlist.length === 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is only one playlist item... I have nothing to shuffle!`);
 
         this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, {
@@ -213,27 +215,38 @@ module.exports = class extends SubCommandPluginCommand {
                 return playlist;
             })()
         });
-        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully shuffled the playlist. Check it out with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}playlist\`.`); // eslint-disable-line max-len
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully shuffled the playlist. Check it out with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}playlist\`.`);
     }
 
     async #addToPlaylist(msg, items) {
         const { playlist } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
 
-        const guildGateway = this.container.stores.get('gateways').get('guildGateway');
+        const { donation, music, prefix } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         if (Array.isArray(items)) {
             let songCount = 0;
             for (const track of items) {
-                if (playlist.length >= guildGateway.get(msg.guild.id, 'music.maxPlaylist')) break;
-                if (guildGateway.get(msg.guild.id, 'donation') < 5 && track.info.length > 18_000_000) continue;
+                if (playlist.length >= music.maxPlaylist) break;
+                if (donation < 5 && track.duration > 18_000_000) continue;
                 playlist.push(mergeObjects(track, { requester: msg.author.id, incognito: false }));
                 songCount++;
             }
-            reply(msg, `🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the playlist.`); // eslint-disable-line max-len
-            if (songCount < items.length) msg.channel.send(`⚠  ::  Not all songs were added. Possibilities: (1) You've reached the playlist limit of ${guildGateway.get(msg.guild.id, 'music.maxPlaylist')} songs, or (2) all songs longer than 5 hours weren't added. View limits via \`${guildGateway.get(msg.guild.id, 'prefix')}conf show music\`.`); // eslint-disable-line max-len
+            reply(msg, `🎶  ::  **${songCount} song${songCount === 1 ? '' : 's'}** ha${songCount === 1 ? 's' : 've'} been added to the playlist.`);
+            if (songCount < items.length) {
+                reply(msg, [
+                    `⚠  ::  Not all songs were added.`,
+                    `Possibilities: (1) You've reached the playlist limit of ${music.maxPlaylist} songs, or (2) all songs longer than 5 hours weren't added.`,
+                    `Server moderators and managers can change these limits using the \`conf\` command.`
+                ].join(' '));
+            }
         } else {
-            if (playlist.length >= guildGateway.get(msg.guild.id, 'music.maxPlaylist')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The music playlist for **${msg.guild.name}** has reached the limit of ${guildGateway.get(msg.guild.id, 'music.maxPlaylist')} songs; currently ${playlist.length}. Change limit via \`${guildGateway.get(msg.guild.id, 'prefix')}conf set music.maxPlaylist <new limit>\`.`); // eslint-disable-line max-len
+            if (playlist.length >= music.maxPlaylist) {
+                return reply(msg, [
+                    `${this.container.constants.EMOTES.xmark}  ::  The music playlist for **${msg.guild.name}** has reached the limit of ${music.maxPlaylist} songs; currently ${playlist.length}.`,
+                    `Change limit via \`${prefix}conf set music.maxPlaylist <new limit>\`.`
+                ].join(' '));
+            }
             playlist.push(mergeObjects(items, { requester: msg.author.id, incognito: false }));
-            reply(msg, `🎶  ::  **${items.info.title}** has been added to the playlist.`);
+            reply(msg, `🎶  ::  **${items.title}** has been added to the playlist.`);
         }
         await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { playlist });
         return playlist;

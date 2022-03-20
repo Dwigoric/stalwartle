@@ -15,23 +15,25 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let entry = await args.pickResult('integer');
-        if (!entry.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me which queue entry you want to move.`);
-        entry = entry.value;
+        const entry = await args.pick('integer').catch(() => null);
+        if (entry === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me which queue entry you want to move.`);
         if (entry < 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You provided an invalid value.`);
-        let position = await args.pickResult('integer');
-        if (!position.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me to which position you want to move the entry to.`);
-        position = position.value;
+        const position = await args.pick('integer').catch(() => null);
+        if (position === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give me to which position you want to move the entry to.`);
         if (position < 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You provided an invalid value.`);
-
-        const { queue } = await this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
-        if (queue.length <= 2) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no queue entry to move.`);
-        // eslint-disable-next-line max-len
-        if (entry > queue.length - 1 || position > queue.length - 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`);
         if (entry === position) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  What's the point of moving a queue entry to the same position?`);
-        queue.splice(position, 0, queue.splice(entry, 1)[0]);
-        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue });
-        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${escapeMarkdown(queue[position].info.title)}** to position \`#${position}\`. New queue at \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}queue\`.`); // eslint-disable-line max-len
+
+        const player = this.container.erela.players.get(msg.guild.id);
+        const { queue } = player && player.playing ? player : await this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
+        if (queue.length <= (player && player.playing ? 1 : 2)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no queue entry to move.`);
+        // eslint-disable-next-line max-len
+        if (entry > (queue.length - (player && player.playing ? 0 : 1)) || position > (queue.length - (player && player.playing ? 0 : 1))) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The server queue only has ${queue.length - (player && player.playing ? 0 : 1)} entr${queue.length - (player && player.playing ? 0 : 1) === 1 ? 'y' : 'ies'}.`);
+        queue.splice(position - (player && player.playing ? 1 : 0), 0, ...queue.splice(entry - (player && player.playing ? 1 : 0), 1));
+
+        const newQueue = Array.from(queue);
+        if (player && player.playing) newQueue.unshift(player.queue.current);
+        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: newQueue });
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${escapeMarkdown(queue[position].title)}** to position \`#${position}\`. New queue at \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}queue\`.`); // eslint-disable-line max-len
     }
 
 };
