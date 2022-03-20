@@ -200,7 +200,14 @@ class Stalwartle extends SapphireClient {
                     }
                 }
 
-                if (donation < 10) this.setTimeout((guildID) => container.erela.players.get(guildID).destroy(), 1000 * 60 * 5, player.guild);
+                if (donation < 10) {
+                    const { timeouts } = container.stores.get('commands').get('play');
+                    timeouts.set(player.guild, setTimeout((guildID) => {
+                        player.destroy();
+                        clearTimeout(timeouts.get(guildID));
+                        timeouts.delete(guildID);
+                    }, 1000 * 10, player.guild));
+                }
 
                 if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${prefix}play <song search>\`!`);
                 return null;
