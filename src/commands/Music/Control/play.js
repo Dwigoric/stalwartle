@@ -41,7 +41,6 @@ module.exports = class extends Command {
 
         let player = this.container.erela.players.get(msg.guild.id);
 
-        if (player && !msg.guild.me.voice.channel) await this.container.destroy(msg.guild.id);
         if (!msg.member.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please connect to a voice channel first.`);
 
         const guildGateway = this.container.stores.get('gateways').get('guildGateway');

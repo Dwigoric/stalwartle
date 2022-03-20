@@ -163,6 +163,14 @@ class Stalwartle extends SapphireClient {
                 const channel = this.channels.cache.get(player.textChannel);
                 channel.send(`${container.constants.EMOTES.loading}  ::  It seems that the player is stuck! It could be buffering.`);
             })
+            .on('playerMove', (player, oldChannel, newChannel) => {
+                player.voiceChannel = newChannel;
+                return;
+            })
+            .on('socketClosed', player => {
+                if (this.guilds.cache.get(player.guild).me.voice.channel) player.pause(false);
+                else player.destroy();
+            })
             .on('queueEnd', async (player, track) => {
                 await container.stores.get('gateways').get('musicGateway').reset(player.guild, 'queue');
                 const { music, donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
