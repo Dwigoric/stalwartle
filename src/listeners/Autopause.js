@@ -16,7 +16,7 @@ module.exports = class extends Listener {
 
         const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
         if (this.container.lavacord.players.get(newState.guild.id) && !this.container.lavacord.players.get(newState.guild.id).playing && !channelMembers.size) {
-            clearTimeout(this.container.client.commands.get('play').timeouts.get(newState.guild.id));
+            clearTimeout(this.container.stores.get('commands').get('play').timeouts.get(newState.guild.id));
             this.container.client.commands.get('play').timeouts.delete(newState.guild.id);
             return this.container.lavacord.leave(newState.guild.id);
         }
