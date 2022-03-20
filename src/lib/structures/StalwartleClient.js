@@ -206,7 +206,7 @@ class Stalwartle extends SapphireClient {
                         player.destroy();
                         clearTimeout(timeouts.get(guildID));
                         timeouts.delete(guildID);
-                    }, 1000 * 10, player.guild));
+                    }, 1000 * 60 * 5, player.guild));
                 }
 
                 if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${prefix}play <song search>\`!`);
