@@ -10,6 +10,7 @@ module.exports = class extends Listener {
 
     async run(oldState, newState) {
         if (!this.container.erela) return null;
+        if (newState.id === this.container.client.user.id) return null;
 
         const player = this.container.erela.players.get(newState.guild.id);
         if (!player) return null;
