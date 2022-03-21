@@ -6,7 +6,7 @@ module.exports = class extends Listener {
         super(context, { ...options, event: Events.VoiceStateUpdate });
     }
 
-    #autopaused = new Set();
+    #autopaused = new Map();
 
     async run(oldState, newState) {
         if (!this.container.erela) return null;
@@ -24,33 +24,25 @@ module.exports = class extends Listener {
             return player.destroy();
         }
         if (newState.guild.me.voice.channelId && channelMembers.size && this.#autopaused.has(newState.guild.id)) {
+            this.container.client.clearTimeout(this.#autopaused.get(newState.guild.id));
             this.#autopaused.delete(newState.guild.id);
-            return player.pause(false);
+            if (!player.queue.current.isStream) return player.pause(false);
         }
         if (channelMembers.size) return null;
 
-        const { queue } = player;
-        if (!queue.current.isStream) {
-            this.#autopaused.add(newState.guild.id);
-            player.pause(true);
-        }
-        if (this.container.stores.get('gateways').get('guildGateway').get(newState.guild.id).donation >= 10) return null;
-        return this.container.client.setTimeout(guild => {
-            if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
-            if (player) player.destroy();
-            return null;
-        }, 30000, newState.guild);
+        if (!player.queue.current.isStream) player.pause(true);
+        return this.addAutopaused(newState.guild.id);
     }
 
     addAutopaused(guildID) {
         if (this.#autopaused.has(guildID)) return null;
-        this.#autopaused.add(guildID);
+        if (this.container.stores.get('gateways').get('guildGateway').get(guildID).donation >= 10) return null;
         const player = this.container.erela.players.get(guildID);
-        return this.container.client.setTimeout(guild => {
+        return this.#autopaused.set(guildID, this.container.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
             if (player) player.destroy();
             return null;
-        }, 30000, this.container.client.guilds.cache.get(guildID));
+        }, 30000, this.container.client.guilds.cache.get(guildID)));
     }
 
 };
