@@ -219,7 +219,7 @@ class Stalwartle extends SapphireClient {
             });
 
         container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
-        container.erela.nodes.forEach(node => node.connect());
+        container.erela.init(this.user.id);
         return true;
     }
 
