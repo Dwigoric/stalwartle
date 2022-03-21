@@ -18,7 +18,7 @@ module.exports = class extends Listener {
         if (oldState.channelId && newState.channelId && (oldState.channelId === newState.channelId || ![oldState.channelId, newState.channelId].includes(newState.guild.me.voice.channelId))) return null;
 
         const channelMembers = newState.guild.me.voice.channel.members.filter(mb => !mb.user.bot);
-        if (player && !player.playing && !channelMembers.size) {
+        if (!player.playing && !channelMembers.size) {
             clearTimeout(this.container.stores.get('commands').get('play').timeouts.get(newState.guild.id));
             this.container.stores.get('commands').get('play').timeouts.delete(newState.guild.id);
             return player.destroy();
@@ -40,6 +40,17 @@ module.exports = class extends Listener {
             if (player) player.destroy();
             return null;
         }, 30000, newState.guild);
+    }
+
+    addAutopaused(guildID) {
+        if (this.#autopaused.has(guildID)) return null;
+        this.#autopaused.add(guildID);
+        const player = this.container.erela.players.get(guildID);
+        return this.container.client.setTimeout(guild => {
+            if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
+            if (player) player.destroy();
+            return null;
+        }, 30000, this.container.client.guilds.cache.get(guildID));
     }
 
 };

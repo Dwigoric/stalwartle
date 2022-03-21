@@ -168,8 +168,13 @@ class Stalwartle extends SapphireClient {
                 return;
             })
             .on('socketClosed', player => {
-                if (this.guilds.cache.get(player.guild).me.voice.channel) player.pause(false);
-                else player.destroy();
+                const { channel } = this.guilds.cache.get(player.guild).me.voice;
+                if (channel) {
+                    if (channel.members.filter(member => !member.user.bot).size) player.pause(false);
+                    else container.stores.get('listeners').get('Autopause').addAutopaused(player.guild);
+                } else {
+                    player.destroy();
+                }
             })
             .on('queueEnd', async (player, track) => {
                 await container.stores.get('gateways').get('musicGateway').reset(player.guild, 'queue');
