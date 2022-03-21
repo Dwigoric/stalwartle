@@ -23,8 +23,9 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const { queue, position, volume } = this.container.erela.players.get(msg.guild.id);
-        if (!queue.current) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player || !player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
+        const { queue, position, volume } = player;
         const timestamp = new Timestamp(`${queue.current.duration >= 86400000 ? 'DD:' : ''}${queue.current.duration >= 3600000 ? 'HH:' : ''}mm:ss`);
 
         const progress = '░'.repeat(35).split('');
