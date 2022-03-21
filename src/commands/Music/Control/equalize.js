@@ -25,26 +25,22 @@ module.exports = class extends Command {
         const player = this.container.erela.players.get(msg.guild.id);
         if (!player) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing on this server.`);
 
-        let band = await args.pickResult('integer');
-        if (!band.success) band = await args.pickResult('enum', { enum: ['setall'] });
-        if (!band.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please set which band to change.`);
-        band = band.value;
+        const band = await args.pick('integer').catch(() => args.pick('enum', { enum: ['setall'] }).catch(() => null));
+        if (band === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please set which band to change.`);
         if (!isNaN(band) && (band < 0 || band > 14)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  15 bands are available: \`0\` to \`14\`.`);
-        let gain = await args.pickResult('number');
-        if (!gain.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please set the gain of band \`${band}\`.`);
-        gain = gain.value;
+        const gain = await args.pick('number').catch(() => null);
+        if (gain === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please set the gain of band \`${band}\`.`);
         if (gain < -0.25 || gain > 1.0) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The value of the gain must be between \`-0.25\` and \`1.0\` inclusive.`);
 
         if (band === 'setall') {
-            const bands = [];
-            for (band of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]) bands.push({ band, gain });
-            player.equalizer(bands);
+            const bands = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(bandNum => ({ band: bandNum, gain }));
+            player.setEQ(bands);
             return reply(msg, [
                 `${this.container.constants.EMOTES.tick}  ::  Successfully equalized all bands' gain to \`${gain}\`.`,
                 gain !== 0 ? ` *Make sure you know what you're doing. Run \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}eq setall 0\` if you're unsure.*` : ''
             ].join(''));
         }
-        player.equalizer([{ gain, band }]);
+        player.setEQ([{ gain, band }]);
         return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  Successfully equalized band \`#${band}\`'s gain to \`${gain}\`.`,
             `*Make sure you know what you're doing. Run \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}eq setall 0\` if you're unsure.*`

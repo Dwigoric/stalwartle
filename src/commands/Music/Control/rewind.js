@@ -15,17 +15,18 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let seek = await args.pickResult('duration');
-        if (!seek.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  How far from the track should I rewind the song to?`);
-        seek = seek.value;
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player || !player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\``);
+
+        let seek = await args.pick('duration').then(duration => duration.getTime()).catch(() => null);
+        if (seek === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  How far from the track should I rewind the song to?`);
 
         seek -= Date.now();
-        const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];
-        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`);
-        if (!song.info.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be rewinded.`);
 
-        const player = this.container.erela.players.get(msg.guild.id);
-        player.seek(player.state.position - seek);
+        const song = player.queue.current;
+        if (!song.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be rewinded.`);
+
+        player.seek(player.position - seek);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully rewinded the music.`);
     }
 

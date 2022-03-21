@@ -19,7 +19,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player || !player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
 
         const entry = await args.pick('integer').catch(() => null);
 
@@ -47,21 +48,24 @@ module.exports = class extends Command {
         }
 
         this.container.cache.guilds.get(msg.guild.id).clearVoteskips();
-        this.container.erela.players.get(msg.guild.id).stop();
+        player.stop();
 
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully skipped the music for this server.`);
     }
 
     async #skipToEntry(msg, entry) {
-        const { queue } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
-        if (queue.length < 2) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no queue entry to skip to.`);
-        if (entry > queue.length - 1) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The server queue only has ${queue.length - 1} entr${queue.length - 1 === 1 ? 'y' : 'ies'}.`);
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player.queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no queue entry to skip to.`);
+        if (entry > player.queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The server queue only has ${player.queue.length} entr${player.queue.length === 1 ? 'y' : 'ies'}.`);
 
-        queue.splice(1, 0, queue.splice(entry, 1)[0]);
-        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue });
+        player.queue.splice(0, 0, ...player.queue.splice(entry - 1, 1));
+
+        const newQueue = Array.from(player.queue);
+        newQueue.unshift(player.queue.current);
+        await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: newQueue });
 
         this.container.cache.guilds.get(msg.guild.id).clearVoteskips();
-        this.container.erela.players.get(msg.guild.id).stop();
+        player.stop();
 
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully skipped to entry \`#${entry}\`.`);
     }
