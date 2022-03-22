@@ -17,7 +17,7 @@ module.exports = class extends Command {
             preconditions: ['DJOnly', 'MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
-            flags: ['force', 'soundcloud'],
+            flags: ['force', 'soundcloud', 'next'],
             detailedDescription: [
                 'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel <channel ID>`.',
                 'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
@@ -90,7 +90,13 @@ module.exports = class extends Command {
         this.timeouts.delete(msg.guild.id);
 
         if (player.state === 'DISCONNECTED') player.connect();
-        if (args.getFlags('force') && (await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) return this.#play(msg, song, { incognito: args.getFlags('incognito'), force: true });
+        if (args.getFlags('force', 'next') && (await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) {
+            return this.#play(msg, song, {
+                incognito: args.getFlags('incognito'),
+                next: args.getFlags('next'),
+                force: args.getFlags('force')
+            });
+        }
         return this.#play(msg, song, { incognito: args.getFlags('incognito') });
     }
 
@@ -107,13 +113,13 @@ module.exports = class extends Command {
         });
     }
 
-    async #play(msg, song, { force = false, incognito = false, resolved = true } = {}) {
+    async #play(msg, song, { force = false, next = false, incognito = false, resolved = true } = {}) {
         const player = this.container.erela.players.get(msg.guild.id);
         const { music } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
 
         if (player.queue.totalSize >= music.maxQueue) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This server has reached its set maximum queue entries!`);
 
-        await this.#addToQueue(msg, resolved ? song : Array.isArray(song) ? song.map(track => buildUnresolved(track)) : buildUnresolved(song), { force, incognito });
+        await this.#addToQueue(msg, resolved ? song : Array.isArray(song) ? song.map(track => buildUnresolved(track)) : buildUnresolved(song), { force, next, incognito });
 
         switch (music.repeat) {
             case 'queue': player.setQueueRepeat(true); break;
@@ -179,16 +185,16 @@ module.exports = class extends Command {
         return this.#prompts.get(args.message.author.id)[parseInt(choice.content) - 1];
     }
 
-    async #addToQueue(msg, song, { force, incognito }) {
+    async #addToQueue(msg, song, { force, next, incognito }) {
         const player = this.container.erela.players.get(msg.guild.id);
         const { queue } = player;
         const { music, donation, prefix } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
 
-        if (force) {
+        if (force || next) {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { incognito })) : [mergeObjects(song, { incognito })];
 
             queue.splice(0, 0, ...songs);
-            reply(msg, `${this.container.constants.EMOTES.tick}  ::  Forcibly played **${songs.length > 1 ? `${songs.length} songs` : songs[0].title}**, moved to the front of the queue.`);
+            reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : songs[0].title}** to the front of the queue.`);
         } else if (Array.isArray(song)) {
             const { length } = song;
 
