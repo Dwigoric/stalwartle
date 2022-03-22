@@ -13,11 +13,12 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music session in this server.`);
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music session in this server.`);
         this.store.get('play').timeouts.delete(msg.guild.id);
-        this.container.lavacord.leave(msg.guild.id);
+
+        player.destroy();
         await this.container.stores.get('gateways').get('musicGateway').reset(msg.guild.id, 'queue');
-        // eslint-disable-next-line max-len
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully ended the music session for this server, and the queue has been emptied.`);
     }
 

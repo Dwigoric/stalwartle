@@ -15,17 +15,19 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let seek = await args.pickResult('duration');
-        if (!seek.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  What timestamp should I seek? (e.g. 1m5s for 01:05)`);
-        seek = seek.value;
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player || !player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\``);
+
+        let seek = await args.pick('duration').then(duration => duration.getTime()).catch(() => null);
+        if (seek === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  What timestamp should I seek? (e.g. 1m5s for 01:05)`);
 
         seek -= Date.now();
-        const { queue } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
-        if (!queue.length || !msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No song playing! Add one using \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`); // eslint-disable-line max-len
-        if (!queue[0].info.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`);
-        if (queue[0].info.length < seek) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`);
 
-        this.container.lavacord.players.get(msg.guild.id).seek(seek);
+        const song = player.queue.current;
+        if (!song.isSeekable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The current track playing cannot be seeked.`);
+        if (song.duration < seek) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The time you supplied is longer than the song's length.`);
+
+        player.seek(seek);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully seeked the music.`);
     }
 

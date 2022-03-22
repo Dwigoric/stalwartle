@@ -28,13 +28,13 @@ module.exports = class extends Command {
         switch (choice.content) {
             case 'file': {
                 if (!msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I do not have the permissions to attach files to this channel.`);
-                return reply(msg, { files: [{ attachment: Buffer.from(queue.map(track => track.info.uri).join('\r\n')), name: 'output.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Exported the queue as file.` });
+                return reply(msg, { files: [{ attachment: Buffer.from(queue.map(track => track.uri).join('\r\n')), name: 'output.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Exported the queue as file.` });
             }
             case 'haste':
             case 'hastebin': {
                 const { key } = await fetch('https://www.toptal.com/developers/hastebin/documents', {
                     method: 'POST',
-                    body: queue.map(track => track.info.uri).join('\r\n')
+                    body: queue.map(track => track.uri).join('\r\n')
                 }).then(res => res.json()).catch(() => ({ key: null }));
                 if (key === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! An unknown error occurred.`);
                 return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Exported the queue to hastebin: <https://www.toptal.com/developers/hastebin/${key}.stalwartle>`);

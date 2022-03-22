@@ -41,16 +41,20 @@ module.exports = class extends SubCommandPluginCommand {
             }
         });
 
-        let duration = 0;
+        let length = 0;
         await Promise.all(chunk(history, 10).map(async (music10, tenPower) => await Promise.all(music10.map(async (music, onePower) => {
-            const { length } = music.info;
-            duration += music.info.isStream ? 0 : length;
-            return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)}](${music.info.uri}) \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` - ${await this.container.client.users.fetch(music.requester).then(usr => usr.tag)} (${moment(music.timestamp).fromNow()})`; // eslint-disable-line max-len
+            length += music.isStream ? 0 : music.duration;
+            return [
+                `\`${(tenPower * 10) + (onePower + 1)}\`.`,
+                `[**${escapeMarkdown(music.title)}** by ${escapeMarkdown(music.author)}](${music.uri})`,
+                `\`${music.isStream ? 'Livestream' : new Timestamp(`${music.duration >= 86400000 ? 'DD:' : ''}${music.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(music.duration)}\``,
+                `- ${await this.container.client.users.fetch(music.requester, { cache: false }).then(usr => usr.tag)} (${moment(music.timestamp).fromNow()})`
+            ].join(' ');
         })))).then(hist => hist.forEach(hist10 => display.addPageEmbed(template => template.setDescription(hist10.join('\n')))));
 
         display.template.embeds[0].setFooter({ text: [
             `[${history.length} History Item${history.length === 1 ? '' : 's'}]`,
-            `History Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`
+            `History Duration: ${new Timestamp(`${length >= 86400000 ? 'DD[d]' : ''}${length >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(length)}`
         ].join(' - ') });
 
         return display.run(message, msg.author).catch(err => this.container.logger.error(err));
@@ -71,13 +75,13 @@ module.exports = class extends SubCommandPluginCommand {
         switch (choice.content) {
             case 'file': {
                 if (!msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I do not have the permissions to attach files to this channel.`);
-                return reply(msg, { files: [{ attachment: Buffer.from(history.map(track => track.info.uri).join('\r\n')), name: 'output.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Exported the history as file.` });
+                return reply(msg, { files: [{ attachment: Buffer.from(history.map(track => track.uri).join('\r\n')), name: 'output.txt' }], content: `${this.container.constants.EMOTES.tick}  ::  Exported the history as file.` });
             }
             case 'haste':
             case 'hastebin': {
                 const { key } = await fetch('https://www.toptal.com/developers/hastebin/documents', {
                     method: 'POST',
-                    body: history.map(track => track.info.uri).join('\r\n')
+                    body: history.map(track => track.uri).join('\r\n')
                 }).then(res => res.json()).catch(() => ({ key: null }));
                 if (key === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! An unknown error occurred.`);
                 return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Exported the history to hastebin: <https://www.toptal.com/developers/hastebin/${key}.stalwartle>`);

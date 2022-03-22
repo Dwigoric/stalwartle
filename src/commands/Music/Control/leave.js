@@ -13,12 +13,11 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music session in this server.`);
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music session in this server.`);
         this.store.get('play').timeouts.delete(msg.guild.id);
-        this.container.lavacord.leave(msg.guild.id);
 
-        const song = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue[0];
-        if (song && song.requester === this.container.client.user.id) this.container.stores.get('gateways').get('musicGateway').reset(msg.guild.id, 'queue');
+        if (player) player.destroy();
 
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully left the voice channel.`);
     }

@@ -13,10 +13,11 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        if (!msg.guild.me.voice.channel) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
-        if (this.container.lavacord.players.get(msg.guild.id).paused) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Music is already paused! Resume it with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}resume\`.`); // eslint-disable-line max-len
+        const player = this.container.erela.players.get(msg.guild.id);
+        if (!player) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no music playing in this server!`);
+        if (player.paused) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Music is already paused! Resume it with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}resume\`.`); // eslint-disable-line max-len
 
-        this.container.lavacord.players.get(msg.guild.id).pause(true);
+        player.pause(true);
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully paused the music for this server.`);
     }
 

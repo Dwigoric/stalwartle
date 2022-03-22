@@ -9,12 +9,8 @@ module.exports = class extends Listener {
     }
 
     async run(guild) {
-        const player = this.container.lavacord.players.get(guild.id);
-        if (player) {
-            player.removeAllListeners();
-            player.destroy();
-            this.container.lavacord.players.delete(guild.id);
-        }
+        const player = this.container.erela.players.get(guild.id);
+        if (player) this.container.players.get(guild.id).destroy();
 
         this.hook.send({
             embeds: [new MessageEmbed()

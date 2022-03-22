@@ -22,8 +22,8 @@ module.exports = class extends Command {
         if (!queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There are no songs in the queue yet! Add one with \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\`.`);
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading the music queue...`);
         const np = queue[0];
-        const npStatus = msg.guild.me.voice.channel ?
-            this.container.lavacord.players.get(msg.guild.id).paused ?
+        const npStatus = this.container.erela.players.has(msg.guild.id) ?
+            this.container.erela.players.get(msg.guild.id).paused ?
                 '⏸' :
                 '▶' :
             '⤴ Up Next:';
@@ -39,17 +39,29 @@ module.exports = class extends Command {
         });
 
         queue.shift();
-        let duration = np.info.isStream ? 0 : np.info.length;
+        let length = np.isStream ? 0 : np.duration;
 
-        await Promise.all((queue.length ? chunk(queue, 10) : [np]).map(async (music10, tenPower) => [`${npStatus} [**${escapeMarkdown(np.info.title)}** by ${escapeMarkdown(np.info.author)}](${np.info.uri}) \`${np.info.isStream ? 'Livestream' : new Timestamp(`${np.info.length >= 86400000 ? 'DD:' : ''}${np.info.length >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.info.length)}\` - ${await this.container.client.users.fetch(np.requester).then(usr => usr.tag)}\n`].concat(queue.length ? await Promise.all(music10.map(async (music, onePower) => { // eslint-disable-line max-len
-            const { length } = music.info;
-            duration += music.info.isStream ? 0 : length;
-            return `\`${(tenPower * 10) + (onePower + 1)}\`. [**${escapeMarkdown(music.info.title)}** by ${escapeMarkdown(music.info.author)}](${music.info.uri}) \`${music.info.isStream ? 'Livestream' : new Timestamp(`${length >= 86400000 ? 'DD:' : ''}${length >= 3600000 ? 'HH:' : ''}mm:ss`).display(length)}\` - ${await this.container.client.users.fetch(music.requester).then(usr => usr.tag)}`; // eslint-disable-line max-len
-        })) : 'No upcoming tracks.'))).then(musicList => musicList.forEach(queue10 => display.addPageEmbed(template => template.setDescription(queue10.join('\n')))));
+        await Promise.all((queue.length ? chunk(queue, 10) : [np]).map(async (music10, tenPower) =>
+            [
+                [
+                    `${npStatus} [**${escapeMarkdown(np.title)}** by ${escapeMarkdown(np.author)}](${np.uri})`,
+                    `\`${np.isStream ? 'Livestream' : new Timestamp(`${np.duration >= 86400000 ? 'DD:' : ''}${np.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(np.duration)}\``,
+                    `- ${await this.container.client.users.fetch(np.requester).then(usr => usr.tag)}\n`
+                ].join(' ')
+            ].concat(queue.length ? await Promise.all(music10.map(async (music, onePower) => {
+                length += music.isStream ? 0 : music.duration;
+                return [
+                    `\`${(tenPower * 10) + (onePower + 1)}\`.`,
+                    `[**${escapeMarkdown(music.title)}** by ${escapeMarkdown(music.author)}](${music.uri})`,
+                    `\`${music.isStream ? 'Livestream' : new Timestamp(`${music.duration >= 86400000 ? 'DD:' : ''}${music.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(music.duration)}\``,
+                    `- ${await this.container.client.users.fetch(music.requester, { cache: false }).then(usr => usr.tag)}`
+                ].join(' ');
+            })) : 'No upcoming tracks.')
+        )).then(musicList => musicList.forEach(queue10 => display.addPageEmbed(template => template.setDescription(queue10.join('\n')))));
 
         display.template.embeds[0].setFooter({ text: [
             `[${queue.length} Queue Entr${queue.length === 1 ? 'y' : 'ies'}]`,
-            `Queue Duration: ${new Timestamp(`${duration >= 86400000 ? 'DD[d]' : ''}${duration >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(duration)}`
+            `Queue Duration: ${new Timestamp(`${length >= 86400000 ? 'DD[d]' : ''}${length >= 3600000 ? 'HH[h]' : ''}mm[m]ss[s]`).display(length)}`
         ].join(' - ') });
 
         return display.run(message, msg.author).catch(err => this.container.logger.error(err));

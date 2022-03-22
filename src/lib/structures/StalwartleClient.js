@@ -1,7 +1,9 @@
 const { SapphireClient, container } = require('@sapphire/framework');
-const { Manager } = require('@lavacord/discord.js');
-const { SpotifyParser } = require('spotilink');
+const { Manager } = require('erela.js');
 const { join } = require('path');
+const { Util: { escapeMarkdown } } = require('discord.js');
+const { mergeObjects } = require('@sapphire/utilities');
+const Spotify = require('erela.js-spotify');
 const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
@@ -26,8 +28,7 @@ class Stalwartle extends SapphireClient {
     constructor(clientOptions) {
         super(clientOptions);
 
-        container.lavacord = null;
-        container.spotifyParser = null;
+        container.erela = null;
         container.constants = require('../util/constants');
 
         this.once('ready', this._initplayer.bind(this));
@@ -70,7 +71,7 @@ class Stalwartle extends SapphireClient {
                 body: JSON.stringify({
                     guilds: await this.guildCount(),
                     users: await this.userCount(),
-                    voice_connections: Array.from(container.lavacord.players.values()).filter(player => player.playing).length // eslint-disable-line camelcase
+                    voice_connections: Array.from(container.erela.players.size).filter(player => player.playing).length // eslint-disable-line camelcase
                 }),
                 headers: { Authorization: `Bot ${process.env.DISCORDBOTLIST_API_KEY}`, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             }).catch(err => container.logger.error(err));
@@ -121,12 +122,110 @@ class Stalwartle extends SapphireClient {
     }
 
     _initplayer() {
-        container.lavacord = container.lavacord || new Manager(this, lavalinkNodes, {
-            user: this.user.id,
-            shards: this.options.shardCount
-        });
-        container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
-        if (!container.lavacord.idealNodes.length) container.lavacord.connect();
+        container.erela = container.erela || new Manager({
+            autoPlay: true,
+            nodes: lavalinkNodes,
+            clientId: this.user.id,
+            shards: this.options.shardCount,
+            trackPartial: ['author', 'duration', 'isSeekable', 'isStream', 'requester', 'title', 'uri', 'identifier', 'incognito'],
+            plugins: [
+                new Spotify({
+                    clientID: process.env.SPOTIFY_CLIENT_ID, // eslint-disable-line no-process-env
+                    clientSecret: process.env.SPOTIFY_CLIENT_SECRET, // eslint-disable-line no-process-env,
+                    playlistLimit: 0,
+                    albumLimit: 0
+                })
+            ],
+            send(id, payload) {
+                const guild = container.client.guilds.cache.get(id);
+                if (guild) guild.shard.send(payload);
+            }
+        })
+            .on('nodeConnect', node => container.logger.info(`Node ${node.options.identifier} connected.`))
+            .on('nodeError', (node, error) => container.logger.error(`Node ${node.options.identifier} had an error: ${error.message}`))
+            .on('trackStart', async (player, track) => {
+                const guildGateway = container.stores.get('gateways').get('guildGateway');
+
+                if (guildGateway.get(player.guild, 'donation') >= 3 && !track.incognito) {
+                    const { history } = container.stores.get('gateways').get('musicGateway').get(player.guild);
+                    history.unshift(mergeObjects(track, { timestamp: Date.now() }));
+                    container.stores.get('gateways').get('musicGateway').update(player.guild, { history });
+                }
+
+                const announceChannel = this.channels.cache.get(player.textChannel);
+                const requester = await this.guilds.cache.get(player.guild).members.fetch(track.requester, { cache: false }).catch(async () => ({ displayName: await this.users.fetch(track.requester, { cache: false }).then(user => user.tag) }));
+                // eslint-disable-next-line max-len
+                if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(requester.displayName)}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
+            })
+            .on('trackEnd', player => {
+                const queue = Array.from(player.queue);
+                queue.unshift(player.queue.current);
+                container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
+            })
+            .on('trackError', (player, track, payload) => {
+                const channel = this.channels.cache.get(player.textChannel);
+                channel.send(`${container.constants.EMOTES.xmark}  ::  An error occurred while playing the track: ${payload.exception.message} (${payload.exception.severity})`);
+            })
+            .on('trackStuck', player => {
+                const channel = this.channels.cache.get(player.textChannel);
+                channel.send(`${container.constants.EMOTES.loading}  ::  It seems that the player is stuck! It could be buffering.`);
+            })
+            .on('playerMove', (player, oldChannel, newChannel) => {
+                player.voiceChannel = newChannel;
+                return;
+            })
+            .on('socketClosed', player => {
+                const { channel } = this.guilds.cache.get(player.guild).me.voice;
+                if (channel) {
+                    if (channel.members.filter(member => !member.user.bot).size) player.pause(false);
+                    else container.stores.get('listeners').get('Autopause').addAutopaused(player.guild);
+                } else {
+                    player.destroy();
+                }
+            })
+            .on('queueEnd', async (player, track) => {
+                await container.stores.get('gateways').get('musicGateway').reset(player.guild, 'queue');
+                const { music, donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
+                const channel = this.channels.cache.get(player.textChannel);
+
+                if (donation >= 8 && music.autoplay) {
+                    const params = new URLSearchParams();
+                    params.set('part', 'snippet');
+                    params.set('relatedToVideoId', track.identifier);
+                    params.set('type', 'video');
+                    params.set('key', process.env.GOOGLE_API_KEY); // eslint-disable-line no-process-env
+                    const { items } = await fetch(`https://www.googleapis.com/youtube/v3/search?${params}`).then(res => res.json());
+                    if (items && items.length) {
+                        const relatedVideo = items[Math.floor(Math.random() * items.length)];
+                        const songResult = relatedVideo ? await player.search(`https://youtu.be/${relatedVideo.id.videoId}`, this.user.id).catch(error => {
+                            if (channel) channel.send(`${container.constants.EMOTES.xmark}  ::  ${error.message}`);
+                            return null;
+                        }) : null;
+
+                        if (songResult) {
+                            if (!songResult.exception) {
+                                player.queue.add(mergeObjects(songResult.tracks[0], { incognito: false }));
+                                return player.play();
+                            }
+                            if (channel) channel.send(`${container.constants.EMOTES.xmark}  ::  ${songResult.exception.message} (Severity: ${songResult.exception.severity})`);
+                        }
+                    }
+                }
+
+                if (donation < 10) {
+                    const { timeouts } = container.stores.get('commands').get('play');
+                    timeouts.set(player.guild, setTimeout((guildID) => {
+                        player.destroy();
+                        clearTimeout(timeouts.get(guildID));
+                        timeouts.delete(guildID);
+                    }, 1000 * 60 * 5, player.guild));
+                }
+
+                if (channel) channel.send(`👋  ::  No song left in the queue, so the music session has ended! Play more music with \`${prefix}play <song search>\`!`);
+                return null;
+            });
+
+        container.erela.init(this.user.id);
         return true;
     }
 

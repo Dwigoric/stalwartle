@@ -29,7 +29,7 @@ module.exports = class extends Command {
                 .addField('🤖 General Information', [
                     `**Users**: ${(await this.container.client.userCount()).toLocaleString()}`,
                     `**Servers**: ${(await this.container.client.guildCount()).toLocaleString()}`,
-                    `**Voice Connections**: ${Array.from(this.container.lavacord.players.values()).filter(player => player.playing).length}`
+                    `**Voice Connections**: ${Array.from(this.container.erela.players.values()).filter(player => player.playing).length}`
                 ].join('\n'), true)
                 .addField('⏱ Uptime', [
                     `**Host**: ${moment(now - (uptime() * 1000)).fromNow(true)}`,
