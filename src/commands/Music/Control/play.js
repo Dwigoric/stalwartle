@@ -24,6 +24,7 @@ module.exports = class extends Command {
                 'To choose which channel I will announce songs, use `s.conf set music.announceChannel <channel>`.',
                 'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
                 'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
+                'To move song(s) to the front of the queue, use the `--next` flag.',
                 '\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
                 'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
                 'To play an online radio, simply supply the radio link.',
