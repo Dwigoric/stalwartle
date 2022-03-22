@@ -90,7 +90,7 @@ module.exports = class extends Command {
         this.timeouts.delete(msg.guild.id);
 
         if (player.state === 'DISCONNECTED') player.connect();
-        if (args.getFlags('force') && queue.length && player.playing && (await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) return this.#play(msg, song, { incognito: args.getFlags('incognito'), force: true });
+        if (args.getFlags('force') && (await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) return this.#play(msg, song, { incognito: args.getFlags('incognito'), force: true });
         return this.#play(msg, song, { incognito: args.getFlags('incognito') });
     }
 
@@ -188,6 +188,7 @@ module.exports = class extends Command {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { incognito })) : [mergeObjects(song, { incognito })];
 
             queue.splice(0, 0, ...songs);
+            reply(msg, `${this.container.constants.EMOTES.tick}  ::  Forcibly played **${songs.length > 1 ? `${songs.length} songs` : songs[0].title}**, moved to the front of the queue.`);
         } else if (Array.isArray(song)) {
             const { length } = song;
 
