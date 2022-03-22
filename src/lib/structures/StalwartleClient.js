@@ -1,9 +1,9 @@
 const { SapphireClient, container } = require('@sapphire/framework');
 const { Manager } = require('erela.js');
-const { SpotifyParser } = require('spotilink');
 const { join } = require('path');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const { mergeObjects } = require('@sapphire/utilities');
+const Spotify = require('erela.js-spotify');
 const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
@@ -29,7 +29,6 @@ class Stalwartle extends SapphireClient {
         super(clientOptions);
 
         container.erela = null;
-        container.spotifyParser = null;
         container.constants = require('../util/constants');
 
         this.once('ready', this._initplayer.bind(this));
@@ -129,6 +128,14 @@ class Stalwartle extends SapphireClient {
             clientId: this.user.id,
             shards: this.options.shardCount,
             trackPartial: ['author', 'duration', 'isSeekable', 'isStream', 'requester', 'title', 'uri', 'identifier', 'incognito'],
+            plugins: [
+                new Spotify({
+                    clientID: process.env.SPOTIFY_CLIENT_ID, // eslint-disable-line no-process-env
+                    clientSecret: process.env.SPOTIFY_CLIENT_SECRET, // eslint-disable-line no-process-env,
+                    playlistLimit: 0,
+                    albumLimit: 0
+                })
+            ],
             send(id, payload) {
                 const guild = container.client.guilds.cache.get(id);
                 if (guild) guild.shard.send(payload);
@@ -218,7 +225,6 @@ class Stalwartle extends SapphireClient {
                 return null;
             });
 
-        container.spotifyParser = new SpotifyParser(lavalinkNodes[0], process.env.SPOTIFY_CLIENT_ID, process.env.SPOTIFY_CLIENT_SECRET); // eslint-disable-line no-process-env
         container.erela.init(this.user.id);
         return true;
     }
