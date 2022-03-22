@@ -143,15 +143,13 @@ module.exports = class extends Command {
             args.message.author.id
         );
 
-        const player = this.container.erela.players.get(args.message.guild.id);
         switch (loadType) {
             case 'LOAD_FAILED': throw new Error(`${this.container.constants.EMOTES.xmark}  ::  ${exception.message} (Severity: ${exception.severity})`);
             case 'NO_MATCHES': throw new Error(`${this.container.constants.EMOTES.xmark}  ::  No track found for your query.`);
             case 'TRACK_LOADED': return tracks[0];
             case 'PLAYLIST_LOADED':
                 if (tracks.length) {
-                    const channel = this.container.client.channels.cache.get(player.textChannel);
-                    channel.send(`${this.container.constants.EMOTES.tick}  ::  Group of tracks loaded: **${escapeMarkdown(playlist.name)}**.`);
+                    args.message.reply(`${this.container.constants.EMOTES.tick}  ::  Group of tracks loaded: **${escapeMarkdown(playlist.name)}**.`);
                     return tracks;
                 }
                 throw new Error(`${this.container.constants.EMOTES.xmark}  ::  It seems the playlist is composed of livestreams. Please try adding them individually.`);
