@@ -58,7 +58,7 @@ module.exports = class extends Command {
         if (!player.queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  There is no queue entry to skip to.`);
         if (entry > player.queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The server queue only has ${player.queue.length} entr${player.queue.length === 1 ? 'y' : 'ies'}.`);
 
-        player.queue.splice(0, 0, ...player.queue.splice(entry - 1, 1));
+        player.queue.unshift(...player.queue.splice(entry - 1, 1));
 
         const newQueue = Array.from(player.queue);
         newQueue.unshift(player.queue.current);

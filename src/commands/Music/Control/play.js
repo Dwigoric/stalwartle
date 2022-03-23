@@ -192,7 +192,7 @@ module.exports = class extends Command {
         if (force || next) {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { incognito })) : [mergeObjects(song, { incognito })];
 
-            queue.splice(0, 0, ...songs);
+            queue.unshift(...songs);
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : songs[0].title}** to the front of the queue.`);
         } else if (Array.isArray(song)) {
             const { length } = song;
