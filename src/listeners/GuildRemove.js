@@ -9,6 +9,7 @@ module.exports = class extends Listener {
     }
 
     async run(guild) {
+        if (!this.container.erela) return;
         const player = this.container.erela.players.get(guild.id);
         if (player) this.container.players.get(guild.id).destroy();
 
