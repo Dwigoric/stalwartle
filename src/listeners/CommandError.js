@@ -31,7 +31,7 @@ module.exports = class extends Listener {
                         `**Command**: \`${escapeMarkdown(context.message.content)}\``,
                         codeBlock('js', error.message),
                         codeBlock('xl', error.stack)
-                    ])
+                    ].join('\n'))
                     .setTimestamp()]
             });
         }
