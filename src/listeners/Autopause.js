@@ -37,9 +37,9 @@ module.exports = class extends Listener {
     addAutopaused(guildID) {
         if (this.#autopaused.has(guildID)) return null;
         if (this.container.stores.get('gateways').get('guildGateway').get(guildID).donation >= 10) return null;
-        const player = this.container.erela.players.get(guildID);
         return this.#autopaused.set(guildID, this.container.client.setTimeout(guild => {
             if (guild.me.voice.channel && guild.me.voice.channel.members.filter(mb => !mb.user.bot).size) return null;
+            const player = this.container.erela.players.get(guild.id);
             if (player) player.destroy();
             return null;
         }, 30000, this.container.client.guilds.cache.get(guildID)));
