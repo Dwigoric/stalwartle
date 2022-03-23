@@ -85,7 +85,7 @@ module.exports = class extends Command {
 
         this.#prompts.delete(msg.author.id);
         // eslint-disable-next-line max-len
-        if (!Array.isArray(song) && guildGateway.get(msg.guild.id).donation < 5 && !song.isStream && song.duration > 18_000_000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${song.info.title}** is longer than 5 hours. Please donate $5 or more to remove this limit.`);
+        if (!Array.isArray(song) && guildGateway.get(msg.guild.id).donation < 5 && !song.isStream && song.duration > 18_000_000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${song.title}** is longer than 5 hours. Please consider donating $5 or more to remove this limit.`);
 
         clearTimeout(this.timeouts.get(msg.guild.id));
         this.timeouts.delete(msg.guild.id);
