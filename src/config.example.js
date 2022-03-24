@@ -1,4 +1,5 @@
 const { LogLevel } = require('@sapphire/framework');
+const { Logger } = require('@sapphire/plugin-logger');
 const { ScheduledTaskRedisStrategy } = require('@sapphire/plugin-scheduled-tasks/register-redis');
 
 exports.config = {
@@ -43,7 +44,14 @@ exports.config = {
 
     // Logger options
     logger: {
-        level: LogLevel.Info
+        level: LogLevel.Info,
+        instance: new Logger({
+            defaultFormat: {
+                timestamp: {
+                    utc: true
+                }
+            }
+        })
     },
 
     /**
