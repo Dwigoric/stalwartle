@@ -164,7 +164,7 @@ class Stalwartle extends SapphireClient {
             })
             .on('trackError', (player, track, payload) => {
                 const channel = this.channels.cache.get(player.textChannel);
-                channel.send(`${container.constants.EMOTES.xmark}  ::  An error occurred while playing the track: ${payload.exception.message} (${payload.exception.severity})`);
+                channel.send(`${container.constants.EMOTES.xmark}  ::  An error occurred while playing the track: ${payload.exception ? payload.exception.message : '(No message received)'} (${payload.exception.severity})`);
             })
             .on('trackStuck', player => {
                 const channel = this.channels.cache.get(player.textChannel);
