@@ -95,7 +95,7 @@ module.exports = class extends SubCommandPluginCommand {
         const remList = await this.#remlist(msg);
         if (remList === null) return null;
 
-        const prompter = new MessagePrompter(`Please give me the list number of the reminder you want to delete:\n${remList.list}`, 'message');
+        const prompter = new MessagePrompter(`Please give me the list number of the reminder you want to delete:\n${remList.list}`, 'message', { timeout: 30000 });
         const prompted = await prompter.run(msg.channel, msg.author);
         const remNum = parseInt(prompted.content);
         prompter.strategy.appliedMessage.delete();
