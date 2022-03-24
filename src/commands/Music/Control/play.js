@@ -90,7 +90,12 @@ module.exports = class extends Command {
         clearTimeout(this.timeouts.get(msg.guild.id));
         this.timeouts.delete(msg.guild.id);
 
-        if (player.state === 'DISCONNECTED') player.connect();
+        if (player.state === 'DISCONNECTED') {
+            if (!msg.member.voice.channelId) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please do not leave the voice channel.`);
+            if (!this.container.erela.players.has(msg.guild.id)) player = this.#createPlayer(msg);
+            player.connect();
+        }
+
         if (args.getFlags('force', 'next') && (await this.container.stores.get('preconditions').get('DJOnly').run(msg)).success) {
             return this.#play(msg, song, {
                 incognito: args.getFlags('incognito'),
