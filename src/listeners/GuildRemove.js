@@ -11,7 +11,8 @@ module.exports = class extends Listener {
     async run(guild) {
         if (!this.container.erela) return;
         const player = this.container.erela.players.get(guild.id);
-        if (player) this.container.erela.players.get(guild.id).destroy();
+        if (player) player.destroy();
+        this.container.stores.get('gateways').get('musicGateway').delete(guild.id);
 
         this.hook.send({
             embeds: [new MessageEmbed()
