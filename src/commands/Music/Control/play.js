@@ -160,9 +160,11 @@ module.exports = class extends Command {
 
         const prompter = new MessagePrompter([
             `🎶  ::  **${escapeMarkdown(args.message.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
-            // eslint-disable-next-line max-len
-            finds.map((result, index) => `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)} \`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\``).join('\n')
-        ].join('\n'), 'message');
+            finds.map((result, index) => [
+                `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)}`,
+                `\`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\``
+            ].join(' ')).join('\n')
+        ].join('\n'), 'message', { timeout: 30000 });
         let limit = 0, choice;
         do {
             if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
