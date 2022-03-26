@@ -24,7 +24,7 @@ module.exports = class extends Command {
                     `• [botlist.space](https://botlist.space/bot/${this.container.client.user.id})`,
                     `• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.container.client.user.id})`,
                     'Thank you!'
-                ])]
+                ].join('\n'))]
         }
         );
     }
