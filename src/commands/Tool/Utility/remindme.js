@@ -75,7 +75,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
-            `You will be reminded of this in approximately ${moment(when).fromNow(true)}.`,
+            `You will be reminded of this in approximately ${moment(reminder.timestamp + reminder.delay).fromNow(true)}.`,
             reminder.data.forceChannel ?
                 'The people of this channel will be reminded.' :
                 "I will first try to remind you in DMs. If I can't send you one, I will then try to remind you in the channel you run this command."
