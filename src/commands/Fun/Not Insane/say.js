@@ -20,7 +20,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
-        if (!chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
+        if (msg.guild && !chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send(msgargs);
     }
@@ -44,7 +44,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
-        if (!chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
+        if (msg.guild && !chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send({
             embeds: [await new MessageEmbed()
