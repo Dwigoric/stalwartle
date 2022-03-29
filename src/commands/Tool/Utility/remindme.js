@@ -71,7 +71,7 @@ module.exports = class extends SubCommandPluginCommand {
             user: msg.author.id,
             text,
             forceChannel: Boolean(args.getFlags('channel'))
-        }, when instanceof Date ? when.getTime() - Date.now() : when);
+        }, when instanceof Date ? when.getTime() - Date.now() : { type: 'repeated', cron: when });
 
         return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
