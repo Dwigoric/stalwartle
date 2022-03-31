@@ -31,37 +31,37 @@ module.exports = class extends SubCommandPluginCommand {
         });
         this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {
-            if (!isNaN(new Date(parameter))) {
-                const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);
-                const customTime = Number(moment.tz(parameter, timezone).format('x'));
-                if (customTime <= Date.now()) {
-                    return Args.error({
-                        argument: argCtx.argument,
-                        parameter: argCtx.parameter,
-                        identifier: 'PastTime',
-                        message: 'The given time was in the past.'
-                    });
-                }
-                return Args.ok(new Date(customTime));
+            if (isNaN(new Date(parameter))) {
+                const cron = {
+                    annually: '0 0 1 1 *',
+                    monthly: '0 0 1 * *',
+                    weekly: '0 0 * * 6',
+                    daily: '0 0 * * *',
+                    hourly: '0 */1 * * *'
+                };
+
+                if (parameter in cron) return Args.ok(cron[parameter]);
+                else return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
             }
 
-            const cron = {
-                annually: '0 0 1 1 *',
-                monthly: '0 0 1 * *',
-                weekly: '0 0 * * 6',
-                daily: '0 0 * * *',
-                hourly: '0 */1 * * *'
-            };
-
-            if (parameter in cron) return Args.ok(cron[parameter]);
-            else return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
+            const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);
+            const customTime = new Date(moment(parameter).tz(timezone).format());
+            if (customTime.getTime() <= Date.now()) {
+                return Args.error({
+                    argument: argCtx.argument,
+                    parameter: argCtx.parameter,
+                    identifier: 'PastTime',
+                    message: 'The given time was in the past.'
+                });
+            }
+            return Args.ok(customTime);
         });
     }
 
     async default(msg, args) {
         let when = await args.pickResult(this.resolver);
         if (!when.success) {
-            if (when.error.identifier === 'PastTime') return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${when.error.message}`);
+            if (when.error.identifier === 'PastTime') return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${when.error.message} Please check if your timezone is correct using the \`tz\` command.`);
             return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give a valid time format.`);
         }
         when = when.value;
