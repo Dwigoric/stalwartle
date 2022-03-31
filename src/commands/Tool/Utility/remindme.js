@@ -31,7 +31,7 @@ module.exports = class extends SubCommandPluginCommand {
         });
         this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {
-            if (moment(parameter, true).isValid()) {
+            if (!isNaN(new Date(parameter))) {
                 const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);
                 const customTime = Number(moment.tz(parameter, timezone).format('x'));
                 if (customTime <= Date.now()) {
@@ -60,7 +60,10 @@ module.exports = class extends SubCommandPluginCommand {
 
     async default(msg, args) {
         let when = await args.pickResult(this.resolver);
-        if (!when.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give a valid time format.`);
+        if (!when.success) {
+            if (when.error.identifier === 'PastTime') return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${when.error.message}`);
+            return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give a valid time format.`);
+        }
         when = when.value;
         const text = await args.rest('string').catch(() => null);
 
