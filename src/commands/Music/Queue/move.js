@@ -33,7 +33,7 @@ module.exports = class extends Command {
         const newQueue = Array.from(queue);
         if (player && player.playing) newQueue.unshift(player.queue.current);
         await this.container.stores.get('gateways').get('musicGateway').update(msg.guild.id, { queue: newQueue });
-        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${escapeMarkdown(queue[position - 1].title)}** to position \`#${position}\`. New queue at \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}queue\`.`); // eslint-disable-line max-len
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${escapeMarkdown(queue[position - (player && player.playing ? 1 : 0)].title)}** to position \`#${position}\`. New queue at \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}queue\`.`); // eslint-disable-line max-len
     }
 
 };
