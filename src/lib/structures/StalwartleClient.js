@@ -73,7 +73,7 @@ class Stalwartle extends SapphireClient {
                     users: await this.userCount(),
                     voice_connections: Array.from(container.erela.players.size).filter(player => player.playing).length // eslint-disable-line camelcase
                 }),
-                headers: { Authorization: `Bot ${process.env.DISCORDBOTLIST_API_KEY}`, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
+                headers: { Authorization: process.env.DISCORDBOTLIST_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             }).catch(err => container.logger.error(err));
         }
         if (process.env.DISCORDBOTSGG_API_KEY) { // eslint-disable-line no-process-env
