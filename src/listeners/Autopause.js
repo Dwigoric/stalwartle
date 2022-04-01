@@ -26,7 +26,7 @@ module.exports = class extends Listener {
         if (newState.guild.me.voice.channelId && channelMembers.size && this.#autopaused.has(newState.guild.id)) {
             this.container.client.clearTimeout(this.#autopaused.get(newState.guild.id));
             this.#autopaused.delete(newState.guild.id);
-            if (!player.queue.current.isStream) return player.pause(false);
+            return player.pause(false);
         }
         if (channelMembers.size) return null;
 
