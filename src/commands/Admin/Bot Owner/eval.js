@@ -59,7 +59,7 @@ module.exports = class extends Command {
     async handleMessage(msg, options, { success, result, time, footer, language }) {
         switch (options.sendAs) {
             case 'file': {
-                if (msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) {
+                if (!msg.guild || msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) {
                     return reply(msg, {
                         files: [{ name: 'output.txt', attachment: Buffer.from(result) }],
                         content: `Sent the result as a file.\n**Type**:${footer}\n${time}`
@@ -95,7 +95,7 @@ module.exports = class extends Command {
 
     async getTypeOutput(msg, options) {
         const _options = ['log'];
-        if (msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) _options.push('file');
+        if (!msg.guild || msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) _options.push('file');
         if (!options.hastebinUnavailable) _options.push('hastebin');
         const handler = new MessagePrompter(`Choose one of the following options: ${_options.join(', ')}`, 'message');
         let _choice;
