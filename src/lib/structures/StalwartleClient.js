@@ -50,55 +50,6 @@ class Stalwartle extends SapphireClient {
         return container.stores.get('gateways').get('clientGateway').get(this.user.id);
     }
 
-    async postStats() {
-        if (process.env.CARBONITEX_API_KEY) { // eslint-disable-line no-process-env
-            fetch('https://www.carbonitex.net/discord/data/botdata.php', {
-                method: 'POST',
-                body: JSON.stringify({ key: process.env.CARBONITEX_API_KEY, server_count: await this.guildCount() }), // eslint-disable-line camelcase,no-process-env
-                headers: { 'Content-Type': 'application/json' }
-            }).catch(err => container.logger.error(err));
-        }
-        if (process.env.TOPGG_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://top.gg/api/bots/${this.user.id}/stats`, {
-                method: 'POST',
-                body: JSON.stringify({ server_count: await this.guildCount(), shard_count: this.options.shardCount }), // eslint-disable-line camelcase
-                headers: { Authorization: process.env.TOPGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
-            }).catch(err => container.logger.error(err));
-        }
-        if (process.env.DISCORDBOTLIST_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://discordbotlist.com/api/v1/bots/${this.user.id}/stats`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    guilds: await this.guildCount(),
-                    users: await this.userCount(),
-                    voice_connections: container.erela.players.filter(player => player.playing).size // eslint-disable-line camelcase
-                }),
-                headers: { Authorization: process.env.DISCORDBOTLIST_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
-            }).catch(err => container.logger.error(err));
-        }
-        if (process.env.DISCORDBOTSGG_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://discord.bots.gg/api/v1/bots/${this.user.id}/stats`, {
-                method: 'POST',
-                body: JSON.stringify({ guildCount: await this.guildCount() }),
-                headers: { Authorization: process.env.DISCORDBOTSGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
-            }).catch(err => container.logger.error(err));
-        }
-        if (process.env.DISCORDLISTSPACE_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://api.discordlist.space/v2/bots/${this.user.id}`, {
-                method: 'POST',
-                body: JSON.stringify({ serverCount: await this.guildCount() }),
-                headers: { Authorization: process.env.DISCORDLISTSPACE_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
-            }).catch(err => container.logger.error(err));
-        }
-        if (process.env.BOTSONDISCORD_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://bots.ondiscord.xyz/bot-api/bots/${this.user.id}/guilds`, {
-                method: 'POST',
-                body: JSON.stringify({ guildCount: await this.guildCount() }),
-                headers: { Authorization: process.env.BOTSONDISCORD_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
-            }).catch(err => container.logger.error(err));
-        }
-    }
-
     async guildCount() {
         let guilds = 0;
         if (this.shard) {
