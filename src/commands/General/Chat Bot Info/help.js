@@ -76,7 +76,7 @@ module.exports = class extends Command {
                 helpMessage.push([
                     this.container.client.application.botPublic ? [
                         `\nWant to add ${this.container.client.user.username} to your own server or to a server you manage? If you have **Manage Server** permissions, you can add this bot by using the link:`,
-                        `<https://bit.ly/${this.container.client.user.username.split(' ').join('-')}>`,
+                        `<https://bit.ly/invite-stalwartle>`,
                         '\nNeed help or has ideas for the bot? Just want somewhere to hang out? Be with us here:',
                         `**${this.container.client.guilds.cache.get('502895390807293963').name}** ⇒ https://discord.gg/KDWGvV8`,
                         `\nUse the command \`${this.container.client.options.prefix}bug\` to report a bug and \`${this.container.client.options.prefix}suggest\` if you have suggestions.`,

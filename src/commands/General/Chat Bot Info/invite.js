@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
 const message = [
     'To add Stalwartle to your Discord server:',
-    '<https://bit.ly/stalwartle>',
+    '<https://bit.ly/invite-stalwartle>',
     'You can also click my profile in the sidebar and click "Add to Server".',
     'Please use the `s.bug` command if you find any bugs.'
 ].join('\n');
