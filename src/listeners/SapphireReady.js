@@ -44,7 +44,10 @@ module.exports = class extends Listener {
             return this.container.client.options.defaultPrefix;
         };
 
-        await Promise.all(this.container.stores.map(async store => await Promise.all(store.map(async piece => { if (piece.init) await piece.init(); }))));
+        await Promise.all(this.container.stores.map(async store => await Promise.all(store.map(async piece => {
+            if (piece.init) return piece.init();
+            return null;
+        }))));
         if (this.container.client.application.partial) this.container.client.application.fetch().catch(error => this.container.logger.warn('Could not fetch ClientApplicaton:', error));
         this.container.client.user.setPresence({ status: 'online' });
         this.container.client.user.setActivity('Just started running! 👀', { type: 'WATCHING' });
