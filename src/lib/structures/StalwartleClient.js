@@ -83,10 +83,10 @@ class Stalwartle extends SapphireClient {
                 headers: { Authorization: process.env.DISCORDBOTSGG_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             }).catch(err => container.logger.error(err));
         }
-        if (process.env.BOTLISTSPACE_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://api.botlist.space/v2/bots/${this.user.id}`, {
+        if (process.env.DISCORDLISTSPACE_API_KEY) { // eslint-disable-line no-process-env
+            fetch(`https://api.discordlist.space/v2/bots/${this.user.id}`, {
                 method: 'POST',
-                body: JSON.stringify({ server_count: await this.guildCount() }), // eslint-disable-line camelcase
+                body: JSON.stringify({ serverCount: await this.guildCount() }),
                 headers: { Authorization: process.env.BOTLISTSPACE_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
             }).catch(err => container.logger.error(err));
         }
