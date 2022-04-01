@@ -31,7 +31,7 @@ class Stalwartle extends SapphireClient {
         container.erela = null;
         container.constants = require('../util/constants');
 
-        this.once('ready', this._initplayer.bind(this));
+        this.once('ready', this.initializeErela.bind(this));
 
         container.database = new PersistenceManager();
 
@@ -72,7 +72,7 @@ class Stalwartle extends SapphireClient {
         return users;
     }
 
-    _initplayer() {
+    initializeErela() {
         container.erela = container.erela || new Manager({
             autoPlay: true,
             nodes: lavalinkNodes,
