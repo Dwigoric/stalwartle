@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
-require('dotenv').config();
 
 module.exports = class extends Command {
 

@@ -6,8 +6,6 @@ const { mergeObjects } = require('@sapphire/utilities');
 const { Util: { escapeMarkdown }, MessageEmbed } = require('discord.js');
 const { TrackUtils: { buildUnresolved } } = require('erela.js');
 
-require('dotenv').config();
-
 module.exports = class extends Command {
 
     constructor(context, options) {

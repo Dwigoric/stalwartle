@@ -1,7 +1,6 @@
 const { Command } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
-require('dotenv').config();
 
 module.exports = class extends Command {
 

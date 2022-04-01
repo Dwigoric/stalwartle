@@ -1,6 +1,5 @@
 const { Listener, Events } = require('@sapphire/framework');
 const fetch = require('node-fetch');
-require('dotenv').config();
 
 module.exports = class extends Listener {
 

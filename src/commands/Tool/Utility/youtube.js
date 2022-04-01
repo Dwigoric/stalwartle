@@ -4,7 +4,6 @@ const fetch = require('node-fetch');
 const moment = require('moment-timezone');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
-require('dotenv').config();
 
 module.exports = class extends SubCommandPluginCommand {
 

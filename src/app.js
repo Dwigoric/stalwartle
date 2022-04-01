@@ -1,6 +1,5 @@
 const Stalwartle = require('./lib/structures/StalwartleClient');
 const { config } = require('./config');
-require('dotenv').config();
 
 // Instantiate Stalwartle
 const client = new Stalwartle(config);
