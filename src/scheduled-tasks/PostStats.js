@@ -6,7 +6,7 @@ module.exports = class extends ScheduledTask {
     constructor(context, options) {
         super(context, {
             ...options,
-            cron: '*/5 * * * *'
+            cron: '*/10 * * * *'
         });
     }
 
