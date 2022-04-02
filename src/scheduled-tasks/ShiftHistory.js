@@ -1,6 +1,6 @@
 const { ScheduledTask } = require('@sapphire/plugin-scheduled-tasks');
 
-module.exports = class extends ScheduledTask {
+module.exports = class ShiftHistoryTask extends ScheduledTask {
 
     constructor(context, options) {
         super(context, {

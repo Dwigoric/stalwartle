@@ -1,7 +1,7 @@
 const { ScheduledTask } = require('@sapphire/plugin-scheduled-tasks');
 const fetch = require('node-fetch');
 
-module.exports = class extends ScheduledTask {
+module.exports = class PostStatsTask extends ScheduledTask {
 
     constructor(context, options) {
         super(context, {
