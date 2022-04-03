@@ -52,7 +52,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async toggle(msg, args, action) {
-        const mod = args.pick('member').catch(() => args.pick('role')).catch(() => null);
+        const mod = await args.pick('member').catch(() => args.pick('role')).catch(() => null);
         if (mod === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the user/role.`);
 
         const type = mod instanceof GuildMember ? 'users' : 'roles';
