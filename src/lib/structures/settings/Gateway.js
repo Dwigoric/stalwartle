@@ -14,11 +14,9 @@ class Gateway extends Piece {
     }
 
     get(id, path, filterUnconfigurable = false) {
-        let obj;
-
-        if (typeof path === 'string') obj = objectValueByPath(this.get(id, undefined, filterUnconfigurable), path);
-        else if (this.cache.has(id)) obj = mergeDefault(deepClone(this.defaults), this.cache.get(id));
-        else obj = deepClone(this.defaults);
+        const obj = typeof path === 'string' ?
+            objectValueByPath(this.get(id, undefined, filterUnconfigurable), path) :
+            mergeDefault(this.defaults, deepClone(this.cache.get(id)));
 
         return filterUnconfigurable ? this.#filterUnconfigurable(obj, path) : obj;
     }
