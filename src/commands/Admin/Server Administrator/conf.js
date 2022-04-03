@@ -99,7 +99,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         const status = await this.container.stores.get('gateways').get('guildGateway').update(message.guild.id, key, type.isArray ? path : resolvedValue.id || resolvedValue).catch(error => error);
         if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await this.#resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
-        return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status.message}`);
+        return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem setting the value.'}`);
     }
 
     async remove(message, args) {
@@ -141,7 +141,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         const status = await this.container.stores.get('gateways').get('guildGateway').update(message.guild.id, key, type.isArray ? path : resolvedValue.id || resolvedValue).catch(error => error);
         if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await this.#resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
-        return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status.message}`);
+        return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem removing the value.'}`);
     }
 
     async reset(message, args) {
@@ -153,7 +153,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         const status = await this.container.stores.get('gateways').get('guildGateway').reset(message.guild.id, key).catch(error => error);
         if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully reset the key **${key}**.`);
-        return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status.message}`);
+        return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem resetting the key.'}`);
     }
 
     #getResolverOptions(type, message) {
