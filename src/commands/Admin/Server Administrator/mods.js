@@ -60,7 +60,16 @@ module.exports = class extends SubCommandPluginCommand {
         if (action === 'add' && guildMods[type].includes(mod.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already a moderator!`);
         if (action === 'remove' && !guildMods[type].includes(mod.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This role/user is already not a moderator!`);
 
-        this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { [type]: mod.id } });
+        switch (action) {
+            case 'add':
+                guildMods[type].push(mod.id);
+                break;
+            case 'remove':
+                guildMods[type].splice(guildMods[type].indexOf(mod.id), 1);
+                break;
+        }
+
+        this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { [type]: guildMods[type] } });
         return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully ${action}${action.slice(-1) === 'e' ? '' : 'e'}d as moderator.`);
     }
 
