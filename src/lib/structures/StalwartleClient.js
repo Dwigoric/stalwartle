@@ -109,7 +109,7 @@ class Stalwartle extends SapphireClient {
                 if (announceChannel && guildGateway.get(player.guild).music.announceSongs && announceChannel.permissionsFor(this.user).has('SEND_MESSAGES')) announceChannel.send(`🎧  ::  Now Playing: **${escapeMarkdown(track.title)}** by ${escapeMarkdown(track.author)} (Requested by **${escapeMarkdown(requester.displayName)}** - more info on \`${guildGateway.get(player.guild, 'prefix')}np\`).`);
             })
             .on('trackEnd', player => {
-                this.container.cache.guilds.get(player.guild).clearVoteskips();
+                container.cache.guilds.get(player.guild).clearVoteskips();
                 const queue = Array.from(player.queue);
                 queue.unshift(player.queue.current);
                 container.stores.get('gateways').get('musicGateway').update(player.guild, { queue });
@@ -140,7 +140,7 @@ class Stalwartle extends SapphireClient {
                 }
             })
             .on('queueEnd', async (player, track) => {
-                this.container.cache.guilds.get(player.guild).clearVoteskips();
+                container.cache.guilds.get(player.guild).clearVoteskips();
 
                 await container.stores.get('gateways').get('musicGateway').reset(player.guild, 'queue');
                 const { music, donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
