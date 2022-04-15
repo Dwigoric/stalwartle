@@ -152,7 +152,7 @@ module.exports = class extends Command {
             case 'TRACK_LOADED': return tracks[0];
             case 'PLAYLIST_LOADED':
                 if (tracks.length) {
-                    args.message.reply(`${this.container.constants.EMOTES.tick}  ::  Group of tracks loaded: **${escapeMarkdown(playlist.name)}**.`);
+                    args.message.reply(`${this.container.constants.EMOTES.tick}  ::  Group of tracks loaded: **${escapeMarkdown(playlist.name)}**`);
                     return tracks;
                 }
                 throw new Error(`${this.container.constants.EMOTES.xmark}  ::  It seems the playlist is composed of livestreams. Please try adding them individually.`);
@@ -198,7 +198,7 @@ module.exports = class extends Command {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { incognito })) : [mergeObjects(song, { incognito })];
 
             queue.add(songs, 0);
-            reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : songs[0].title}** to the front of the queue.`);
+            reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : escapeMarkdown(songs[0].title)}** to the front of the queue.`);
         } else if (Array.isArray(song)) {
             const { length } = song;
 
