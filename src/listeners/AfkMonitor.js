@@ -1,6 +1,5 @@
 const { Listener, Events } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const moment = require('moment-timezone');
 
 module.exports = class extends Listener {
 
@@ -22,7 +21,7 @@ module.exports = class extends Listener {
         if (!afkUser) return;
         const { reason, timestamp } = this.container.stores.get('gateways').get('afkGateway').get(afkUser.id);
         reply(msg, [
-            `${this.container.constants.EMOTES.blobping}  ::  ${msg.author}, **${await msg.guild.members.fetch(afkUser.id).then(mb => mb.displayName).catch(() => afkUser.username)}** is currently AFK. [Last seen ${moment(timestamp).fromNow()}]`, // eslint-disable-line max-len
+            `${this.container.constants.EMOTES.blobping}  ::  ${msg.author}, **${await msg.guild.members.fetch(afkUser.id).then(mb => mb.displayName).catch(() => afkUser.username)}** is currently AFK. [Last seen <t:${parseInt(timestamp / 1000)}:R>]`, // eslint-disable-line max-len
             reason ? `**Reason**: ${reason}` : ''
         ].join('\n'), { disableMentions: 'everyone' });
     }
