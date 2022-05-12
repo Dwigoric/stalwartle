@@ -87,7 +87,7 @@ module.exports = class extends Command {
                         '$10 ⇒ Make ot not leave within 30 seconds when no one is connected to voice channel; unless the bot is rebooted. ($3, $5, and $8 perks are included)',
                         '**Cryptocurrency Channel**: <https://nowpayments.io/donation/dwigoric>',
                         '**Fiat Channels**',
-                        'PayPal: <https://www.paypal.com/donate?hosted_button_id=EPD2AY6LRNDGS>',
+                        'PayPal: <https://www.paypal.com/donate/?hosted_button_id=C7FW3HGK8HQ9S>',
                         'Ko-fi: <https://ko-fi.com/dwigoric>',
                         'Patreon: <https://patreon.com/Dwigoric>',
                         `*AFTER donating, contact ${(await this.container.client.users.fetch(this.container.client.options.ownerID)).tag} or go to my support server to avail of these perks.*`
