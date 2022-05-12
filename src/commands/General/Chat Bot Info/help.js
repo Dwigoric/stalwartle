@@ -67,8 +67,8 @@ module.exports = class extends Command {
                 if (!args.getFlags('all')) {
                     helpMessage.push(
                         `\n**${'\\*'.repeat(75)}**`,
-                        '***Say `s.help <category>` (e.g. `s.help Music`) to get the commands for that category.***',
-                        '***Say `s.help <category>, <subcategory>` (e.g. `s.help Music, Control`) to get the commands of a specific subcategory.***',
+                        `***Say \`${this.container.client.options.defaultPrefix}help <category>\` (e.g. \`${this.container.client.options.defaultPrefix}help Music\`) to get the commands for that category.***`,
+                        `***Say \`${this.container.client.options.defaultPrefix}help <category>, <subcategory>\` (e.g. \`${this.container.client.options.defaultPrefix}help Music, Control\`) to get the commands of a specific subcategory.***`,
                         `**${'\\*'.repeat(75)}**`,
                         '\u200b'
                     );
@@ -79,7 +79,7 @@ module.exports = class extends Command {
                         `<https://bit.ly/invite-stalwartle>`,
                         '\nNeed help or has ideas for the bot? Just want somewhere to hang out? Be with us here:',
                         `**${this.container.client.guilds.cache.get('502895390807293963').name}** ⇒ https://discord.gg/KDWGvV8`,
-                        `\nUse the command \`${this.container.client.options.prefix}bug\` to report a bug and \`${this.container.client.options.prefix}suggest\` if you have suggestions.`,
+                        `\nUse the command \`${this.container.client.options.defaultPrefix}bug\` to report a bug and \`${this.container.client.options.defaultPrefix}suggest\` if you have suggestions.`,
                         '\n__**DONATION PERKS**__',
                         '$3 ⇒ Enable the history and playlist features.',
                         '$5 ⇒ Removal of 5-hour limit for each track in music. ($3 perk is included)',
@@ -94,10 +94,10 @@ module.exports = class extends Command {
                     ].join('\n') : '',
                     `\nBot developed by **${this.container.client.application.owner}**, from 🇵🇭 with ❤`,
                     '💡 **ProTip #1**: Prefixes and commands are **case-insensitive**.',
-                    "💡 **ProTip #2**: By using `s.help (command)`, you can get the command's additional information!",
+                    `💡 **ProTip #2**: By using \`${this.container.client.options.defaultPrefix}help (command)\`, you can get the command's additional information!`,
                     '💡 **ProTip #3**: Getting tired of retyping the commands because you made a typo? Worry not! Just edit your message and the bot will edit the response accordingly!',
-                    '💡 **ProTip #4**: You do not want to use some commands in your server? Just use `s.conf set disabledCommands <command>`!',
-                    '💡 **ProTip #5**: Having fun with the `s.conf` command? To access folders in e.g. `show` subcommand, use `s.conf show <folder>`. To access items inside the folder, use `s.conf show <folder>.<item>`.' // eslint-disable-line max-len
+                    `💡 **ProTip #4**: You do not want to use some commands in your server? Just use \`${this.container.client.options.defaultPrefix}conf set disabledCommands <command>\`!`,
+                    `💡 **ProTip #5**: Having fun with the \`${this.container.client.options.defaultPrefix}conf\` command? To access folders in e.g. \`show\` subcommand, use \`${this.container.client.options.defaultPrefix}conf show <folder>\`. To access items inside the folder, use \`${this.container.client.options.defaultPrefix}conf show <folder>.<item>\`.` // eslint-disable-line max-len
                 ].join('\n'));
             }
         }
