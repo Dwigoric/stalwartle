@@ -45,7 +45,7 @@ module.exports = class extends SubCommandPluginCommand {
             }
 
             const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);
-            const customTime = new Date(moment(parameter, moment.defaultFormatUtc).tz(timezone).format());
+            const customTime = new Date(moment.tz(parameter, timezone).format());
             if (customTime.getTime() <= Date.now()) {
                 return Args.error({
                     argument: argCtx.argument,
