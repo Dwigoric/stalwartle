@@ -12,11 +12,11 @@ module.exports = class extends Command {
         this.resolver = Args.make((parameter, { argument }) => {
             const regex = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/i;
             return regex.test(parameter) ? Args.ok(parameter) : Args.error({
-                    argument,
-                    parameter,
-                    identifier: 'MalformattedHexCode',
-                    message: 'The string provided was not a hex code.'
-                });
+                argument,
+                parameter,
+                identifier: 'MalformattedHexCode',
+                message: 'The string provided was not a hex code.'
+            });
         });
     }
 
