@@ -38,8 +38,7 @@ module.exports = class extends SubCommandPluginCommand {
                 roles = 'None';
             } else {
                 roles = guildMember.roles.cache.sort((a, b) => b.position - a.position);
-                if (guildMember.roles.cache.size <= 10) roles = Array.from(roles.values()).join(' | ');
-                else roles = `${roles.first(10).join(' | ')} **+ ${roles.size - 10} other role${roles.size - 10 === 1 ? '' : 's'}**`;
+                roles = guildMember.roles.cache.size <= 10 ? Array.from(roles.values()).join(' | ') : `${roles.first(10).join(' | ')} **+ ${roles.size - 10} other role${roles.size - 10 === 1 ? '' : 's'}**`;
             }
         }
 

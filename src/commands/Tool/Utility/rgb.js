@@ -11,16 +11,12 @@ module.exports = class extends Command {
         this.usage = '<HexColor:hexcode>';
         this.resolver = Args.make((parameter, { argument }) => {
             const regex = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/i;
-            if (regex.test(parameter)) {
-                return Args.ok(parameter);
-            } else {
-                return Args.error({
+            return regex.test(parameter) ? Args.ok(parameter) : Args.error({
                     argument,
                     parameter,
                     identifier: 'MalformattedHexCode',
                     message: 'The string provided was not a hex code.'
                 });
-            }
         });
     }
 
