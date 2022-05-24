@@ -204,8 +204,7 @@ module.exports = class extends Command {
             .then(async () => {
                 if (!(await this.container.stores.get('preconditions').get('DevsOnly').run(message)).success && command.category === 'Admin' && command.subCategory === 'Bot Owner') return null;
                 const category = commands.get(`${command.category} - ${command.subCategory}`);
-                if (category) return category.push(command);
-                else return commands.set(`${command.category} - ${command.subCategory}`, [command]);
+                return category ? category.push(command) : commands.set(`${command.category} - ${command.subCategory}`, [command]);
             }).catch(() => {
                 // noop
             })

@@ -10,8 +10,7 @@ module.exports = class extends ScheduledTask {
             `Hey there, people of ${_channel}! **${_user.tag}** wanted ${_text}` :
             `Hey there, ${_user}! You wanted ${_text}`;
         if (!_channel) return null;
-        if (forceChannel) return _channel.send(reminder).catch(() => null);
-        else return _user.send(reminder).catch(() => _channel.send(reminder).catch(() => null));
+        return forceChannel ? _channel.send(reminder).catch(() => null) : _user.send(reminder).catch(() => _channel.send(reminder).catch(() => null));
     }
 
 };

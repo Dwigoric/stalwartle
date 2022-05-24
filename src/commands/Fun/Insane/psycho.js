@@ -15,10 +15,9 @@ module.exports = class extends Command {
         this.usage = '[User:user]';
     }
 
-    async messageRun(msg, args) {
+    static async messageRun(msg, args) {
         let mentioned = await args.pickResult('user');
-        if (mentioned.success) mentioned = mentioned.value;
-        else mentioned = msg.author;
+        mentioned = mentioned.success ? mentioned.value : msg.author;
 
         const crimec = Math.round(Math.random() * 1000);
         let results;

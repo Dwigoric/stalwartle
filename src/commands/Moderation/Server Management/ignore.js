@@ -22,8 +22,7 @@ module.exports = class extends SubCommandPluginCommand {
         channel = channel.value;
 
         if (!['GUILD_TEXT', 'GUILD_CATEGORY'].includes(channel.type)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Only channel categories and text channels are supported.`);
-        if (channel.type === 'GUILD_CATEGORY') channel = msg.guild.channels.cache.filter(chan => chan.parentID === channel.id && chan.type === 'GUILD_TEXT');
-        else channel = [channel];
+        channel = channel.type === 'GUILD_CATEGORY' ? msg.guild.channels.cache.filter(chan => chan.parentID === channel.id && chan.type === 'GUILD_TEXT') : [channel];
         const { ignored } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
         const added = [],
             removed = [];
