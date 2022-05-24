@@ -12,8 +12,8 @@ module.exports = class extends Listener {
 
         const owner = await this.container.client.users.fetch(member.guild.ownerId, { cache: false });
         if (!member.guild.me.permissions.has('MANAGE_ROLES')) return owner.send(`⚠ I don't have **Manage Roles** permission on ${member.guild.name}, so I couldn't give ${member.user.tag} the autorole.`); // eslint-disable-line max-len
-        if (member.user.bot && autorole.bot) return await this.giveRole(member, 'bot', owner);
-        if (!member.user.bot && autorole.user) return await this.giveRole(member, 'user', owner);
+        if (member.user.bot && autorole.bot) return this.giveRole(member, 'bot', owner);
+        if (!member.user.bot && autorole.user) return this.giveRole(member, 'user', owner);
         return null;
     }
 

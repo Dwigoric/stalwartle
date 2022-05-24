@@ -44,7 +44,7 @@ module.exports = class extends Listener {
             return this.container.client.options.defaultPrefix;
         };
 
-        await Promise.all(this.container.stores.map(async store => await Promise.all(store.map(async piece => {
+        await Promise.all(this.container.stores.map(store => Promise.all(store.map(piece => {
             if (piece.init) return piece.init();
             return null;
         }))));

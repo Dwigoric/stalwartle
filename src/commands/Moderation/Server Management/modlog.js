@@ -70,7 +70,7 @@ module.exports = class extends SubCommandPluginCommand {
             }
         });
 
-        await Promise.all(chunk(list, 5).map(async modlog5 => await Promise.all(modlog5.map(async modlog => {
+        await Promise.all(chunk(list, 5).map(modlog5 => Promise.all(modlog5.map(async modlog => {
             const _user = await this.container.client.users.fetch(modlog.user).catch(() => null);
             const moderator = await this.container.client.users.fetch(modlog.moderator).catch(() => null);
             return [

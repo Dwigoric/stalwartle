@@ -42,7 +42,7 @@ module.exports = class extends SubCommandPluginCommand {
         });
 
         let length = 0;
-        await Promise.all(chunk(history, 10).map(async (music10, tenPower) => await Promise.all(music10.map(async (music, onePower) => {
+        await Promise.all(chunk(history, 10).map((music10, tenPower) => Promise.all(music10.map(async (music, onePower) => {
             length += music.isStream ? 0 : music.duration;
             return [
                 `\`${(tenPower * 10) + (onePower + 1)}\`.`,
