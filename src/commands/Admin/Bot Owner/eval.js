@@ -129,7 +129,7 @@ module.exports = class extends Command {
         let type;
         try {
             if (args.getFlags('async')) code = `(async () => {\n${code}\n})();`;
-            // skipqc: JS-0060
+            // skipcq: JS-0060
             result = eval(code);
             syncTime = stopwatch.toString();
             type = new Type(result);
