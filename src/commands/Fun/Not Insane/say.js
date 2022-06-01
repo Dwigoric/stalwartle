@@ -11,7 +11,7 @@ module.exports = class extends SubCommandPluginCommand {
             description: 'Makes the bot say anything you want.',
             subCommands: ['delete', 'embed', 'anonymous', { input: 'default', default: true }]
         });
-        this.usage = '[Channel:channel] <Content:string{1,1000}> [...]';
+        this.usage = '[Channel:channel] <Content:string{1,2000}> [...]';
     }
 
     async default(msg, args) {
@@ -20,6 +20,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
+        if (msgargs.length > 2000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please input a message of 2000 characters or less.`);
         if (msg.guild && !chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send(msgargs);
@@ -31,6 +32,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
+        if (msgargs.length > 2000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please input a message of 2000 characters or less.`);
         if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`);
         if (!chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
@@ -44,6 +46,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
+        if (msgargs.length > 2000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please input a message of 2000 characters or less.`);
         if (msg.guild && !chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
         return chan.send({
@@ -62,6 +65,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!msgargs.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the message you want to say.`);
         msgargs = msgargs.value;
 
+        if (msgargs.length > 2000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please input a message of 2000 characters or less.`);
         if (!msg.guild || !msg.channel.permissionsFor(this.container.client.user).has('MANAGE_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot delete messages in this channel.`);
         if (!chan.permissionsFor(this.container.client.user).has('SEND_MESSAGES')) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! I cannot send messages in that channel.`);
         if (chan !== msg.channel) reply(msg, `${this.container.constants.EMOTES.tick}  ::  Message sent!`);
