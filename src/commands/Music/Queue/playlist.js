@@ -66,8 +66,6 @@ module.exports = class extends SubCommandPluginCommand {
         const songs = await args.pick('url').then(url => url.toString()).catch(() => args.pick('enum', { enum: ['queue', 'queuereplace'] }).catch(() => null));
         if (songs === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide the URL of the song(s) you want to add to the playlist.`);
 
-        if (!URL_REGEX.test(songs) && !['.m3u', '.pls'].includes(songs.slice(-4))) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Unsupported URL.`);
-
         if (['queue', 'queuereplace'].includes(songs)) {
             switch (songs) {
                 case 'queue':
@@ -78,6 +76,8 @@ module.exports = class extends SubCommandPluginCommand {
                     break;
             }
             return null;
+        } else if (!URL_REGEX.test(songs) && !['.m3u', '.pls'].includes(songs.slice(-4))) {
+            return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Unsupported URL.`);
         }
 
         const { loadType, tracks } = await this.container.erela.search(songs, msg.author.id).catch(error => {
