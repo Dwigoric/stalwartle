@@ -30,7 +30,7 @@
 		"@sapphire/type": "^2.2.0",
 		"@sapphire/utilities": "^3.6.2",
 		"bull": "^4.8.1",
-		"discord.js": "^13.6.0",
+		"discord.js": "^13.8.0",
 		"dotenv": "^16.0.0",
 		"erela.js": "^2.3.3",
 		"erela.js-spotify": "^1.2.0",
