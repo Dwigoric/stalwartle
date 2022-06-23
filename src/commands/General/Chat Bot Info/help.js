@@ -31,7 +31,7 @@ module.exports = class extends Command {
                 embeds: [new MessageEmbed()
                     .setTitle(`The \`${this.container.client.options.defaultPrefix}${command.name}\` command`)
                     .setDescription(command.description)
-                    .addField('Usage', `\`${this.container.client.options.defaultPrefix}${this.getUsage(command)}\``)
+                    .addField('Usage', `\`${this.container.client.options.defaultPrefix}${getUsage(command)}\``)
                     .addField('Additional Information', command.detailedDescription || 'No additional information.')
                     .addField('Usage Legend', '`<required> [optional] (semirequired)` // `Name:type{min,max}`')
                     .setFooter({ text: `Classification: ${command.category} → ${command.subCategory}` })]
@@ -163,20 +163,10 @@ module.exports = class extends Command {
             display.addPageEmbed(new MessageEmbed()
                 .setTitle(`${category} Commands`)
                 .setColor(color)
-                .setDescription(list.map(this.formatCommand.bind(this, prefix, true)).join('\n')));
+                .setDescription(list.map(cmd => formatCommand(prefix, true, cmd)).join('\n')));
         }
 
         return display;
-    }
-
-    formatCommand(prefix, richDisplay, command) {
-        const { description } = command;
-        return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
-    }
-
-    getUsage(command) {
-        const names = [command.name].concat(command.aliases);
-        return `${names.length === 1 ? names.join('') : `《${names.join('|')}》`}${command.usage ? ` ${command.usage}` : ''}`;
     }
 
     async _fetchCommands(message, [maincategory, subcategory]) {
@@ -214,3 +204,13 @@ module.exports = class extends Command {
     }
 
 };
+
+function formatCommand(prefix, richDisplay, command) {
+    const { description } = command;
+    return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
+}
+
+function getUsage(command) {
+    const names = [command.name].concat(command.aliases);
+    return `${names.length === 1 ? names.join('') : `《${names.join('|')}》`}${command.usage ? ` ${command.usage}` : ''}`;
+}
