@@ -47,14 +47,6 @@ module.exports = class PostStatsTask extends ScheduledTask {
             }).catch(err => this.container.logger.error(err));
         }
 
-        if (process.env.DISCORDLISTSPACE_API_KEY) { // eslint-disable-line no-process-env
-            fetch(`https://api.discordlist.space/v2/bots/${this.container.client.user.id}`, {
-                method: 'POST',
-                body: JSON.stringify({ serverCount: await this.container.client.guildCount() }),
-                headers: { Authorization: process.env.DISCORDLISTSPACE_API_KEY, 'Content-Type': 'application/json' } // eslint-disable-line no-process-env
-            }).catch(err => this.container.logger.error(err));
-        }
-
         if (process.env.TOPGG_API_KEY) { // eslint-disable-line no-process-env
             fetch(`https://top.gg/api/bots/${this.container.client.user.id}/stats`, {
                 method: 'POST',
