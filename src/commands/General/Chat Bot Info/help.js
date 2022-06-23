@@ -4,6 +4,16 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { splitMessage } } = require('discord.js');
 
+function formatCommand(prefix, richDisplay, command) {
+    const { description } = command;
+    return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
+}
+
+function getUsage(command) {
+    const names = [command.name].concat(command.aliases);
+    return `${names.length === 1 ? names.join('') : `《${names.join('|')}》`}${command.usage ? ` ${command.usage}` : ''}`;
+}
+
 module.exports = class extends Command {
 
     constructor(context, options) {
@@ -204,13 +214,3 @@ module.exports = class extends Command {
     }
 
 };
-
-function formatCommand(prefix, richDisplay, command) {
-    const { description } = command;
-    return richDisplay ? `• \`${prefix}${command.name}\` → ${description}` : `• **${prefix}${command.name}** → ${description}`;
-}
-
-function getUsage(command) {
-    const names = [command.name].concat(command.aliases);
-    return `${names.length === 1 ? names.join('') : `《${names.join('|')}》`}${command.usage ? ` ${command.usage}` : ''}`;
-}
