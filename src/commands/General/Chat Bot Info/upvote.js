@@ -21,7 +21,6 @@ module.exports = class extends Command {
                     'Aside from donations, you can support me by simply upvoting me on bot listing sites!',
                     `• [DiscordBotList.org](https://discordbots.org/bot/${this.container.client.user.id}/vote)`,
                     `• [DiscordBotList.com](https://discordbotlist.com/bots/${this.container.client.user.id}/upvote)`,
-                    `• [botlist.space](https://botlist.space/bot/${this.container.client.user.id})`,
                     `• [Bots on Discord](https://bots.ondiscord.xyz/bots/${this.container.client.user.id})`,
                     'Thank you!'
                 ].join('\n'))]
