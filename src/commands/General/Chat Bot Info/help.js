@@ -165,7 +165,7 @@ module.exports = class extends Command {
             embedFooterSeparator: '|',
             template: {
                 content: `${this.container.constants.EMOTES.tick}  ::  Command list loaded!`,
-                embeds: [new MessageEmbed().setFooter({ text: 'To know more about Donation Perks and ProTips from our developers, say `help` in DMs with Stalwartle!' })]
+                embeds: [new MessageEmbed().setFooter({ text: `To know more about Donation Perks and ProTips from our developers, say \`${this.container.client.options.defaultPrefix}help\` in DMs with Stalwartle!` })]
             }
         });
         const color = message.member.displayColor;
