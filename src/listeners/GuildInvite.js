@@ -22,8 +22,9 @@ module.exports = class extends Listener {
                 .setThumbnail(guild.iconURL({ dynamic: true, format: 'png' }))
                 .setTitle(`${escapeMarkdown(guild.name)}  |  ${guild.id}`)
                 .addField('Guild Owner', `${owner.tag}\n(${guild.ownerId})`, true)
-                .addField('Large Guild', guild.large ? '✅' : '❌', true)
-                .addField('Verified Guild', guild.verified ? '✅' : '❌', true)
+                .addField('Large', guild.large ? '✅' : '❌', true)
+                .addField('Verified', guild.verified ? '✅' : '❌', true)
+                .addField('Partnered', guild.partnered ? '✅' : '❌', true)
                 .addField('Guild Members', String(guild.memberCount), true)
                 .addField('New Guild Count', String(await this.container.client.guildCount()), true)
                 .setTimestamp()]
