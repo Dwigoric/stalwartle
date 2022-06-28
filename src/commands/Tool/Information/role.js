@@ -2,7 +2,6 @@ const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
-const moment = require('moment-timezone');
 
 module.exports = class extends SubCommandPluginCommand {
 
@@ -23,8 +22,6 @@ module.exports = class extends SubCommandPluginCommand {
         let role = await args.pickResult('role');
         if (!role.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the role.`);
         role = role.value;
-
-        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
 
         const hexToRgb = hex => {
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -49,7 +46,7 @@ module.exports = class extends SubCommandPluginCommand {
                 .addField('Mentionable', String(role.mentionable).replace(/^./, i => i.toUpperCase()), true)
                 .addField('Color', `HEX: ${role.hexColor}\nRGB: ${hexToRgb(role.hexColor).join(', ')}`, true)
                 .addField('Position', `${msg.guild.roles.cache.size - role.position} out of ${msg.guild.roles.cache.size}`, true)
-                .addField('Created', `${moment(role.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(role.createdAt).fromNow()}`)
+                .addField('Created', `<t:${parseInt(role.createdAt / 1000)}:f> (<t:${parseInt(role.createdAt / 1000)}:R>)`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
         });

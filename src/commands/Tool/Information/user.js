@@ -1,6 +1,5 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
-const moment = require('moment-timezone');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
@@ -22,7 +21,6 @@ module.exports = class extends SubCommandPluginCommand {
     async default(msg, args) {
         const player = await args.pick('user').catch(() => msg.author);
 
-        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
         const guildMember = await msg.guild.members.fetch(player.id, { cache: false }).catch(() => null);
         let nick = 'Not a member of this server',
             joined = 'Not a member of this server',
@@ -31,7 +29,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         if (guildMember) {
             nick = guildMember.nickname || 'None';
-            joined = `${moment(guildMember.joinedAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(guildMember.joinedAt).fromNow()}`;
+            joined = `<t:${parseInt(guildMember.joinedAt / 1000)}:f> (<t:${parseInt(guildMember.joinedAt / 1000)}:R>)`;
             roleNum = guildMember.roles.cache.size ? `[${guildMember.roles.cache.size}]` : '';
 
             if (!guildMember.roles.cache.size) {
@@ -50,7 +48,7 @@ module.exports = class extends SubCommandPluginCommand {
             .addField('Server Nickname', nick, true);
         if (!player.bot) embed.addField('User\'s Timezone', this.container.stores.get('gateways').get('userGateway').get(player.id).timezone, true);
         embed.addField('Joined Server', joined)
-            .addField('Joined Discord', `${moment(player.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(player.createdAt).fromNow()}`)
+            .addField('Joined Discord', `<t:${parseInt(player.createdAt / 1000)}:f> (<t:${parseInt(player.createdAt / 1000)}:R>)`)
             .addField(`Roles ${roleNum}`, roles)
             .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
             .setTimestamp();

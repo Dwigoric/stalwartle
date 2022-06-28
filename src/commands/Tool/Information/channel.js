@@ -3,7 +3,6 @@ const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
-const moment = require('moment-timezone');
 
 module.exports = class extends SubCommandPluginCommand {
 
@@ -21,7 +20,6 @@ module.exports = class extends SubCommandPluginCommand {
 
     async default(msg, args) {
         const chan = await args.pick('channel').catch(() => msg.channel);
-        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
 
         const embed = new MessageEmbed()
             .setColor('RANDOM')
@@ -42,7 +40,7 @@ module.exports = class extends SubCommandPluginCommand {
                 .addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
                 .addField('User Limit', String(chan.userLimit), true);
         }
-        return reply(msg, { embeds: [embed.addField('Created', `${moment(chan.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(chan.createdAt).fromNow()}`)] });
+        return reply(msg, { embeds: [embed.addField('Created', `<t:${parseInt(chan.createdAt / 1000)}:f> (<t:${parseInt(chan.createdAt / 1000)}:R>)`)] });
     }
 
     async id(msg, args) {

@@ -1,7 +1,6 @@
 const { Command } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed, version } = require('discord.js');
-const moment = require('moment-timezone');
 
 module.exports = class extends Command {
 
@@ -16,7 +15,6 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg) {
-        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
         const owners = await Promise.all(this.container.client.options.developers.map(owner => this.container.client.users.fetch(owner).then(own => own.tag)));
 
         reply(msg, {
@@ -29,7 +27,7 @@ module.exports = class extends Command {
                 .addField('Discord.js Version', `v${version}`, true)
                 .addField('Node.js Version', process.version, true)
                 .addField('Bot Creator', (await this.container.client.users.fetch(this.container.client.options.ownerID)).tag, true)
-                .addField('Created', `${moment(this.container.client.user.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(this.container.client.user.createdAt).fromNow()}`)
+                .addField('Created', `<t:${parseInt(this.container.client.user.createdAt / 1000)}:f> (<t:${parseInt(this.container.client.user.createdAt / 1000)}:R>)`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
         });

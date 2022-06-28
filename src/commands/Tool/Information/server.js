@@ -2,8 +2,6 @@ const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
-const moment = require('moment-timezone');
-
 module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
@@ -19,8 +17,6 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async default(msg) {
-        const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
-
         return reply(msg, {
             embeds: [new MessageEmbed()
                 .setColor('RANDOM')
@@ -45,7 +41,7 @@ module.exports = class extends SubCommandPluginCommand {
                 .addField('Role Count', msg.guild.roles.cache.size > 1 ? String(msg.guild.roles.cache.size) : 'None', true)
                 .addField('Text Channel Count', String(msg.guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').size), true)
                 .addField('Voice Channel Count', String(msg.guild.channels.cache.filter(ch => ch.type === 'GUILD_VOICE').size), true)
-                .addField('Created', `${moment(msg.guild.createdAt).tz(timezone).format('dddd, LL | LTS z')}\n>> ${moment(msg.guild.createdAt).fromNow()}`)
+                .addField('Created', `<t:${parseInt(msg.guild.createdAt / 1000)}:f> (<t:${parseInt(msg.guild.createdAt / 1000)}:R>)`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
         });
