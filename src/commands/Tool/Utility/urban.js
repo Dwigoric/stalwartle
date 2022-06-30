@@ -4,8 +4,8 @@ const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
 function splitText(string, length, endBy = ' ') {
-    const a = string.substring(0, length).lastIndexOf(endBy);
-    const pos = a === -1 ? length : a;
+    const substringIndex = string.substring(0, length).lastIndexOf(endBy);
+    const pos = substringIndex === -1 ? length : substringIndex;
     return string.substring(0, pos);
 }
 
