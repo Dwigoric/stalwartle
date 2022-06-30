@@ -46,7 +46,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!ignored.length) return reply(msg, 'This server currently has no ignored channels.');
         let channels = ignored.map(ign => {
             if (msg.guild.channels.cache.has(ign)) return msg.guild.channels.cache.get(ign);
-            else ignored.splice(ignored.indexOf(ign), 1);
+            ignored.splice(ignored.indexOf(ign), 1);
             return null;
         });
         await this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { ignored });

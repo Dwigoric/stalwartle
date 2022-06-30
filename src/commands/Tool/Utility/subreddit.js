@@ -26,9 +26,9 @@ module.exports = class extends Command {
             .then(res => res.json())
             .catch(() => null);
         if (subreddit === null) return reply(msg, 'There was an error. Reddit may be down, or the subreddit doesn\'t exist.');
-
         if (subreddit.kind !== 't5') return reply(msg, `Subreddit ${subredditName} doesn't exist.`);
-        else subreddit = subreddit.data;
+
+        subreddit = subreddit.data;
 
         return reply(msg, { embeds: [new MessageEmbed()
             .setTitle(subreddit.title)

@@ -94,9 +94,9 @@ module.exports = class extends SubCommandPluginCommand {
         if (prompt) {
             await this.container.stores.get('gateways').get('modlogGateway').reset(msg.guild.id, 'modlogs');
             return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully reset the modlogs of **${msg.guild.name}**.`);
-        } else {
-            return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
         }
+
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Alright! You don't want to reset your modlogs.`);
     }
 
 };

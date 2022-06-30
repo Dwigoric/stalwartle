@@ -21,22 +21,18 @@ module.exports = class extends SubCommandPluginCommand {
         const { roles, users } = await this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'moderators');
         const modRoles = roles.map(rl => {
             const modRole = msg.guild.roles.cache.get(rl);
-            if (modRole) {
-                return modRole.name;
-            } else {
-                const dummyArray = roles.concat([]).splice(roles.findIndex(rl), 1);
-                this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { roles: dummyArray } });
-            }
+            if (modRole) return modRole.name;
+
+            const dummyArray = roles.concat([]).splice(roles.findIndex(rl), 1);
+            this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { roles: dummyArray } });
             return null;
         });
         const modUsers = await Promise.all(users.map(async us => {
             const modUser = await msg.guild.members.fetch(us);
-            if (modUser) {
-                return modUser.user.tag;
-            } else {
-                const dummyArray = users.concat([]).splice(users.findIndex(us), 1);
-                this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { users: dummyArray } });
-            }
+            if (modUser) return modUser.user.tag;
+
+            const dummyArray = users.concat([]).splice(users.findIndex(us), 1);
+            this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { users: dummyArray } });
             return null;
         }));
         [modRoles, modUsers].forEach(mods => mods.forEach(mod => { if (!mod) mods.splice(mods.indexOf(mod), 1); }));

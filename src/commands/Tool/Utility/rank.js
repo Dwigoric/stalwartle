@@ -34,10 +34,10 @@ module.exports = class extends SubCommandPluginCommand {
         if (msg.member.roles.cache.has(role.id)) {
             await msg.member.roles.remove(role, `[Selfrole Remove] Selfrole feature of ${this.container.client.user.username}`);
             return reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.member.displayName)}** via selfrole.`);
-        } else {
-            await msg.member.roles.add(role, `[Selfrole Add] Selfrole feature of ${this.container.client.user.username}`);
-            return reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(msg.member.displayName)}** has been given **${escapeMarkdown(role.name)}** via selfrole.`);
         }
+
+        await msg.member.roles.add(role, `[Selfrole Add] Selfrole feature of ${this.container.client.user.username}`);
+        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(msg.member.displayName)}** has been given **${escapeMarkdown(role.name)}** via selfrole.`);
     }
 
     async list(msg) {
