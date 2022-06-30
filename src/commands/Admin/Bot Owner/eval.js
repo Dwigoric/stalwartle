@@ -60,6 +60,19 @@ async function custEval(args, code) {
     return { success, type, time: formatTime(syncTime, asyncTime), result };
 }
 
+function timedEval(args, code, flagTime) {
+    if (flagTime === Infinity || flagTime === 0) return custEval(args, code);
+    return Promise.race([
+        sleep(flagTime).then(() => ({
+            success: false,
+            result: `TIMEOUT: Took longer than ${flagTime / 1000} seconds.`,
+            time: '⏱ ...',
+            type: 'EvalTimeoutError'
+        })),
+        custEval(args, code)
+    ]);
+}
+
 module.exports = class extends Command {
 
     constructor(context, options) {
@@ -93,7 +106,7 @@ module.exports = class extends Command {
         code = code.value;
         const flagTime = args.getFlags('no-timeout') ? Number(args.getOption('wait')) || this.timeout : Infinity;
         const language = args.getOption('lang') || args.getOption('language') || (args.getFlags('json') ? 'json' : 'js');
-        const { success, result, time, type } = await this.timedEval(args, code, flagTime);
+        const { success, result, time, type } = await timedEval(args, code, flagTime);
 
         if (args.getFlags('silent')) {
             if (!success && result && result.stack) this.container.client.emit('error', result.stack);
@@ -154,19 +167,6 @@ module.exports = class extends Command {
         } while (!['file', 'haste', 'hastebin', 'console', 'log', 'default', 'none'].includes(_choice.content));
         handler.strategy.appliedMessage.delete();
         options.sendAs = _choice.content;
-    }
-
-    timedEval(args, code, flagTime) {
-        if (flagTime === Infinity || flagTime === 0) return custEval(args, code);
-        return Promise.race([
-            sleep(flagTime).then(() => ({
-                success: false,
-                result: `TIMEOUT: Took longer than ${flagTime / 1000} seconds.`,
-                time: '⏱ ...',
-                type: 'EvalTimeoutError'
-            })),
-            custEval(args, code)
-        ]);
     }
 
 };
