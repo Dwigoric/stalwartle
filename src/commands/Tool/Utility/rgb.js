@@ -26,10 +26,10 @@ module.exports = class extends Command {
         hexColor = hexColor.value;
 
         function hexToRgb(hex) {
-            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, (mm, rd, gn, bl) => rd + rd + gn + gn + bl + bl);
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            var rgbObj = result ? {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            const rgbObj = result ? {
                 rd: parseInt(result[1], 16),
                 gn: parseInt(result[2], 16),
                 bl: parseInt(result[3], 16)
