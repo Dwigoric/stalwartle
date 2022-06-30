@@ -69,9 +69,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         list.forEach((top, tenPower) =>
             display.addAsyncPageEmbed(async template => {
-                top = await Promise.all(top.map(topUser => this.container.client.users.fetch(topUser.id, { cache: false })));
-
-                template.setDescription(top.map((topUser, onePower) => {
+                template.setDescription((await Promise.all(top.map(topUser => this.container.client.users.fetch(topUser.id, { cache: false })))).map((topUser, onePower) => {
                     const topUserCookies = this.container.stores.get('gateways').get('userGateway').get(topUser.id, 'cookies');
                     return `\`${onePower === 9 ? (tenPower + 1) * 10 : (tenPower * 10) + (onePower + 1)}\`. ${topUser.tag} ➱ ${topUserCookies} Stalkie${topUserCookies === 1 ? '' : 's'}`;
                 }).join('\n\n'));

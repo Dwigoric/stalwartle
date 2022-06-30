@@ -123,11 +123,13 @@ module.exports = class extends Command {
     // Eval the input
     async eval(args, code) {
         const stopwatch = new Stopwatch();
+        // skipqc: JS-0083
         code = code.replace(/[“”]/gu, '"').replace(/[‘’]/gu, "'");
         let success, syncTime, asyncTime, result;
         let thenable = false;
         let type;
         try {
+            // skipqc: JS-0083
             if (args.getFlags('async')) code = `(async () => {\n${code}\n})();`;
             // skipcq: JS-0060
             result = eval(code);
