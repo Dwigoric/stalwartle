@@ -18,7 +18,7 @@ module.exports = class extends SubCommandPluginCommand {
         this.usage = '[id] [Channel:channel]';
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async default(msg, args) {
         const chan = await args.pick('channel').catch(() => msg.channel);
 
@@ -44,7 +44,7 @@ module.exports = class extends SubCommandPluginCommand {
         return reply(msg, { embeds: [embed.addField('Created', `<t:${(chan.createdAt / 1000).toFixed()}:f> (<t:${(chan.createdAt / 1000).toFixed()}:R>)`)] });
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async id(msg, args) {
         const chan = await args.pick('channel').catch(() => msg.channel);
         reply(msg, `The channel ID of **#${chan.name}** is \`${chan.id}\`.`);

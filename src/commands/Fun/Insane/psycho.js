@@ -15,7 +15,7 @@ module.exports = class extends Command {
         this.usage = '[User:user]';
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async messageRun(msg, args) {
         let mentioned = await args.pickResult('user');
         mentioned = mentioned.success ? mentioned.value : msg.author;

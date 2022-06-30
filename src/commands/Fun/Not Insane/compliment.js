@@ -12,7 +12,7 @@ module.exports = class extends Command {
         this.usage = '[UserToCompliment:member]';
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async messageRun(msg, args) {
         const mentioned = await args.pick('member').catch(() => msg.member);
 

@@ -14,7 +14,7 @@ module.exports = class extends Command {
         this.guarded = true;
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async messageRun(msg) {
         reply(msg, {
             embeds: [await new MessageEmbed()

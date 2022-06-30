@@ -16,7 +16,7 @@ module.exports = class extends SubCommandPluginCommand {
         this.usage = '[icon|roles|id]';
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async default(msg) {
         return reply(msg, {
             embeds: [new MessageEmbed()
@@ -48,7 +48,7 @@ module.exports = class extends SubCommandPluginCommand {
         });
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async icon(msg) {
         return reply(msg, {
             embeds: [new MessageEmbed()
@@ -57,7 +57,7 @@ module.exports = class extends SubCommandPluginCommand {
         });
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async roles(msg) {
         if (msg.guild.roles.cache.size === 1) return reply(msg, 'This server doesn\'t have any role yet!');
         return reply(msg, {
@@ -68,7 +68,7 @@ module.exports = class extends SubCommandPluginCommand {
         });
     }
 
-    // skipqc: JS-0105
+    // skipcq: JS-0105
     async id(msg) {
         reply(msg, `The server ID of ${msg.guild} is \`${msg.guild.id}\`.`);
     }
