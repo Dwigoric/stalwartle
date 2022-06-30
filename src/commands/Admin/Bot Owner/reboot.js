@@ -29,7 +29,7 @@ module.exports = class extends Command {
                 .setTitle('Bot has successfully restarted!')
                 .setThumbnail(this.container.client.user.displayAvatarURL({ dynamic: true }))
                 .setDescription(`**Creeping through Discord...**\nand doing some magic!\n\nCurrently running on **${await this.container.client.guildCount()}** guilds with **${await this.container.client.userCount()}** users.`) // eslint-disable-line max-len
-                .setFooter({ text: `Reboot duration: ${+`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`}s` })
+                .setFooter({ text: `Reboot duration: ${Number(`${`${Math.round(`${`${(Date.now() - timestamp) / 1000}e+2`}`)}e-2`}`)}s` })
                 .setTimestamp()]
         });
         ['restart.channel', 'restart.timestamp'].forEach(path => this.container.stores.get('gateways').get('clientGateway').reset(this.container.client.id, path));

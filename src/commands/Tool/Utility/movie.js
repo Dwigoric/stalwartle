@@ -55,7 +55,7 @@ module.exports = class extends Command {
         embed
             .addField('Language', tmdb.original_language.toUpperCase(), true)
             .addField('Vote Count', String(tmdb.vote_count), true)
-            .addField('User Score', `${+`${`${Math.round(`${`${(tmdb.vote_average / 10) * 100}e+2`}`)}e-2`}`}%`, true)
+            .addField('User Score', `${Number(`${`${Math.round(`${`${(tmdb.vote_average / 10) * 100}e+2`}`)}e-2`}`)}%`, true)
             .addField('Popularity', String(tmdb.popularity), true)
             .addField('Runtime', String(runtime), true)
             .addField('Adult Content', tmdb.adult ? 'Yep' : 'Nope', true);
