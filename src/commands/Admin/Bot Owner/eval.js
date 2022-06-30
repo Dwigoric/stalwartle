@@ -53,7 +53,7 @@ async function custEval(args, code) {
     stopwatch.stop();
     if (typeof result !== 'string') {
         result = result instanceof Error ? result.stack : args.getFlags('json') ? JSON.stringify(result, null, 4) : inspect(result, {
-            depth: parseInt(args.getOption('depth')) || 0,
+            depth: parseInt(args.getOption('depth'), 10) || 0,
             showHidden: args.getFlags('showHidden')
         });
     }
