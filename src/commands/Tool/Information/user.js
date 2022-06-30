@@ -55,6 +55,7 @@ module.exports = class extends SubCommandPluginCommand {
         return reply(msg, { embeds: [embed] });
     }
 
+    // skipqc: JS-0105
     async roles(msg, args) {
         const user = await args.pick('user').catch(() => msg.author);
 
@@ -68,6 +69,7 @@ module.exports = class extends SubCommandPluginCommand {
         });
     }
 
+    // skipqc: JS-0105
     async avatar(msg, args) {
         const user = await args.pick('user').catch(() => msg.author);
 
@@ -85,6 +87,7 @@ module.exports = class extends SubCommandPluginCommand {
         return reply(msg, { content: `**${user.username}**'s avatar`, files: [new MessageAttachment(user.displayAvatarURL({ dynamic: true }))] });
     }
 
+    // skipqc: JS-0105
     async id(msg, args) {
         const user = await args.pick('user').catch(() => msg.author);
 
