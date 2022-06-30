@@ -40,7 +40,7 @@ module.exports = class extends SubCommandPluginCommand {
                 .addField('Bitrate', `${chan.bitrate / 1000}kbps`, true)
                 .addField('User Limit', String(chan.userLimit), true);
         }
-        return reply(msg, { embeds: [embed.addField('Created', `<t:${parseInt(chan.createdAt / 1000)}:f> (<t:${parseInt(chan.createdAt / 1000)}:R>)`)] });
+        return reply(msg, { embeds: [embed.addField('Created', `<t:${(chan.createdAt / 1000).toFixed()}:f> (<t:${(chan.createdAt / 1000).toFixed()}:R>)`)] });
     }
 
     async id(msg, args) {

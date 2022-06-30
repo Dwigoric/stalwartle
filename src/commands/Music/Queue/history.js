@@ -47,7 +47,7 @@ module.exports = class extends SubCommandPluginCommand {
                 `\`${(tenPower * 10) + (onePower + 1)}\`.`,
                 `[**${escapeMarkdown(music.title)}** by ${escapeMarkdown(music.author)}](${music.uri})`,
                 `\`${music.isStream ? 'Livestream' : new Timestamp(`${music.duration >= 86400000 ? 'DD:' : ''}${music.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(music.duration)}\``,
-                `- ${await this.container.client.users.fetch(music.requester, { cache: false }).then(usr => usr.tag)} (<t:${parseInt(music.timestamp / 1000)}:R>)`
+                `- ${await this.container.client.users.fetch(music.requester, { cache: false }).then(usr => usr.tag)} (<t:${(music.timestamp / 1000).toFixed()}:R>)`
             ].join(' ');
         })))).then(hist => hist.forEach(hist10 => display.addPageEmbed(template => template.setDescription(hist10.join('\n')))));
 

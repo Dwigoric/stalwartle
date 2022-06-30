@@ -27,7 +27,7 @@ module.exports = class extends Command {
                 .addField('Discord.js Version', `v${version}`, true)
                 .addField('Node.js Version', process.version, true)
                 .addField('Bot Creator', (await this.container.client.users.fetch(this.container.client.options.ownerID)).tag, true)
-                .addField('Created', `<t:${parseInt(this.container.client.user.createdAt / 1000)}:f> (<t:${parseInt(this.container.client.user.createdAt / 1000)}:R>)`)
+                .addField('Created', `<t:${(this.container.client.user.createdAt / 1000).toFixed()}:f> (<t:${(this.container.client.user.createdAt / 1000).toFixed()}:R>)`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
         });

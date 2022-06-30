@@ -41,7 +41,7 @@ module.exports = class extends SubCommandPluginCommand {
                 .addField('Role Count', msg.guild.roles.cache.size > 1 ? String(msg.guild.roles.cache.size) : 'None', true)
                 .addField('Text Channel Count', String(msg.guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').size), true)
                 .addField('Voice Channel Count', String(msg.guild.channels.cache.filter(ch => ch.type === 'GUILD_VOICE').size), true)
-                .addField('Created', `<t:${parseInt(msg.guild.createdAt / 1000)}:f> (<t:${parseInt(msg.guild.createdAt / 1000)}:R>)`)
+                .addField('Created', `<t:${(msg.guild.createdAt / 1000).toFixed()}:f> (<t:${(msg.guild.createdAt / 1000).toFixed()}:R>)`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
         });

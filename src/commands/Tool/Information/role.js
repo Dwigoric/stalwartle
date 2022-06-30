@@ -46,7 +46,7 @@ module.exports = class extends SubCommandPluginCommand {
                 .addField('Mentionable', String(role.mentionable).replace(/^./, i => i.toUpperCase()), true)
                 .addField('Color', `HEX: ${role.hexColor}\nRGB: ${hexToRgb(role.hexColor).join(', ')}`, true)
                 .addField('Position', `${msg.guild.roles.cache.size - role.position} out of ${msg.guild.roles.cache.size}`, true)
-                .addField('Created', `<t:${parseInt(role.createdAt / 1000)}:f> (<t:${parseInt(role.createdAt / 1000)}:R>)`)
+                .addField('Created', `<t:${(role.createdAt / 1000).toFixed()}:f> (<t:${(role.createdAt / 1000).toFixed()}:R>)`)
                 .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
                 .setTimestamp()]
         });
