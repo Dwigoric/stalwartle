@@ -123,7 +123,7 @@ module.exports = class extends Command {
     // Eval the input
     async eval(args, code) {
         const stopwatch = new Stopwatch();
-        code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+        code = code.replace(/[“”]/gu, '"').replace(/[‘’]/gu, "'");
         let success, syncTime, asyncTime, result;
         let thenable = false;
         let type;
