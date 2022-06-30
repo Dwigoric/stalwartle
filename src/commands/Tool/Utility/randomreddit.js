@@ -33,7 +33,7 @@ module.exports = class extends Command {
 
         if (Boolean(msg.guild) && !msg.channel.permissionsFor(this.container.client.user).has('EMBED_LINKS')) return reply(msg, `***${data.title}***\n\n${data.url}`);
 
-        const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
+        const trim = (str, max) => (str.length > max ? `${str.slice(0, max)}...` : str); // eslint-disable-line no-extra-parens
         return reply(msg, { embeds: [new MessageEmbed()
             .setColor('RANDOM')
             .setAuthor({ name: trim(data.title, 253), url: `https://www.reddit.com${data.permalink}` })

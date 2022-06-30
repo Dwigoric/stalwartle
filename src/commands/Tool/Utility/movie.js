@@ -25,7 +25,7 @@ module.exports = class extends Command {
         const page = parseInt(args.getOption('page')) || 1;
 
         const { timezone } = this.container.stores.get('gateways').get('userGateway').get(msg.author.id);
-        const trim = (str, max) => str.length > max ? `${str.slice(0, max)}...` : str;
+        const trim = (str, max) => (str.length > max ? `${str.slice(0, max)}...` : str); // eslint-disable-line no-extra-parens
 
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading movie...`);
 

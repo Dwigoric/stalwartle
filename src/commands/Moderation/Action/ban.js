@@ -22,7 +22,7 @@ module.exports = class extends Command {
         let user = await args.pickResult('user');
         if (!user.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be banned.`);
         user = user.value;
-        const days = await args.pick('integer').then(dayAmt => dayAmt < 0 || dayAmt > 7 ? 0 : dayAmt).catch(() => 0);
+        const days = await args.pick('integer').then(dayAmt => (dayAmt < 0 || dayAmt > 7 ? 0 : dayAmt)).catch(() => 0); // eslint-disable-line no-extra-parens
         const duration = await args.pick('duration').catch(() => Infinity);
         const reason = await args.rest('string').catch(() => null);
 

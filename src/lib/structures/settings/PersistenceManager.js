@@ -77,7 +77,7 @@ class PersistenceManager {
 
 }
 
-const resolveQuery = query => isObject(query) ? query : { id: query };
+const resolveQuery = query => (isObject(query) ? query : { id: query }); // eslint-disable-line no-extra-parens
 
 function flatten(obj, path = '') {
     let output = {};
