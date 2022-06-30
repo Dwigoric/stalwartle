@@ -3,6 +3,12 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 
+function splitText(string, length, endBy = ' ') {
+    const a = string.substring(0, length).lastIndexOf(endBy);
+    const pos = a === -1 ? length : a;
+    return string.substring(0, pos);
+}
+
 module.exports = class extends Command {
 
     constructor(context, options) {
@@ -33,7 +39,7 @@ module.exports = class extends Command {
         if (!result) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No Urban Dictionary entry found.`);
 
         const definition = result.definition.length > 1000 ?
-            `${this.splitText(result.definition, 1000)}...` :
+            `${splitText(result.definition, 1000)}...` :
             result.definition;
 
         return reply(msg, {
@@ -47,12 +53,6 @@ module.exports = class extends Command {
                 .setFooter({ text: 'Definition from Urban Dictionary' })
                 .setTimestamp()]
         });
-    }
-
-    splitText(string, length, endBy = ' ') {
-        const a = string.substring(0, length).lastIndexOf(endBy);
-        const pos = a === -1 ? length : a;
-        return string.substring(0, pos);
     }
 
 };

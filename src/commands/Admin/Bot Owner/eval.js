@@ -11,6 +11,16 @@ const fetch = require('node-fetch');
 
 const sleep = promisify(setTimeout);
 
+// Function definitions
+function formatTime(syncTime, asyncTime) {
+    return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`;
+}
+
+async function getHaste(evalResult, language) {
+    const { key } = await fetch('https://www.toptal.com/developers/hastebin/documents', { method: 'POST', body: evalResult }).then(response => response.json());
+    return `https://www.toptal.com/developers/hastebin/${key}.${language}`;
+}
+
 module.exports = class extends Command {
 
     constructor(context, options) {
@@ -70,7 +80,7 @@ module.exports = class extends Command {
             }
             case 'haste':
             case 'hastebin': {
-                if (!options.url) options.url = await this.getHaste(result, language).catch(() => null);
+                if (!options.url) options.url = await getHaste(result, language).catch(() => null);
                 if (options.url) return reply(msg, { content: `Sent the result to hastebin: <${options.url}>\n**Type**:${footer}\n${time}` });
                 options.hastebinUnavailable = true;
                 await this.getTypeOutput(msg, options);
@@ -157,16 +167,7 @@ module.exports = class extends Command {
                 showHidden: args.getFlags('showHidden')
             });
         }
-        return { success, type, time: this.formatTime(syncTime, asyncTime), result };
-    }
-
-    formatTime(syncTime, asyncTime) {
-        return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`;
-    }
-
-    async getHaste(evalResult, language) {
-        const { key } = await fetch('https://www.toptal.com/developers/hastebin/documents', { method: 'POST', body: evalResult }).then(response => response.json());
-        return `https://www.toptal.com/developers/hastebin/${key}.${language}`;
+        return { success, type, time: formatTime(syncTime, asyncTime), result };
     }
 
 };
