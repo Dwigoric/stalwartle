@@ -25,9 +25,9 @@ async function custEval(args, code) {
     const stopwatch = new Stopwatch();
     // skipcq: JS-0083
     code = code.replace(/[“”]/gu, '"').replace(/[‘’]/gu, "'");
-    let success, syncTime, asyncTime, result;
+    let success = false, syncTime = '', asyncTime = '', result = null;
     let thenable = false;
-    let type;
+    let type = null;
     try {
         // skipcq: JS-0083
         if (args.getFlags('async')) code = `(async () => {\n${code}\n})();`;
