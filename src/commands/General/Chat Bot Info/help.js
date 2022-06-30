@@ -123,7 +123,7 @@ module.exports = class extends Command {
         const commandNames = [...this.container.stores.get('commands').keys()];
         const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
-        let cmds;
+        let cmds = null;
         if (!category && !subcategory) cmds = this.container.stores.get('commands');
         if (category) {
             if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(category)) {
@@ -183,7 +183,7 @@ module.exports = class extends Command {
         const run = this.container.stores.get('preconditions').run.bind(this.container.stores.get('preconditions'), message);
         const commands = new Map();
 
-        let cmds;
+        let cmds = null;
         if (!maincategory && !subcategory) cmds = this.container.stores.get('commands');
         if (maincategory) {
             if (!this.container.stores.get('commands').map(cmd => cmd.category).includes(maincategory)) {

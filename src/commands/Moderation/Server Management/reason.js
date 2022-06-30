@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
         if (!modlog.message) return reply(msg, `⚠  ::  I've updated the modlog in \`${this.container.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}modlogs\`, however the one sent in the modlog channel is not edited.`);
         const channel = msg.guild.channels.cache.get(this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, `modlogs.${modlog.type}`));
-        let message;
+        let message = null;
         if (channel) message = await channel.messages.fetch(modlog.message).catch(() => null);
         if (message === null) return reply(msg, `⚠  ::  I've updated the modlog in \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}modlogs\`, however either the message has been deleted or the modlog message is not in ${channel}.`); // eslint-disable-line max-len
         const embed = message.embeds[0];

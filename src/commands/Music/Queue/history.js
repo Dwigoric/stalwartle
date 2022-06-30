@@ -64,7 +64,7 @@ module.exports = class extends SubCommandPluginCommand {
         if (!history.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The history is empty. Songs you play are stored in the history within a day.`);
 
         const prompter = new MessagePrompter('📜  ::  Should the history be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer. Otherwise, reply `none` to cancel.', 'message');
-        let choice;
+        let choice = null;
         do {
             if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
             choice = await prompter.run(msg.channel, msg.author).catch(() => ({ content: 'none' }));

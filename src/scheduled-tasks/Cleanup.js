@@ -76,7 +76,7 @@ module.exports = class MemorySweeper extends ScheduledTask {
 
         // Music database sweeper
         for (const music of await this.container.database.getAll('music')) {
-            let queue, playlist, history, changed = false;
+            let queue = false, playlist = false, history = false, changed = false;
             const gateway = this.container.stores.get('gateways').get('musicGateway');
 
             if (this.container.client.guilds.cache.has(music.id)) {

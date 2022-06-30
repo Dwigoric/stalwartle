@@ -160,7 +160,7 @@ module.exports = class extends Command {
         if (!msg.guild || msg.channel.permissionsFor(this.container.client.user).has(['SEND_MESSAGES', 'ATTACH_FILES'])) _options.push('file');
         if (!options.hastebinUnavailable) _options.push('hastebin');
         const handler = new MessagePrompter(`Choose one of the following options: ${_options.join(', ')}`, 'message');
-        let _choice;
+        let _choice = null;
         do {
             if (handler.strategy.appliedMessage) handler.strategy.appliedMessage.delete();
             _choice = await handler.run(msg.channel, msg.author).catch(() => ({ content: 'none' }));

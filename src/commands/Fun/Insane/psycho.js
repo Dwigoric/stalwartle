@@ -21,7 +21,7 @@ module.exports = class extends Command {
         mentioned = mentioned.success ? mentioned.value : msg.author;
 
         const crimec = Math.round(Math.random() * 1000);
-        let results;
+        let results = '';
         if (mentioned.id === msg.author.id) {
             if (crimec < 100) results = `🔫  ::  Your Crime Coefficient is: **${crimec}/1000**.\n\nYou are not a target for enforcement action. The trigger of Dominator will be locked.`;
             if (crimec >= 100 && crimec < 300) results = `🔫  ::  Your Crime Coefficient is: **${crimec}/1000**.\n\nYou are classified as a latent criminal and are a target for enforcement action. Dominator is set to Non-Lethal Paralyzer mode. You can then be knocked out using the Dominator.`; // eslint-disable-line max-len

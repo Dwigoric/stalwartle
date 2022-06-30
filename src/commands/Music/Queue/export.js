@@ -18,7 +18,7 @@ module.exports = class extends Command {
         if (!queue.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  The queue is empty. Add one using the \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}play\` command.`);
 
         const prompter = new MessagePrompter('📜  ::  Should the queue be exported to `haste`/`hastebin` or `file`? Please reply with your respective answer. Otherwise, reply `none` to cancel.', 'message');
-        let choice;
+        let choice = null;
         do {
             if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
             choice = await prompter.run(msg.channel, msg.author).catch(() => ({ content: 'none' }));
