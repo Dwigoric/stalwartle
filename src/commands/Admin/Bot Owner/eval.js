@@ -21,6 +21,45 @@ async function getHaste(evalResult, language) {
     return `https://www.toptal.com/developers/hastebin/${key}.${language}`;
 }
 
+async function custEval(args, code) {
+    const stopwatch = new Stopwatch();
+    // skipcq: JS-0083
+    code = code.replace(/[“”]/gu, '"').replace(/[‘’]/gu, "'");
+    let success, syncTime, asyncTime, result;
+    let thenable = false;
+    let type;
+    try {
+        // skipcq: JS-0083
+        if (args.getFlags('async')) code = `(async () => {\n${code}\n})();`;
+        // skipcq: JS-0060
+        result = eval(code);
+        syncTime = stopwatch.toString();
+        type = new Type(result);
+        if (isThenable(result)) {
+            thenable = true;
+            stopwatch.restart();
+            result = await result;
+            asyncTime = stopwatch.toString();
+        }
+        success = true;
+    } catch (error) {
+        if (!syncTime) syncTime = stopwatch.toString();
+        if (thenable && !asyncTime) asyncTime = stopwatch.toString();
+        if (!type) type = new Type(error);
+        result = error;
+        success = false;
+    }
+
+    stopwatch.stop();
+    if (typeof result !== 'string') {
+        result = result instanceof Error ? result.stack : args.getFlags('json') ? JSON.stringify(result, null, 4) : inspect(result, {
+            depth: parseInt(args.getOption('depth')) || 0,
+            showHidden: args.getFlags('showHidden')
+        });
+    }
+    return { success, type, time: formatTime(syncTime, asyncTime), result };
+}
+
 module.exports = class extends Command {
 
     constructor(context, options) {
@@ -118,7 +157,7 @@ module.exports = class extends Command {
     }
 
     timedEval(args, code, flagTime) {
-        if (flagTime === Infinity || flagTime === 0) return this.eval(args, code);
+        if (flagTime === Infinity || flagTime === 0) return custEval(args, code);
         return Promise.race([
             sleep(flagTime).then(() => ({
                 success: false,
@@ -126,48 +165,8 @@ module.exports = class extends Command {
                 time: '⏱ ...',
                 type: 'EvalTimeoutError'
             })),
-            this.eval(args, code)
+            custEval(args, code)
         ]);
-    }
-
-    // Eval the input
-    async eval(args, code) {
-        const stopwatch = new Stopwatch();
-        // skipcq: JS-0083
-        code = code.replace(/[“”]/gu, '"').replace(/[‘’]/gu, "'");
-        let success, syncTime, asyncTime, result;
-        let thenable = false;
-        let type;
-        try {
-            // skipcq: JS-0083
-            if (args.getFlags('async')) code = `(async () => {\n${code}\n})();`;
-            // skipcq: JS-0060
-            result = eval(code);
-            syncTime = stopwatch.toString();
-            type = new Type(result);
-            if (isThenable(result)) {
-                thenable = true;
-                stopwatch.restart();
-                result = await result;
-                asyncTime = stopwatch.toString();
-            }
-            success = true;
-        } catch (error) {
-            if (!syncTime) syncTime = stopwatch.toString();
-            if (thenable && !asyncTime) asyncTime = stopwatch.toString();
-            if (!type) type = new Type(error);
-            result = error;
-            success = false;
-        }
-
-        stopwatch.stop();
-        if (typeof result !== 'string') {
-            result = result instanceof Error ? result.stack : args.getFlags('json') ? JSON.stringify(result, null, 4) : inspect(result, {
-                depth: parseInt(args.getOption('depth')) || 0,
-                showHidden: args.getFlags('showHidden')
-            });
-        }
-        return { success, type, time: formatTime(syncTime, asyncTime), result };
     }
 
 };
