@@ -85,6 +85,7 @@ module.exports = class extends SubCommandPluginCommand {
                 if (key === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Sorry! An unknown error occurred.`);
                 return reply(msg, `${this.container.constants.EMOTES.tick}  ::  Exported the history to hastebin: <https://www.toptal.com/developers/hastebin/${key}.stalwartle>`);
             }
+            // no default
         }
         return null;
     }

@@ -41,6 +41,7 @@ module.exports = class extends Command {
             }
             case 'none':
                 reply(msg, `${this.container.constants.EMOTES.tick}  ::  Queue export cancelled!`);
+            // no default
         }
         return null;
     }

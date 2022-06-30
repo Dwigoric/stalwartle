@@ -63,6 +63,7 @@ module.exports = class extends SubCommandPluginCommand {
             case 'remove':
                 guildMods[type].splice(guildMods[type].indexOf(mod.id), 1);
                 break;
+            // no default
         }
 
         this.container.stores.get('gateways').get('guildGateway').update(msg.guild.id, { moderators: { [type]: guildMods[type] } });
