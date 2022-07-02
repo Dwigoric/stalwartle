@@ -48,7 +48,7 @@ module.exports = class extends SubCommandPluginCommand {
             .addField('Server Nickname', nick, true);
         if (!player.bot) embed.addField('User\'s Timezone', this.container.stores.get('gateways').get('userGateway').get(player.id).timezone, true);
         embed.addField('Joined Server', joined)
-            .addField('Joined Discord', `<t:${(player.createdAt / 1000, 10).toFixed()}:f> (<t:${(player.createdAt / 1000).toFixed()}:R>)`)
+            .addField('Joined Discord', `<t:${(player.createdAt / 1000).toFixed()}:f> (<t:${(player.createdAt / 1000).toFixed()}:R>)`)
             .addField(`Roles ${roleNum}`, roles)
             .setFooter({ text: `Information requested by ${msg.author.tag}`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
             .setTimestamp();
