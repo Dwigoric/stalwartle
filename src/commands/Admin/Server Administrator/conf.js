@@ -11,6 +11,12 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             preconditions: ['ModsOnly'],
             description: 'Define per-server settings.',
+            detailedDescription: [
+                'To access folders, use the dot (.) notation.',
+                'For example, if you want to access the `options` folder in the `automod` folder, you would use the notation `automod.options`.',
+                'To access a key, use the dot notation again, followed by the key name.',
+                'For example, if you want to access the `duration` key in the `automod.options.antiSpam` folder, you would use the notation `automod.options.antiSpam.duration`.'
+            ].join('\n'),
             subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
