@@ -28,6 +28,22 @@ function getResolverOptions(type, message) {
     }[type.type];
 }
 
+async function resolveString(message, type, value) {
+    if (value === null) return 'Not set';
+    let resolvedValue = null;
+    if (Array.isArray(value)) {
+        return value.length ? type.type === 'command' ? `[ ${value.join(' | ')} ]` : `[ ${await Promise.all(value.map(async val => {
+            resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](val, getResolverOptions(type, message))).value;
+            if (resolvedValue) return resolvedValue.name || resolvedValue;
+            return val;
+        })).then(values => values.join(' | '))} ]` : 'None';
+    }
+    resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](String(value), getResolverOptions(type, message))).value;
+    if (typeof resolvedValue === 'boolean') return resolvedValue ? 'Enabled' : 'Disabled';
+    if (resolvedValue) return resolvedValue.name || resolvedValue;
+    return String(value);
+}
+
 module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
@@ -82,7 +98,7 @@ module.exports = class extends SubCommandPluginCommand {
             if (keysTypes.length) {
                 for (const keyType of keysTypes.sort()) {
                     array.push(`= ${toTitleCase(keyType)}s =`,
-                        ...await Promise.all(keys[keyType].sort().map(async ref => `${ref.padEnd(longest)} :: ${await this.#resolveString(message, guildGateway.getType(`${key || ''}.${ref}`), path[ref])}`)),
+                        ...await Promise.all(keys[keyType].sort().map(async ref => `${ref.padEnd(longest)} :: ${await resolveString(message, guildGateway.getType(`${key || ''}.${ref}`), path[ref])}`)),
                         '');
                 }
             }
@@ -92,7 +108,7 @@ module.exports = class extends SubCommandPluginCommand {
                 codeBlock('asciidoc', array.join('\n'))
             ].join('\n')}`);
         }
-        return reply(message, `${this.container.constants.EMOTES.tick}  ::  The value for the key **${key}** is \`${await this.#resolveString(message, guildGateway.getType(key), path)}\`.`);
+        return reply(message, `${this.container.constants.EMOTES.tick}  ::  The value for the key **${key}** is \`${await resolveString(message, guildGateway.getType(key), path)}\`.`);
     }
 
     async set(message, args) {
@@ -129,7 +145,7 @@ module.exports = class extends SubCommandPluginCommand {
         }
 
         const status = await this.container.stores.get('gateways').get('guildGateway').update(message.guild.id, key, type.isArray ? path : resolvedValue.id || resolvedValue).catch(error => error);
-        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await this.#resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
+        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
         return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem setting the value.'}`);
     }
 
@@ -171,7 +187,7 @@ module.exports = class extends SubCommandPluginCommand {
         }
 
         const status = await this.container.stores.get('gateways').get('guildGateway').update(message.guild.id, key, type.isArray ? path : resolvedValue.id || resolvedValue).catch(error => error);
-        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await this.#resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
+        if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully updated the key **${key}**:\`${await resolveString(message, type, type.isArray ? path : resolvedValue.id || resolvedValue)}\``);
         return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem removing the value.'}`);
     }
 
@@ -185,22 +201,6 @@ module.exports = class extends SubCommandPluginCommand {
         const status = await this.container.stores.get('gateways').get('guildGateway').reset(message.guild.id, key).catch(error => error);
         if (status) return reply(message, `${this.container.constants.EMOTES.tick}  ::  Successfully reset the key **${key}**.`);
         return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem resetting the key.'}`);
-    }
-
-    async #resolveString(message, type, value) {
-        if (value === null) return 'Not set';
-        let resolvedValue = null;
-        if (Array.isArray(value)) {
-            return value.length ? type.type === 'command' ? `[ ${value.join(' | ')} ]` : `[ ${await Promise.all(value.map(async val => {
-                resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](val, getResolverOptions(type, message))).value;
-                if (resolvedValue) return resolvedValue.name || resolvedValue;
-                return val;
-            })).then(values => values.join(' | '))} ]` : 'None';
-        }
-        resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](String(value), getResolverOptions(type, message))).value;
-        if (typeof resolvedValue === 'boolean') return resolvedValue ? 'Enabled' : 'Disabled';
-        if (resolvedValue) return resolvedValue.name || resolvedValue;
-        return String(value);
     }
 
 };
