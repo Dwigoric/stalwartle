@@ -94,7 +94,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         if (Array.isArray(path) && type.isArray) {
             if (path.indexOf(resolvedValue.id || resolvedValue) !== -1) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Value already included in key.`);
-            else path.push(resolvedValue.id || resolvedValue);
+            path.push(resolvedValue.id || resolvedValue);
         } else if (Array.isArray(path) && !type.isArray) {
             return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The new value of key was not supposed to be an array, but I resolved one.`);
         } else if (!Array.isArray(path) && type.isArray) {
@@ -136,7 +136,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         if (Array.isArray(path) && type.isArray) {
             if (path.indexOf(resolvedValue.id || resolvedValue) === -1) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Value already not included in key.`);
-            else path.splice(path.indexOf(resolvedValue.id || resolvedValue), 1);
+            path.splice(path.indexOf(resolvedValue.id || resolvedValue), 1);
         } else if (Array.isArray(path) && !type.isArray) {
             return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The new value of key was not supposed to be an array, but I resolved one.`);
         } else if (!Array.isArray(path) && type.isArray) {
