@@ -3,6 +3,7 @@ const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { Args } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { Util: { escapeMarkdown } } = require('discord.js');
+const { isValidCron } = require('cron-validator');
 const moment = require('moment-timezone');
 
 module.exports = class extends SubCommandPluginCommand {
@@ -18,12 +19,9 @@ module.exports = class extends SubCommandPluginCommand {
                 'To be reminded in specific times, replace the subcommands with this format: `YYYY-MM-DD HH:mm`. Please be noted that this respects your custom timezone, if you set one.',
                 'If you want to set a reminder on 29 Feb 2020 at 1:00 PM, you would run `s.rem "2020-02-29 13:00" do something`. You can set the timezone for each reminder as well.',
                 '\nThe subcommands `list` and `remove` are used to list or remove reminders.',
-                '**If you want recurring reminders (GMT timezone), just replace the reminder duration with `daily`, `annually` etc., e.g. `s.remindme daily to drink water`**',
-                '\n**Hourlies** `hourly` → At 0 minute past every hour',
-                '**Dailies** `daily` → At 00:00',
-                '**Weeklies** `weekly` → At 00:00 every Saturday',
-                '**Monthlies** `monthly` → At 00:00 every first day of the month',
-                '**Annuals** `annually` → At 00:00 in January 1',
+                '\n**Regarding recurring reminders**',
+                'If you want recurring reminders (UTC timezone), just replace the reminder duration with a cron format; i.e., if you want to be reminded every hour on Wednesdays, run `s.remindme "0 * * * wed" to drink water`.',
+                'To help you format your cron, you can use the website <https://crontab.guru/>.',
                 '\nIf you want to force the reminder to the channel, use the `--channel` flag.'
             ].join('\n'),
             flags: ['channel'],
@@ -32,16 +30,8 @@ module.exports = class extends SubCommandPluginCommand {
         this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {
             if (isNaN(new Date(parameter))) {
-                const cron = {
-                    annually: '0 0 1 1 *',
-                    monthly: '0 0 1 * *',
-                    weekly: '0 0 * * 6',
-                    daily: '0 0 * * *',
-                    hourly: '0 */1 * * *'
-                };
-
-                if (parameter in cron) return Args.ok(cron[parameter]);
-                else return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
+                if (isValidCron(parameter, { alias: true })) return Args.ok(parameter);
+                return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
             }
 
             const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);
