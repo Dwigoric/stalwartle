@@ -3,6 +3,31 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase, codeBlock, isObject } = require('@sapphire/utilities');
 
+function getResolverOptions(type, message) {
+    return {
+        boolean: { truths: ['true', 'yes', 'y', '1'], falses: ['false', 'no', 'n', '0'] },
+        channel: message,
+        DMChannel: message,
+        float: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
+        guildCategoryChannel: message.guild,
+        guildChannel: message.guild,
+        guildNewsChannel: message.guild,
+        guildNewsThreadChannel: message.guild,
+        guildPrivateThreadChannel: message.guild,
+        guildPublicThreadChannel: message.guild,
+        guildStageVoiceChannel: message.guild,
+        guildTextChannel: message.guild,
+        guildThreadChannel: message.guild,
+        guildVoiceChannel: message.guild,
+        integer: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum) },
+        member: message.guild,
+        number: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
+        partialDMChannel: message,
+        role: message.guild,
+        string: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum) }
+    }[type.type];
+}
+
 module.exports = class extends SubCommandPluginCommand {
 
     constructor(context, options) {
@@ -87,7 +112,7 @@ module.exports = class extends SubCommandPluginCommand {
             if (command.guarded) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  That command is guarded and cannot be disabled.`);
             resolvedValue = command.name;
         } else {
-            const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, this.#getResolverOptions(type, message));
+            const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, getResolverOptions(type, message));
             if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
             resolvedValue = resolved.value;
         }
@@ -125,7 +150,7 @@ module.exports = class extends SubCommandPluginCommand {
             if (command.guarded) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  That command is guarded and cannot be disabled.`);
             resolvedValue = command.name;
         } else {
-            const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, this.#getResolverOptions(type, message));
+            const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, getResolverOptions(type, message));
             if (!resolved.success) {
                 if (type.isArray && path.includes(valueToRemove)) resolvedValue = valueToRemove;
                 else return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
@@ -162,42 +187,17 @@ module.exports = class extends SubCommandPluginCommand {
         return reply(message, `${this.container.constants.EMOTES.xmark}  ::  ${status instanceof Error ? status.message : 'There was a problem resetting the key.'}`);
     }
 
-    #getResolverOptions(type, message) {
-        return {
-            boolean: { truths: ['true', 'yes', 'y', '1'], falses: ['false', 'no', 'n', '0'] },
-            channel: message,
-            DMChannel: message,
-            float: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
-            guildCategoryChannel: message.guild,
-            guildChannel: message.guild,
-            guildNewsChannel: message.guild,
-            guildNewsThreadChannel: message.guild,
-            guildPrivateThreadChannel: message.guild,
-            guildPublicThreadChannel: message.guild,
-            guildStageVoiceChannel: message.guild,
-            guildTextChannel: message.guild,
-            guildThreadChannel: message.guild,
-            guildVoiceChannel: message.guild,
-            integer: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum) },
-            member: message.guild,
-            number: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
-            partialDMChannel: message,
-            role: message.guild,
-            string: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum) }
-        }[type.type];
-    }
-
     async #resolveString(message, type, value) {
         if (value === null) return 'Not set';
         let resolvedValue = null;
         if (Array.isArray(value)) {
             return value.length ? type.type === 'command' ? `[ ${value.join(' | ')} ]` : `[ ${await Promise.all(value.map(async val => {
-                resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](val, this.#getResolverOptions(type, message))).value;
+                resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](val, getResolverOptions(type, message))).value;
                 if (resolvedValue) return resolvedValue.name || resolvedValue;
                 return val;
             })).then(values => values.join(' | '))} ]` : 'None';
         }
-        resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](String(value), this.#getResolverOptions(type, message))).value;
+        resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](String(value), getResolverOptions(type, message))).value;
         if (typeof resolvedValue === 'boolean') return resolvedValue ? 'Enabled' : 'Disabled';
         if (resolvedValue) return resolvedValue.name || resolvedValue;
         return String(value);
