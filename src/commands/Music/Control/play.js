@@ -168,7 +168,7 @@ module.exports = class extends Command {
                 `\`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\``
             ].join(' ')).join('\n')
         ].join('\n'), 'message', { timeout: 30000 });
-        let limit = 0, choice;
+        let limit = 0, choice = null;
         do {
             if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
             if (limit++ >= 5) {
