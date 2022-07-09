@@ -99,6 +99,7 @@ module.exports = class extends SubCommandPluginCommand {
             if (keysTypes.length) {
                 for (const keyType of keysTypes.sort()) {
                     array.push(`= ${toTitleCase(keyType)}s =`,
+                        // skipcq: JS-0032
                         ...await Promise.all(keys[keyType].sort().map(async ref => `${ref.padEnd(longest)} :: ${await resolveString(message, guildGateway.getType(`${key || ''}.${ref}`), path[ref])}`)),
                         '');
                 }
