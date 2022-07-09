@@ -4,11 +4,12 @@ const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase, codeBlock, isObject } = require('@sapphire/utilities');
 
 function getResolverOptions(type, message) {
+    const undef = void 0; // eslint-disable-line no-void
     return {
         boolean: { truths: ['true', 'yes', 'y', '1'], falses: ['false', 'no', 'n', '0'] },
         channel: message,
         DMChannel: message,
-        float: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
+        float: { maximum: isNaN(type.maximum) ? undef : type.maximum, minimum: isNaN(type.minimum) ? undef : type.minimum },
         guildCategoryChannel: message.guild,
         guildChannel: message.guild,
         guildNewsChannel: message.guild,
@@ -19,12 +20,12 @@ function getResolverOptions(type, message) {
         guildTextChannel: message.guild,
         guildThreadChannel: message.guild,
         guildVoiceChannel: message.guild,
-        integer: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum, 10), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum, 10) },
+        integer: { maximum: isNaN(type.maximum) ? undef : parseInt(type.maximum, 10), minimum: isNaN(type.minimum) ? undef : parseInt(type.minimum, 10) },
         member: message.guild,
-        number: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
+        number: { maximum: isNaN(type.maximum) ? undef : type.maximum, minimum: isNaN(type.minimum) ? undef : type.minimum },
         partialDMChannel: message,
         role: message.guild,
-        string: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum, 10), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum, 10) }
+        string: { maximum: isNaN(type.maximum) ? undef : parseInt(type.maximum, 10), minimum: isNaN(type.minimum) ? undef : parseInt(type.minimum, 10) }
     }[type.type];
 }
 
