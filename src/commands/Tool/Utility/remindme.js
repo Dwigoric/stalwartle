@@ -68,7 +68,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
-            `You will be reminded of this <t:${parseInt((reminder.timestamp + reminder.delay) / 1000)}:R>.`,
+            `You will be reminded of this <t:${((reminder.timestamp + reminder.delay) / 1000).toFixed()}:R>.`,
             reminder.data.forceChannel ?
                 'The people of this channel will be reminded.' :
                 "I will first try to remind you in DMs. If I can't send you one, I will then try to remind you in the channel you run this command."
@@ -90,7 +90,7 @@ module.exports = class extends SubCommandPluginCommand {
 
         const prompter = new MessagePrompter(`Please give me the list number of the reminder you want to delete:\n${remList.list}`, 'message', { timeout: 30000 });
         const prompted = await prompter.run(msg.channel, msg.author);
-        const remNum = parseInt(prompted.content);
+        const remNum = parseInt(prompted.content, 10);
         prompter.strategy.appliedMessage.delete();
         if (isNaN(remNum)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You didn't give a number!`);
 
@@ -111,7 +111,7 @@ module.exports = class extends SubCommandPluginCommand {
             const remPage = Object.values(userRems).map(rmd => rmd.id).indexOf(rem.id) + 1;
             remList[remPage] = rem.id;
             const text = rem.data.payload.text ? `: ${escapeMarkdown(rem.data.payload.text)}` : '.';
-            remList.list += `\`${remPage}\` (\`${rem.id}\`) | You'll be reminded <t:${parseInt((rem.timestamp + rem.delay) / 1000)}:R>${text}\n`;
+            remList.list += `\`${remPage}\` (\`${rem.id}\`) | You'll be reminded <t:${((rem.timestamp + rem.delay) / 1000).toFixed()}:R>${text}\n`;
         });
         return remList;
     }
