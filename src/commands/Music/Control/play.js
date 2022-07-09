@@ -128,6 +128,7 @@ module.exports = class extends Command {
         switch (music.repeat) {
             case 'queue': player.setQueueRepeat(true); break;
             case 'song': player.setTrackRepeat(true);
+            // no default
         }
 
         if (force) return player.stop();
@@ -156,6 +157,7 @@ module.exports = class extends Command {
                     return tracks;
                 }
                 throw new Error(`${this.container.constants.EMOTES.xmark}  ::  It seems the playlist is composed of livestreams. Please try adding them individually.`);
+            // no default
         }
 
         const finds = tracks.slice(0, 5);
