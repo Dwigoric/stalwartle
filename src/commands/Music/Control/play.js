@@ -175,6 +175,7 @@ module.exports = class extends Command {
                 this.#prompts.delete(args.message.author.id);
                 throw new Error(`${this.container.constants.EMOTES.xmark}  ::  Too many invalid replies. Please try again.`);
             }
+            // skipcq: JS-0032
             choice = await prompter.run(args.message.channel, args.message.author).catch(() => ({ content: 'cancel' }));
         // eslint-disable-next-line max-len
         } while ((choice.content.toLowerCase() !== 'cancel' && !parseInt(choice.content)) || parseInt(choice.content) < 1 || (this.#prompts.has(args.message.author.id) && parseInt(choice.content) > this.#prompts.get(args.message.author.id).length));
