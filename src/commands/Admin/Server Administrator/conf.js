@@ -19,12 +19,12 @@ function getResolverOptions(type, message) {
         guildTextChannel: message.guild,
         guildThreadChannel: message.guild,
         guildVoiceChannel: message.guild,
-        integer: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum) },
+        integer: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum, 10), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum, 10) },
         member: message.guild,
         number: { maximum: isNaN(type.maximum) ? undefined : type.maximum, minimum: isNaN(type.minimum) ? undefined : type.minimum },
         partialDMChannel: message,
         role: message.guild,
-        string: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum) }
+        string: { maximum: isNaN(type.maximum) ? undefined : parseInt(type.maximum, 10), minimum: isNaN(type.minimum) ? undefined : parseInt(type.minimum, 10) }
     }[type.type];
 }
 
