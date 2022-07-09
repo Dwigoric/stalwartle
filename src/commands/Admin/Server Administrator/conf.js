@@ -80,7 +80,7 @@ module.exports = class extends SubCommandPluginCommand {
         const type = this.container.stores.get('gateways').get('guildGateway').getType(key);
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
-        let resolvedValue;
+        let resolvedValue = null;
         if (type.type === 'command') {
             const command = this.store.get(valueToSet);
             if (!command) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Not a valid command name.`);
@@ -118,7 +118,7 @@ module.exports = class extends SubCommandPluginCommand {
         const type = this.container.stores.get('gateways').get('guildGateway').getType(key);
         if (path === null || type.type === 'object') return reply(message, `${this.container.constants.EMOTES.xmark}  ::  The key **${key}** does not seem to exist.`);
 
-        let resolvedValue;
+        let resolvedValue = null;
         if (type.type === 'command') {
             const command = this.store.get(valueToRemove);
             if (!command) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Not a valid command name.`);
@@ -189,7 +189,7 @@ module.exports = class extends SubCommandPluginCommand {
 
     async #resolveString(message, type, value) {
         if (value === null) return 'Not set';
-        let resolvedValue;
+        let resolvedValue = null;
         if (Array.isArray(value)) {
             return value.length ? type.type === 'command' ? `[ ${value.join(' | ')} ]` : `[ ${await Promise.all(value.map(async val => {
                 resolvedValue = (await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](val, this.#getResolverOptions(type, message))).value;
