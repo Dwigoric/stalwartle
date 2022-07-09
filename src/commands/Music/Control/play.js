@@ -205,7 +205,9 @@ module.exports = class extends Command {
         } else if (Array.isArray(song)) {
             const { length } = song;
 
+            // skipcq: JS-0083
             if (donation < 5) song = song.filter(track => track.duration <= 18_000_000);
+            // skipcq: JS-0083
             if (music.noDuplicates) song = song.filter(trackToAdd => queue.some(track => track.track !== trackToAdd.track));
             if (song.length + player.queue.filter(track => track.requester === msg.author.id).length > music.maxUserRequests) song.splice(music.maxUserRequests - player.queue.filter(track => track.requester === msg.author.id).length - 1);
             if (player.queue.length + song.length > music.maxQueue) song.splice(music.maxQueue - player.queue.length - 1);
