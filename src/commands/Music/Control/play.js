@@ -190,7 +190,7 @@ module.exports = class extends Command {
         return this.#prompts.get(args.message.author.id)[parseInt(choice.content) - 1];
     }
 
-    async #addToQueue(msg, song, { force, next, incognito }) {
+    #addToQueue(msg, song, { force, next, incognito }) {
         const player = this.container.erela.players.get(msg.guild.id);
         const { queue } = player;
         const { music, donation, prefix } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
