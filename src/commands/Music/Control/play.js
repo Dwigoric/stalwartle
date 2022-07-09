@@ -239,7 +239,7 @@ module.exports = class extends Command {
                         .setFooter({ text: `For various music settings, run \`${prefix}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.` })
                         .addField('Queue Position', queue.current === song ? 'Now Playing' : String(queue.length), true)
                         .addField('Duration', song.isStream ? 'Livestream' : new Timestamp(`${song.duration >= 86400000 ? 'DD:' : ''}${song.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(song.duration), true)
-                        .addField('Time Left Before Playing', new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)]
+                        .addField('Time Left Before Playing', queue.current === song ? 'Right now' : new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)]
                 });
             } else {
                 // eslint-disable-next-line max-len
