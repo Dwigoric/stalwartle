@@ -64,7 +64,7 @@ module.exports = class extends SubCommandPluginCommand {
             user: msg.author.id,
             text,
             forceChannel: Boolean(args.getFlags('channel'))
-        }, when instanceof Date ? when.getTime() - Date.now() : { repeated: true, cron: when });
+        }, when instanceof Date ? when.getTime() - Date.now() : { repeated: true, cron: when, customJobOptions: { jobId: Date.now().toString(36) } });
 
         return reply(msg, [
             `${this.container.constants.EMOTES.tick}  ::  Alright! I've created you a reminder with the ID: \`${reminder.id}\``,
