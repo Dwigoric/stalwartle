@@ -1,3 +1,4 @@
+const { Intents } = require('discord.js');
 const { LogLevel } = require('@sapphire/framework');
 const { Logger } = require('@sapphire/plugin-logger');
 const { ScheduledTaskRedisStrategy } = require('@sapphire/plugin-scheduled-tasks/register-redis');
@@ -23,7 +24,15 @@ exports.config = {
     // A presence to login with
     presence: { status: 'idle', activities: [{ name: 'Loading...', type: 'PLAYING' }] },
     // Intents
-    intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_BANS', 'GUILD_WEBHOOKS', 'GUILD_VOICE_STATES', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES'],
+    intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MEMBERS,
+        Intents.FLAGS.GUILD_BANS,
+        Intents.FLAGS.GUILD_VOICE_STATES,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+        Intents.FLAGS.DIRECT_MESSAGES
+    ],
 
     ownerID: '295391820744228867',
     developers: ['295391820744228867', '296862433136476160', '296256174209105920'],
