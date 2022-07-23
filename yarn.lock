@@ -140,13 +140,13 @@
     colorette "^2.0.19"
     tslib "^2.4.0"
 
-"@sapphire/plugin-scheduled-tasks@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-scheduled-tasks/-/plugin-scheduled-tasks-2.3.0.tgz#53614a585b6fde9ce8997f02f040f2470a06a176"
-  integrity sha512-HXr9WFDkqI/2v87k9sYP7cSt41s8l/pzJYAzQIZd/fIaTEgdb2bb3yAgUlsblkq2kyW+A1QM7z9cI+dOAA1UuQ==
+"@sapphire/plugin-scheduled-tasks@3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-scheduled-tasks/-/plugin-scheduled-tasks-3.0.0.tgz#cf08986aee565b4757ad5d2334c5099ef9a2b277"
+  integrity sha512-VdVSvkR8Zzk/8FxioUCy+DTjTJWS3YcNakVlwErSWNvRKStaPlkIPQsRDbZLaibdTYIYov3o2IoJwxso+qh+Sw==
   dependencies:
-    "@sapphire/time-utilities" "^1.6.0"
-    tslib "^2.3.1"
+    "@sapphire/time-utilities" "^1.7.5"
+    tslib "^2.4.0"
 
 "@sapphire/plugin-subcommands@^2.2.2":
   version "2.2.2"
@@ -177,7 +177,7 @@
   dependencies:
     tslib "^2.3.1"
 
-"@sapphire/time-utilities@^1.6.0", "@sapphire/time-utilities@^1.7.4", "@sapphire/time-utilities@^1.7.5":
+"@sapphire/time-utilities@^1.7.4", "@sapphire/time-utilities@^1.7.5":
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/@sapphire/time-utilities/-/time-utilities-1.7.5.tgz#e5d22db355f4ce10f9e4dd8a46227a9bab56800e"
   integrity sha512-QLYUCIhnntEWZugY+E0/2fmFPn/ARV1ZP0LLUcowBpC7+U4NmDi12iQ9dJmM+14PmI45J2nUWFJ7ocKCMfCr5g==
@@ -328,20 +328,20 @@ bufferutil@^4.0.6:
   dependencies:
     node-gyp-build "^4.3.0"
 
-bull@^4.8.4:
-  version "4.8.4"
-  resolved "https://registry.yarnpkg.com/bull/-/bull-4.8.4.tgz#c538610492050d5160dbd9180704145f135a0aa9"
-  integrity sha512-vDNhM/pvfFY3+msulMbqPBdBO7ntKxRZRtMfi3EguVW/Ozo4uez+B81I8ZoDxYCLgSOBfwRuPnFtcv7QNzm4Ew==
+bullmq@^1.86.7:
+  version "1.86.7"
+  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-1.86.7.tgz#29b0d4c4ab47360e87917b316931820e032dc4f8"
+  integrity sha512-4fsIcoMmdRmPvll/dV205wfKJlx7jfn1zX1AzO2t56juxiVrbXv5MtYLYzFgx8FW4CnyWzhxXMqJSdTmdxxJ+g==
   dependencies:
     cron-parser "^4.2.1"
-    debuglog "^1.0.0"
     get-port "^5.1.1"
+    glob "^7.2.0"
     ioredis "^4.28.5"
     lodash "^4.17.21"
-    msgpackr "^1.5.2"
-    p-timeout "^3.2.0"
-    semver "^7.3.2"
-    uuid "^8.3.0"
+    msgpackr "^1.4.6"
+    semver "^7.3.7"
+    tslib "^1.14.1"
+    uuid "^8.3.2"
 
 cheerio-select@^2.1.0:
   version "2.1.0"
@@ -439,11 +439,6 @@ debug@4, debug@^4.3.1:
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
   dependencies:
     ms "2.1.2"
-
-debuglog@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/debuglog/-/debuglog-1.0.1.tgz#aa24ffb9ac3df9a2351837cfb2d279360cd78492"
-  integrity sha512-syBZ+rnAK3EgMsH2aYEOLUW7mZSY9Gb+0wUMCFsZvcmiz+HigA0LOcq/HoQqVuGG+EKykunc7QG2bzrponfaSw==
 
 delayed-stream@~1.0.0:
   version "1.0.0"
@@ -622,7 +617,7 @@ get-port@^5.1.1:
   resolved "https://registry.yarnpkg.com/get-port/-/get-port-5.1.1.tgz#0469ed07563479de6efb986baf053dcd7d4e3193"
   integrity sha512-g/Q1aTSDOxFpchXC4i8ZWvxA1lnPqx/JHqcpIw0/LX9T8x/GBbi6YnlN5nhaKIFkT8oFsscUKgDJYxfwfS6QsQ==
 
-glob@^7.1.3:
+glob@^7.1.3, glob@^7.2.0:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
   integrity sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==
@@ -851,7 +846,7 @@ msgpackr-extract@^2.0.2:
     "@msgpackr-extract/msgpackr-extract-linux-x64" "2.0.2"
     "@msgpackr-extract/msgpackr-extract-win32-x64" "2.0.2"
 
-msgpackr@^1.5.2:
+msgpackr@^1.4.6:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/msgpackr/-/msgpackr-1.6.1.tgz#4f3c94d6a5b819b838ffc736eddaf60eba436d20"
   integrity sha512-Je+xBEfdjtvA4bKaOv8iRhjC8qX2oJwpYH4f7JrG4uMVJVmnmkAT4pjKdbztKprGj3iwjcxPzb5umVZ02Qq3tA==
@@ -916,22 +911,10 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-p-finally@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
-  integrity sha512-LICb2p9CB7FS+0eR1oqWnHhp0FljGLZCWBE9aix0Uye9W8LTQPwMTYVGWQWIw9RdQiDg4+epXQODwIYJtSJaow==
-
 p-map@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-2.1.0.tgz#310928feef9c9ecc65b68b17693018a665cea175"
   integrity sha512-y3b8Kpd8OAN444hxfBbFfj1FY/RjtTd8tzYwhUqNYXx0fXx2iX4maP4Qr6qhIKbQXI02wTLAda4fYUbDagTUFw==
-
-p-timeout@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/p-timeout/-/p-timeout-3.2.0.tgz#c7e17abc971d2a7962ef83626b35d635acf23dfe"
-  integrity sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==
-  dependencies:
-    p-finally "^1.0.0"
 
 parse5-htmlparser2-tree-adapter@^7.0.0:
   version "7.0.0"
@@ -1020,7 +1003,7 @@ semver@^6.0.0:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.0.tgz#ee0a64c8af5e8ceea67687b133761e1becbd1d3d"
   integrity sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==
 
-semver@^7.3.2, semver@^7.3.5:
+semver@^7.3.5, semver@^7.3.7:
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
   integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
@@ -1126,6 +1109,11 @@ ts-mixer@^6.0.1:
   resolved "https://registry.yarnpkg.com/ts-mixer/-/ts-mixer-6.0.1.tgz#7c2627fb98047eb5f3c7f2fee39d1521d18fe87a"
   integrity sha512-hvE+ZYXuINrx6Ei6D6hz+PTim0Uf++dYbK9FFifLNwQj+RwKquhQpn868yZsCtJYiclZF1u8l6WZxxKi+vv7Rg==
 
+tslib@^1.14.1:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+  integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+
 tslib@^2.3.1, tslib@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
@@ -1143,7 +1131,7 @@ util-deprecate@^1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-uuid@^8.3.0:
+uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

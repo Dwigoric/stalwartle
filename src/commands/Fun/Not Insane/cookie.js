@@ -4,7 +4,6 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 const { chunk } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 const { LazyPaginatedMessage } = require('@sapphire/discord.js-utilities');
-const moment = require('moment-timezone');
 
 module.exports = class extends SubCommandPluginCommand {
 
@@ -37,8 +36,8 @@ module.exports = class extends SubCommandPluginCommand {
         if (person.bot) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I wonder if bots can eat cookies... 🤔`);
         const cookies = this.container.stores.get('gateways').get('userGateway').get(person.id, 'cookies');
         if (args.getFlags('check')) return reply(msg, `🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
-        const cookieTask = (await this.container.tasks.list({})).filter(job => job.data.task === 'CookieReset' && job.data.payload.user === msg.author.id);
-        if (cookieTask.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again ${moment(cookieTask[0].timestamp + cookieTask[0].delay).fromNow()}.`);
+        const cookieTask = (await this.container.tasks.list({})).filter(job => job.name === 'CookieReset' && job.data.user === msg.author.id);
+        if (cookieTask.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again <t:${((cookieTask[0].timestamp + cookieTask[0].opts.delay) / 1000).toFixed()}:R>.`);
         await this.container.tasks.create('CookieReset', { user: msg.author.id }, 1000 * 60 * 60);
         await this.container.stores.get('gateways').get('userGateway').update(person.id, 'cookies', cookies + 1);
         return reply(msg, `🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
