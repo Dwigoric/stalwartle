@@ -7,7 +7,7 @@ module.exports = class extends ScheduledTask {
         const _user = await this.container.client.users.fetch(user);
         const _text = text ? `remind you: ${text}` : 'give this reminder. (No details provided)';
         const reminder = forceChannel ?
-            `Hey there, people of ${_channel}! **${_user.tag}** wanted ${_text}` :
+            `Hey there, people of ${_channel}! **${_user.tag}** wanted me to ${_text}` :
             `Hey there, ${_user}! You wanted me to ${_text}`;
         const parseMentions = ['roles', 'users'];
 
