@@ -23,7 +23,7 @@ module.exports = class extends SubCommandPluginCommand {
                 'If you want recurring reminders (UTC timezone), just replace the reminder duration with a cron format; i.e., if you want to be reminded every hour on Wednesdays, run `s.remindme "0 * * * wed" to drink water`.',
                 'To help you format your cron, you can use the website <https://crontab.guru/>.',
                 '\nIf you want to force the reminder to the channel, use the `--channel` flag.',
-                'By default, @everyone and @here will not be notified. Moderators and admins can enable this setting via the `allowRemindEveryone` setting in the `conf` command.'
+                'Moderators and admins can enable @everyone and @here notifications via the `allowRemindEveryone` setting in the `conf` command.'
             ].join('\n'),
             flags: ['channel'],
             subCommands: ['list', 'remove', { input: 'default', default: true }]
