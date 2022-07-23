@@ -62,6 +62,7 @@ const guilds = Object.freeze({
     ignored: [],
     logging: true,
     selfroles: [],
+    allowRemindEveryone: false,
     autorole: {
         user: '',
         bot: ''

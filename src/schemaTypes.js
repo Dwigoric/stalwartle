@@ -60,6 +60,7 @@ const guilds = Object.freeze({
     ignored: 'guildTextChannel[]',
     logging: 'boolean',
     selfroles: 'role[]',
+    allowRemindEveryone: 'boolean',
     autorole: {
         user: 'role',
         bot: 'role'
