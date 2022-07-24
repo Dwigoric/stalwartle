@@ -110,11 +110,11 @@ module.exports = class extends SubCommandPluginCommand {
 
         let i = 0;
         let finishingMove = '🏁 Retreated';
-        let winner;
+        let winner = null;
         const start = Date.now();
         while (challengerData.health > 0 || opponentData.health > 0) {
             i++;
-            let count;
+            let count = 0;
             const chHealth = '░'.repeat(10).split('');
             count = Math.ceil(((challengerData.health / totalChHealth)) * chHealth.length);
             chHealth.splice(0, count, '▓'.repeat(count));
@@ -145,7 +145,7 @@ module.exports = class extends SubCommandPluginCommand {
                 ].join('\n'), true)
                 .setFooter({ text: `${(i % 2 ? challenger : opponent).tag}'s turn | Please reply how you want to attack.` })
             ] }, 'message', { timeout: 30000 });
-            let response;
+            let response = null;
             do {
                 if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
                 // skipcq: JS-0032
@@ -176,9 +176,9 @@ module.exports = class extends SubCommandPluginCommand {
 
             prompter.strategy.appliedMessage.delete();
             const move = response.content.toLowerCase();
-            let damage;
-            let addedHp;
-            let bandageSuccess;
+            let damage = 0;
+            let addedHp = 0;
+            let bandageSuccess = false;
             if (move === 'retreat') {
                 winner = i % 2 ? opponent : challenger;
                 break;
@@ -188,7 +188,7 @@ module.exports = class extends SubCommandPluginCommand {
                     addedHp = this.getRandomInt(5, 7);
                     if (currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health > 100 - addedHp) currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health = 100;
                     else currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].health += addedHp;
-                } else { bandageSuccess = false; }
+                }
                 currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina -= this.moves[move].stamina;
                 currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].bandaged = true;
             } else if (move === 'rest') {
@@ -204,7 +204,7 @@ module.exports = class extends SubCommandPluginCommand {
                 currentFights[channel.id][i % 2 ? 'challenger' : 'opponent'].stamina -= this.moves[move].stamina;
                 currentFights[channel.id][i % 2 ? 'opponent' : 'challenger'].health -= damage;
             }
-            let moveResults;
+            let moveResults = [];
             switch (move) {
                 case 'bandage': if (bandageSuccess) {
                     moveResults = [
