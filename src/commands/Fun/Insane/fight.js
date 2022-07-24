@@ -17,11 +17,7 @@ module.exports = class extends SubCommandPluginCommand {
             subCommands: ['accept', 'deny', 'cancel', { input: 'default', default: true }]
         });
         this.usage = '[accept|deny|cancel]|(Opponent:user)';
-        this.getRandomInt = (min, max) => {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        };
+        this.getRandomInt = (min, max) => (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min)); // eslint-disable-line no-extra-parens
         this.moves = {
             nuke: {
                 description: 'Might be destructive! Costs 20 stamina, deals 30-40 damage.',
