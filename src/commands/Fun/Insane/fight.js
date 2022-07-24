@@ -264,18 +264,20 @@ module.exports = class extends SubCommandPluginCommand {
         return delete currentFights[msg.channel.id];
     }
 
-    async deny(msg) {
+    deny(msg) {
         // eslint-disable-next-line max-len
         if (!(msg.channel.id in currentFights) || msg.author.id !== currentFights[msg.channel.id].opponent.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`);
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  You've denied ${currentFights[msg.channel.id].challenger}'s challenge.`);
-        return delete currentFights[msg.channel.id];
+        delete currentFights[msg.channel.id];
+        return null;
     }
 
-    async cancel(msg) {
+    cancel(msg) {
         // eslint-disable-next-line max-len
         if (!(msg.channel.id in currentFights) || msg.author.id !== currentFights[msg.channel.id].opponent.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You do not have any pending fight requests.`);
         reply(msg, `⚔  ::  ${currentFights[msg.channel.id].challenger.tag} has cancelled their match with ${currentFights[msg.channel.id].opponent.tag}.`);
-        return delete currentFights[msg.channel.id];
+        delete currentFights[msg.channel.id];
+        return null;
     }
 
 };
