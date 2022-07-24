@@ -77,7 +77,15 @@ module.exports = class extends SubCommandPluginCommand {
             }
             return null;
         }, 30000);
-        return reply(msg, `⚔  ::  Hey ${opponent}, **${msg.member.displayName}** wants to challenge you to a fight! Please accept or deny the request by \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}fight accept\` or \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}fight deny\`. You can disable future requests by \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}userconf set acceptFights false\`.`); // eslint-disable-line max-len
+        return reply(msg, {
+            allowedMentions: { users: [opponent.id] },
+            content: [
+                `⚔  ::  Hey ${opponent}, **${msg.author}** wants to challenge you to a fight!`,
+                'Please accept or deny the request by',
+                `\`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}fight accept\` or \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}fight deny\`.`,
+                `You can disable future requests by \`${this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'prefix')}userconf set acceptFights false\`.`
+            ].join(' ')
+        });
     }
 
     /* eslint-disable complexity */

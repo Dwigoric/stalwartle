@@ -33,11 +33,17 @@ module.exports = class extends SubCommandPluginCommand {
         if (role.position > msg.guild.me.roles.highest.position) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  **${escapeMarkdown(role.name)}**'s position is higher than me.`);
         if (msg.member.roles.cache.has(role.id)) {
             await msg.member.roles.remove(role, `[Selfrole Remove] Selfrole feature of ${this.container.client.user.username}`);
-            return reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.member.displayName)}** via selfrole.`);
+            return reply(msg, {
+                allowedMentions: { parse: [] },
+                content: `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.author)}** via selfrole.`
+            });
         }
 
         await msg.member.roles.add(role, `[Selfrole Add] Selfrole feature of ${this.container.client.user.username}`);
-        return reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(msg.member.displayName)}** has been given **${escapeMarkdown(role.name)}** via selfrole.`);
+        return reply(msg, {
+            allowedMentions: { parse: [] },
+            content: `${this.container.constants.EMOTES.tick}  ::  **${msg.author}** has been given **${escapeMarkdown(role.name)}** via selfrole.`
+        });
     }
 
     async list(msg) {

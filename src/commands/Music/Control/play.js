@@ -164,7 +164,7 @@ module.exports = class extends Command {
         this.#prompts.set(args.message.author.id, finds);
 
         const prompter = new MessagePrompter([
-            `🎶  ::  **${escapeMarkdown(args.message.member.displayName)}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
+            `🎶  ::  **${args.message.author}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
             finds.map((result, index) => [
                 `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)}`,
                 `\`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\``

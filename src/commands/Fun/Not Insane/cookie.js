@@ -32,7 +32,12 @@ module.exports = class extends SubCommandPluginCommand {
         // eslint-disable-next-line max-len
         if (!person) return reply(msg, `🍪  ::  You have **${this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'cookies')}** cookie${this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'cookies') === 1 ? '' : 's'}.`);
         if (person.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I know cookies are delicious, but you can't give yourself a cookie! Don't be greedy 😿`);
-        if (person.id === this.container.client.user.id) return reply(msg, `🍪  ::  **${msg.member.displayName}** gave me a cookie! Oh wait, I already have infinite cookies!`);
+        if (person.id === this.container.client.user.id) {
+            return reply(msg, {
+                allowedMentions: { parse: [] },
+                content: `🍪  ::  **${msg.author}** gave me a cookie! Oh wait, I already have infinite cookies!`
+            });
+        }
         if (person.bot) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I wonder if bots can eat cookies... 🤔`);
         const cookies = this.container.stores.get('gateways').get('userGateway').get(person.id, 'cookies');
         if (args.getFlags('check')) return reply(msg, `🍪  ::  **${person.tag}** has **${cookies}** cookie${cookies === 1 ? '' : 's'}.`);
@@ -40,7 +45,10 @@ module.exports = class extends SubCommandPluginCommand {
         if (cookieTask.length) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've just given someone a cookie! You can use it again <t:${((cookieTask[0].timestamp + cookieTask[0].opts.delay) / 1000).toFixed()}:R>.`);
         await this.container.tasks.create('CookieReset', { user: msg.author.id }, 1000 * 60 * 60);
         await this.container.stores.get('gateways').get('userGateway').update(person.id, 'cookies', cookies + 1);
-        return reply(msg, `🍪  ::  **${msg.member.displayName}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`);
+        return reply(msg, {
+            allowedMentions: { users: [person.id] },
+            content: `🍪  ::  **${msg.author}** gave ${person} a cookie, with a total of **${cookies + 1}** cookie${!cookies ? '' : 's'}!`
+        });
     }
 
     async lb(msg) {

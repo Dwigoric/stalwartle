@@ -25,7 +25,11 @@ module.exports = class extends Command {
             .then(res => res.json())
             .catch(() => ({ link: null }));
         if (!link) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);
-        return reply(msg, { content: `🤗  ::  **${msg.member.displayName}** wants to hug ${person}!`, files: [{ attachment: link, name: 'hug.gif' }] });
+        return reply(msg, {
+            allowedMentions: { users: [person.id] },
+            content: `🤗  ::  **${msg.author}** wants to hug ${person}!`,
+            files: [{ attachment: link, name: 'hug.gif' }]
+        });
     }
 
 };
