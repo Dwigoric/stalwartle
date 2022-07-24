@@ -148,6 +148,7 @@ module.exports = class extends SubCommandPluginCommand {
             let response;
             do {
                 if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
+                // skipcq: JS-0032
                 response = await prompter.run(channel, i % 2 ? challenger : opponent).catch(() => null);
                 if (response === null) {
                     delete currentFights[channel.id];
