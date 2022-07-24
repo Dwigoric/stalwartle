@@ -20,10 +20,13 @@ module.exports = class extends Listener {
         const afkUser = msg.mentions.users.filter(us => this.container.stores.get('gateways').get('afkGateway').cache.has(us.id)).first();
         if (!afkUser) return;
         const { reason, timestamp } = this.container.stores.get('gateways').get('afkGateway').get(afkUser.id);
-        reply(msg, [
-            `${this.container.constants.EMOTES.blobping}  ::  ${msg.author}, **${await msg.guild.members.fetch(afkUser.id).then(mb => mb.displayName).catch(() => afkUser.username)}** is currently AFK. [Last seen <t:${parseInt(timestamp / 1000)}:R>]`, // eslint-disable-line max-len
-            reason ? `**Reason**: ${reason}` : ''
-        ].join('\n'), { disableMentions: 'everyone' });
+        reply(msg, {
+            allowedMentions: { users: [msg.author.id] },
+            content: [
+                `${this.container.constants.EMOTES.blobping}  ::  ${msg.author}, **${afkUser}** is currently AFK. [Last seen <t:${parseInt(timestamp / 1000)}:R>]`, // eslint-disable-line max-len
+                reason ? `**Reason**: ${reason}` : ''
+            ].join('\n')
+        });
     }
 
 };
