@@ -128,7 +128,7 @@ module.exports = class extends SubCommandPluginCommand {
 
             const prompter = new MessagePrompter({ content: `${i % 2 ? challenger : opponent}, it's your turn now`, embeds: [new MessageEmbed()
                 .setColor('RANDOM')
-                .setTitle(`Round ${parseInt((i + 1) / 2)}: ${challenger.tag} vs ${opponent.tag}`)
+                .setTitle(`Round ${((i + 1) / 2).toFixed()}: ${challenger.tag} vs ${opponent.tag}`)
                 .setDescription([
                     `Attacks available: ${Object.keys(this.moves).join(', ')}`,
                     moveDescriptions.join('\n')
@@ -242,7 +242,7 @@ module.exports = class extends SubCommandPluginCommand {
             .setTitle(`${winner.tag} won!`)
             .setDescription([
                 '⚔ Match Statistics ⚔',
-                `Rounds Taken: **${parseInt((i + 1) / 2)}**\n`,
+                `Rounds Taken: **${((i + 1) / 2).toFixed()}**\n`,
                 `__**${challenger.tag}**__`,
                 `Health: ${challengerData.health}`,
                 `Stamina: ${challengerData.stamina}`,
