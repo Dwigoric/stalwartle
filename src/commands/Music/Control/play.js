@@ -202,7 +202,7 @@ module.exports = class extends Command {
             queue.add(songs.concat(player.playing ? [] : currQueue.map(buildUnresolved)), 0);
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : escapeMarkdown(songs[0].title)}** to the front of the queue.`);
         } else {
-            if (currQueue.length) queue.add(currQueue.map(buildUnresolved));
+            if (!player.playing && currQueue.length) queue.add(currQueue.map(buildUnresolved));
             if (Array.isArray(song)) {
                 const { length } = song;
 
