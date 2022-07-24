@@ -7,7 +7,7 @@ module.exports = class extends Listener {
         super(context, { ...options, event: Events.MessageCreate });
     }
 
-    async run(msg) {
+    run(msg) {
         if (msg.author.id === this.container.client.user.id) return;
 
         if (this.container.stores.get('gateways').get('userGateway').get(msg.author.id).afkIgnore.includes(msg.channel.id)) return;
@@ -23,7 +23,7 @@ module.exports = class extends Listener {
         reply(msg, {
             allowedMentions: { users: [msg.author.id] },
             content: [
-                `${this.container.constants.EMOTES.blobping}  ::  ${msg.author}, **${afkUser}** is currently AFK. [Last seen <t:${parseInt(timestamp / 1000)}:R>]`, // eslint-disable-line max-len
+                `${this.container.constants.EMOTES.blobping}  ::  ${msg.author}, **${afkUser}** is currently AFK. [Last seen <t:${(timestamp / 1000).toFixed()}:R>]`, // eslint-disable-line max-len
                 reason ? `**Reason**: ${reason}` : ''
             ].join('\n')
         });
