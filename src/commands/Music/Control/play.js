@@ -50,11 +50,11 @@ module.exports = class extends Command {
         if (this.#prompts.has(msg.author.id)) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You are currently being prompted. Please pick one first or cancel the prompt.`);
 
         const { queue, playlist } = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id);
+        player = this.#createPlayer(msg);
 
         if (!query) {
             // eslint-disable-next-line max-len
-            if (player && player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${guildGateway.get(msg.guild.id, 'prefix')}leave\` or \`${guildGateway.get(msg.guild.id, 'prefix')}stop\` command.`);
-            player = this.#createPlayer(msg);
+            if (player.playing) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Music is playing in this server, however you can still enqueue a song. You can stop the music session using the \`${guildGateway.get(msg.guild.id, 'prefix')}leave\` or \`${guildGateway.get(msg.guild.id, 'prefix')}stop\` command.`);
 
             if (queue.length) {
                 reply(msg, '🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
@@ -72,8 +72,6 @@ module.exports = class extends Command {
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Queue is empty. The playlist has been added to the queue.`);
             return this.#play(msg, playlist, { incognito: args.getFlags('incognito'), resolved: false });
         }
-
-        player = this.#createPlayer(msg);
 
         const song = await this.#resolveQuery(args, query).catch(error => {
             reply(msg, error.message);
@@ -196,59 +194,63 @@ module.exports = class extends Command {
         const player = this.container.erela.players.get(msg.guild.id);
         const { queue } = player;
         const { music, donation, prefix } = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id);
+        const currQueue = this.container.stores.get('gateways').get('musicGateway').get(msg.guild.id).queue;
 
         if (force || next) {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { incognito })) : [mergeObjects(song, { incognito })];
 
-            queue.add(songs, 0);
+            queue.add(songs.concat(currQueue.map(buildUnresolved)), 0);
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : escapeMarkdown(songs[0].title)}** to the front of the queue.`);
-        } else if (Array.isArray(song)) {
-            const { length } = song;
-
-            // skipcq: JS-0083
-            if (donation < 5) song = song.filter(track => track.duration <= 18_000_000);
-            // skipcq: JS-0083
-            if (music.noDuplicates) song = song.filter(trackToAdd => queue.some(track => track.track !== trackToAdd.track));
-            if (song.length + player.queue.filter(track => track.requester === msg.author.id).length > music.maxUserRequests) song.splice(music.maxUserRequests - player.queue.filter(track => track.requester === msg.author.id).length - 1);
-            if (player.queue.length + song.length > music.maxQueue) song.splice(music.maxQueue - player.queue.length - 1);
-
-            queue.add(song.map(track => mergeObjects(track, { incognito })));
-
-            // eslint-disable-next-line max-len
-            if (song.length < length) reply(msg, `⚠  ::  Not all songs were added. Possibilities: (1) You've reached the queue limit of ${music.maxQueue} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, (4) you've reached the limit of ${music.maxUserRequests} song requests per user, or (5) a YouTube equivalent of a Spotify track was not found. Server moderators and managers can view the limits using the \`conf\` command.`);
-            reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${song.length} song${song.length === 1 ? '' : 's'}** ha${song.length === 1 ? 's' : 've'} been added to the queue, now at **${queue.length} entries**.`);
         } else {
-            if (donation < 5 && song.duration > 18_000_000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This song is longer than 5 hours!`);
-            // eslint-disable-next-line max-len
-            if (queue.filter(track => track.requester === msg.author.id).length >= music.maxUserRequests) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've reached the maximum user request limit on this server of ${music.maxUserRequests} requests. Moderators and managers can change the limit via the \`conf\` command.`);
-            if (music.noDuplicates && queue.some(track => track.track === song.track)) return reply(`${this.container.constants.EMOTES.xmark}  ::  It looks like this song is already enqueued! This server disabled duplicate requests.`);
+            if (currQueue.length) queue.add(currQueue.map(buildUnresolved));
+            if (Array.isArray(song)) {
+                const { length } = song;
 
-            queue.add(mergeObjects(song, { incognito }));
+                // skipcq: JS-0083
+                if (donation < 5) song = song.filter(track => track.duration <= 18_000_000);
+                // skipcq: JS-0083
+                if (music.noDuplicates) song = song.filter(trackToAdd => queue.some(track => track.track !== trackToAdd.track));
+                if (song.length + player.queue.filter(track => track.requester === msg.author.id).length > music.maxUserRequests) song.splice(music.maxUserRequests - player.queue.filter(track => track.requester === msg.author.id).length - 1);
+                if (player.queue.length + song.length > music.maxQueue) song.splice(music.maxQueue - player.queue.length - 1);
 
-            if (this.container.client.channels.cache.get(player.textChannel).permissionsFor(this.container.client.user).has('EMBED_LINKS')) {
-                const duration = queue.reduce((prev, current) => prev + (current.isStream ? 0 : current.duration), 0) -
-                    song.duration +
-                    (player.playing && player.queue.current.isStream ? 0 : player.queue.current.duration) -
-                    (player.playing && player.queue.current.isStream ? 0 : player.position);
-                reply(msg, {
-                    content: queue.length >= 2 && (!player || !player.playing) ?
-                        `🔢  ::  There are songs in your queue from your previous session! You can run ${queue.length >= 3 ? `\`${prefix}remove 1${queue.length >= 4 ? `-${queue.length - 2}` : ''}\` then ` : ' '}\`${prefix}skip\` to start over.` :
-                        `${this.container.constants.EMOTES.tick}  ::  Successfully added your song to the queue!`,
-                    embeds: [new MessageEmbed()
-                        .setColor('RANDOM')
-                        .setAuthor({ name: `Enqueued by ${msg.member.displayName} (${msg.author.tag})`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
-                        .setTitle(song.title)
-                        .setURL(song.uri)
-                        .setDescription(`by ${song.author}`)
-                        // eslint-disable-next-line max-len
-                        .setFooter({ text: `For various music settings, run \`${prefix}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.` })
-                        .addField('Queue Position', queue.current === song ? 'Now Playing' : String(queue.length), true)
-                        .addField('Duration', song.isStream ? 'Livestream' : new Timestamp(`${song.duration >= 86400000 ? 'DD:' : ''}${song.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(song.duration), true)
-                        .addField('Time Left Before Playing', queue.current === song ? 'Right now' : new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)]
-                });
-            } else {
+                queue.add(song.map(track => mergeObjects(track, { incognito })));
+
                 // eslint-disable-next-line max-len
-                reply(msg, `🎶  ::  **${song.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${prefix}conf show music\`. Change settings with \`set\` instead of \`show\`.`);
+                if (song.length < length) reply(msg, `⚠  ::  Not all songs were added. Possibilities: (1) You've reached the queue limit of ${music.maxQueue} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, (4) you've reached the limit of ${music.maxUserRequests} song requests per user, or (5) a YouTube equivalent of a Spotify track was not found. Server moderators and managers can view the limits using the \`conf\` command.`);
+                reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${song.length} song${song.length === 1 ? '' : 's'}** ha${song.length === 1 ? 's' : 've'} been added to the queue, now at **${queue.length} entries**.`);
+            } else {
+                if (donation < 5 && song.duration > 18_000_000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This song is longer than 5 hours!`);
+                // eslint-disable-next-line max-len
+                if (queue.filter(track => track.requester === msg.author.id).length >= music.maxUserRequests) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You've reached the maximum user request limit on this server of ${music.maxUserRequests} requests. Moderators and managers can change the limit via the \`conf\` command.`);
+                if (music.noDuplicates && queue.some(track => track.track === song.track)) return reply(`${this.container.constants.EMOTES.xmark}  ::  It looks like this song is already enqueued! This server disabled duplicate requests.`);
+
+                queue.add(mergeObjects(song, { incognito }));
+
+                if (this.container.client.channels.cache.get(player.textChannel).permissionsFor(this.container.client.user).has('EMBED_LINKS')) {
+                    const duration = queue.reduce((prev, current) => prev + (current.isStream ? 0 : current.duration), 0) -
+                        song.duration +
+                        (player.playing && player.queue.current.isStream ? 0 : player.queue.current.duration) -
+                        (player.playing && player.queue.current.isStream ? 0 : player.position);
+                    reply(msg, {
+                        content: queue.length >= 2 && (!player || !player.playing) ?
+                            `🔢  ::  There are songs in your queue from your previous session! You can run ${queue.length >= 3 ? `\`${prefix}remove 1${queue.length >= 4 ? `-${queue.length - 2}` : ''}\` then ` : ' '}\`${prefix}skip\` to start over.` :
+                            `${this.container.constants.EMOTES.tick}  ::  Successfully added your song to the queue!`,
+                        embeds: [new MessageEmbed()
+                            .setColor('RANDOM')
+                            .setAuthor({ name: `Enqueued by ${msg.member.displayName} (${msg.author.tag})`, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
+                            .setTitle(song.title)
+                            .setURL(song.uri)
+                            .setDescription(`by ${song.author}`)
+                            // eslint-disable-next-line max-len
+                            .setFooter({ text: `For various music settings, run \`${prefix}conf show music\`. Change settings with \`set\` instead of \`show\`.\n\nIf the bot starts to sound robotic, please check if your internet connection is experiencing packet loss.` })
+                            .addField('Queue Position', queue.current === song ? 'Now Playing' : String(queue.length), true)
+                            .addField('Duration', song.isStream ? 'Livestream' : new Timestamp(`${song.duration >= 86400000 ? 'DD:' : ''}${song.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(song.duration), true)
+                            .addField('Time Left Before Playing', queue.current === song ? 'Right now' : new Timestamp(`${duration >= 86400000 ? 'DD:' : ''}${duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(duration), true)]
+                    });
+                } else {
+                    // eslint-disable-next-line max-len
+                    reply(msg, `🎶  ::  **${song.title}** has been added to the queue to position \`${queue.length === 1 ? 'Now Playing' : `#${queue.length - 1}`}\`. For various music settings, run \`${prefix}conf show music\`. Change settings with \`set\` instead of \`show\`.`);
+                }
             }
         }
 
