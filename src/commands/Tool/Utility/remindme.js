@@ -86,6 +86,8 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async remove(msg) {
+        if (msg.channel.type !== 'DM') return reply(`${this.container.constants.EMOTES.xmark}  ::  Removing reminders can only be done on DM channels.`);
+
         const remList = await this.#remlist(msg);
         if (remList === null) return null;
 
