@@ -60,7 +60,7 @@ module.exports = class extends Command {
                 reply(msg, '🎶  ::  No search query provided, but I found tracks in the queue so I\'m gonna play it.');
                 if (player.state === 'DISCONNECTED') player.connect();
 
-                return this.#play(msg, queue, { incognito: args.getFlags('incognito'), resolved: false });
+                return this.#play(msg, [], { incognito: args.getFlags('incognito'), resolved: false });
             }
 
             if (!playlist.length) {
@@ -205,6 +205,7 @@ module.exports = class extends Command {
             if (!player.playing && currQueue.length) queue.add(currQueue.map(buildUnresolved));
             if (Array.isArray(song)) {
                 const { length } = song;
+                if (length === 0) return null;
 
                 // skipcq: JS-0083
                 if (donation < 5) song = song.filter(track => track.duration <= 18_000_000);
