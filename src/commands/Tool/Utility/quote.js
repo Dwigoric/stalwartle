@@ -4,8 +4,9 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
-    constructor(...args) {
-        super(...args, {
+    constructor(context, options) {
+        super(context, {
+            ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS'],
             description: 'Puts a certain message (given the message ID or link) in an embed, as if "quoting" the message.'
