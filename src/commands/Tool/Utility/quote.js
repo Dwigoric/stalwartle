@@ -9,15 +9,15 @@ module.exports = class extends Command {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredPermissions: ['EMBED_LINKS'],
-            description: 'Puts a certain message (given the message ID or link) in an embed, as if "quoting" the message.'
+            description: 'Puts a certain message (given the message ID or link) in an embed, as if "quoting" the message.',
+            detailedDescription: 'The message ID is only applicable if you are quoting from the same channel; otherwise, the link is required. Note that the bot has to have the "Embed Links" permission to see the message.'
         });
         this.usage = '<MessageID:string> [Channel:channel]';
     }
 
     async messageRun(msg, args) {
-        let message = await args.pickResult('message');
-        if (!message.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the message link or ID.`);
-        message = message.value;
+        const message = await args.pick('message').catch(() => null);
+        if (message === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the message ID (will work only here in ${msg.channel}) or link to the message.`);
 
         const embed = new MessageEmbed()
             .setColor('RANDOM')
