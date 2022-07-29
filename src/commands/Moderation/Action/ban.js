@@ -19,9 +19,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let user = await args.pickResult('user');
-        if (!user.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be banned.`);
-        user = user.value;
+        const user = await args.pick('user').catch(() => null);
+        if (user === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be banned.`);
         const days = await args.pick('integer').then(dayAmt => (dayAmt < 0 || dayAmt > 7 ? 0 : dayAmt)).catch(() => 0); // eslint-disable-line no-extra-parens
         const duration = await args.pick('duration').catch(() => Infinity);
         const reason = await args.rest('string').catch(() => null);
@@ -37,7 +36,7 @@ module.exports = class extends Command {
         }
 
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been banned. ${reason ? `**Reason**: ${reason}` : ''}`);
-        return this.container.client.emit('modlogAction', 'ban', msg.author, user, reason, msg.guild, { reason, duration, banDays: days });
+        return this.container.client.emit('modlogAction', 'ban', msg.author, user, msg.guild, { channel: msg.channel, reason, duration, banDays: days });
     }
 
 };

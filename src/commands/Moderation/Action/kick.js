@@ -15,9 +15,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let member = await args.pickResult('member');
-        if (!member.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to kick.`);
-        member = member.value;
+        const member = await args.pick('member').catch(() => null);
+        if (member === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to kick.`);
         const reason = await args.rest('string').catch(() => null);
 
         if (member.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you kick yourself?`);
@@ -28,7 +27,7 @@ module.exports = class extends Command {
         if (!member.kickable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot kick this user.`);
 
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.id}\`) has been kicked.${reason ? ` **Reason**: ${reason}` : ''}`);
-        return this.container.client.emit('modlogAction', 'kick', msg.author, member.user, msg.guild, { reason });
+        return this.container.client.emit('modlogAction', 'kick', msg.author, member.user, msg.guild, { channel: msg.channel, reason });
     }
 
 };

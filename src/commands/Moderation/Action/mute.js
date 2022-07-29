@@ -16,9 +16,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let member = await args.pickResult('member');
-        if (!member.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be muted.`);
-        member = member.value;
+        const member = await args.pick('member').catch(() => null);
+        if (member === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be muted.`);
         const duration = await args.pick('duration').catch(() => Date.now() + (1000 * 60 * 5));
         const reason = await args.rest('string').catch(() => null);
 
@@ -27,7 +26,7 @@ module.exports = class extends Command {
         if (!member.moderatable) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  I cannot mute that user due to lacking permissions!`);
 
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${member.user.tag}** (\`${member.user.id}\`) has been muted. ${reason ? `**Reason**: ${reason}` : ''}`);
-        return this.container.client.emit('modlogAction', 'mute', msg.author, member.user, msg.guild, { reason, duration });
+        return this.container.client.emit('modlogAction', 'mute', msg.author, member.user, msg.guild, { channel: msg.channel, reason, duration });
     }
 
 };

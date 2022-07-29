@@ -16,9 +16,8 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let user = await args.pickResult('user');
-        if (!user.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the user to be softbanned.`);
-        user = user.value;
+        const user = await args.pick('user').catch(() => null);
+        if (user === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the user to be softbanned.`);
         let days = await args.pick('integer').catch(() => 1);
         if (days < 1 || days > 7) days = 1;
         const reason = await args.rest('string').catch(() => null);
@@ -34,7 +33,7 @@ module.exports = class extends Command {
         }
 
         reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${user.tag}** (\`${user.id}\`) has been softbanned. ${reason ? `**Reason**: ${reason}` : ''}`);
-        return this.container.client.emit('modlogAction', 'softban', msg.author, user, msg.guild, { reason });
+        return this.container.client.emit('modlogAction', 'softban', msg.author, user, msg.guild, { channel: msg.channel, reason });
     }
 
 };
