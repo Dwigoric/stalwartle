@@ -4,7 +4,7 @@ module.exports = class extends ScheduledTask {
 
     async run({ channel, user, text, forceChannel }) {
         const _channel = this.container.client.channels.cache.get(channel);
-        const _user = await this.container.client.users.fetch(user);
+        const _user = await this.container.client.users.fetch(user, { cache: false });
         const _text = text ? `remind you: ${text}` : 'give this reminder. (No details provided)';
         const reminder = forceChannel && _channel.type !== 'DM' ?
             `Hey there, people of ${_channel}! **${_user.tag}** wanted me to ${_text}` :
