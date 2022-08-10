@@ -30,10 +30,8 @@ module.exports = class extends SubCommandPluginCommand {
         });
         this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {
-            if (isNaN(new Date(parameter))) {
-                if (isValidCron(parameter, { alias: true })) return Args.ok(parameter);
-                return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
-            }
+            if (isValidCron(parameter, { alias: true })) return Args.ok(parameter);
+            if (isNaN(new Date(parameter))) return this.container.stores.get('arguments').get('duration').run(parameter, argCtx);
 
             const { timezone } = this.container.stores.get('gateways').get('userGateway').get(argCtx.message.author.id);
             const customTime = new Date(moment.tz(parameter, timezone).format());
