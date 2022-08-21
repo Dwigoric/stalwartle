@@ -1,4 +1,4 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { reply } = require('@sapphire/plugin-editable-commands');
@@ -6,7 +6,7 @@ const { toTitleCase, chunk } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {

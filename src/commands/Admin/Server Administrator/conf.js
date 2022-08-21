@@ -1,6 +1,6 @@
 const { CommandOptionsRunTypeEnum, Resolvers } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase, codeBlock, isObject } = require('@sapphire/utilities');
 
 function getResolverOptions(type, message) {
@@ -45,7 +45,7 @@ async function resolveString(message, type, value) {
     return String(value);
 }
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {

@@ -1,4 +1,4 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 const { reply } = require('@sapphire/plugin-editable-commands');
@@ -58,7 +58,7 @@ const MODS = Object.freeze({
     '2K': 268435456
 });
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {

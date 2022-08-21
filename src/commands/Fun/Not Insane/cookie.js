@@ -1,11 +1,11 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { chunk } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 const { LazyPaginatedMessage } = require('@sapphire/discord.js-utilities');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
