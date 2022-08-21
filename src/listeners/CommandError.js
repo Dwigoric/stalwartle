@@ -6,7 +6,7 @@ const { WebhookClient, MessageEmbed, Util: { escapeMarkdown } } = require('disco
 module.exports = class extends Listener {
 
     constructor(context, options) {
-        super(context, { ...options, event: Events.CommandError });
+        super(context, { ...options, event: Events.MessageCommandError });
         this.hook = null;
     }
 
