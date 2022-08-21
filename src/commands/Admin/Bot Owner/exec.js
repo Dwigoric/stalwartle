@@ -27,7 +27,7 @@ module.exports = class extends Command {
         if (!input.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
         input = input.value;
         const stopwatch = new Stopwatch().start();
-        const result = await execute(input, { timeout: args.getOption('timeout') ? Number(args.getOption('timeout')) : 60000 })
+        const result = await execute(input, { timeout: args.getOption('timeout').value ? Number(args.getOption('timeout').value) : 60000 })
             .catch(error => ({ error }));
         const results = [];
         if (result.stdout) results.push(`**\`OUTPUT\`**${codeBlock('', result.stdout)}`);

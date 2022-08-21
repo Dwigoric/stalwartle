@@ -53,7 +53,7 @@ async function custEval(args, code) {
     stopwatch.stop();
     if (typeof result !== 'string') {
         result = result instanceof Error ? result.stack : args.getFlags('json') ? JSON.stringify(result, null, 4) : inspect(result, {
-            depth: parseInt(args.getOption('depth'), 10) || 0,
+            depth: parseInt(args.getOption('depth').value, 10) || 0,
             showHidden: args.getFlags('showHidden')
         });
     }
@@ -101,11 +101,10 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        let code = await args.restResult('string');
-        if (!code.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
-        code = code.value;
-        const flagTime = args.getFlags('no-timeout') ? Number(args.getOption('wait')) || this.timeout : Infinity;
-        const language = args.getOption('lang') || args.getOption('language') || (args.getFlags('json') ? 'json' : 'js');
+        const code = await args.rest('string').catch(() => null);
+        if (code === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
+        const flagTime = args.getFlags('no-timeout') ? Number(args.getOption('wait').value) || this.timeout : Infinity;
+        const language = args.getOption('lang').value || args.getOption('language').value || (args.getFlags('json') ? 'json' : 'js');
         const { success, result, time, type } = await timedEval(args, code, flagTime);
 
         if (args.getFlags('silent')) {
@@ -114,7 +113,7 @@ module.exports = class extends Command {
         }
 
         const footer = codeBlock('ts', type);
-        const sendAs = args.getOption('output') || args.getOption('output-to') || (args.getFlags('log') ? 'log' : null);
+        const sendAs = args.getOption('output').value || args.getOption('output-to').value || (args.getFlags('log') ? 'log' : null);
         return this.handleMessage(msg, { sendAs, hastebinUnavailable: false, url: null }, { success, result, time, footer, language });
     }
 

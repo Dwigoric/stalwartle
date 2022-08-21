@@ -27,7 +27,7 @@ module.exports = class extends Command {
         let search = await args.restResult('string');
         if (!search.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give the term to search in the Urban Dictionary.`);
         search = search.value;
-        const index = parseInt(args.getOption('result')) || 1;
+        const index = parseInt(args.getOption('result').value, 10) || 1;
 
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading Urban definition...`);
 
