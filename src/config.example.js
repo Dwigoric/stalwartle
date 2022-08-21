@@ -9,6 +9,10 @@ exports.config = {
      */
     // The default configurable prefix for each guild
     defaultPrefix: 's.',
+    // If the message command listeners will be loaded
+    loadMessageCommandListeners: true,
+    // If the bot will use NOT use the mention prefix for message commands
+    disableMentionPrefix: false,
     // If the bot will be insensitive to the prefix case
     caseInsensitivePrefixes: true,
     // If the bot will be insensitive to the command case
