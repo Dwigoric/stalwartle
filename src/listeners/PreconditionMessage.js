@@ -6,7 +6,7 @@ module.exports = class PreconditionMessage extends Listener {
     constructor(context, options) {
         super(context, {
             ...options,
-            event: Events.CommandDenied
+            event: Events.MessageCommandDenied
         });
     }
 
