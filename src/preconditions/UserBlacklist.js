@@ -9,7 +9,7 @@ module.exports = class extends Precondition {
         });
     }
 
-    run(msg) {
+    messageRun(msg) {
         if (!msg.guild) return this.ok();
         if (this.container.client.settings.userBlacklist.includes(msg.author.id)) return this.error();
         return this.ok();

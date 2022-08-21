@@ -9,7 +9,7 @@ module.exports = class extends Precondition {
         });
     }
 
-    async run(msg, cmd) {
+    async messageRun(msg, cmd) {
         if (!msg.guild) return this.ok();
         if (cmd.guarded) return this.ok();
 

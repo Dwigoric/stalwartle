@@ -9,7 +9,7 @@ module.exports = class extends Precondition {
         });
     }
 
-    run() {
+    messageRun() {
         if (this.container.client.user.presence.status === 'online') return this.ok();
         return this.error();
     }
