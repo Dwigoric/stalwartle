@@ -9,8 +9,10 @@ module.exports = class extends Listener {
         });
     }
 
-    run(error) {
-        this.container.logger.error(error);
+    run(error, payload) {
+        if (!error.message) return;
+        const message = error.message.includes('  ::  ') ? error.message : `${this.container.constants.EMOTES.xmark}  ::  ${error.message}`;
+        payload.interaction.reply({ content: message, ephemeral: true, fetchReply: false });
     }
 
 };
