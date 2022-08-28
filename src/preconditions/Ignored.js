@@ -9,10 +9,17 @@ module.exports = class IgnoredPrecondition extends Precondition {
         });
     }
 
-    async messageRun(msg, cmd) {
-        if (!msg.guild) return this.ok();
-        if (cmd.name === 'ignore') return this.ok();
-        if (this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id).ignored.includes(msg.channel.id)) return this.error({ message: '🔇  ::  This channel is included in this server\'s ignored channels.' });
+    chatInputRun(interaction, command) {
+        return this.runForAll(interaction, command);
+    }
+
+    messageRun(message, command) {
+        return this.runForAll(message, command);
+    }
+
+    runForAll(medium, command) {
+        if (command.name === 'ignore') return this.ok();
+        if (medium.guild && this.container.stores.get('gateways').get('guildGateway').get(medium.guildId).ignored.includes(medium.channelId)) return this.error({ message: '🔇  ::  This channel is included in this server\'s ignored channels.' });
         return this.ok();
     }
 

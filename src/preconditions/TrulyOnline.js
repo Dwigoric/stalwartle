@@ -9,7 +9,15 @@ module.exports = class extends Precondition {
         });
     }
 
+    chatInputRun() {
+        return this.runForAll();
+    }
+
     messageRun() {
+        return this.runForAll();
+    }
+
+    runForAll() {
         if (this.container.client.user.presence.status === 'online') return this.ok();
         return this.error();
     }

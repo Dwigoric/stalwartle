@@ -9,9 +9,15 @@ module.exports = class extends Precondition {
         });
     }
 
-    messageRun(msg) {
-        if (!msg.guild) return this.ok();
-        if (this.container.client.settings.userBlacklist.includes(msg.author.id)) return this.error();
+    chatInputRun(interaction) {
+        if (!interaction.guild) return this.ok();
+        if (this.container.client.settings.userBlacklist.includes(interaction.user.id)) return this.error();
+        return this.ok();
+    }
+
+    messageRun(message) {
+        if (!message.guild) return this.ok();
+        if (this.container.client.settings.userBlacklist.includes(message.author.id)) return this.error();
         return this.ok();
     }
 
