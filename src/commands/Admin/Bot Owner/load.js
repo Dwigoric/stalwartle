@@ -20,7 +20,7 @@ module.exports = class extends Command {
     async messageRun(message, args) {
         const store = await args.pick('store').catch(() => null);
         if (store === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Please supply the store to load the piece to.`);
-        let path = await args.rest('string').catch(() => null);
+        let path = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (path === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  Please supply the file path of the piece you want to load.`);
 
         path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);

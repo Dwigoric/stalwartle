@@ -18,7 +18,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const rolled = await args.rest('string').catch(() => null);
+        const rolled = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         const dice = new Dice();
         if (!rolled) return reply(msg, `🎲  ::  **One die** (default) was embedded with magic and resulted to **${dice.roll('d6').result}**!`);

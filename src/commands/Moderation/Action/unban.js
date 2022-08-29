@@ -17,7 +17,7 @@ module.exports = class extends Command {
     async messageRun(msg, args) {
         const user = await args.pick('user').catch(() => null);
         if (user === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the user ID.`);
-        const reason = await args.rest('string').catch(() => null);
+        const reason = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         if (!await msg.guild.bans.fetch({ cache: false }).then(bans => bans.has(user.id))) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This user isn't banned from this server.`);
 

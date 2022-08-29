@@ -58,7 +58,7 @@ module.exports = class extends Subcommand {
             return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give a valid time format.`);
         }
         when = when.value;
-        const text = await args.rest('string').catch(() => null);
+        const text = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         if (when - new Date() >= 1577880000000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 5 decades!`);
 

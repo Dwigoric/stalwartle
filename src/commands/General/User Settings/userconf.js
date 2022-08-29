@@ -71,7 +71,7 @@ module.exports = class extends Subcommand {
     async set(message, args) {
         const key = await args.pick('string').catch(() => null);
         if (key === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a key.`);
-        const valueToSet = await args.rest('string').catch(() => null);
+        const valueToSet = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (valueToSet === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a value.`);
 
         const path = this.container.stores.get('gateways').get('userGateway').get(message.author.id, key, true);
@@ -101,7 +101,7 @@ module.exports = class extends Subcommand {
     async remove(message, args) {
         const key = await args.pick('string').catch(() => null);
         if (key === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a key.`);
-        const valueToRemove = await args.rest('string').catch(() => null);
+        const valueToRemove = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (valueToRemove === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a value.`);
 
         const path = this.container.stores.get('gateways').get('userGateway').get(message.author.id, key, true);

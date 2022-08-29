@@ -192,7 +192,7 @@ module.exports = class extends Subcommand {
     }
 
     async best(msg, args) {
-        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        const username = await args.rest('string').then(str => str.trim()).catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
         if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
 
         let mode;
@@ -205,7 +205,7 @@ module.exports = class extends Subcommand {
     }
 
     async recent(msg, args) {
-        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        const username = await args.rest('string').then(str => str.trim()).catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
         if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
 
         let mode;

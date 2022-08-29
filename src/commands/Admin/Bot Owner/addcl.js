@@ -18,7 +18,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const changelog = await args.rest('string').catch(() => null);
+        const changelog = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (changelog === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the new changelog.`);
 
         this.container.client.channels.cache.get(this.container.client.settings.changelogs).send({

@@ -20,7 +20,7 @@ module.exports = class extends Command {
         if (user === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the user to be softbanned.`);
         let days = await args.pick('integer').catch(() => 1);
         if (days < 1 || days > 7) days = 1;
-        const reason = await args.rest('string').catch(() => null);
+        const reason = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         if (user.id === msg.author.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Why would you ban yourself?`);
         if (user.id === this.container.client.user.id) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Have I done something wrong?`);

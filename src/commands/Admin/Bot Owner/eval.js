@@ -101,7 +101,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const code = await args.rest('string').catch(() => null);
+        const code = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (code === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  No code was supplied to be evaluated.`);
         const flagTime = args.getFlags('no-timeout') ? Number(args.getOption('wait').value) || this.timeout : Infinity;
         const language = args.getOption('lang').value || args.getOption('language').value || (args.getFlags('json') ? 'json' : 'js');

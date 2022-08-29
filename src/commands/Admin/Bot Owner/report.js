@@ -30,7 +30,7 @@ module.exports = class extends Command {
         const repMsg = await args.pick('message').catch(() => null);
         if (repMsg === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply the message ID or message link of the report.`);
 
-        const repCom = await args.rest('string').catch(() => null);
+        const repCom = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (repCom === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You must supply comments on the report.`);
 
         if (!repMsg.author.equals(this.container.client.user)) return null;
