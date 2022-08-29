@@ -14,7 +14,10 @@ module.exports = class extends Subcommand {
             requiredClientPermissions: ['MANAGE_ROLES'],
             description: 'Gives/takes a self-assignable role (selfrole).',
             detailedDescription: 'You can setup selfroles via `s.conf set selfroles`',
-            subCommands: ['list', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list],(SelfAssignableRole:string)';
     }

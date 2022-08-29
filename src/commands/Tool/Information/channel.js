@@ -13,7 +13,10 @@ module.exports = class extends Subcommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredClientPermissions: ['EMBED_LINKS'],
             description: "Gives information about the channel you're on or the channel you provided.",
-            subCommands: ['id', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'id', messageRun: 'id' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[id] [Channel:channel]';
     }

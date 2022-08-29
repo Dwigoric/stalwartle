@@ -59,7 +59,13 @@ module.exports = class extends Subcommand {
                 'To access a key, use the dot notation again, followed by the key name.',
                 'For example, if you want to access the `duration` key in the `automod.options.antiSpam` folder, you would use the notation `automod.options.antiSpam.duration`.'
             ].join('\n'),
-            subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'set', messageRun: 'set' },
+                { name: 'show', messageRun: 'show' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
         this.guarded = true;
@@ -131,7 +137,7 @@ module.exports = class extends Subcommand {
             resolvedValue = command.name;
         } else {
             const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, getResolverOptions(type, message));
-            if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+            if (resolved.error) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
             resolvedValue = resolved.value;
         }
 
@@ -169,7 +175,7 @@ module.exports = class extends Subcommand {
             resolvedValue = command.name;
         } else {
             const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, getResolverOptions(type, message));
-            if (!resolved.success) {
+            if (resolved.error) {
                 if (type.isArray && path.includes(valueToRemove)) resolvedValue = valueToRemove;
                 else return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
             } else {

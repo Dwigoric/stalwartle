@@ -26,7 +26,11 @@ module.exports = class extends Subcommand {
                 'Moderators and admins can enable @everyone and @here notifications via the `allowRemindEveryone` setting in the `conf` command.'
             ].join('\n'),
             flags: ['channel'],
-            subCommands: ['list', 'remove', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {

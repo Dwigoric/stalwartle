@@ -13,7 +13,11 @@ module.exports = class extends Subcommand {
             aliases: ['yt', 'ytsearch', 'yts'],
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Finds a video, channel, or playlist from YouTube.',
-            subCommands: ['channel', 'playlist', { input: 'video', default: true }]
+            subcommands: [
+                { name: 'channel', messageRun: 'channel' },
+                { name: 'playlist', messageRun: 'playlist' },
+                { name: 'video', messageRun: 'video', default: true }
+            ]
         });
         this.usage = '[channel|playlist] <VideoOrQuery:...string>';
     }

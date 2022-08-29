@@ -23,7 +23,10 @@ module.exports = class extends Subcommand {
                 'To get the modlogs of a certain type, you can use the `--type` flag, e.g. `--type=warn`, `--type=kick`, `ban`, etc.'
             ].join('\n'),
             options: ['type'],
-            subCommands: ['reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[reset|User:user|CaseNumber:integer]';
     }

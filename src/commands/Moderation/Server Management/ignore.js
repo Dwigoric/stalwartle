@@ -11,7 +11,10 @@ module.exports = class extends Subcommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Makes me ignore channels or a channel category in the server.',
             detailedDescription: 'If you want to unignore channels or categories, simply reuse the command and give the channel you want to unignore.',
-            subCommands: ['list', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list]|(ChannelOrCategory:channel)';
     }

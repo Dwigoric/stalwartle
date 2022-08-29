@@ -14,7 +14,12 @@ module.exports = class extends Subcommand {
             ...options,
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'A fight minigame between two Discord users.',
-            subCommands: ['accept', 'deny', 'cancel', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'accept', messageRun: 'accept' },
+                { name: 'deny', messageRun: 'deny' },
+                { name: 'cancel', messageRun: 'cancel' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[accept|deny|cancel]|(Opponent:user)';
         this.getRandomInt = (min, max) => (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min)); // eslint-disable-line no-extra-parens

@@ -73,7 +73,12 @@ module.exports = class extends Subcommand {
                 '- If you simply want to get information about a user, do not use any subcommand and supply the username.'
             ].join('\n'),
             flags: ['mania', 'catch', 'taiko'],
-            subCommands: ['best', 'recent', 'beatmap', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'best', messageRun: 'best' },
+                { name: 'recent', messageRun: 'recent' },
+                { name: 'beatmap', messageRun: 'beatmap' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[best|recent|beatmap] (BeatmapID|Username:...string)';
     }

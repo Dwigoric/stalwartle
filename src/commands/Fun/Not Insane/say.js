@@ -9,7 +9,12 @@ module.exports = class extends Subcommand {
             ...options,
             requiredClientPermissions: 'EMBED_LINKS',
             description: 'Makes the bot say anything you want.',
-            subCommands: ['delete', 'embed', 'anonymous', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'delete', messageRun: 'delete' },
+                { name: 'embed', messageRun: 'embed' },
+                { name: 'anonymous', messageRun: 'anonymous' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[Channel:channel] <Content:string{1,2000}> [...]';
     }

@@ -28,7 +28,15 @@ module.exports = class extends Subcommand {
                 'To move stuff in the playlist, run `s.playlist move` and I will guide you through the rest of the process.',
                 'To shuffle the playlist, run `s.playlist shuffle`.'
             ].join('\n'),
-            subCommands: ['add', 'remove', 'clear', 'export', 'move', 'shuffle', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'add', messageRun: 'add' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'clear', messageRun: 'clear' },
+                { name: 'export', messageRun: 'export' },
+                { name: 'move', messageRun: 'move' },
+                { name: 'shuffle', messageRun: 'shuffle' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[add|remove|clear|export|move|shuffle] (TracksURLOrPlaylistItems:string)';
     }

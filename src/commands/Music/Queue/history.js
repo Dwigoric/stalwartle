@@ -19,7 +19,11 @@ module.exports = class extends Subcommand {
                 'Export the history by using `s.history export`, clear it with `s.history clear`',
                 'To play songs on incognito, simply add the `--incognito` flag **when using the `s.play` command**.'
             ].join('\n'),
-            subCommands: ['export', 'clear', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'export', messageRun: 'export' },
+                { name: 'clear', messageRun: 'clear' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[export|clear]';
     }

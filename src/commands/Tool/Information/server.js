@@ -11,7 +11,12 @@ module.exports = class extends Subcommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives information about the current server.',
-            subCommands: ['icon', 'roles', 'id', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'icon', messageRun: 'icon' },
+                { name: 'roles', messageRun: 'roles' },
+                { name: 'id', messageRun: 'id' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[icon|roles|id]';
     }

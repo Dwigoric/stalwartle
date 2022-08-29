@@ -9,7 +9,13 @@ module.exports = class extends Subcommand {
         super(context, {
             ...options,
             description: 'Define per-user settings.',
-            subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'set', messageRun: 'set' },
+                { name: 'show', messageRun: 'show' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
         this.guarded = true;

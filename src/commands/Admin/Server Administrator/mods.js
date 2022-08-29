@@ -12,7 +12,11 @@ module.exports = class extends Subcommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',
             detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
-            subCommands: ['add', 'remove', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'add', messageRun: 'add' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[add|remove] (Member:member|Role:role) [...]';
     }

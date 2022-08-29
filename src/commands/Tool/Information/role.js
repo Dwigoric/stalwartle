@@ -13,7 +13,10 @@ module.exports = class extends Subcommand {
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives information about a role.',
             detailedDescription: "You can use the role's name in providing the role.",
-            subCommands: ['id', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'id', messageRun: 'id' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[id] <Role:role>';
     }

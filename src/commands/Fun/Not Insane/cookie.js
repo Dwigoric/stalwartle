@@ -21,7 +21,10 @@ module.exports = class extends Subcommand {
                 'To get the global leaderboard, use the flag `--global`, e.g. `s.cookie lb --global`'
             ].join('\n'),
             flags: ['check'],
-            subCommands: ['lb', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'lb', messageRun: 'lb' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[lb]|(Person:user)';
     }
