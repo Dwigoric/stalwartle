@@ -98,30 +98,30 @@
     "@sapphire/utilities" "^3.9.2"
     tslib "^2.4.0"
 
-"@sapphire/framework@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/framework/-/framework-3.0.0.tgz#da5c4fc8673f22bec73445e5a5d43785adb42f06"
-  integrity sha512-VflLMOHKtecTxAi2N1m1DzCN/qKB7vrRolx9UFXmcQg9fGmYzj9yaKM3Fyw+ZvhpS/gijGWN1lWSr8fyTscdEA==
+"@sapphire/framework@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/framework/-/framework-3.1.0.tgz#2c2ce4d3886dd9653054341b4c3503df52b71213"
+  integrity sha512-23DY+YKKcl0y7BhAfoD3yw6J/mkJxjeKFaUjmrNtkoiXBAsPxd/RnYRCerAjAMfIiSwHe36CuCw7EnLjjTYUwg==
   dependencies:
     "@discordjs/builders" "^0.16.0"
     "@sapphire/discord-utilities" "^2.11.6"
     "@sapphire/discord.js-utilities" "^5.0.0"
-    "@sapphire/lexure" "^1.0.1"
+    "@sapphire/lexure" "^1.0.2"
     "@sapphire/pieces" "^3.5.1"
     "@sapphire/ratelimits" "^2.4.4"
-    "@sapphire/result" "^2.4.0"
+    "@sapphire/result" "^2.4.1"
     "@sapphire/stopwatch" "^1.4.1"
     "@sapphire/utilities" "^3.9.2"
     "@types/object-hash" "^2.2.1"
     object-hash "^3.0.0"
     tslib "^2.4.0"
 
-"@sapphire/lexure@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@sapphire/lexure/-/lexure-1.0.1.tgz#a2cf516f2c8e08d4d6e4e020391cf8de741c4296"
-  integrity sha512-bxI85SqPERicAC8fyZNRjrK2SroXFtpa/vgUNExH8VSM1LIysZE6zDRGCvllAfOdEVGSGBKjNRLfT9kYwNDhXg==
+"@sapphire/lexure@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@sapphire/lexure/-/lexure-1.0.2.tgz#6a5dd4a92690d114b3c3e35354048e3e4f323aa5"
+  integrity sha512-KKKcCvjkB6AImGzpWdrbLVI++VnRinpus+a4yu+PUT7zUlzUZdma1P/P8XlRDFEx6U+d5jk8ygKyTPzQKvkqRA==
   dependencies:
-    "@sapphire/result" "^2.1.1"
+    "@sapphire/result" "^2.4.1"
 
 "@sapphire/pieces@^3.5.1":
   version "3.5.1"
@@ -132,12 +132,12 @@
     "@sapphire/utilities" "^3.9.2"
     tslib "^2.4.0"
 
-"@sapphire/plugin-editable-commands@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-editable-commands/-/plugin-editable-commands-2.0.0.tgz#e1248378ba91e62951ce9c79ca475a58d8c3fa04"
-  integrity sha512-kxiZg61SYC1EOF1Xz6KTSFyypYA0yU/jsdy+czJv6Dmw7o1Anr6Tkp6eLgO4+43gGke07Kbdi6H/980Onm9png==
+"@sapphire/plugin-editable-commands@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-editable-commands/-/plugin-editable-commands-2.0.1.tgz#aaa7a1758a46a3bc3e45b7d50386d00c80208307"
+  integrity sha512-uXM2YweVLgZWzZxR0TDRPertnWiR6Yi8kuABudLIJuSN4WtAUUxeE65iUNEGN8rzFnIvRwHTRLRPxgIub0I6VQ==
   dependencies:
-    "@skyra/editable-commands" "^2.1.3"
+    "@skyra/editable-commands" "^2.1.4"
     tslib "^2.4.0"
 
 "@sapphire/plugin-logger@^3.0.0":
@@ -157,10 +157,10 @@
     "@sapphire/time-utilities" "^1.7.6"
     tslib "^2.4.0"
 
-"@sapphire/plugin-subcommands@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-subcommands/-/plugin-subcommands-3.1.1.tgz#51cb7950213e0d29b6899832c5b346ac1f12b866"
-  integrity sha512-uZVIskeqMXnuNj6rgaM4EytMmjyI33HM+n4TpM8cA9DdkZrJMybDucbRz4bjnjlxzwe8nP3z2ZfZkJ3rV2tlOQ==
+"@sapphire/plugin-subcommands@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-subcommands/-/plugin-subcommands-3.2.0.tgz#25a82b60ed386ab3054940bde4abef787e7ad771"
+  integrity sha512-z+if7P0s7QMS642fBwkwoaFn02RdU2pD0GxLFidtnW7o/zjvqw4xVIWgB4RN8NWGXPZjf7eFIYLiS1L6YXNRBA==
   dependencies:
     "@sapphire/utilities" "^3.9.2"
     tslib "^2.4.0"
@@ -172,10 +172,10 @@
   dependencies:
     "@sapphire/time-utilities" "^1.7.4"
 
-"@sapphire/result@^2.1.1", "@sapphire/result@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/result/-/result-2.4.0.tgz#48444d8faad71ab4324f6c48ecfa246292af933b"
-  integrity sha512-BJkBsXYjTr6nQmKQnUriA1IyQrVDd7rKHTnbk2n03d/sri9ZFYYCRZ8wfFv+Z8QUasFWliypg3Qstz29G1nnjQ==
+"@sapphire/result@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/result/-/result-2.4.1.tgz#6303973dcc005914f30b20e7fc68ca15ae32cc7c"
+  integrity sha512-RWgp+cCm1dhE/voMGwp3z5xGmsOluXW9EPIXyO+khMXxZDL3iAgp4/ZCSFEw3nI98njwGmgWYIzdQfCu3WA4OA==
 
 "@sapphire/shapeshift@^3.5.1":
   version "3.5.1"
@@ -213,10 +213,10 @@
   resolved "https://registry.yarnpkg.com/@sapphire/utilities/-/utilities-3.9.2.tgz#fba479e5d7ee7e3a604caa6c98d48bce0706d45d"
   integrity sha512-CG8mFPse+VDUVenj3PqZyh9PATFd/pzrQaX2gZqv0f7AzGnlyfm/ygh0tnQRVKpMDFr39uCQqVse8i0f51DAkg==
 
-"@skyra/editable-commands@^2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@skyra/editable-commands/-/editable-commands-2.1.3.tgz#14086bbf7df4025edf7c4f6b3519a11f366e343b"
-  integrity sha512-L1Tg+LAnmbg2Ai8tklndRv4JUZI7cTD5jd8UgYfQc3qBcs2yTe+WKHc+bsuyISJquW6V841QoEwbxJsAb8cg1w==
+"@skyra/editable-commands@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@skyra/editable-commands/-/editable-commands-2.1.4.tgz#f1549f1740c1f38707712f6c387f0cfa30732286"
+  integrity sha512-W/m7GVmPCFKmEc49J4dLP6+TRlbBhXUPkN5KAV4PSzk5JaYLOTl5fgjEzHJOxtLHwiQBd36lrQdsWKxL+N9zBQ==
 
 "@types/node-fetch@^2.6.2":
   version "2.6.2"
@@ -350,10 +350,10 @@ bufferutil@^4.0.6:
   dependencies:
     node-gyp-build "^4.3.0"
 
-bullmq@^1.89.1:
-  version "1.89.1"
-  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-1.89.1.tgz#69b6f9022d4e5e8bfbcff33fe950735426a81b46"
-  integrity sha512-VpNFa1buQYDOl4yUF0PxVoCDbh/GT/JeQiaWu/8IdPVMk91RToWtsXvaZdVrfp9VAOtP+F1KJr/pFn+ewY2rnw==
+bullmq@^1.90.0:
+  version "1.90.0"
+  resolved "https://registry.yarnpkg.com/bullmq/-/bullmq-1.90.0.tgz#f72541929f6e66ca9009d78035f551ce010b3fb9"
+  integrity sha512-kKsMkWyrtcAgqkVclw7YSOTCzaqv0WyGfufStk4GFCWXq9qgfZV8INYIkX4pfPkEA7H/k2Va+8ABTvg0X7DmWA==
   dependencies:
     cron-parser "^4.6.0"
     get-port "6.1.2"
@@ -818,10 +818,10 @@ mkdirp@^1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-moment-timezone@^0.5.34:
-  version "0.5.34"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.34.tgz#a75938f7476b88f155d3504a9343f7519d9a405c"
-  integrity sha512-3zAEHh2hKUs3EXLESx/wsgw6IQdusOT8Bxm3D9UrHPQR7zlMmzwybC8zHEM1tQ4LJwP7fcxrWr8tuBg05fFCbg==
+moment-timezone@^0.5.37:
+  version "0.5.37"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.37.tgz#adf97f719c4e458fdb12e2b4e87b8bec9f4eef1e"
+  integrity sha512-uEDzDNFhfaywRl+vwXxffjjq1q0Vzr+fcQpQ1bU0kbzorfS7zVtZnCnGc8mhWmF39d4g4YriF6kwA75mJKE/Zg==
   dependencies:
     moment ">= 2.9.0"
 
