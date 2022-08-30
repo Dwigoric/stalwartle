@@ -87,7 +87,7 @@ exports.config = {
 
 exports.mongodb = {
     // The Mongo DB connection string
-    connectionString: '',
+    connectionString: process.env.DATABASE_URL, // eslint-disable-line no-process-env
 
     // The DB name
     name: '',
