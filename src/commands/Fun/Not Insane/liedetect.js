@@ -28,7 +28,7 @@ module.exports = class extends Command {
             truth: ['https://media.giphy.com/media/5wWf7GR2nhgamhRnEuA/giphy.gif', 0x2ECC71],
             lie: ['https://media.giphy.com/media/2wVDK79pXCAsTyqLUa/giphy.gif', 0xE74C3C]
         };
-        const gif = gifs[args.getOption('force').value] || Object.values(gifs)[Math.round(Math.random())];
+        const gif = gifs[args.getOption('force')] || Object.values(gifs)[Math.round(Math.random())];
 
         const embed = new MessageEmbed()
             .setColor(gif[1])

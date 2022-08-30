@@ -60,7 +60,7 @@ module.exports = class extends Subcommand {
             });
         }
 
-        if (args.getOption('type').value && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(args.getOption('type').value)) list = list.filter(ml => ml.type === args.getOption('type').value); // eslint-disable-line max-len
+        if (args.getOption('type') && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(args.getOption('type'))) list = list.filter(ml => ml.type === args.getOption('type')); // eslint-disable-line max-len
         if (user) list = list.filter(ml => ml.user === user.id);
         if (!list.length) return reply(msg, `${this.container.constants.EMOTES.blobstop}  ::  Whoops! It seems that ${user ? user.tag : msg.guild.name} has no record${user ? ' on this server' : ''} yet.`);
         const message = await msg.reply(`${this.container.constants.EMOTES.loading}  ::  Loading moderation logs...`);
@@ -69,7 +69,7 @@ module.exports = class extends Subcommand {
                 content: `${this.container.constants.EMOTES.tick}  ::  Moderation logs loaded!`,
                 embeds: [new MessageEmbed()
                     .setColor('RANDOM')
-                    .setTitle(`${this.container.constants.EMOTES.blobban} ${list.length} ${args.getOption('type').value && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(args.getOption('type').value) ? toTitleCase(args.getOption('type').value) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)] // eslint-disable-line max-len
+                    .setTitle(`${this.container.constants.EMOTES.blobban} ${list.length} ${args.getOption('type') && this.container.client.commands.filter(cmd => cmd.category === 'Moderation' && cmd.subCategory === 'Action').keyArray().includes(args.getOption('type')) ? toTitleCase(args.getOption('type')) : 'Modlog'}${list.length === 1 ? '' : 's'} for ${user ? `${user.bot ? 'bot' : 'user'} ${user.tag}` : msg.guild.name}`)] // eslint-disable-line max-len
             }
         });
 
