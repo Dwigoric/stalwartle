@@ -40,6 +40,7 @@ exports.config = {
 
     ownerID: '295391820744228867',
     developers: ['295391820744228867', '296862433136476160', '296256174209105920'],
+    devServer: '502895390807293963',
 
     lavalinkNodes: [{ identifier: 'server', host: 'localhost', port: 80, password: '' }],
 
