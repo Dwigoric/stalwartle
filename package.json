@@ -35,7 +35,7 @@
 		"dotenv": "^16.0.1",
 		"erela.js": "^2.3.3",
 		"erela.js-spotify": "^1.2.0",
-		"moment-timezone": "^0.5.34",
+		"moment-timezone": "^0.5.35",
 		"mongodb": "^4.8.0"
 	},
 	"optionalDependencies": {
