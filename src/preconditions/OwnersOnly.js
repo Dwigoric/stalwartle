@@ -2,7 +2,7 @@ const { Precondition } = require('@sapphire/framework');
 
 module.exports = class DevsOnlyPrecondition extends Precondition {
 
-    chatInputRunner(interaction) {
+    chatInputRun(interaction) {
         return this.runForAll(interaction);
     }
 
@@ -11,7 +11,7 @@ module.exports = class DevsOnlyPrecondition extends Precondition {
     }
 
     runForAll(medium) {
-        if (this.container.client.options.ownerID === medium.author.id) return this.ok();
+        if (this.container.client.options.ownerID === (medium.author || medium.user).id) return this.ok();
         return this.error({ message: 'You do not have permission to use this command.' });
     }
 
