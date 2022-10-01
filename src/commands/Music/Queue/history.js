@@ -4,7 +4,7 @@ const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { chunk } = require('@sapphire/utilities');
-const { Timestamp } = require('@sapphire/time-utilities');
+const { Timestamp } = require('@sapphire/timestamp');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
 module.exports = class extends Subcommand {

@@ -1,7 +1,7 @@
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { Timestamp } = require('@sapphire/time-utilities');
+const { Timestamp } = require('@sapphire/timestamp');
 const { mergeObjects } = require('@sapphire/utilities');
 const { Util: { escapeMarkdown }, MessageEmbed } = require('discord.js');
 const { TrackUtils: { buildUnresolved } } = require('erela.js');
@@ -15,7 +15,8 @@ module.exports = class extends Command {
             preconditions: ['DJOnly', 'MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
-            flags: ['force', 'soundcloud', 'next'],
+            // 'soundcloud'
+            flags: ['force', 'next'],
             detailedDescription: [
                 'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel <channel ID>`.',
                 'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
@@ -136,11 +137,11 @@ module.exports = class extends Command {
 
     async #resolveQuery(args, query) {
         const { exception, loadType, playlist, tracks } = await this.container.erela.search(
-            query instanceof URL ?
-                query.toString() :
+            query instanceof URL ? query.toString() :
                 {
                     query,
-                    source: args.getFlags('soundcloud') ? 'soundcloud' : 'youtube'
+                    // args.getFlags('soundcloud') ? 'soundcloud' : 'youtube'
+                    source: 'soundcloud'
                 },
             args.message.author.id
         );

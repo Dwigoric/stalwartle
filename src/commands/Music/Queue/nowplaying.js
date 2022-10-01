@@ -1,6 +1,6 @@
 const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { Timestamp } = require('@sapphire/time-utilities');
+const { Timestamp } = require('@sapphire/timestamp');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 

@@ -1,7 +1,7 @@
 const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { Timestamp } = require('@sapphire/time-utilities');
+const { Timestamp } = require('@sapphire/timestamp');
 const { chunk, mergeObjects } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const { reply } = require('@sapphire/plugin-editable-commands');
