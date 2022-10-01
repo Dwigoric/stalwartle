@@ -1,5 +1,5 @@
 const { Argument } = require('@sapphire/framework');
-const { Duration } = require('@sapphire/time-utilities');
+const { Duration } = require('@sapphire/duration');
 
 module.exports = class extends Argument {
 

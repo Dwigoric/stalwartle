@@ -1,7 +1,7 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { Timestamp } = require('@sapphire/time-utilities');
+const { Timestamp } = require('@sapphire/timestamp');
 const { MessageEmbed } = require('discord.js');
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 
