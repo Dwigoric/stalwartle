@@ -3,8 +3,8 @@ const { Manager } = require('erela.js');
 const { join } = require('path');
 const { Util: { escapeMarkdown } } = require('discord.js');
 const { mergeObjects } = require('@sapphire/utilities');
-const Spotify = require('erela.js-spotify');
-const fetch = require('node-fetch');
+// const Spotify = require('erela.js-spotify');
+// const fetch = require('node-fetch');
 
 const { config: { lavalinkNodes } } = require('../../config');
 
@@ -79,6 +79,7 @@ class Stalwartle extends SapphireClient {
             clientId: this.user.id,
             shards: this.options.shardCount,
             trackPartial: ['author', 'duration', 'isSeekable', 'isStream', 'requester', 'title', 'uri', 'identifier', 'incognito'],
+            /*
             plugins: [
                 new Spotify({
                     clientID: process.env.SPOTIFY_CLIENT_ID, // eslint-disable-line no-process-env
@@ -87,6 +88,7 @@ class Stalwartle extends SapphireClient {
                     albumLimit: 0
                 })
             ],
+            */
             send(id, payload) {
                 const guild = container.client.guilds.cache.get(id);
                 if (guild) guild.shard.send(payload);
@@ -144,13 +146,14 @@ class Stalwartle extends SapphireClient {
                     player.destroy();
                 }
             })
-            .on('queueEnd', async (player, track) => {
+            .on('queueEnd', async (player) => {
                 container.cache.guilds.get(player.guild).clearVoteskips();
 
                 await container.stores.get('gateways').get('musicGateway').reset(player.guild, 'queue');
-                const { music, donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
+                const { donation, prefix } = container.stores.get('gateways').get('guildGateway').get(player.guild);
                 const channel = this.channels.cache.get(player.textChannel);
 
+                /*
                 if (donation >= 8 && music.autoplay) {
                     const params = new URLSearchParams();
                     params.set('part', 'snippet');
@@ -174,6 +177,7 @@ class Stalwartle extends SapphireClient {
                         }
                     }
                 }
+                */
 
                 if (donation < 10) {
                     const { timeouts } = container.stores.get('commands').get('play');
