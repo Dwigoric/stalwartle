@@ -14,14 +14,14 @@ module.exports = class extends Command {
             aliases: ['p'],
             preconditions: ['DJOnly', 'MusicControl'],
             runIn: [CommandOptionsRunTypeEnum.GuildText],
-            description: 'Plays music in the server. Accepts YouTube, Spotify, SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
+            description: 'Plays music in the server. Accepts SoundCloud, Vimeo, Mixer, Bandcamp, Twitch, and online radios.',
             // 'soundcloud'
             flags: ['force', 'next'],
             detailedDescription: [
                 'You can limit the voice channels Stalwartle can connect to for music: `s.conf set music.limitToChannel <channel ID>`.',
                 'To continue playing from the current music queue (if stopped), simply do not supply any argument.',
                 'To choose which channel I will announce songs, use `s.conf set music.announceChannel <channel>`.',
-                'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
+                // 'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
                 'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
                 'To move song(s) to the front of the queue, use the `--next` flag.',
                 '\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
