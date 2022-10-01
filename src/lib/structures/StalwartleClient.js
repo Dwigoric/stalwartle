@@ -75,6 +75,7 @@ class Stalwartle extends SapphireClient {
     initializeErela() {
         container.erela = container.erela || new Manager({
             autoPlay: true,
+            defaultSearchPlatform: 'soundcloud',
             nodes: lavalinkNodes,
             clientId: this.user.id,
             shards: this.options.shardCount,
