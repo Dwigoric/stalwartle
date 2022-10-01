@@ -137,11 +137,12 @@ module.exports = class extends Command {
 
     async #resolveQuery(args, query) {
         const { exception, loadType, playlist, tracks } = await this.container.erela.search(
-            {
-                query: query instanceof URL ? query.toString() : query,
-                // args.getFlags('soundcloud') ? 'soundcloud' : 'youtube'
-                source: 'soundcloud'
-            },
+            query instanceof URL ? query.toString() :
+                {
+                    query,
+                    // args.getFlags('soundcloud') ? 'soundcloud' : 'youtube'
+                    source: 'soundcloud'
+                },
             args.message.author.id
         );
 
