@@ -24,8 +24,7 @@ module.exports = class extends Command {
                 // 'Use SoundCloud with your searches just by simply using the `--soundcloud` flag! e.g. `s.play Imagine Dragons - Natural --soundcloud`',
                 'To force play a song, just use the `--force` flag. e.g. `s.play twenty one pilots - Jumpsuit --force`.',
                 'To move song(s) to the front of the queue, use the `--next` flag.',
-                '\nTo insert a whole YouTube playlist into the queue, just supply the playlist link.',
-                'To play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
+                '\nTo play directly from Vimeo, Mixer (Beam.pro), Bandcamp, or Twitch, give the video/song/stream\'s link. (or for bandcamp, song/album)',
                 'To play an online radio, simply supply the radio link.',
                 'To enable autoplay, use `s.conf set music.autoplay true`. This is only applicable for $8+ donators.'
             ].join('\n')
@@ -218,7 +217,7 @@ module.exports = class extends Command {
                 queue.add(song.map(track => mergeObjects(track, { incognito })));
 
                 // eslint-disable-next-line max-len
-                if (song.length < length) reply(msg, `⚠  ::  Not all songs were added. Possibilities: (1) You've reached the queue limit of ${music.maxQueue} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, (4) you've reached the limit of ${music.maxUserRequests} song requests per user, or (5) a YouTube equivalent of a Spotify track was not found. Server moderators and managers can view the limits using the \`conf\` command.`);
+                if (song.length < length) reply(msg, `⚠  ::  Not all songs were added. Possibilities: (1) You've reached the queue limit of ${music.maxQueue} songs, (2) all songs longer than 5 hours weren't added, (3) there were duplicates, or (4) you've reached the limit of ${music.maxUserRequests} song requests per user. Server moderators and managers can view the limits using the \`conf\` command.`);
                 reply(msg, `${this.container.constants.EMOTES.tick}  ::  **${song.length} song${song.length === 1 ? '' : 's'}** ha${song.length === 1 ? 's' : 've'} been added to the queue, now at **${queue.length} entries**.`);
             } else {
                 if (donation < 5 && song.duration > 18_000_000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This song is longer than 5 hours!`);
