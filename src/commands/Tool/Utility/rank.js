@@ -35,7 +35,7 @@ module.exports = class extends SubCommandPluginCommand {
             await msg.member.roles.remove(role, `[Selfrole Remove] Selfrole feature of ${this.container.client.user.username}`);
             return reply(msg, {
                 allowedMentions: { parse: [] },
-                content: `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.author)}** via selfrole.`
+                content: `${this.container.constants.EMOTES.tick}  ::  **${escapeMarkdown(role.name)}** has been taken from **${escapeMarkdown(msg.author.toString())}** via selfrole.`
             });
         }
 
