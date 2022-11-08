@@ -7,7 +7,7 @@ const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const fetch = require('node-fetch');
 
-const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com|youtube\.com|youtu\.?be)\/.+$/;
+const URL_REGEX = /^(https?:\/\/)?(www\.|[a-zA-Z-_]+\.)?(vimeo\.com|mixer\.com|bandcamp\.com|twitch\.tv|soundcloud\.com)\/.+$/;
 
 module.exports = class extends Subcommand {
 
