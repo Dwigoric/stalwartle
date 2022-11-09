@@ -1,6 +1,6 @@
 const { CommandOptionsRunTypeEnum, Resolvers } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase, codeBlock, isObject } = require('@sapphire/utilities');
 
 function getResolverOptions(type, message) {
@@ -45,7 +45,7 @@ async function resolveString(message, type, value) {
     return String(value);
 }
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -59,7 +59,13 @@ module.exports = class extends SubCommandPluginCommand {
                 'To access a key, use the dot notation again, followed by the key name.',
                 'For example, if you want to access the `duration` key in the `automod.options.antiSpam` folder, you would use the notation `automod.options.antiSpam.duration`.'
             ].join('\n'),
-            subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'set', messageRun: 'set' },
+                { name: 'show', messageRun: 'show' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
         this.guarded = true;
@@ -116,7 +122,7 @@ module.exports = class extends SubCommandPluginCommand {
     async set(message, args) {
         const key = await args.pick('string').catch(() => null);
         if (key === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a key.`);
-        const valueToSet = await args.rest('string').catch(() => null);
+        const valueToSet = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (valueToSet === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a value.`);
 
         const path = this.container.stores.get('gateways').get('guildGateway').get(message.guild.id, key, true);
@@ -131,7 +137,7 @@ module.exports = class extends SubCommandPluginCommand {
             resolvedValue = command.name;
         } else {
             const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToSet, getResolverOptions(type, message));
-            if (!resolved.success) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
+            if (resolved.error) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
             resolvedValue = resolved.value;
         }
 
@@ -154,7 +160,7 @@ module.exports = class extends SubCommandPluginCommand {
     async remove(message, args) {
         const key = await args.pick('string').catch(() => null);
         if (key === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a key.`);
-        const valueToRemove = await args.rest('string').catch(() => null);
+        const valueToRemove = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (valueToRemove === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a value.`);
 
         const path = this.container.stores.get('gateways').get('guildGateway').get(message.guild.id, key, true);
@@ -169,7 +175,7 @@ module.exports = class extends SubCommandPluginCommand {
             resolvedValue = command.name;
         } else {
             const resolved = await Resolvers[`resolve${type.type.replace(/^./, letter => letter.toUpperCase())}`](valueToRemove, getResolverOptions(type, message));
-            if (!resolved.success) {
+            if (resolved.error) {
                 if (type.isArray && path.includes(valueToRemove)) resolvedValue = valueToRemove;
                 else return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You supplied an invalid entry.`);
             } else {

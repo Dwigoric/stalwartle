@@ -16,7 +16,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const reason = await args.rest('string').catch(() => null);
+        const reason = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         if (await this.container.stores.get('gateways').get('afkGateway').has(msg.author.id) && this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'afktoggle')) {
             await this.container.stores.get('gateways').get('afkGateway').delete(msg.author.id);

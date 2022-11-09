@@ -1,15 +1,21 @@
 const { Resolvers } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase, codeBlock, isObject } = require('@sapphire/utilities');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
             ...options,
             description: 'Define per-user settings.',
-            subCommands: ['set', 'show', 'remove', 'reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'set', messageRun: 'set' },
+                { name: 'show', messageRun: 'show' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '<set|show|remove|reset> (key:string) (value:any) [...]';
         this.guarded = true;
@@ -65,7 +71,7 @@ module.exports = class extends SubCommandPluginCommand {
     async set(message, args) {
         const key = await args.pick('string').catch(() => null);
         if (key === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a key.`);
-        const valueToSet = await args.rest('string').catch(() => null);
+        const valueToSet = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (valueToSet === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a value.`);
 
         const path = this.container.stores.get('gateways').get('userGateway').get(message.author.id, key, true);
@@ -95,7 +101,7 @@ module.exports = class extends SubCommandPluginCommand {
     async remove(message, args) {
         const key = await args.pick('string').catch(() => null);
         if (key === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a key.`);
-        const valueToRemove = await args.rest('string').catch(() => null);
+        const valueToRemove = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (valueToRemove === null) return reply(message, `${this.container.constants.EMOTES.xmark}  ::  You must provide a value.`);
 
         const path = this.container.stores.get('gateways').get('userGateway').get(message.author.id, key, true);

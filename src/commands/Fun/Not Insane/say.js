@@ -1,15 +1,20 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
             ...options,
             requiredClientPermissions: 'EMBED_LINKS',
             description: 'Makes the bot say anything you want.',
-            subCommands: ['delete', 'embed', 'anonymous', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'delete', messageRun: 'delete' },
+                { name: 'embed', messageRun: 'embed' },
+                { name: 'anonymous', messageRun: 'anonymous' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[Channel:channel] <Content:string{1,2000}> [...]';
     }

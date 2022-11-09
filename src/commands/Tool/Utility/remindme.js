@@ -1,4 +1,4 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { Args } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
@@ -6,7 +6,7 @@ const { Util: { escapeMarkdown } } = require('discord.js');
 const { isValidCron } = require('cron-validator');
 const moment = require('moment-timezone');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -26,7 +26,11 @@ module.exports = class extends SubCommandPluginCommand {
                 'Moderators and admins can enable @everyone and @here notifications via the `allowRemindEveryone` setting in the `conf` command.'
             ].join('\n'),
             flags: ['channel'],
-            subCommands: ['list', 'remove', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list|remove] (DurationUntilReminder:time) [Reminder:...string]';
         this.resolver = Args.make((parameter, argCtx) => {
@@ -54,7 +58,7 @@ module.exports = class extends SubCommandPluginCommand {
             return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please give a valid time format.`);
         }
         when = when.value;
-        const text = await args.rest('string').catch(() => null);
+        const text = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         if (when - new Date() >= 1577880000000) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Your reminder cannot be longer than 5 decades!`);
 

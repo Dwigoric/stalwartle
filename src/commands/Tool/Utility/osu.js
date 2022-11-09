@@ -1,4 +1,4 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 const { reply } = require('@sapphire/plugin-editable-commands');
@@ -58,7 +58,7 @@ const MODS = Object.freeze({
     '2K': 268435456
 });
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -73,7 +73,12 @@ module.exports = class extends SubCommandPluginCommand {
                 '- If you simply want to get information about a user, do not use any subcommand and supply the username.'
             ].join('\n'),
             flags: ['mania', 'catch', 'taiko'],
-            subCommands: ['best', 'recent', 'beatmap', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'best', messageRun: 'best' },
+                { name: 'recent', messageRun: 'recent' },
+                { name: 'beatmap', messageRun: 'beatmap' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[best|recent|beatmap] (BeatmapID|Username:...string)';
     }
@@ -187,7 +192,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async best(msg, args) {
-        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        const username = await args.rest('string').then(str => str.trim()).catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
         if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
 
         let mode;
@@ -200,7 +205,7 @@ module.exports = class extends SubCommandPluginCommand {
     }
 
     async recent(msg, args) {
-        const username = await args.rest('string').catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
+        const username = await args.rest('string').then(str => str.trim()).catch(() => this.container.stores.get('gateways').get('userGateway').get(msg.author.id, 'osu'));
         if (!username) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  You did not provide a search query. Do you want a default osu! account? Use \`s.userconf set osu <username here>\`.`);
 
         let mode;

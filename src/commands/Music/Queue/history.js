@@ -1,4 +1,4 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
@@ -7,7 +7,7 @@ const { chunk } = require('@sapphire/utilities');
 const { Timestamp } = require('@sapphire/timestamp');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -19,7 +19,11 @@ module.exports = class extends SubCommandPluginCommand {
                 'Export the history by using `s.history export`, clear it with `s.history clear`',
                 'To play songs on incognito, simply add the `--incognito` flag **when using the `s.play` command**.'
             ].join('\n'),
-            subCommands: ['export', 'clear', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'export', messageRun: 'export' },
+                { name: 'clear', messageRun: 'clear' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[export|clear]';
     }

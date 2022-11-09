@@ -1,10 +1,10 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -13,7 +13,10 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredClientPermissions: ['EMBED_LINKS'],
             description: "Gives information about the channel you're on or the channel you provided.",
-            subCommands: ['id', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'id', messageRun: 'id' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[id] [Channel:channel]';
     }

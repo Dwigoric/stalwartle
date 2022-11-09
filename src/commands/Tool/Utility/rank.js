@@ -1,11 +1,11 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { LazyPaginatedMessage } = require('@sapphire/discord.js-utilities');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const { regExpEsc, chunk } = require('@sapphire/utilities');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -14,7 +14,10 @@ module.exports = class extends SubCommandPluginCommand {
             requiredClientPermissions: ['MANAGE_ROLES'],
             description: 'Gives/takes a self-assignable role (selfrole).',
             detailedDescription: 'You can setup selfroles via `s.conf set selfroles`',
-            subCommands: ['list', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list],(SelfAssignableRole:string)';
     }

@@ -1,9 +1,9 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { GuildMember } = require('discord.js');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -12,7 +12,11 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Sets a moderator user/role.',
             detailedDescription: 'If no argument is provided, this will list the moderator roles and members.',
-            subCommands: ['add', 'remove', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'add', messageRun: 'add' },
+                { name: 'remove', messageRun: 'remove' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[add|remove] (Member:member|Role:role) [...]';
     }

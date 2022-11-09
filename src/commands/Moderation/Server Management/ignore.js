@@ -1,8 +1,8 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -11,7 +11,10 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             description: 'Makes me ignore channels or a channel category in the server.',
             detailedDescription: 'If you want to unignore channels or categories, simply reuse the command and give the channel you want to unignore.',
-            subCommands: ['list', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list]|(ChannelOrCategory:channel)';
     }

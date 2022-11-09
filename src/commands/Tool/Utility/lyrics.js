@@ -16,7 +16,7 @@ module.exports = class extends Command {
     }
 
     async messageRun(msg, args) {
-        const query = await args.rest('string').catch(() => null);
+        const query = await args.rest('string').then(str => str.trim()).catch(() => null);
         if (query === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please provide your lyric query.`);
 
         const message = await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading lyrics...`);

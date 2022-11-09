@@ -6,6 +6,8 @@ const { mergeObjects } = require('@sapphire/utilities');
 // const Spotify = require('erela.js-spotify');
 // const fetch = require('node-fetch');
 
+require('dotenv').config();
+
 const { config: { lavalinkNodes } } = require('../../config');
 
 // Register editable-commands plugin
@@ -20,8 +22,6 @@ const Gateway = require('./settings/Gateway');
 const CacheManager = require('./cache/CacheManager');
 const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
-
-require('dotenv').config();
 
 class Stalwartle extends SapphireClient {
 

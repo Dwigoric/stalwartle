@@ -1,4 +1,4 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { reply } = require('@sapphire/plugin-editable-commands');
@@ -6,7 +6,7 @@ const { toTitleCase, chunk } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -23,7 +23,10 @@ module.exports = class extends SubCommandPluginCommand {
                 'To get the modlogs of a certain type, you can use the `--type` flag, e.g. `--type=warn`, `--type=kick`, `ban`, etc.'
             ].join('\n'),
             options: ['type'],
-            subCommands: ['reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[reset|User:user|CaseNumber:integer]';
     }

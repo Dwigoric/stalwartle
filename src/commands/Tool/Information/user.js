@@ -1,9 +1,9 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -13,7 +13,13 @@ module.exports = class extends SubCommandPluginCommand {
             cooldownDelay: 10,
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives information about you or another user (mention, tag, or ID).',
-            subCommands: ['rawavatar', 'avatar', 'roles', 'id', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'rawavatar', messageRun: 'rawavatar' },
+                { name: 'avatar', messageRun: 'avatar' },
+                { name: 'roles', messageRun: 'roles' },
+                { name: 'id', messageRun: 'id' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[rawavatar|avatar|roles|id] [User:user]';
     }

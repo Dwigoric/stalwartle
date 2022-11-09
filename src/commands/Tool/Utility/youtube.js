@@ -1,11 +1,11 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -13,7 +13,11 @@ module.exports = class extends SubCommandPluginCommand {
             aliases: ['yt', 'ytsearch', 'yts'],
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Finds a video, channel, or playlist from YouTube.',
-            subCommands: ['channel', 'playlist', { input: 'video', default: true }]
+            subcommands: [
+                { name: 'channel', messageRun: 'channel' },
+                { name: 'playlist', messageRun: 'playlist' },
+                { name: 'video', messageRun: 'video', default: true }
+            ]
         });
         this.usage = '[channel|playlist] <VideoOrQuery:...string>';
     }

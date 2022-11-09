@@ -36,7 +36,7 @@ module.exports = class extends Command {
     #prompts = new Map();
 
     async messageRun(msg, args) {
-        const query = await args.pick('url').catch(() => args.rest('string').catch(() => null));
+        const query = await args.pick('url').catch(() => args.rest('string').then(str => str.trim()).catch(() => null));
 
         let player = this.container.erela.players.get(msg.guild.id);
 

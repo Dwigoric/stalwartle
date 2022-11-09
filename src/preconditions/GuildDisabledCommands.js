@@ -9,12 +9,20 @@ module.exports = class extends Precondition {
         });
     }
 
-    async run(msg, cmd) {
-        if (!msg.guild) return this.ok();
-        if (cmd.guarded) return this.ok();
+    chatInputRun(interaction, command) {
+        return this.runForAll(interaction, command);
+    }
 
-        const disabled = this.container.stores.get('gateways').get('guildGateway').get(msg.guild.id, 'disabledCommands');
-        if (disabled.includes(cmd.name)) return this.error({ message: `This server has disabled the \`${cmd.name}\` command.` });
+    messageRun(message, command) {
+        return this.runForAll(message, command);
+    }
+
+    runForAll(medium, command) {
+        if (!medium.guild) return this.ok();
+        if (command.guarded) return this.ok();
+
+        const disabled = this.container.stores.get('gateways').get('guildGateway').get(medium.guildId, 'disabledCommands');
+        if (disabled.includes(command.name)) return this.error({ message: `This server has disabled the \`${command.name}\` command.` });
         return this.ok();
     }
 

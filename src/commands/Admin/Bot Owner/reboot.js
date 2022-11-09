@@ -12,9 +12,28 @@ module.exports = class extends Command {
         });
     }
 
-    async messageRun(msg) {
-        await this.container.stores.get('gateways').get('clientGateway').update(this.container.client.user.id, { restart: { channel: msg.channel.id, timestamp: msg.createdTimestamp } });
-        await msg.reply('<a:loading:430269209415516160>  ::  Bot is restarting... I will message you in this channel once I\'ve woken up again.').catch(err => this.container.client.emit('error', err));
+    registerApplicationCommands(registry) {
+        registry.registerChatInputCommand(builder =>
+            builder
+                .setName(this.name)
+                .setDescription(this.description)
+        , {
+            guildIds: [this.container.client.options.devServer],
+            idHints: ['1015443737440165970']
+        });
+    }
+
+    async chatInputRun(interaction) {
+        return this.killProcess(interaction);
+    }
+
+    async messageRun(message) {
+        return this.killProcess(message);
+    }
+
+    async killProcess(medium) {
+        await this.container.stores.get('gateways').get('clientGateway').update(this.container.client.user.id, { restart: { channel: medium.channelId, timestamp: medium.createdTimestamp } });
+        await medium.reply('<a:loading:430269209415516160>  ::  Bot is restarting... I will message you in this channel once I\'ve woken up again.').catch(err => this.container.client.emit('error', err));
         await this.container.client.destroy();
         await this.container.erela.nodes.forEach(node => node.destroy());
         process.exit();

@@ -1,8 +1,8 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -24,7 +24,16 @@ module.exports = class extends SubCommandPluginCommand {
                 'E.g. if `within` is `5` on antiSpam (`limit` set to `3`), it\'d mean "3 messages within 5 seconds". `s.conf set automod.options.antiSpam.within 5`',
                 'For quota, it\'d mean "3 offenses within 5 minutes". Please don\'t be confused. 😉'
             ].join('\n'),
-            subCommands: ['invite', 'swear', 'spam', 'mentionspam', 'quota', 'ignorebots', 'ignoremods', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'invite', messageRun: 'invite' },
+                { name: 'swear', messageRun: 'swear' },
+                { name: 'spam', messageRun: 'spam' },
+                { name: 'mentionspam', messageRun: 'mentionspam' },
+                { name: 'quota', messageRun: 'quota' },
+                { name: 'ignorebots', messageRun: 'ignorebots' },
+                { name: 'ignoremods', messageRun: 'ignoremods' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '<invite|swear|spam|mentionspam|quota|ignorebots|ignoremods> (enable|disable|actionType:string)';
     }

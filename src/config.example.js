@@ -9,6 +9,10 @@ exports.config = {
      */
     // The default configurable prefix for each guild
     defaultPrefix: 's.',
+    // If the message command listeners will be loaded
+    loadMessageCommandListeners: true,
+    // If the bot will use NOT use the mention prefix for message commands
+    disableMentionPrefix: false,
     // If the bot will be insensitive to the prefix case
     caseInsensitivePrefixes: true,
     // If the bot will be insensitive to the command case
@@ -36,6 +40,7 @@ exports.config = {
 
     ownerID: '295391820744228867',
     developers: ['295391820744228867', '296862433136476160', '296256174209105920'],
+    devServer: '502895390807293963',
 
     lavalinkNodes: [{ identifier: 'server', host: 'localhost', port: 80, password: '' }],
 
@@ -83,7 +88,7 @@ exports.config = {
 
 exports.mongodb = {
     // The Mongo DB connection string
-    connectionString: '',
+    connectionString: process.env.DATABASE_URL, // eslint-disable-line no-process-env
 
     // The DB name
     name: '',

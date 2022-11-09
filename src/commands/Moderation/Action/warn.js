@@ -16,7 +16,7 @@ module.exports = class extends Command {
     async messageRun(msg, args) {
         const member = await args.pick('member').catch(() => null);
         if (member === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the member to be warned.`);
-        const reason = await args.rest('string').catch(() => null);
+        const reason = await args.rest('string').then(str => str.trim()).catch(() => null);
 
         if (member.user.id === msg.author.id) return reply(msg, 'Why would you warn yourself?');
         if (member.user.id === this.container.client.user.id) return reply(msg, 'Have I done something wrong?');

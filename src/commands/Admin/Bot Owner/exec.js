@@ -22,10 +22,43 @@ module.exports = class extends Command {
         this.guarded = true;
     }
 
+    registerApplicationCommands(registry) {
+        registry.registerChatInputCommand(builder =>
+            builder
+                .setName(this.name)
+                .setDescription(this.description)
+                .addStringOption(option =>
+                    option
+                        .setName('expression')
+                        .setDescription('The command to be executed on the CLI.')
+                        .setRequired(true))
+                .addIntegerOption(option =>
+                    option
+                        .setName('timeout')
+                        .setDescription('The amount of time (in ms) to wait for the command to complete.'))
+        , {
+            idHints: ['1015443734906806373']
+        });
+    }
+
+    async chatInputRun(interaction) {
+        const input = interaction.options.getString('expression');
+
+        const stopwatch = new Stopwatch().start();
+        const result = await execute(input, { timeout: interaction.options.getInteger('timeout') || 60000 })
+            .catch(error => ({ error }));
+        const results = [];
+        if (result.stdout) results.push(`**\`OUTPUT\`**${codeBlock('', result.stdout)}`);
+        if (result.stderr) results.push(`**\`STDERR\`**${codeBlock('', result.stderr)}`);
+        if (result.error) results.push(`**\`ERROR\`**${codeBlock('xl', result.error)}`);
+
+        return interaction.reply(results.concat(`⏱ ${stopwatch.stop()}`).join('\n'));
+    }
+
     async messageRun(msg, args) {
-        let input = await args.restResult('string');
-        if (!input.success) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
-        input = input.value;
+        const input = await args.rest('string').then(str => str.trim()).catch(() => null);
+        if (input === null) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  Please supply the command to be executed on the CLI.`);
+
         const stopwatch = new Stopwatch().start();
         const result = await execute(input, { timeout: args.getOption('timeout') ? Number(args.getOption('timeout')) : 60000 })
             .catch(error => ({ error }));

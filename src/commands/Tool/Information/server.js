@@ -1,8 +1,8 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { MessageEmbed } = require('discord.js');
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -11,7 +11,12 @@ module.exports = class extends SubCommandPluginCommand {
             runIn: [CommandOptionsRunTypeEnum.GuildText],
             requiredClientPermissions: ['EMBED_LINKS'],
             description: 'Gives information about the current server.',
-            subCommands: ['icon', 'roles', 'id', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'icon', messageRun: 'icon' },
+                { name: 'roles', messageRun: 'roles' },
+                { name: 'id', messageRun: 'id' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[icon|roles|id]';
     }

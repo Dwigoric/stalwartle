@@ -1,9 +1,9 @@
-const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
+const { Subcommand } = require('@sapphire/plugin-subcommands');
 const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
 const { reply } = require('@sapphire/plugin-editable-commands');
 const { toTitleCase } = require('@sapphire/utilities');
 
-module.exports = class extends SubCommandPluginCommand {
+module.exports = class extends Subcommand {
 
     constructor(context, options) {
         super(context, {
@@ -18,7 +18,17 @@ module.exports = class extends SubCommandPluginCommand {
                 'If you want to reset the modlog channel for a specific moderation action, use `s.setlog <moderation action> reset`',
                 'If you want to list the modlog channels each moderation action is assigned to, use the `list` subcommand.'
             ].join('\n'),
-            subCommands: ['list', 'kick', 'ban', 'softban', 'unban', 'mute', 'unmute', 'reset', { input: 'default', default: true }]
+            subcommands: [
+                { name: 'list', messageRun: 'list' },
+                { name: 'kick', messageRun: 'kick' },
+                { name: 'ban', messageRun: 'ban' },
+                { name: 'softban', messageRun: 'softban' },
+                { name: 'unban', messageRun: 'unban' },
+                { name: 'mute', messageRun: 'mute' },
+                { name: 'unmute', messageRun: 'unmute' },
+                { name: 'reset', messageRun: 'reset' },
+                { name: 'default', messageRun: 'default', default: true }
+            ]
         });
         this.usage = '[list|kick|ban|softban|unban|mute|unmute|reset] (reset|Modlog:channel)';
     }
