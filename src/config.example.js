@@ -3,6 +3,8 @@ const { LogLevel } = require('@sapphire/framework');
 const { Logger } = require('@sapphire/plugin-logger');
 const { ScheduledTaskRedisStrategy } = require('@sapphire/plugin-scheduled-tasks/register-redis');
 
+require('dotenv').config();
+
 exports.config = {
     /**
      * General Options
@@ -83,7 +85,7 @@ exports.config = {
 
 exports.mongodb = {
     // The Mongo DB connection string
-    connectionString: '',
+    connectionString: process.env.DATABASE_URL, // eslint-disable-line no-process-env
 
     // The DB name
     name: '',

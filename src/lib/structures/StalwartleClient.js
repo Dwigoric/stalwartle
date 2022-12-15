@@ -21,8 +21,6 @@ const CacheManager = require('./cache/CacheManager');
 const GuildCacheData = require('./cache/GuildCacheData');
 const MemberCacheData = require('./cache/MemberCacheData');
 
-require('dotenv').config();
-
 class Stalwartle extends SapphireClient {
 
     constructor(clientOptions) {
