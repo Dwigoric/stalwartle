@@ -4,7 +4,7 @@ const { reply } = require('@sapphire/plugin-editable-commands');
 const { Timestamp } = require('@sapphire/timestamp');
 const { mergeObjects } = require('@sapphire/utilities');
 const { Util: { escapeMarkdown }, MessageEmbed } = require('discord.js');
-const { TrackUtils: { buildUnresolved } } = require('erela.js');
+const { TrackUtils: { markAsTrack } } = require('erela.js');
 
 module.exports = class extends Command {
 
@@ -121,7 +121,7 @@ module.exports = class extends Command {
 
         if (player.queue.totalSize >= music.maxQueue) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  This server has reached its set maximum queue entries!`);
 
-        await this.#addToQueue(msg, resolved ? song : Array.isArray(song) ? song.map(track => buildUnresolved(track)) : buildUnresolved(song), { force, next, incognito });
+        await this.#addToQueue(msg, resolved ? song : Array.isArray(song) ? song.map(track => markAsTrack(track)) : markAsTrack(song), { force, next, incognito });
 
         switch (music.repeat) {
             case 'queue': player.setQueueRepeat(true); break;
@@ -199,10 +199,10 @@ module.exports = class extends Command {
         if (force || next) {
             const songs = Array.isArray(song) ? song.map(track => mergeObjects(track, { incognito })) : [mergeObjects(song, { incognito })];
 
-            queue.add(songs.concat(player.playing ? [] : currQueue.map(buildUnresolved)), 0);
+            queue.add(songs.concat(player.playing ? [] : currQueue.map(markAsTrack)), 0);
             reply(msg, `${this.container.constants.EMOTES.tick}  ::  Successfully moved **${songs.length > 1 ? `${songs.length} songs` : escapeMarkdown(songs[0].title)}** to the front of the queue.`);
         } else {
-            if (!player.playing && currQueue.length) queue.add(currQueue.map(buildUnresolved));
+            if (!player.playing && currQueue.length) queue.add(currQueue.map(markAsTrack));
             if (Array.isArray(song)) {
                 const { length } = song;
                 if (length === 0) return null;
