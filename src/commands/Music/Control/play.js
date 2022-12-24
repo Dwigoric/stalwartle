@@ -164,8 +164,8 @@ module.exports = class extends Command {
         const prompter = new MessagePrompter([
             `🎶  ::  **${args.message.author}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
             finds.map((result, index) => [
-                `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)}${index === 0 ? ` (choosing <t:${((Date.now() + 15_000) / 1000).toFixed()}:R>)` : ''}`,
-                `\`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\``
+                `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)}`,
+                `\`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\`${index === 0 ? ` (choosing <t:${((Date.now() + 15_000) / 1000).toFixed()}:R>)` : ''}`
             ].join(' ')).join('\n')
         ].join('\n'), 'message', { timeout: 15_000 });
         let limit = 0, choice = null;
