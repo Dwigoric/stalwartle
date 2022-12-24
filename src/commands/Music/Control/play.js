@@ -178,10 +178,14 @@ module.exports = class extends Command {
             // skipcq: JS-0032
             choice = await prompter.run(args.message.channel, args.message.author).catch(() => ({ content: '1' }));
         // eslint-disable-next-line max-len
-        } while (parseInt(choice.content, 10) < 1 || (this.#prompts.has(args.message.author.id) && parseInt(choice.content, 10) > this.#prompts.get(args.message.author.id).length));
+        } while ((choice.content.toLowerCase() !== 'cancel' && !parseInt(choice.content, 10)) || parseInt(choice.content, 10) < 1 || (this.#prompts.has(args.message.author.id) && parseInt(choice.content, 10) > this.#prompts.get(args.message.author.id).length));
         prompter.strategy.appliedMessage.delete();
 
         if (choice.deletable) choice.delete();
+        if (choice.content.toLowerCase() === 'cancel') {
+            this.#prompts.delete(args.message.author.id);
+            throw new Error(`${this.container.constants.EMOTES.tick}  ::  Successfully cancelled prompt.`);
+        }
 
         return this.#prompts.get(args.message.author.id)[parseInt(choice.content, 10) - 1];
     }
