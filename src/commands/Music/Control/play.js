@@ -164,10 +164,10 @@ module.exports = class extends Command {
         const prompter = new MessagePrompter([
             `🎶  ::  **${args.message.author}**, please **reply** the number of the song you want to play: (reply \`cancel\` to cancel prompt)`,
             finds.map((result, index) => [
-                `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)}`,
+                `\`${index + 1}\`. **${escapeMarkdown(result.title)}** by ${escapeMarkdown(result.author)}${index === 0 ? ` (choosing <t:${((Date.now() + 15_000) / 1000).toFixed()}:R>)` : ''}`,
                 `\`${new Timestamp(`${result.duration >= 86400000 ? 'DD:' : ''}${result.duration >= 3600000 ? 'HH:' : ''}mm:ss`).display(result.duration)}\``
             ].join(' ')).join('\n')
-        ].join('\n'), 'message', { timeout: 30000 });
+        ].join('\n'), 'message', { timeout: 15_000 });
         let limit = 0, choice = null;
         do {
             if (prompter.strategy.appliedMessage) prompter.strategy.appliedMessage.delete();
@@ -176,16 +176,12 @@ module.exports = class extends Command {
                 throw new Error(`${this.container.constants.EMOTES.xmark}  ::  Too many invalid replies. Please try again.`);
             }
             // skipcq: JS-0032
-            choice = await prompter.run(args.message.channel, args.message.author).catch(() => ({ content: 'cancel' }));
+            choice = await prompter.run(args.message.channel, args.message.author).catch(() => ({ content: '1' }));
         // eslint-disable-next-line max-len
-        } while ((choice.content.toLowerCase() !== 'cancel' && !parseInt(choice.content, 10)) || parseInt(choice.content, 10) < 1 || (this.#prompts.has(args.message.author.id) && parseInt(choice.content, 10) > this.#prompts.get(args.message.author.id).length));
+        } while (parseInt(choice.content, 10) < 1 || (this.#prompts.has(args.message.author.id) && parseInt(choice.content, 10) > this.#prompts.get(args.message.author.id).length));
         prompter.strategy.appliedMessage.delete();
 
         if (choice.deletable) choice.delete();
-        if (choice.content.toLowerCase() === 'cancel') {
-            this.#prompts.delete(args.message.author.id);
-            throw new Error(`${this.container.constants.EMOTES.tick}  ::  Successfully cancelled prompt.`);
-        }
 
         return this.#prompts.get(args.message.author.id)[parseInt(choice.content, 10) - 1];
     }
