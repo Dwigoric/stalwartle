@@ -1,6 +1,6 @@
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { Command, container } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 const moment = require('moment-timezone');
 
 module.exports = class extends Command {

@@ -1,8 +1,8 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 module.exports = class extends Command {
 

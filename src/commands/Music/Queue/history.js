@@ -1,11 +1,11 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
-const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { CommandOptionsRunTypeEnum, container } = require('@sapphire/framework');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const fetch = require('node-fetch');
 const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-utilities');
 const { chunk } = require('@sapphire/utilities');
 const { Timestamp } = require('@sapphire/timestamp');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 module.exports = class extends SubCommandPluginCommand {
 

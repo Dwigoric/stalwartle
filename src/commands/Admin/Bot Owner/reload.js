@@ -1,5 +1,5 @@
-const { Command, Store } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Command, Store, container } = require('@sapphire/framework');
+const { reply } = container;
 const { Stopwatch } = require('@sapphire/stopwatch');
 
 module.exports = class extends Command {

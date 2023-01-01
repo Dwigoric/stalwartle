@@ -2,7 +2,7 @@ const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
 const moment = require('moment-timezone');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/framework').container;
 const { toTitleCase } = require('@sapphire/utilities');
 
 module.exports = class extends SubCommandPluginCommand {

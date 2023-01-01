@@ -1,7 +1,7 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
-const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { CommandOptionsRunTypeEnum, container } = require('@sapphire/framework');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 module.exports = class extends SubCommandPluginCommand {
 

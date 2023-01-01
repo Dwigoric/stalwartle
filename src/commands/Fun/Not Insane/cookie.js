@@ -1,6 +1,6 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
-const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { CommandOptionsRunTypeEnum, container } = require('@sapphire/framework');
+const { reply } = container;
 const { chunk } = require('@sapphire/utilities');
 const { MessageEmbed } = require('discord.js');
 const { LazyPaginatedMessage } = require('@sapphire/discord.js-utilities');

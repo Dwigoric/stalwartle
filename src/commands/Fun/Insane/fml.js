@@ -1,6 +1,6 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 

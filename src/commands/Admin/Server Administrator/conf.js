@@ -1,5 +1,5 @@
-const { CommandOptionsRunTypeEnum, Resolvers } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { CommandOptionsRunTypeEnum, Resolvers, container } = require('@sapphire/framework');
+const { reply } = container;
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { toTitleCase, codeBlock, isObject } = require('@sapphire/utilities');
 

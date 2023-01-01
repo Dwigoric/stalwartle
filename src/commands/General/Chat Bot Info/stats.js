@@ -1,5 +1,5 @@
-const { Command } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Command, container } = require('@sapphire/framework');
+const { reply } = container;
 const { MessageEmbed } = require('discord.js');
 const { uptime, loadavg } = require('os');
 const moment = require('moment-timezone');

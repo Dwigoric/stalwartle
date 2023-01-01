@@ -1,7 +1,7 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { Args } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Args, container } = require('@sapphire/framework');
+const { reply } = container;
 const { Util: { escapeMarkdown } } = require('discord.js');
 const { isValidCron } = require('cron-validator');
 const moment = require('moment-timezone');

@@ -1,9 +1,9 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { MessageEmbed } = require('discord.js');
 const SteamAPI = require('steamapi');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 const { toTitleCase } = require('@sapphire/utilities');
 
 module.exports = class extends Command {

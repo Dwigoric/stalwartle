@@ -1,10 +1,10 @@
 // Copyright (c) 2017-2018 dirigeants. All rights reserved. MIT license.
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { codeBlock, isThenable } = require('@sapphire/utilities');
 const { Stopwatch } = require('@sapphire/stopwatch');
 const { Type } = require('@sapphire/type');
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 const { inspect, promisify } = require('util');
 const fetch = require('node-fetch');

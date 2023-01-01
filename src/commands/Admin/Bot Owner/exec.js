@@ -1,7 +1,7 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { Stopwatch } = require('@sapphire/stopwatch');
 const { codeBlock } = require('@sapphire/utilities');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 const { promisify } = require('util');
 const { exec } = require('child_process');

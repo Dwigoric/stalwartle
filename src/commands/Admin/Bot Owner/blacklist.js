@@ -1,5 +1,5 @@
-const { Command } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Command, container } = require('@sapphire/framework');
+const { reply } = container;
 const { codeBlock } = require('@sapphire/utilities');
 const { User } = require('discord.js');
 

@@ -1,6 +1,6 @@
 const { LazyPaginatedMessage } = require('@sapphire/discord.js-utilities');
-const { Command } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Command, container } = require('@sapphire/framework');
+const { reply } = container;
 const { toTitleCase } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { splitMessage } } = require('discord.js');
 

@@ -1,6 +1,6 @@
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Command, CommandOptionsRunTypeEnum, container } = require('@sapphire/framework');
+const { reply } = container;
 const fetch = require('node-fetch');
 
 module.exports = class extends Command {

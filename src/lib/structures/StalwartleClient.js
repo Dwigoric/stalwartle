@@ -28,6 +28,7 @@ class Stalwartle extends SapphireClient {
 
         container.erela = null;
         container.constants = require('../util/constants');
+        container.reply = require('../util/reply');
 
         this.once('ready', this.initializeErela.bind(this));
 

@@ -1,6 +1,6 @@
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { Command, CommandOptionsRunTypeEnum } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Command, CommandOptionsRunTypeEnum, container } = require('@sapphire/framework');
+const { reply } = container;
 const { Timestamp } = require('@sapphire/timestamp');
 const { mergeObjects } = require('@sapphire/utilities');
 const { Util: { escapeMarkdown }, MessageEmbed } = require('discord.js');

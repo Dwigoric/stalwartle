@@ -1,7 +1,7 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const fetch = require('node-fetch');
 const { MessageEmbed } = require('discord.js');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 module.exports = class extends Command {
 

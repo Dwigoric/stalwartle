@@ -1,6 +1,6 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 
 module.exports = class extends Command {
 

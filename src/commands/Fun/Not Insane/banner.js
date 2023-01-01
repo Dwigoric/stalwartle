@@ -1,6 +1,6 @@
-const { Command } = require('@sapphire/framework');
+const { Command, container } = require('@sapphire/framework');
 const { codeBlock } = require('@sapphire/utilities');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 const figletAsync = require('util').promisify(require('figlet'));
 
 module.exports = class extends Command {

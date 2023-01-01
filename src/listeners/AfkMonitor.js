@@ -1,5 +1,5 @@
-const { Listener, Events } = require('@sapphire/framework');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { Listener, Events, container } = require('@sapphire/framework');
+const { reply } = container;
 
 module.exports = class extends Listener {
 

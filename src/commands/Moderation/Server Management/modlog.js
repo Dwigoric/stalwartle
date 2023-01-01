@@ -1,7 +1,7 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
-const { CommandOptionsRunTypeEnum } = require('@sapphire/framework');
+const { CommandOptionsRunTypeEnum, container } = require('@sapphire/framework');
 const { LazyPaginatedMessage, MessagePrompter } = require('@sapphire/discord.js-utilities');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = container;
 const { toTitleCase, chunk } = require('@sapphire/utilities');
 const { MessageEmbed, Util: { escapeMarkdown } } = require('discord.js');
 const moment = require('moment-timezone');

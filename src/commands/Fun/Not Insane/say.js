@@ -1,5 +1,5 @@
 const { SubCommandPluginCommand } = require('@sapphire/plugin-subcommands');
-const { reply } = require('@sapphire/plugin-editable-commands');
+const { reply } = require('@sapphire/framework').container;
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends SubCommandPluginCommand {
