@@ -20,7 +20,7 @@ module.exports = class extends SubCommandPluginCommand {
                 'If you want to set a reminder on 29 Feb 2020 at 1:00 PM, you would run `s.rem "2020-02-29 13:00" do something`. You can set the timezone for each reminder as well.',
                 '\nThe subcommands `list` and `remove` are used to list or remove reminders.',
                 '\n**Regarding recurring reminders**',
-                'If you want recurring reminders (UTC timezone), just replace the reminder duration with a cron format; i.e., if you want to be reminded every hour on Wednesdays, run `s.remindme "0 * * * wed" to drink water`.',
+                'If you want recurring reminders (UTC), just replace the reminder duration with a cron format; i.e., if you want to be reminded every hour on Wednesdays, run `s.remindme "0 * * * wed" to drink water`.',
                 'To help you format your cron, you can use the website <https://crontab.guru/>.',
                 '\nIf you want to force the reminder to the channel, use the `--channel` flag.',
                 'Moderators and admins can enable @everyone and @here notifications via the `allowRemindEveryone` setting in the `conf` command.'
