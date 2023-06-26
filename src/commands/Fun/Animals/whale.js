@@ -16,11 +16,11 @@ module.exports = class extends Command {
     async messageRun(msg) {
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading whale...`);
 
-        const { link } = await fetch(`https://some-random-api.ml/img/whale`)
+        const { link } = await fetch(`https://some-random-api.com/img/whale`)
             .then(res => res.json())
             .catch(() => ({ link: null }));
 
-        const { fact } = await fetch(`https://some-random-api.ml/facts/whale`)
+        const { fact } = await fetch(`https://some-random-api.com/facts/whale`)
             .then(res => res.json())
             .catch(() => ({ fact: null }));
 

@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading GIF...`);
 
-        const { link } = await fetch(`https://some-random-api.ml/animu/hug`)
+        const { link } = await fetch(`https://some-random-api.com/animu/hug`)
             .then(res => res.json())
             .catch(() => ({ link: null }));
         if (!link) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  An unexpected error occured. Sorry about that!`);

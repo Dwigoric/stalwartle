@@ -16,7 +16,7 @@ module.exports = class extends Command {
     async messageRun(msg) {
         await reply(msg, `${this.container.constants.EMOTES.loading}  ::  Loading meme...`);
 
-        const meme = await fetch(`https://some-random-api.ml/meme`)
+        const meme = await fetch(`https://some-random-api.com/meme`)
             .then(res => res.json())
             .catch(() => null);
 

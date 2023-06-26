@@ -23,7 +23,7 @@ module.exports = class extends Command {
 
         const params = new URLSearchParams();
         params.set('title', query);
-        const metadata = await fetch(`https://some-random-api.ml/lyrics?${params}`).then(res => res.json());
+        const metadata = await fetch(`https://some-random-api.com/lyrics?${params}`).then(res => res.json());
         if (metadata.error) return reply(msg, `${this.container.constants.EMOTES.xmark}  ::  ${metadata.error}`);
         const lyrics = metadata.lyrics.split('\n');
         while (lyrics.indexOf('') >= 0) lyrics.splice(lyrics.indexOf(''), 1, '\u200b');
