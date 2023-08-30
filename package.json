@@ -36,7 +36,7 @@
 		"dotenv": "^16.0.3",
 		"erela.js": "github:Dwigoric/erela.js#build",
 		"moment-timezone": "^0.5.40",
-		"mongodb": "^5.6.0",
+		"mongodb": "^5.8.0",
 		"node-fetch": "2"
 	},
 	"optionalDependencies": {
