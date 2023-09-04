@@ -32,9 +32,15 @@ module.exports = class extends Listener {
     async run() {
         await this.container.database.init()
             .then(() => this.container.logger.info('Connection to MongoDB has been established.'))
-            .catch(() => { throw new Error('Could not establish connection to MongoDB.'); });
+            .catch(error => {
+                this.container.logger.error(error);
+                throw new Error('Could not establish connection to MongoDB.');
+            });
         for (const gateway of this.container.stores.get('gateways').values()) {
-            await gateway.init().catch(() => { throw new Error(`Could not load Collection ${gateway.name} to cache.`); });
+            await gateway.init().catch(error => {
+                this.container.logger.error(error);
+                throw new Error(`Could not load Collection ${gateway.name} to cache.`);
+            });
             this.container.logger.info(`Loaded Collection ${gateway.name} to cache.`);
         }
         this.container.logger.info('The gateways have been loaded.');
